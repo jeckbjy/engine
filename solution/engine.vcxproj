@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\build\bin\Debug\</OutDir>
+    <IntDir>..\build\obj\Debug\engine\</IntDir>
+    <TargetName>engine</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\build\bin\Release\</OutDir>
+    <IntDir>..\build\obj\Release\engine\</IntDir>
+    <TargetName>engine</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;CU_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\build\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\build\bin\Debug\engine.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;CU_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\build\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\build\bin\Release\engine.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\engine\include\API.h" />
+    <ClInclude Include="..\engine\include\Algo.h" />
+    <ClInclude Include="..\engine\include\Application.h" />
+    <ClInclude Include="..\engine\include\AssetCache.h" />
+    <ClInclude Include="..\engine\include\Attribute.h" />
+    <ClInclude Include="..\engine\include\Bits.h" />
+    <ClInclude Include="..\engine\include\CMath.h" />
+    <ClInclude Include="..\engine\include\CProcess.h" />
+    <ClInclude Include="..\engine\include\Camera.h" />
+    <ClInclude Include="..\engine\include\Canvas.h" />
+    <ClInclude Include="..\engine\include\Color.h" />
+    <ClInclude Include="..\engine\include\Component.h" />
+    <ClInclude Include="..\engine\include\Condition.h" />
+    <ClInclude Include="..\engine\include\Context.h" />
+    <ClInclude Include="..\engine\include\Delegate.h" />
+    <ClInclude Include="..\engine\include\Drawable.h" />
+    <ClInclude Include="..\engine\include\DynLib.h" />
+    <ClInclude Include="..\engine\include\Engine.h" />
+    <ClInclude Include="..\engine\include\Event.h" />
+    <ClInclude Include="..\engine\include\FourCC.h" />
+    <ClInclude Include="..\engine\include\Frustum.h" />
+    <ClInclude Include="..\engine\include\FuncTraits.h" />
+    <ClInclude Include="..\engine\include\Function.h" />
+    <ClInclude Include="..\engine\include\GpuBuffer.h" />
+    <ClInclude Include="..\engine\include\Graphics.h" />
+    <ClInclude Include="..\engine\include\List.h" />
+    <ClInclude Include="..\engine\include\Macro.h" />
+    <ClInclude Include="..\engine\include\Matrix4.h" />
+    <ClInclude Include="..\engine\include\Mutex.h" />
+    <ClInclude Include="..\engine\include\Object.h" />
+    <ClInclude Include="..\engine\include\Plane.h" />
+    <ClInclude Include="..\engine\include\Platform.h" />
+    <ClInclude Include="..\engine\include\Plugin.h" />
+    <ClInclude Include="..\engine\include\Quaternion.h" />
+    <ClInclude Include="..\engine\include\Range.h" />
+    <ClInclude Include="..\engine\include\Ray.h" />
+    <ClInclude Include="..\engine\include\Rect.h" />
+    <ClInclude Include="..\engine\include\Ref.h" />
+    <ClInclude Include="..\engine\include\RenderPath.h" />
+    <ClInclude Include="..\engine\include\Renderer.h" />
+    <ClInclude Include="..\engine\include\Rtti.h" />
+    <ClInclude Include="..\engine\include\Scene.h" />
+    <ClInclude Include="..\engine\include\Singleton.h" />
+    <ClInclude Include="..\engine\include\SmartPtr.h" />
+    <ClInclude Include="..\engine\include\StringPiece.h" />
+    <ClInclude Include="..\engine\include\StringUtil.h" />
+    <ClInclude Include="..\engine\include\SyncEvent.h" />
+    <ClInclude Include="..\engine\include\Texture.h" />
+    <ClInclude Include="..\engine\include\Thread.h" />
+    <ClInclude Include="..\engine\include\Traits.h" />
+    <ClInclude Include="..\engine\include\Transform.h" />
+    <ClInclude Include="..\engine\include\Tuple.h" />
+    <ClInclude Include="..\engine\include\Types.h" />
+    <ClInclude Include="..\engine\include\UIView.h" />
+    <ClInclude Include="..\engine\include\UIWidget.h" />
+    <ClInclude Include="..\engine\include\Util.h" />
+    <ClInclude Include="..\engine\include\Variant.h" />
+    <ClInclude Include="..\engine\include\Vector2.h" />
+    <ClInclude Include="..\engine\include\Vector3.h" />
+    <ClInclude Include="..\engine\include\Vector4.h" />
+    <ClInclude Include="..\engine\include\View.h" />
+    <ClInclude Include="..\engine\include\Window.h" />
+    <ClInclude Include="..\engine\include\WorkQueue.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\engine\src\Application.cpp" />
+    <ClCompile Include="..\engine\src\AssetCache.cpp" />
+    <ClCompile Include="..\engine\src\CMath.cpp" />
+    <ClCompile Include="..\engine\src\CProcess.cpp" />
+    <ClCompile Include="..\engine\src\Camera.cpp" />
+    <ClCompile Include="..\engine\src\Color.cpp" />
+    <ClCompile Include="..\engine\src\Component.cpp" />
+    <ClCompile Include="..\engine\src\Condition.cpp" />
+    <ClCompile Include="..\engine\src\Context.cpp" />
+    <ClCompile Include="..\engine\src\Drawable.cpp" />
+    <ClCompile Include="..\engine\src\DynLib.cpp" />
+    <ClCompile Include="..\engine\src\Engine.cpp" />
+    <ClCompile Include="..\engine\src\Frustum.cpp" />
+    <ClCompile Include="..\engine\src\Matrix4.cpp" />
+    <ClCompile Include="..\engine\src\Mutex.cpp" />
+    <ClCompile Include="..\engine\src\Object.cpp" />
+    <ClCompile Include="..\engine\src\Plane.cpp" />
+    <ClCompile Include="..\engine\src\Quaternion.cpp" />
+    <ClCompile Include="..\engine\src\Ray.cpp" />
+    <ClCompile Include="..\engine\src\Ref.cpp" />
+    <ClCompile Include="..\engine\src\RenderPath.cpp" />
+    <ClCompile Include="..\engine\src\Rtti.cpp" />
+    <ClCompile Include="..\engine\src\Scene.cpp" />
+    <ClCompile Include="..\engine\src\StringPiece.cpp" />
+    <ClCompile Include="..\engine\src\StringUtil.cpp" />
+    <ClCompile Include="..\engine\src\SyncEvent.cpp" />
+    <ClCompile Include="..\engine\src\Thread.cpp" />
+    <ClCompile Include="..\engine\src\Transform.cpp" />
+    <ClCompile Include="..\engine\src\Util.cpp" />
+    <ClCompile Include="..\engine\src\Variant.cpp" />
+    <ClCompile Include="..\engine\src\View.cpp" />
+    <ClCompile Include="..\engine\src\Window.cpp" />
+    <ClCompile Include="..\engine\src\WorkQueue.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

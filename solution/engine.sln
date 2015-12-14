@@ -1,0 +1,40 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine.vcxproj", "{FBDB78FB-E77D-A3D1-D038-B725BC792A22}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{65689E7C-519F-9F0D-FA8B-8510E6A11B0F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cpp", "test_cpp.vcxproj", "{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_engine", "test_engine.vcxproj", "{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FBDB78FB-E77D-A3D1-D038-B725BC792A22} = {FBDB78FB-E77D-A3D1-D038-B725BC792A22}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBDB78FB-E77D-A3D1-D038-B725BC792A22}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FBDB78FB-E77D-A3D1-D038-B725BC792A22}.Debug|Win32.Build.0 = Debug|Win32
+		{FBDB78FB-E77D-A3D1-D038-B725BC792A22}.Release|Win32.ActiveCfg = Release|Win32
+		{FBDB78FB-E77D-A3D1-D038-B725BC792A22}.Release|Win32.Build.0 = Release|Win32
+		{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96}.Debug|Win32.Build.0 = Debug|Win32
+		{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96}.Release|Win32.ActiveCfg = Release|Win32
+		{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96}.Release|Win32.Build.0 = Release|Win32
+		{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1}.Debug|Win32.Build.0 = Debug|Win32
+		{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1}.Release|Win32.ActiveCfg = Release|Win32
+		{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7DEEBFC-D3AB-4608-FCC4-34B0E8F07B96} = {65689E7C-519F-9F0D-FA8B-8510E6A11B0F}
+		{9AC7C8D7-067D-41CD-8F71-3BA4FB2538D1} = {65689E7C-519F-9F0D-FA8B-8510E6A11B0F}
+	EndGlobalSection
+EndGlobal
