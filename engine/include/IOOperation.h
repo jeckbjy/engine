@@ -8,20 +8,37 @@ class CU_API IOOperation : public Object
 {
 	DECLARE_RTTI(IOOperation, Object, "IOOP");
 #ifdef CU_OS_WIN
-	struct IOData : public OVERLAPPED
-#else
-	struct IOData
-#endif
+	struct IOData : OVERLAPPED
 	{
 		IOOperation* op;
 	};
+#endif
+
+#ifdef CU_OS_WIN
 	IOData data;
+#endif
 	Channel* channel;
 	IOOperation* next;
 	error_t code;
 	IOOperation(Channel* channel);
 	virtual ~IOOperation();
 	bool success() const { return code == 0; }
+};
+
+class CU_API SyncOperation : public IOOperation
+{
+	DECLARE_RTTI(SyncOperation, IOOperation, "IOPS");
+public:
+	enum
+	{
+		OP_INPUT	= 0x01,
+		OP_OUTPUT	= 0x02,
+	};
+	uint8_t flags;
+	SyncOperation(Channel* channel, uint8_t flags)
+		:IOOperation(channel), flags(flags)
+	{
+	}
 };
 
 // Í¬²½Socket²Ù×÷
@@ -31,6 +48,7 @@ class CU_API SocketOperation : public IOOperation
 public:
 	enum
 	{
+
 		OP_CONNECT,
 		OP_READ,
 		OP_WRITE,

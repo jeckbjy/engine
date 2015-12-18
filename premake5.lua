@@ -216,7 +216,7 @@ project("engine")
 	defines {"CU_BUILD_DLL"}
 	kind (iif(_ACTION =="gmake","StaticLib", "SharedLib"))
 	files {"engine/include/**.*", "engine/src/**.*"}
-	--engine_vpaths()
+	engine_vpaths()
 	
 --[[ 暂时先不开启这些工程
 group "render"

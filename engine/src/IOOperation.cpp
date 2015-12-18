@@ -1,4 +1,5 @@
 #include "IOOperation.h"
+#include "Channel.h"
 
 CU_NS_BEGIN
 

@@ -112,14 +112,13 @@ void EventLoop::run_once(int msec)
 		if (m_handle.check(udata))
 			continue;
 		Channel* channel = (Channel*)udata;
+		uint8_t flags = 0;
 		if (ev_is_input(ev))
-		{
-			// 处理
-		}
-		else if (ev_is_output(ev))
-		{
-			// 处理
-		}
+			flags |= SyncOperation::OP_INPUT;
+		if (ev_is_output(ev))
+			flags |= SyncOperation::OP_OUTPUT;
+		SyncOperation op(channel, flags);
+		channel->completed(&op);
 	}
 }
 #endif
