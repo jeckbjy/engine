@@ -10,7 +10,7 @@ class CU_API Object : public RefCounted
 public:
 	virtual ~Object();
 
-	uint32_t getType() const { return getRtti()->getType(); }
+	uint32_t getObjectType() const { return getRtti()->getType(); }
 
 	bool isKindOf(const Rtti* rtti) const { return getRtti()->isKindOf(rtti); }
 

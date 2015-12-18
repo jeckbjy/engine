@@ -4,19 +4,13 @@ using namespace std;
 class Test
 {
 public:
-	int a;
-};
-
-template<class T, size_t offset>
-class TList
-{
-
+	Test(){}
+	virtual void handle(){};
 };
 
 int main(int argc, char** argv)
 {
-	//TList<Test, offsetof(Test, a)> a;
-	//cout << offsetof(Test, a) << endl;
+	cout << std::is_abstract<Test>::value << endl;
 	system("pause");
 	return 0;
 }

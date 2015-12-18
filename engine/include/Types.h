@@ -86,6 +86,14 @@ typedef std::basic_string<char>		String;
 typedef std::basic_string<wchar_t>  WString;
 typedef std::vector<String>			StringList;
 
+template<class T>
+using Vector = std::vector<T>;
+template<class T>
+using Atomic = std::atomic<T>;
+typedef Atomic<int8_t>	Atomic8;
+typedef Atomic<int16_t>	Atomic16;
+typedef Atomic<int32_t> Atomic32;
+
 //////////////////////////////////////////////////////////////////////////
 // 不同平台间类型差异
 //////////////////////////////////////////////////////////////////////////
@@ -113,6 +121,8 @@ typedef int		error_t;
 #endif
 
 #ifdef _WIN32
+extern LPFN_CONNECTEX		FConnectEx;
+extern LPFN_ACCEPTEX		FAcceptEx;
 #define strcasecmp			stricmp
 #define strncasecmp			strnicmp 
 #define cu_close_socket(s)	::closesocket(s)
@@ -124,13 +134,59 @@ typedef int		error_t;
 #define cu_last_error()		errno
 #endif
 
-template<class T>
-using Vector = std::vector<T>;
-template<class T>
-using Atomic = std::atomic<T>;
-typedef Atomic<int8_t>	Atomic8;
-typedef Atomic<int16_t>	Atomic16;
-typedef Atomic<int32_t> Atomic32;
+#ifdef _WIN32
+#define CU_ERROR(ec) WSA ## ec
+#define CU_WIN_OR_POSIX(e_win, e_posix) e_win
+#else
+#define CU_ERROR(ec) ec
+#define CU_WIN_OR_POSIX(e_win, e_posix) e_posix
+#endif
+
+enum ErrorCode
+{
+	ERR_SUCCESS					= 0,
+	ERR_ACCESS					= CU_ERROR(EACCES),
+	ERR_AFNOSUPPORT				= CU_ERROR(EAFNOSUPPORT),
+	ERR_ADDRESS_IN_USE			= CU_ERROR(EADDRINUSE),
+	ERR_ALREADY_CONNECTED		= CU_ERROR(EISCONN),
+	ERR_ALREADY_STARTED			= CU_ERROR(EALREADY),
+	ERR_CONNECTION_ABORTED		= CU_ERROR(ECONNABORTED),
+	ERR_CONNECTION_REFUSED		= CU_ERROR(ECONNREFUSED),
+	ERR_CONNECTION_RESET		= CU_ERROR(ECONNRESET),
+	ERR_BAD_DESCRIPTOR			= CU_ERROR(EBADF),
+	ERR_FAULT					= CU_ERROR(EFAULT),
+	ERR_HOST_UNREACHABLE		= CU_ERROR(EHOSTUNREACH),
+	ERR_IN_PROGRESS				= CU_ERROR(EINPROGRESS),
+	ERR_INTERRUPTED				= CU_ERROR(EINTR),
+	ERR_INVALID_ARGUMENT		= CU_ERROR(EINVAL),
+	ERR_NAME_TOO_LONG			= CU_ERROR(ENAMETOOLONG),
+	ERR_NETWORK_DOWN			= CU_ERROR(ENETDOWN),
+	ERR_NETWORK_RESET			= CU_ERROR(ENETRESET),
+	ERR_NETWORK_UNREACHABLE		= CU_ERROR(ENETUNREACH),
+	ERR_NO_DESCRIPTORS			= CU_ERROR(EMFILE),
+	ERR_NO_BUFFER_SPACE			= CU_ERROR(ENOBUFS),
+	ERR_NO_PROTOCOL_OPTION		= CU_ERROR(ENOPROTOOPT),
+	ERR_NOT_CONNECTED			= CU_ERROR(ENOTCONN),
+	ERR_NOT_SOCKET				= CU_ERROR(ENOTSOCK),
+	ERR_OPERATION_NOT_SUPPORTED = CU_ERROR(EOPNOTSUPP),
+	ERR_SHUT_DOWN				= CU_ERROR(ESHUTDOWN),
+	ERR_TIMED_OUT				= CU_ERROR(ETIMEDOUT),
+	ERR_WOULD_BLOCK				= CU_ERROR(EWOULDBLOCK),
+	ERR_BROKEN_PIPE				= CU_WIN_OR_POSIX(ERROR_BROKEN_PIPE, EPIPE),
+	ERR_NO_MEMORY				= CU_WIN_OR_POSIX(ERROR_OUTOFMEMORY, ENOMEM),
+	ERR_NO_PERMISSION			= CU_WIN_OR_POSIX(ERROR_ACCESS_DENIED, EPERM),
+	ERR_OPERATION_ABORTED		= CU_WIN_OR_POSIX(ERROR_OPERATION_ABORTED, ECANCELED),
+	ERR_RETRY_AGAIN				= CU_WIN_OR_POSIX(ERROR_RETRY, EAGAIN),
+};
+
+inline error_t last_error()
+{
+#ifdef _WIN32
+	return ::GetLastError();
+#else
+	return errno;
+#endif
+}
 
 template<typename T>
 struct DeletePolicy

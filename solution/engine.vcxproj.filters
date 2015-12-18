@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="core">
@@ -21,6 +21,12 @@
     </Filter>
     <Filter Include="ui">
       <UniqueIdentifier>{C3795900-AF05-880B-18B4-880B045F880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{97a21137-64bd-43a8-8374-0c3300b4df65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{485d8c79-3609-4b1f-bae7-9779ebdb0857}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +219,33 @@
     <ClInclude Include="..\engine\include\WorkQueue.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Poller.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Socket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\TcpServer.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\EventLoop.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\SocketAddress.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Channel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\SocketChannel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\AcceptChannel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Buffer.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\Application.cpp">
@@ -313,6 +346,33 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\WorkQueue.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Poller.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Socket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\TcpServer.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\EventLoop.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\SocketAddress.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\SocketChannel.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\AcceptChannel.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Types.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Channel.cpp">
+      <Filter>net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

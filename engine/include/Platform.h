@@ -111,7 +111,8 @@
 #	define CU_CPP0X
 #endif
 
-#if (__cplusplus) && (__cplusplus >= 201103L)
+// msvc:1600 = vs2010
+#if __cplusplus >= 201103L || _MSC_VER > 1600
 #	define CU_CPP11
 #endif
 

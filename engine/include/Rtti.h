@@ -71,7 +71,7 @@ struct rtti_traits
 };
 
 template<typename T>
-struct rtti_traits<T, typename std::enable_if<std::is_default_constructible<T>::value>::type>
+struct rtti_traits<T, typename std::enable_if<!std::is_abstract<T>::value && std::is_default_constructible<T>::value>::type>
 {
 	inline static void* create() { return new T(); }
 	inline static Rtti::Creator getCreator() { return &create; }
@@ -91,8 +91,7 @@ public:\
 		static cute::Rtti rtti(BASE::getStaticRtti(), #CLS, fourCC, rtti_traits<CLS>::getCreator()); \
 		return &rtti; \
 	};\
-	virtual Rtti* getRtti() const { return getStaticRtti(); }\
-private:
+	virtual Rtti* getRtti() const { return getStaticRtti(); }
 
 #define DECLARE_RTTI(CLS, BASE, FOUR_CC) __DeclareRTTI(CLS, BASE, FOUR_CC)
 #define DECLARE_BASE_RTTI(CLS, FOUR_CC)  __DeclareRTTI(CLS, RootRtti, FOUR_CC)
