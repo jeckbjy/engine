@@ -91,19 +91,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\include\AcceptChannel.h" />
     <ClInclude Include="..\engine\include\API.h" />
+    <ClInclude Include="..\engine\include\AcceptChannel.h" />
     <ClInclude Include="..\engine\include\Algo.h" />
     <ClInclude Include="..\engine\include\Application.h" />
     <ClInclude Include="..\engine\include\AssetCache.h" />
     <ClInclude Include="..\engine\include\Attribute.h" />
     <ClInclude Include="..\engine\include\Bits.h" />
     <ClInclude Include="..\engine\include\Buffer.h" />
-    <ClInclude Include="..\engine\include\Channel.h" />
     <ClInclude Include="..\engine\include\CMath.h" />
     <ClInclude Include="..\engine\include\CProcess.h" />
     <ClInclude Include="..\engine\include\Camera.h" />
     <ClInclude Include="..\engine\include\Canvas.h" />
+    <ClInclude Include="..\engine\include\Channel.h" />
     <ClInclude Include="..\engine\include\Color.h" />
     <ClInclude Include="..\engine\include\Component.h" />
     <ClInclude Include="..\engine\include\Condition.h" />
@@ -120,6 +120,7 @@
     <ClInclude Include="..\engine\include\Function.h" />
     <ClInclude Include="..\engine\include\GpuBuffer.h" />
     <ClInclude Include="..\engine\include\Graphics.h" />
+    <ClInclude Include="..\engine\include\IOOperation.h" />
     <ClInclude Include="..\engine\include\List.h" />
     <ClInclude Include="..\engine\include\Macro.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
@@ -168,10 +169,10 @@
     <ClCompile Include="..\engine\src\AcceptChannel.cpp" />
     <ClCompile Include="..\engine\src\Application.cpp" />
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
-    <ClCompile Include="..\engine\src\Channel.cpp" />
     <ClCompile Include="..\engine\src\CMath.cpp" />
     <ClCompile Include="..\engine\src\CProcess.cpp" />
     <ClCompile Include="..\engine\src\Camera.cpp" />
+    <ClCompile Include="..\engine\src\Channel.cpp" />
     <ClCompile Include="..\engine\src\Color.cpp" />
     <ClCompile Include="..\engine\src\Component.cpp" />
     <ClCompile Include="..\engine\src\Condition.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="..\engine\src\Engine.cpp" />
     <ClCompile Include="..\engine\src\EventLoop.cpp" />
     <ClCompile Include="..\engine\src\Frustum.cpp" />
+    <ClCompile Include="..\engine\src\IOOperation.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
     <ClCompile Include="..\engine\src\Mutex.cpp" />
     <ClCompile Include="..\engine\src\Object.cpp" />

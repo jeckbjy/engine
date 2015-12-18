@@ -32,49 +32,8 @@ function my_vpaths(files)
 	vpaths(result)
 end
 
-workspace "engine"
-	location("solution")
-	--toolset "v140"
-	--basedir("solution")
-	--startproject "engine"
-	startproject "unit"
-	configurations {"Debug", "Release"}
-	language "c++"
-	
-	-- 全局配置
-	includedirs {"engine/include"}
-	targetdir(bin_dir)
-	libdirs(lib_dir)
-	objdir(obj_dir)
-	-- 关闭警告
-	filter {"action:vs*"}
-		defines{ "_CRT_SECURE_NO_WARNINGS" }
-	filter {}
-	-- 调试信息
-	filter "configurations:Debug"
-		defines { "DEBUG" }
-		flags 	{ "Symbols" }
-	filter "configurations:Release"
-		defines { "NDEBUG" }
-		optimize "On"
-	filter {}
-	-- 特殊规则
-	filter {"kind:StaticLib"}
-		targetdir(lib_dir)
-	filter {"action:vs*", "kind:SharedLib"}
-		implibdir(lib_dir)
-	filter {"action:gmake"}
-		buildoptions {"-std=c++11", "-fpermissive", "-g -ggdb -Wall"}
-		links { "pthread", "dl"}
-	filter {"action:gmake","kind:SharedLib"}
-		buildoptions {"-fPIC"}
-	filter {}
--- 主工程
-project("engine")
-	defines {"CU_BUILD_DLL"}
-	kind (iif(_ACTION =="gmake","StaticLib", "SharedLib"))
-	files {"engine/include/**.*", "engine/src/**.*"}
-	my_vpaths {
+function engine_vpaths()
+		my_vpaths {
 		["core"] = {
 			"API.h",
 			"Macro.h",
@@ -82,6 +41,7 @@ project("engine")
 			"Algo.h",
 			"Bits.h",
 			"Types.h",
+			"Types.cpp",
 			"List.h",
 			"Tuple.h",
 			"Traits.h",
@@ -106,6 +66,7 @@ project("engine")
 			"StringPiece.cpp",
 			"StringUtil.h",
 			"StringUtil.cpp",
+			"Buffer.h",
 		},
 		["os"] = {
 			"Mutex.h",
@@ -138,6 +99,26 @@ project("engine")
 			"Ray.cpp",
 			"Frustum.h",
 			"Frustum.cpp",
+		},
+		["net"] = {
+			"AcceptChannel.h",
+			"AcceptChannel.cpp",
+			"Channel.h",
+			"Channel.cpp",
+			"EventLoop.h",
+			"EventLoop.cpp",
+			"IOOperation.h",
+			"IOOperation.cpp",
+			"Poller.h",
+			"Poller.cpp",
+			"Socket.h",
+			"Socket.cpp",
+			"SocketAddress.h",
+			"SocketAddress.cpp",
+			"SocketChannel.h",
+			"SocketChannel.cpp",
+			"TcpServer.h",
+			"TcpServer.cpp",
 		},
 		["engine"] = {
 			"Event.h",
@@ -190,9 +171,52 @@ project("engine")
 		},
 		["audio"] = {
 		},
-		["net"] = {
-		},
 	}
+end
+
+workspace "engine"
+	location("solution")
+	--toolset "v140"
+	--basedir("solution")
+	--startproject "engine"
+	startproject "unit"
+	configurations {"Debug", "Release"}
+	language "c++"
+	
+	-- 全局配置
+	includedirs {"engine/include"}
+	targetdir(bin_dir)
+	libdirs(lib_dir)
+	objdir(obj_dir)
+	-- 关闭警告
+	filter {"action:vs*"}
+		defines{ "_CRT_SECURE_NO_WARNINGS" }
+	filter {}
+	-- 调试信息
+	filter "configurations:Debug"
+		defines { "DEBUG" }
+		flags 	{ "Symbols" }
+	filter "configurations:Release"
+		defines { "NDEBUG" }
+		optimize "On"
+	filter {}
+	-- 特殊规则
+	filter {"kind:StaticLib"}
+		targetdir(lib_dir)
+	filter {"action:vs*", "kind:SharedLib"}
+		implibdir(lib_dir)
+	filter {"action:gmake"}
+		buildoptions {"-std=c++11", "-fpermissive", "-g -ggdb -Wall"}
+		links { "pthread", "dl"}
+	filter {"action:gmake","kind:SharedLib"}
+		buildoptions {"-fPIC"}
+	filter {}
+-- 主工程
+project("engine")
+	defines {"CU_BUILD_DLL"}
+	kind (iif(_ACTION =="gmake","StaticLib", "SharedLib"))
+	files {"engine/include/**.*", "engine/src/**.*"}
+	--engine_vpaths()
 	
 --[[ 暂时先不开启这些工程
 group "render"
