@@ -164,6 +164,11 @@ int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 *
 	return rc;
 }
 
+int Socket::available() const
+{
+	return 0;
+}
+
 void Socket::ioctl(int request, void* arg)
 {
 #ifdef CU_OS_WIN

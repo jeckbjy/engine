@@ -28,6 +28,7 @@ public:
 	int recv(void* buf, int len, int flags = 0);
 	int sendTo(const SocketAddress& addr, const void* buf, int len, int flags = 0);
 	int recvFrom(SocketAddress& addr, void* buf, int len, int flags = 0);
+	int available() const;
 
 	void ioctl(int request, void* arg);
 	void ioctl(int request, int& arg){ this->ioctl(request, (void*)(&arg)); }

@@ -90,12 +90,12 @@ void EventLoop::run_once(int msec)
 			::closesocket(aop->sock);
 			aop->sock = INVALID_SOCKET;
 		}
-		channel->completed(op);
+		channel->perform(op);
 	}
 	else if (op->isKindOf<SocketOperation>())
 	{
 		SocketOperation* sop = (SocketOperation*)op;
-		channel->completed(op);
+		channel->perform(op);
 	}
 	delete op;
 }
@@ -118,7 +118,8 @@ void EventLoop::run_once(int msec)
 		if (ev_is_output(ev))
 			flags |= SyncOperation::OP_OUTPUT;
 		SyncOperation op(channel, flags);
-		channel->completed(&op);
+		op.code = errno;
+		channel->perform(&op);
 	}
 }
 #endif
@@ -136,6 +137,33 @@ void EventLoop::detach(Channel* channel)
 {
 #ifndef CU_OS_WIN
 	m_handle.ctrl(channel->handle(), EV_CTL_DEL, EV_IN | EV_OUT, channel);
+#endif
+}
+
+void EventLoop::accept(Channel* channel)
+{
+
+}
+
+void EventLoop::connect(Channel* channel)
+{
+}
+
+void EventLoop::send(Channel* channel)
+{
+#ifdef CU_OS_WIN
+
+#else
+	modify(channel, EV_CTL_MOD, EV_OUT);
+#endif
+}
+
+void EventLoop::recv(Channel* channel)
+{
+#ifdef CU_OS_WIN
+
+#else
+	modify(channel, EV_CTL_MOD, EV_IN);
 #endif
 }
 

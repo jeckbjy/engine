@@ -33,12 +33,15 @@ public:
 	{
 		OP_INPUT	= 0x01,
 		OP_OUTPUT	= 0x02,
+		//OP_PRI		= 0x04,
 	};
 	uint8_t flags;
 	SyncOperation(Channel* channel, uint8_t flags)
 		:IOOperation(channel), flags(flags)
 	{
 	}
+	bool isInput() const { return (flags & OP_INPUT) != 0; }
+	bool isOutput() const { return (flags & OP_OUTPUT) != 0; }
 };
 
 // Í¬²½Socket²Ù×÷

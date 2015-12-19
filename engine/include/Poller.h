@@ -25,11 +25,13 @@ typedef epoll_event			event_t;
 #define ev_get_udata(ev)	ev.data.ptr
 #define ev_is_input(ev)		(ev.events & EPOLLIN) != 0
 #define ev_is_output(ev)	(ev.events & EPOLLOUT)!= 0
+//#define ev_is_pri(ev)		(ev.events & EPOLLPRI)!= 0
 #elif defined(CU_OS_BSD)
 typedef kevent				event_t;
 #define ev_get_udata(ev)	ev.udata
 #define ev_is_input(ev)		ev.filter == EVFILT_READ
 #define ev_is_output(ev)	ev.filter == EVFILT_WRITE
+//#define ev_is_pri(ev)		ev.filter == 
 #endif
 
 // ²Ù×÷Âë¶¨Òå

@@ -42,7 +42,7 @@ void AcceptChannel::accept()
 		AcceptOperation op(this);
 		op.sock = sock;
 		op.code = last_error();
-		completed(&op);
+		perform(&op);
 	}
 #endif
 }
@@ -59,7 +59,7 @@ void AcceptChannel::listen(const SocketAddress& addr)
 	accept();
 }
 
-void AcceptChannel::completed(IOOperation* op)
+void AcceptChannel::perform(IOOperation* op)
 {
 	AcceptOperation* aop = op->cast<AcceptOperation>();
 	if (!aop)

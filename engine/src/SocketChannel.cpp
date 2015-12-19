@@ -33,55 +33,125 @@ void SocketChannel::connect(const SocketAddress& addr)
 	if (!result && err != WSA_IO_PENDING)
 		m_loop->post(op, err);
 #else
-	SocketOperation op(this, SocketOperation::OP_CONNECT);
-	if (m_sock.connect(addr) == 0)
-		completed(&op);
+	if (m_sock.connect(addr) == 0) {
+		// 链接成功
+		completed(SocketOperation::OP_CONNECT);
+	}
 
-	bool blocking = errno == EINPROGRESS || errno == EWOULDBLOCK;
+	bool blocking = (errno == EINPROGRESS || errno == EWOULDBLOCK);
 	if (blocking){
+		// blocking:wait for triger
+		m_flags |= F_CONNECTING;
 		m_loop->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
 	}else{
-		op.code = errno;
-		completed(&op);
+		// error:notify 
+		//op.code = errno;
+		//perform(&op);
 	}
 #endif
 }
 
-void SocketChannel::write()
+void SocketChannel::write(const Buffer & buf)
 {
+	m_writer.write(buf);
+	send();
+}
 
+void SocketChannel::send()
+{
+	while (!m_writer.eof())
+	{
+		int len = m_writer.chunk_size();
+		int ret = m_sock.send(m_writer.chunk_data(), len);
+		if(ret == 0)
+			break;
+		if (ret > 0) {
+			m_writer.advance(len);
+			if (ret < len)
+				m_loop->send(this);
+		}
+		else if (ret == -1)
+		{
+			error_t code = last_error();
+			if (code == ERR_IN_PROGRESS)
+			{
+				m_loop->send(this);
+			}
+			else
+			{// notify error
+
+			}
+		}
+	}
 }
 
 void SocketChannel::read()
 {
-
+	int len = m_sock.available();
+	if (len <= 0)
+		return;
+	m_reader.reserve((size_t)len);
+	for (;;)
+	{
+		char*  buf = m_reader.chunk_data();
+		size_t len = m_reader.chunk_size();
+		int ret = m_sock.recv(buf, len);
+	}
+	// 监听读
+	//m_loop->read();
 }
 
-void SocketChannel::completed(IOOperation* op)
+void SocketChannel::perform(IOOperation* op)
 {
-	SocketOperation* sop = op->cast<SocketOperation>();
-	if (sop == NULL)
-		return;
-	if (!op->success()){
+	if (!op->success())
+	{
 		// close log notify
 		return;
 	}
+	if (op->isKindOf<SyncOperation>())
+	{// for *nix
+		SyncOperation* sop = (SyncOperation*)(op);
+		if (sop->isInput())
+		{// for read
+			int len = m_sock.available();
+			if (len == 0)
+			{// error:socket closed
+			}
+			completed(SocketOperation::OP_READ);
+		}
 
-	switch (sop->type)
+		if (sop->isOutput())
+		{// for write
+			if (m_flags & F_CONNECTING)
+				completed(SocketOperation::OP_CONNECT);
+			completed(SocketOperation::OP_WRITE);
+		}
+	}
+	else if(op->isKindOf<SocketOperation>())
+	{// for iocp
+		completed(((SocketOperation*)op)->type);
+	}
+}
+
+void SocketChannel::completed(uint8_t type)
+{
+	switch (type)
 	{
 	case SocketOperation::OP_CONNECT:
 	{
-
+		m_flags &= ~F_CONNECTING;
+		// 通知
 	}
 	break;
 	case SocketOperation::OP_WRITE:
 	{
-
+		m_flags &= ~F_WRITING;
+		send();
 	}
 	break;
 	case SocketOperation::OP_READ:
 	{// 同步读取直到结束
-
+		read();
 	}
 	break;
 	}

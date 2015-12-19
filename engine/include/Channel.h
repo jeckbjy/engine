@@ -13,7 +13,7 @@ public:
 	Channel(EventLoop* loop = NULL);
 	virtual ~Channel();
 	virtual handle_t handle() const = 0;
-	virtual void completed(IOOperation* op) = 0;
+	virtual void perform(IOOperation* op) = 0;
 
 	void attach();
 	void detach();

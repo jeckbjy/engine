@@ -25,6 +25,8 @@ public:
 	// ¥¶¿Ì
 	void accept(Channel* channel);
 	void connect(Channel* channel);
+	void send(Channel* channel);
+	void recv(Channel* channel);
 
 #ifdef CU_OS_WIN
 	void post(IOOperation* op);
