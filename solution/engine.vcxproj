@@ -169,6 +169,7 @@
     <ClCompile Include="..\engine\src\AcceptChannel.cpp" />
     <ClCompile Include="..\engine\src\Application.cpp" />
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
+    <ClCompile Include="..\engine\src\Buffer.cpp" />
     <ClCompile Include="..\engine\src\CMath.cpp" />
     <ClCompile Include="..\engine\src\CProcess.cpp" />
     <ClCompile Include="..\engine\src\Camera.cpp" />

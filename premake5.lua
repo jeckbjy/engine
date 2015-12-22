@@ -67,6 +67,7 @@ function engine_vpaths()
 			"StringUtil.h",
 			"StringUtil.cpp",
 			"Buffer.h",
+			"Buffer.cpp",
 		},
 		["os"] = {
 			"Mutex.h",

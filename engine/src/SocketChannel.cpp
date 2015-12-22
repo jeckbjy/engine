@@ -45,28 +45,32 @@ void SocketChannel::connect(const SocketAddress& addr)
 		m_loop->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
 	}else{
 		// error:notify 
-		//op.code = errno;
-		//perform(&op);
 	}
 #endif
 }
 
-void SocketChannel::write(const Buffer & buf)
+void SocketChannel::send(const Buffer & buf)
 {
-	m_writer.write(buf);
-	send();
+	LockGuard<Mutex> guard(m_mutex);
+	m_writer.append(buf);
+	write();
 }
 
-void SocketChannel::send()
+void SocketChannel::recv()
+{
+	m_loop->recv(this);
+}
+
+void SocketChannel::write()
 {
 	while (!m_writer.eof())
 	{
+		char* buf = m_writer.chunk_data();
 		int len = m_writer.chunk_size();
-		int ret = m_sock.send(m_writer.chunk_data(), len);
-		if(ret == 0)
-			break;
-		if (ret > 0) {
-			m_writer.advance(len);
+		int ret = m_sock.send(buf, len);
+		if (ret > 0) 
+		{
+			m_writer.seek(len, SEEK_CUR);
 			if (ret < len)
 				m_loop->send(this);
 		}
@@ -87,18 +91,32 @@ void SocketChannel::send()
 
 void SocketChannel::read()
 {
-	int len = m_sock.available();
-	if (len <= 0)
-		return;
-	m_reader.reserve((size_t)len);
+	// 从尾部添加数据
+	m_reader.seek(0, SEEK_END);
 	for (;;)
 	{
-		char*  buf = m_reader.chunk_data();
-		size_t len = m_reader.chunk_size();
-		int ret = m_sock.recv(buf, len);
+		int len = m_sock.available();
+		if (len <= 0)
+			return;
+		// 先预分配内存
+		m_reader.expand((size_t)len);
+		int bytes = 0;
+		// 读取填充每段buf
+		for (;;)
+		{
+			char*  buf = m_reader.chunk_data();
+			size_t len = m_reader.chunk_size();
+			int ret = m_sock.recv(buf, len);
+			if (ret <= 0)
+			{// error
+				break;
+			}
+			// 向前移动
+			bytes += ret;
+			m_reader.seek(ret, SEEK_CUR);
+		}
+		assert(bytes == len);
 	}
-	// 监听读
-	//m_loop->read();
 }
 
 void SocketChannel::perform(IOOperation* op)
@@ -135,6 +153,7 @@ void SocketChannel::perform(IOOperation* op)
 
 void SocketChannel::completed(uint8_t type)
 {
+	LockGuard<Mutex> guard(m_mutex);
 	switch (type)
 	{
 	case SocketOperation::OP_CONNECT:
@@ -146,12 +165,15 @@ void SocketChannel::completed(uint8_t type)
 	case SocketOperation::OP_WRITE:
 	{
 		m_flags &= ~F_WRITING;
-		send();
+		write();
 	}
 	break;
 	case SocketOperation::OP_READ:
 	{// 同步读取直到结束
 		read();
+		// 继续监听读取
+		if (m_sock)
+			m_loop->recv(this);
 	}
 	break;
 	}

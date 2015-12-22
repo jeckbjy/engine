@@ -51,7 +51,7 @@ class CU_API SocketOperation : public IOOperation
 public:
 	enum
 	{
-
+		OP_ERROR,
 		OP_CONNECT,
 		OP_READ,
 		OP_WRITE,

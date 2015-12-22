@@ -164,9 +164,35 @@ int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 *
 	return rc;
 }
 
-int Socket::available() const
+int Socket::available()
 {
-	return 0;
+	int result;
+	ioctl(FIONREAD, result);
+	return result;
+}
+
+SocketAddress Socket::address() const
+{
+	assert(m_sock != INVALID_SOCKET);
+	char buffer[SocketAddress::MAX_ADDR_LEN];
+	struct sockaddr* sa = (struct sockaddr*)buffer;
+	socklen_t len = sizeof(buffer);
+	int rc = ::getsockname(m_sock, sa, &len);
+	if (rc == 0)
+		return SocketAddress(sa, len);
+	return SocketAddress();
+}
+
+SocketAddress Socket::peerAddress() const
+{
+	assert(m_sock != INVALID_SOCKET);
+	char buffer[SocketAddress::MAX_ADDR_LEN];
+	struct sockaddr* sa = (struct sockaddr*)buffer;
+	socklen_t len = sizeof(buffer);
+	int rc = ::getpeername(m_sock, sa, &len);
+	if (rc == 0)
+		return SocketAddress(sa, len);
+	return SocketAddress();
 }
 
 void Socket::ioctl(int request, void* arg)
@@ -196,6 +222,31 @@ void Socket::getOption(int level, int option, void* value, socklen_t length) con
 		throw std::runtime_error("getsockopt error");
 }
 
+void Socket::setOptionFlag(int level, int option, bool flag)
+{
+	int value = flag ? 1 : 0;
+	setOption(level, option, &value, sizeof(value));
+}
+
+bool Socket::getOptionFlag(int level, int option) const
+{
+	int value;
+	getOption(level, option, &value, sizeof(value));
+	return value != 0;
+}
+
+void Socket::setOptionInteger(int level, int option, int value)
+{
+	setOption(level, option, &value, sizeof(value));
+}
+
+int  Socket::getOptionInteger(int level, int option) const
+{
+	int result;
+	getOption(level, option, &result, sizeof(int));
+	return result;
+}
+
 void Socket::setLinger(bool on, int seconds)
 {
 	struct linger l;
@@ -210,6 +261,12 @@ void Socket::getLinger(bool& on, int& seconds) const
 	getOption(SOL_SOCKET, SO_LINGER, &l, sizeof(l));
 	on = l.l_onoff != 0;
 	seconds = l.l_linger;
+}
+
+void Socket::setBlocking(bool flag)
+{
+	int arg = flag ? 0 : 1;
+	ioctl(FIONBIO, arg);
 }
 
 CU_NS_END

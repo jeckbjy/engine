@@ -257,6 +257,9 @@
     <ClCompile Include="..\engine\src\AssetCache.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Buffer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\CMath.cpp">
       <Filter>math</Filter>
     </ClCompile>

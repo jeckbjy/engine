@@ -28,7 +28,10 @@ public:
 	int recv(void* buf, int len, int flags = 0);
 	int sendTo(const SocketAddress& addr, const void* buf, int len, int flags = 0);
 	int recvFrom(SocketAddress& addr, void* buf, int len, int flags = 0);
-	int available() const;
+	int available();
+
+	SocketAddress address() const;
+	SocketAddress peerAddress() const;
 
 	void ioctl(int request, void* arg);
 	void ioctl(int request, int& arg){ this->ioctl(request, (void*)(&arg)); }
@@ -39,6 +42,8 @@ public:
 	// 辅助函数，内部调用setOption
 	void setOptionFlag(int level, int option, bool flag);
 	bool getOptionFlag(int level, int option) const;
+	void setOptionInteger(int level, int option, int value);
+	int  getOptionInteger(int level, int option) const;
 
 	void setLinger(bool on, int seconds);
 	void getLinger(bool& on, int& seconds) const;
@@ -58,14 +63,22 @@ public:
 	void setOOBInline(bool flag);
 	bool getOOBInline() const;
 
+	void setBroadcast(bool flag);
+	bool getBroadcast() const;
+
 	void setBlocking(bool flag);
 
+	void setSendBufferSize(int size);
+	int  getSendBufferSize() const;
+	void setReceiveBufferSize(int size);
+	int  getReceiveBufferSize() const;
+
+	int getError() const;
 	socket_t native() const { return m_sock; }
 
 	operator socket_t() const { return m_sock; }
 	bool operator!() const { return m_sock != INVALID_SOCKET; }
 	Socket& operator=(socket_t sock) { set(sock); return *this; }
-
 private:
 	socket_t m_sock;
 };
@@ -73,19 +86,6 @@ private:
 //////////////////////////////////////////////////////////////////////////
 // inline
 //////////////////////////////////////////////////////////////////////////
-inline void Socket::setOptionFlag(int level, int option, bool flag)
-{
-	int value = flag ? 1 : 0;
-	setOption(level, option, &value, sizeof(value));
-}
-
-inline bool Socket::getOptionFlag(int level, int option) const
-{
-	int value;
-	getOption(level, option, &value, sizeof(value));
-	return value != 0;
-}
-
 inline void Socket::setNoDelay(bool flag)
 {
 	setOptionFlag(IPPROTO_TCP, TCP_NODELAY, flag);
@@ -142,10 +142,39 @@ inline bool Socket::getOOBInline() const
 	return getOptionFlag(SOL_SOCKET, SO_OOBINLINE);
 }
 
-inline void Socket::setBlocking(bool flag)
+inline void Socket::setBroadcast(bool flag)
 {
-	int arg = flag ? 0 : 1;
-	ioctl(FIONBIO, arg);
+	setOptionFlag(SOL_SOCKET, SO_BROADCAST, flag);
+}
+
+inline bool Socket::getBroadcast() const
+{
+	return getOptionFlag(SOL_SOCKET, SO_BROADCAST);
+}
+
+inline void Socket::setSendBufferSize(int size)
+{
+	setOptionInteger(SOL_SOCKET, SO_SNDBUF, size);
+}
+
+inline int Socket::getSendBufferSize() const
+{
+	return getOptionInteger(SOL_SOCKET, SO_SNDBUF);
+}
+
+inline void Socket::setReceiveBufferSize(int size)
+{
+	setOptionInteger(SOL_SOCKET, SO_RCVBUF, size);
+}
+
+inline int Socket::getReceiveBufferSize() const
+{
+	return getOptionInteger(SOL_SOCKET, SO_RCVBUF);
+}
+
+inline int Socket::getError() const
+{
+	return getOptionInteger(SOL_SOCKET, SO_ERROR);
 }
 
 CU_NS_END

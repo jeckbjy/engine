@@ -23,8 +23,6 @@ public:
 	bool attach(Channel* channel);
 	void detach(Channel* channel);
 	// ¥¶¿Ì
-	void accept(Channel* channel);
-	void connect(Channel* channel);
 	void send(Channel* channel);
 	void recv(Channel* channel);
 

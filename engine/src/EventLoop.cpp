@@ -140,19 +140,21 @@ void EventLoop::detach(Channel* channel)
 #endif
 }
 
-void EventLoop::accept(Channel* channel)
-{
-
-}
-
-void EventLoop::connect(Channel* channel)
-{
-}
-
 void EventLoop::send(Channel* channel)
 {
 #ifdef CU_OS_WIN
-
+	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_WRITE);
+	WSABUF buf = { 0, 0 };
+	DWORD bytes;
+	int   result = ::WSASend((SOCKET)channel->handle(), &buf, 1, &bytes, 0, &op->data, 0);
+	DWORD ec = ::WSAGetLastError();
+	if (result != ERROR_SUCCESS)
+	{
+		if (ec == ERROR_PORT_UNREACHABLE)
+			ec = WSAECONNREFUSED;
+		if (ec != WSA_IO_PENDING)
+			post(op, ec, bytes);
+	}
 #else
 	modify(channel, EV_CTL_MOD, EV_OUT);
 #endif
@@ -161,6 +163,20 @@ void EventLoop::send(Channel* channel)
 void EventLoop::recv(Channel* channel)
 {
 #ifdef CU_OS_WIN
+	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_READ);
+	WSABUF buf = { 0, 0 };
+	DWORD bytes, flag;
+	int result = ::WSARecv((SOCKET)channel->handle(), &buf, 1, &bytes, &flag, &op->data, 0);
+	DWORD ec = ::WSAGetLastError();
+	if (result != ERROR_SUCCESS)
+	{
+		if (ec == ERROR_NETNAME_DELETED)
+			ec = WSAECONNRESET;
+		else if (ec == ERROR_PORT_UNREACHABLE)
+			ec = WSAECONNREFUSED;
+		if (ec != WSA_IO_PENDING)
+			post(op, ec, bytes);
+	}
 
 #else
 	modify(channel, EV_CTL_MOD, EV_IN);

@@ -92,9 +92,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\sample\test_engine\Game.h" />
+    <ClInclude Include="..\sample\test_engine\Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sample\test_engine\Game.cpp" />
+    <ClCompile Include="..\sample\test_engine\Test.cpp" />
     <ClCompile Include="..\sample\test_engine\main.cpp" />
   </ItemGroup>
   <ItemGroup>

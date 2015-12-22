@@ -39,10 +39,7 @@ void AcceptChannel::accept()
 	}
 	else
 	{// 完成或出错
-		AcceptOperation op(this);
-		op.sock = sock;
-		op.code = last_error();
-		perform(&op);
+		completed(last_error(), sock);
 	}
 #endif
 }
@@ -64,6 +61,15 @@ void AcceptChannel::perform(IOOperation* op)
 	AcceptOperation* aop = op->cast<AcceptOperation>();
 	if (!aop)
 		return;
+	completed(aop->code, aop->sock);
+}
+
+void AcceptChannel::completed(error_t ec, socket_t sock)
+{
+	if (ec != 0 || sock == INVALID_SOCKET)
+	{// 说明出错了
+	}
+	// 创建
 }
 
 CU_NS_END

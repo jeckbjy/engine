@@ -13,6 +13,7 @@ public:
 	void accept();
 	void listen(const SocketAddress& addr);
 	void perform(IOOperation* op);
+	void completed(error_t ec, socket_t sock);
 
 	handle_t handle() const { return (handle_t)m_sock.native(); }
 

@@ -2,8 +2,17 @@
 #include "Channel.h"
 #include "Buffer.h"
 #include "Socket.h"
+#include "Mutex.h"
 
 CU_NS_BEGIN
+
+// »Øµ÷
+class IChannelHandler
+{
+public:
+	virtual ~IChannelHandler(){}
+	virtual void invoke(Channel* channel, int events) = 0;
+};
 
 class SocketAddress;
 class CU_API SocketChannel : public Channel
@@ -13,8 +22,8 @@ public:
 	~SocketChannel();
 
 	void connect(const SocketAddress& addr);
-	void write(const Buffer& buf);
-	void read();
+	void send(const Buffer& buf);
+	void recv();
 
 	void perform(IOOperation* op);
 	void completed(uint8_t type);
@@ -22,8 +31,8 @@ public:
 	handle_t handle() const { return (handle_t)m_sock.native(); }
 
 private:
-	void send();
-	void recv();
+	void write();
+	void read();
 
 private:
 	enum
@@ -34,6 +43,7 @@ private:
 
 	uchar  m_flags;
 	Socket m_sock;
+	Mutex  m_mutex;
 	Buffer m_reader;
 	Buffer m_writer;
 };
