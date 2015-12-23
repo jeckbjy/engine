@@ -7,18 +7,18 @@ CU_NS_BEGIN
 class CU_API AcceptChannel : public Channel
 {
 public:
-	AcceptChannel(EventLoop* loop);
+	AcceptChannel(IOService* service);
 	~AcceptChannel();
 
 	void accept();
 	void listen(const SocketAddress& addr);
-	void perform(IOOperation* op);
-	void completed(error_t ec, socket_t sock);
+	virtual void perform(IOOperation* op);
+	virtual void completed(socket_t sock);
 
 	handle_t handle() const { return (handle_t)m_sock.native(); }
 
 protected:
-	Socket m_sock;
+	Socket	m_sock;
 	SocketAddress m_addr;
 };
 

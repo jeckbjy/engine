@@ -3,11 +3,20 @@
 
 CU_NS_BEGIN
 
-void WorkQueue::WorkThread(Thread* thread)
+class WorkThread : public Runnable
 {
-	WorkQueue* worker = (WorkQueue*)thread->data();
-	worker->loop(thread->index());
-}
+	WorkQueue* m_worker;
+	int m_index;
+public:
+	WorkThread(WorkQueue* worker, int index)
+		:m_worker(worker), m_index(index)
+	{}
+
+	void run()
+	{
+		m_worker->loop(m_index);
+	}
+};
 
 WorkQueue::WorkQueue()
 {
@@ -37,9 +46,10 @@ void WorkQueue::create(int threads)
 
 	for (int i = 1; i <= threads; ++i)
 	{
-		Thread* thread = new Thread(i);
-		m_threads.push_back(thread);
-		thread->start(&WorkThread, this);
+		Thread* thd = new Thread(i);
+		m_threads.push_back(thd);
+		WorkThread* worker = new WorkThread(this, i);
+		thd->start(worker);
 	}
 }
 

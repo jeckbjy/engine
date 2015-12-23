@@ -13,11 +13,11 @@ typedef pthread_t	thread_id;
 #endif
 
 class Thread;
-class CU_API Runnable
+class CU_API Runnable : public Ref
 {
 public:
 	virtual ~Runnable(){}
-	virtual void run(Thread* owner) = 0;
+	virtual void run() = 0;
 };
 
 // 应该使用_beginthreadex代替CreateThread
@@ -35,7 +35,7 @@ public:
 		Hightest,
 	};
 
-	typedef void(*func_t)(Thread* owner);
+	typedef void(*func_t)(void* args);
 	
 	static void sleep(long msec);	// 休眠毫秒
 	static void yield();			// 让出cpu
@@ -44,7 +44,7 @@ public:
 	static bool	isMainThread();
 
 public:
-	Thread(size_t idx = 0, size_t size = 0);
+	Thread(size_t size = 0);
 	~Thread();
 
 	void start(Runnable* target);
@@ -55,7 +55,6 @@ public:
 	bool running() const { return m_handle != NULL; }
 
 	thread_id id() const { return m_id; }
-	size_t index() const { return m_index; }
 	void* data() const { return m_data; }
 
 public:
@@ -68,7 +67,6 @@ private:
 
 	thread_t	m_handle;
 	thread_id	m_id;
-	size_t		m_index;	// 额外线程索引
 	size_t		m_size;		// 堆栈大小
 	func_t		m_func;
 	void*		m_data;

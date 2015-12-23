@@ -1,9 +1,9 @@
 #include "SocketChannel.h"
-#include "EventLoop.h"
+#include "IOService.h"
 
 CU_NS_BEGIN
 
-SocketChannel::SocketChannel(EventLoop* loop)
+SocketChannel::SocketChannel(IOService* loop)
 :Channel(loop)
 {
 
@@ -31,7 +31,7 @@ void SocketChannel::connect(const SocketAddress& addr)
 	result = FConnectEx(m_sock, addr.address(), addr.length(), 0, 0, 0, &op->data);
 	err = ::WSAGetLastError();
 	if (!result && err != WSA_IO_PENDING)
-		m_loop->post(op, err);
+		m_serivce->post(op, err);
 #else
 	if (m_sock.connect(addr) == 0) {
 		// 链接成功
@@ -42,7 +42,7 @@ void SocketChannel::connect(const SocketAddress& addr)
 	if (blocking){
 		// blocking:wait for triger
 		m_flags |= F_CONNECTING;
-		m_loop->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
+		m_serivce->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
 	}else{
 		// error:notify 
 	}
@@ -58,7 +58,7 @@ void SocketChannel::send(const Buffer & buf)
 
 void SocketChannel::recv()
 {
-	m_loop->recv(this);
+	m_serivce->recv(this);
 }
 
 void SocketChannel::write()
@@ -72,14 +72,14 @@ void SocketChannel::write()
 		{
 			m_writer.seek(len, SEEK_CUR);
 			if (ret < len)
-				m_loop->send(this);
+				m_serivce->send(this);
 		}
 		else if (ret == -1)
 		{
 			error_t code = last_error();
 			if (code == ERR_IN_PROGRESS)
 			{
-				m_loop->send(this);
+				m_serivce->send(this);
 			}
 			else
 			{// notify error
@@ -173,10 +173,11 @@ void SocketChannel::completed(uint8_t type)
 		read();
 		// 继续监听读取
 		if (m_sock)
-			m_loop->recv(this);
+			m_serivce->recv(this);
 	}
 	break;
 	}
+	notify(type);
 }
 
 CU_NS_END

@@ -9,11 +9,13 @@ CU_NS_BEGIN
 class IOOperation;
 class Channel;
 // iocp or poller
-class CU_API EventLoop
+class CU_API IOService
 {
 public:
-	EventLoop();
-	~EventLoop();
+	static void WorkThread(void* param);
+
+	IOService();
+	~IOService();
 
 	void run();
 	void stop();

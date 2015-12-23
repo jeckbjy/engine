@@ -16,6 +16,18 @@ socket_t Socket::create_socket(int af /* = AF_INET */, int type /* = SOCK_STREAM
 	return sock;
 }
 
+void Socket::close_socket(socket_t sock)
+{
+	if (sock != INVALID_SOCKET)
+	{
+#ifdef _WIN32
+		::closesocket(sock);
+#else
+		::close(sock);
+#endif
+	}
+}
+
 Socket::Socket(socket_t sock)
 	:m_sock(sock)
 {
@@ -51,15 +63,6 @@ void Socket::reset()
 
 void Socket::close()
 {
-	if (m_sock != INVALID_SOCKET)
-	{
-#ifdef _WIN32
-		::closesocket(m_sock);
-#else
-		::close(m_sock);
-#endif
-		m_sock = INVALID_SOCKET;
-	}
 }
 
 void Socket::shutdown(int how /* = SHUT_RDWR */)

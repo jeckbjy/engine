@@ -1,4 +1,4 @@
-#include "EventLoop.h"
+#include "IOService.h"
 #include "Channel.h"
 
 #ifndef CU_OS_WIN
@@ -12,17 +12,23 @@ CU_NS_BEGIN
 #define KEY_COMPLETION	2
 #endif
 
-EventLoop::EventLoop()
+void IOService::WorkThread(void* param)
+{
+	IOService* service = (IOService*)param;
+	service->run();
+}
+
+IOService::IOService()
 {
 
 }
 
-EventLoop::~EventLoop()
+IOService::~IOService()
 {
 
 }
 
-void EventLoop::run()
+void IOService::run()
 {
 	++m_threads;
 	m_stopped = 0;
@@ -37,7 +43,7 @@ void EventLoop::run()
 		wakeup();
 }
 
-void EventLoop::stop()
+void IOService::stop()
 {
 	if (m_stopped == 0)
 	{
@@ -47,7 +53,7 @@ void EventLoop::stop()
 	}
 }
 
-void EventLoop::wakeup()
+void IOService::wakeup()
 {
 #if defined(CU_OS_WIN)
 	if (::PostQueuedCompletionStatus((HANDLE)m_handle, 0, KEY_WAKEUP, 0) == 0)
@@ -58,7 +64,7 @@ void EventLoop::wakeup()
 }
 
 #ifdef CU_OS_WIN
-void EventLoop::run_once(int msec)
+void IOService::run_once(int msec)
 {
 	DWORD bytes;
 	DWORD_PTR completion_key = 0;
@@ -100,7 +106,7 @@ void EventLoop::run_once(int msec)
 	delete op;
 }
 #else
-void EventLoop::run_once(int msec)
+void IOService::run_once(int msec)
 {
 	static const int kEventMax = 128;
 	event_t events[kEventMax];
@@ -124,7 +130,7 @@ void EventLoop::run_once(int msec)
 }
 #endif
 
-bool EventLoop::attach(Channel* channel)
+bool IOService::attach(Channel* channel)
 {
 #ifdef CU_OS_WIN
 	return ::CreateIoCompletionPort((HANDLE)channel->handle(), m_handle, 0, 0) == 0;
@@ -133,14 +139,14 @@ bool EventLoop::attach(Channel* channel)
 #endif
 }
 
-void EventLoop::detach(Channel* channel)
+void IOService::detach(Channel* channel)
 {
 #ifndef CU_OS_WIN
 	m_handle.ctrl(channel->handle(), EV_CTL_DEL, EV_IN | EV_OUT, channel);
 #endif
 }
 
-void EventLoop::send(Channel* channel)
+void IOService::send(Channel* channel)
 {
 #ifdef CU_OS_WIN
 	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_WRITE);
@@ -160,7 +166,7 @@ void EventLoop::send(Channel* channel)
 #endif
 }
 
-void EventLoop::recv(Channel* channel)
+void IOService::recv(Channel* channel)
 {
 #ifdef CU_OS_WIN
 	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_READ);
@@ -184,20 +190,20 @@ void EventLoop::recv(Channel* channel)
 }
 
 #ifdef CU_OS_WIN
-void EventLoop::post(IOOperation* op)
+void IOService::post(IOOperation* op)
 {
 	if (::PostQueuedCompletionStatus(m_handle, 0, KEY_COMPLETION, &op->data) == 0)
 		throw std::runtime_error("post fail.");
 }
 
-void EventLoop::post(IOOperation* op, DWORD ec, DWORD bytes /* = 0 */)
+void IOService::post(IOOperation* op, DWORD ec, DWORD bytes /* = 0 */)
 {
 	op->data.Offset = ec;
 	op->data.OffsetHigh = bytes;
 	post(op);
 }
 #else
-void EventLoop::modify(Channel* channel, int op, int events)
+void IOService::modify(Channel* channel, int op, int events)
 {
 	m_handle.ctrl(channel->handle(), op, events, channel);
 }

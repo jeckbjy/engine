@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClInclude Include="..\engine\include\API.h" />
     <ClInclude Include="..\engine\include\AcceptChannel.h" />
+    <ClInclude Include="..\engine\include\Acceptor.h" />
     <ClInclude Include="..\engine\include\Algo.h" />
     <ClInclude Include="..\engine\include\Application.h" />
     <ClInclude Include="..\engine\include\AssetCache.h" />
@@ -113,7 +114,6 @@
     <ClInclude Include="..\engine\include\DynLib.h" />
     <ClInclude Include="..\engine\include\Engine.h" />
     <ClInclude Include="..\engine\include\Event.h" />
-    <ClInclude Include="..\engine\include\EventLoop.h" />
     <ClInclude Include="..\engine\include\FourCC.h" />
     <ClInclude Include="..\engine\include\Frustum.h" />
     <ClInclude Include="..\engine\include\FuncTraits.h" />
@@ -121,6 +121,8 @@
     <ClInclude Include="..\engine\include\GpuBuffer.h" />
     <ClInclude Include="..\engine\include\Graphics.h" />
     <ClInclude Include="..\engine\include\IOOperation.h" />
+    <ClInclude Include="..\engine\include\IOService.h" />
+    <ClInclude Include="..\engine\include\IOServicePool.h" />
     <ClInclude Include="..\engine\include\List.h" />
     <ClInclude Include="..\engine\include\Macro.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
@@ -130,6 +132,7 @@
     <ClInclude Include="..\engine\include\Platform.h" />
     <ClInclude Include="..\engine\include\Plugin.h" />
     <ClInclude Include="..\engine\include\Poller.h" />
+    <ClInclude Include="..\engine\include\Procotol.h" />
     <ClInclude Include="..\engine\include\Quaternion.h" />
     <ClInclude Include="..\engine\include\Range.h" />
     <ClInclude Include="..\engine\include\Ray.h" />
@@ -139,6 +142,9 @@
     <ClInclude Include="..\engine\include\Renderer.h" />
     <ClInclude Include="..\engine\include\Rtti.h" />
     <ClInclude Include="..\engine\include\Scene.h" />
+    <ClInclude Include="..\engine\include\Server.h" />
+    <ClInclude Include="..\engine\include\ServerEvent.h" />
+    <ClInclude Include="..\engine\include\Session.h" />
     <ClInclude Include="..\engine\include\Singleton.h" />
     <ClInclude Include="..\engine\include\SmartPtr.h" />
     <ClInclude Include="..\engine\include\Socket.h" />
@@ -147,7 +153,6 @@
     <ClInclude Include="..\engine\include\StringPiece.h" />
     <ClInclude Include="..\engine\include\StringUtil.h" />
     <ClInclude Include="..\engine\include\SyncEvent.h" />
-    <ClInclude Include="..\engine\include\TcpServer.h" />
     <ClInclude Include="..\engine\include\Texture.h" />
     <ClInclude Include="..\engine\include\Thread.h" />
     <ClInclude Include="..\engine\include\Traits.h" />
@@ -167,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp" />
+    <ClCompile Include="..\engine\src\Acceptor.cpp" />
     <ClCompile Include="..\engine\src\Application.cpp" />
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
     <ClCompile Include="..\engine\src\Buffer.cpp" />
@@ -181,27 +187,30 @@
     <ClCompile Include="..\engine\src\Drawable.cpp" />
     <ClCompile Include="..\engine\src\DynLib.cpp" />
     <ClCompile Include="..\engine\src\Engine.cpp" />
-    <ClCompile Include="..\engine\src\EventLoop.cpp" />
     <ClCompile Include="..\engine\src\Frustum.cpp" />
     <ClCompile Include="..\engine\src\IOOperation.cpp" />
+    <ClCompile Include="..\engine\src\IOService.cpp" />
+    <ClCompile Include="..\engine\src\IOServicePool.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
     <ClCompile Include="..\engine\src\Mutex.cpp" />
     <ClCompile Include="..\engine\src\Object.cpp" />
     <ClCompile Include="..\engine\src\Plane.cpp" />
     <ClCompile Include="..\engine\src\Poller.cpp" />
+    <ClCompile Include="..\engine\src\Procotol.cpp" />
     <ClCompile Include="..\engine\src\Quaternion.cpp" />
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />
     <ClCompile Include="..\engine\src\RenderPath.cpp" />
     <ClCompile Include="..\engine\src\Rtti.cpp" />
     <ClCompile Include="..\engine\src\Scene.cpp" />
+    <ClCompile Include="..\engine\src\Server.cpp" />
+    <ClCompile Include="..\engine\src\Session.cpp" />
     <ClCompile Include="..\engine\src\Socket.cpp" />
     <ClCompile Include="..\engine\src\SocketAddress.cpp" />
     <ClCompile Include="..\engine\src\SocketChannel.cpp" />
     <ClCompile Include="..\engine\src\StringPiece.cpp" />
     <ClCompile Include="..\engine\src\StringUtil.cpp" />
     <ClCompile Include="..\engine\src\SyncEvent.cpp" />
-    <ClCompile Include="..\engine\src\TcpServer.cpp" />
     <ClCompile Include="..\engine\src\Thread.cpp" />
     <ClCompile Include="..\engine\src\Transform.cpp" />
     <ClCompile Include="..\engine\src\Types.cpp" />

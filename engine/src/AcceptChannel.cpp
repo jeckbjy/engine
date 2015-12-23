@@ -1,10 +1,10 @@
 #include "AcceptChannel.h"
-#include "EventLoop.h"
+#include "IOService.h"
 
 CU_NS_BEGIN
 
-AcceptChannel::AcceptChannel(EventLoop* loop)
-:Channel(loop)
+AcceptChannel::AcceptChannel(IOService* service)
+:Channel(service)
 {
 
 }
@@ -24,18 +24,18 @@ void AcceptChannel::accept()
 		BOOL result = FAcceptEx(m_sock, op->sock, op->buff, 0, AcceptOperation::ADDR_LEN, AcceptOperation::ADDR_LEN, &bytes, &op->data);
 		error = ::WSAGetLastError();
 		if (result == FALSE && error != WSA_IO_PENDING)
-			m_loop->post(op, error);
+			m_serivce->post(op, error);
 	}
 	else
 	{
-		m_loop->post(op, WSAEBADF);
+		m_serivce->post(op, WSAEBADF);
 	}
 #else
 	// 每次获取一个
 	socket_t sock = m_sock.accept();
 	if (sock == INVALID_SOCKET && errno == EAGAIN)
 	{// 监听等待回调
-		m_loop->modify(this, EV_CTL_MOD, EV_IN);
+		m_serivce->modify(this, EV_CTL_MOD, EV_IN);
 	}
 	else
 	{// 完成或出错
@@ -58,18 +58,27 @@ void AcceptChannel::listen(const SocketAddress& addr)
 
 void AcceptChannel::perform(IOOperation* op)
 {
-	AcceptOperation* aop = op->cast<AcceptOperation>();
-	if (!aop)
-		return;
-	completed(aop->code, aop->sock);
+	if (op->isKindOf<SyncOperation>())
+	{
+		SyncOperation* sop = (SyncOperation*)op;
+		if (sop->isInput())
+		{
+			socket_t sock = m_sock.accept();
+			error_t ec = last_error();
+			completed(sock);
+		}
+	}
+	else if (op->isKindOf<AcceptOperation>())
+	{
+		AcceptOperation* aop = op->cast<AcceptOperation>();
+		if (!aop)
+			return;
+		completed(aop->sock);
+	}
 }
 
-void AcceptChannel::completed(error_t ec, socket_t sock)
+void AcceptChannel::completed(socket_t sock)
 {
-	if (ec != 0 || sock == INVALID_SOCKET)
-	{// 说明出错了
-	}
-	// 创建
 }
 
 CU_NS_END

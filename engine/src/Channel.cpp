@@ -1,11 +1,12 @@
 #include "Channel.h"
-#include "EventLoop.h"
+#include "IOService.h"
 
 CU_NS_BEGIN
 
-Channel::Channel(EventLoop* loop /* = NULL */)
-	: m_loop(loop)
-	, m_attached(false)
+Channel::Channel(IOService* service /* = NULL */)
+: m_serivce(service)
+, m_attached(false)
+, m_code(0)
 {
 }
 
@@ -16,9 +17,9 @@ Channel::~Channel()
 
 void Channel::attach()
 {
-	if (m_attached || !m_loop)
+	if (m_attached || !m_serivce)
 		return;
-	if (m_loop->attach(this))
+	if (m_serivce->attach(this))
 		m_attached = true;
 }
 
@@ -26,7 +27,7 @@ void Channel::detach()
 {
 	if (m_attached)
 	{
-		m_loop->detach(this);
+		m_serivce->detach(this);
 		m_attached = false;
 	}
 }

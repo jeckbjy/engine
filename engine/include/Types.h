@@ -52,8 +52,13 @@
 #include <map>
 #include <set>
 #include <stack>
+#include <queue>
 
+#ifdef CU_CPP11
 #include <atomic>
+#include <unordered_map>
+#include <unordered_set>
+#endif
 
 CU_NS_BEGIN
 
@@ -97,6 +102,10 @@ typedef std::vector<String>			StringList;
 
 template<class T>
 using Vector = std::vector<T>;
+template<class T>
+using HashSet = std::unordered_set<T>;
+template<class U, class V>
+using HashMap = std::unordered_map<U, V>;
 template<class T>
 using Atomic = std::atomic<T>;
 typedef Atomic<int8_t>	Atomic8;

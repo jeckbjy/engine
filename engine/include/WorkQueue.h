@@ -23,7 +23,7 @@ public:
 // 同步多线程加速运算
 class CU_API WorkQueue : public Singleton<WorkQueue>
 {
-	static void WorkThread(Thread* thread);
+	friend class WorkThread;
 public:
 	WorkQueue();
 	~WorkQueue();

@@ -104,22 +104,32 @@ function engine_vpaths()
 		["net"] = {
 			"AcceptChannel.h",
 			"AcceptChannel.cpp",
+			"Acceptor.h",
+			"Acceptor.cpp",
 			"Channel.h",
 			"Channel.cpp",
-			"EventLoop.h",
-			"EventLoop.cpp",
+			"IOService.h",
+			"IOService.cpp",
+			"IOServicePool.h",
+			"IOServicePool.cpp",
 			"IOOperation.h",
 			"IOOperation.cpp",
 			"Poller.h",
 			"Poller.cpp",
+			"Procotol.h",
+			"Procotol.cpp",
+			"ServerEvent.h",
+			"Session.h",
+			"Session.cpp",
 			"Socket.h",
 			"Socket.cpp",
 			"SocketAddress.h",
 			"SocketAddress.cpp",
 			"SocketChannel.h",
 			"SocketChannel.cpp",
-			"TcpServer.h",
-			"TcpServer.cpp",
+			"Server.h",
+			"Server.cpp",
+
 		},
 		["engine"] = {
 			"Event.h",
@@ -189,6 +199,7 @@ workspace "engine"
 	targetdir(bin_dir)
 	libdirs(lib_dir)
 	objdir(obj_dir)
+	debugdir(bin_dir)
 	-- 关闭警告
 	filter {"action:vs*"}
 		defines{ "_CRT_SECURE_NO_WARNINGS" }
@@ -316,7 +327,7 @@ group "importer"
 group "test"
 	project "test_engine"
 		src_dir = "sample/test_engine/"
-		debugdir( bin_dir )
+		--debugdir( bin_dir )
 		dependson {"engine"}
 		kind "WindowedApp"
 		links { "engine" }
@@ -327,6 +338,18 @@ group "test"
 		files { src_dir.."**.h", src_dir.."**.cpp" }
 	project "test_cpp"
 		src_dir = "sample/test_cpp/"
+		kind "ConsoleApp"
+		includedirs {"."}
+		files { src_dir.."**.h", src_dir.."**.cpp" }
+	project "test_server"
+		src_dir = "sample/test_server/"
+		dependson {"engine"}
+		kind "ConsoleApp"
+		includedirs {"."}
+		files { src_dir.."**.h", src_dir.."**.cpp" }
+	project "test_client"
+		src_dir = "sample/test_client/"
+		dependson {"engine"}
 		kind "ConsoleApp"
 		includedirs {"."}
 		files { src_dir.."**.h", src_dir.."**.cpp" }

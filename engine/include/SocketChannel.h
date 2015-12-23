@@ -6,20 +6,14 @@
 
 CU_NS_BEGIN
 
-// »Øµ÷
-class IChannelHandler
-{
-public:
-	virtual ~IChannelHandler(){}
-	virtual void invoke(Channel* channel, int events) = 0;
-};
-
 class SocketAddress;
 class CU_API SocketChannel : public Channel
 {
 public:
-	SocketChannel(EventLoop* loop = NULL);
-	~SocketChannel();
+	SocketChannel(IOService* loop = NULL);
+	virtual ~SocketChannel();
+
+	virtual void notify(uint8_t type) = 0;
 
 	void connect(const SocketAddress& addr);
 	void send(const Buffer& buf);

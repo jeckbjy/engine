@@ -89,10 +89,9 @@ Thread* Thread::current()
 	return thread;
 }
 
-Thread::Thread(size_t index, size_t size)
+Thread::Thread(size_t size)
 : m_handle(0)
 , m_id(0)
-, m_index(index)
 , m_size(size)
 , m_func(0)
 , m_data(0)
@@ -105,15 +104,17 @@ Thread::~Thread()
 	detach();
 }
 
-void RunnableEntry(Thread* thread)
+void RunnableEntry(void* args)
 {
-	Runnable* runner = (Runnable*)thread->data();
-	runner->run(thread);
+	Runnable* runner = (Runnable*)(args);
+	runner->run();
+	runner->release();
 }
 
 void Thread::start(Runnable* target)
 {
-	this->start(&RunnableEntry, 0);
+	target->retain();
+	this->start(&RunnableEntry, target);
 }
 
 void Thread::start(func_t func, void* data /* = 0 */)

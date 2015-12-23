@@ -8,6 +8,7 @@ class CU_API Socket
 {
 public:
 	static socket_t create_socket(int af = AF_INET, int type = SOCK_STREAM, int proto = IPPROTO_IP);
+	static void		close_socket(socket_t sock);
 	
 	Socket(socket_t sock = INVALID_SOCKET);
 	Socket(int af, int type, int proto = IPPROTO_IP);
