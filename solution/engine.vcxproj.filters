@@ -78,6 +78,9 @@
     <ClInclude Include="..\engine\include\Condition.h">
       <Filter>os</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Config.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Context.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -96,6 +99,9 @@
     <ClInclude Include="..\engine\include\Event.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\File.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\FourCC.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -113,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Graphics.h">
       <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\HandlerMgr.h">
+      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\IOOperation.h">
       <Filter>net</Filter>
@@ -135,6 +144,12 @@
     <ClInclude Include="..\engine\include\Mutex.h">
       <Filter>os</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\NetEvent.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\NetService.h">
+      <Filter>net</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Object.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -151,6 +166,9 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Procotol.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Proto.h">
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Quaternion.h">
@@ -179,12 +197,6 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Scene.h">
       <Filter>render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\Server.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\ServerEvent.h">
-      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Session.h">
       <Filter>net</Filter>
@@ -299,6 +311,9 @@
     <ClCompile Include="..\engine\src\Condition.cpp">
       <Filter>os</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Config.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Context.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -311,8 +326,14 @@
     <ClCompile Include="..\engine\src\Engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\File.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Frustum.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\HandlerMgr.cpp">
+      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\IOOperation.cpp">
       <Filter>net</Filter>
@@ -329,6 +350,12 @@
     <ClCompile Include="..\engine\src\Mutex.cpp">
       <Filter>os</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\NetEvent.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\NetService.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Object.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -339,6 +366,9 @@
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Procotol.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Proto.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Quaternion.cpp">
@@ -358,9 +388,6 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Scene.cpp">
       <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\Server.cpp">
-      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Session.cpp">
       <Filter>net</Filter>

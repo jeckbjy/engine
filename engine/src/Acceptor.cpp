@@ -1,17 +1,16 @@
 #include "Acceptor.h"
-#include "ServerEvent.h"
-#include "Server.h"
+#include "NetService.h"
 
 CU_NS_BEGIN
 
-struct AcceptEvent : public ServerEvent
+struct AcceptEvent : public NetEvent
 {
 	Acceptor* m_acceptor;
 	socket_t m_sock;
 	AcceptEvent(Acceptor* acceptor, socket_t sock) :m_acceptor(acceptor), m_sock(sock){}
-	bool process(Server* server)
+	bool process(NetService* server)
 	{
-		gServer->onAccept(m_acceptor, m_sock);
+		gNetService->onAccept(m_acceptor, m_sock);
 		return true;
 	}
 };
@@ -31,7 +30,7 @@ Acceptor::~Acceptor()
 void Acceptor::completed(socket_t sock)
 {
 	AcceptEvent* ev = new AcceptEvent(this, sock);
-	gServer->post(ev);
+	gNetService->post(ev);
 }
 
 CU_NS_END

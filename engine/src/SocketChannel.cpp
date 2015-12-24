@@ -13,6 +13,39 @@ SocketChannel::~SocketChannel()
 {
 }
 
+void SocketChannel::reconnect()
+{
+#ifdef CU_OS_WIN
+	if (FConnectEx == NULL)
+		throw std::runtime_error("cannot find connectex");
+	SocketOperation* op = new SocketOperation(this, SocketOperation::OP_CONNECT);
+	DWORD result, err;
+	result = FConnectEx(m_sock, m_peer.address(), m_peer.length(), 0, 0, 0, &op->data);
+	err = ::WSAGetLastError();
+	if (!result && err != WSA_IO_PENDING)
+		m_serivce->post(op, err);
+#else
+	if (m_sock.connect(m_peer) == 0)
+	{// 链接成功
+		completed(SocketOperation::OP_CONNECT);
+	}
+	else
+	{
+		m_code = last_error();
+		bool blocking = (m_code == EINPROGRESS || m_code == EWOULDBLOCK);
+		if (blocking)
+		{// blocking:wait for triger
+			m_connecting = TRUE;
+			m_serivce->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
+		}
+		else
+		{// error:notify 
+			notify(EV_ERROR);
+		}
+	}
+#endif
+}
+
 void SocketChannel::connect(const SocketAddress& addr)
 {
 	if (!m_sock)
@@ -22,31 +55,9 @@ void SocketChannel::connect(const SocketAddress& addr)
 		m_sock.bind(SocketAddress(), true);
 	}
 	attach();
+	m_peer = addr;
 	// do connect
-#ifdef CU_OS_WIN
-	if (FConnectEx == NULL)
-		throw std::runtime_error("cannot find connectex");
-	SocketOperation* op = new SocketOperation(this, SocketOperation::OP_CONNECT);
-	DWORD result, err;
-	result = FConnectEx(m_sock, addr.address(), addr.length(), 0, 0, 0, &op->data);
-	err = ::WSAGetLastError();
-	if (!result && err != WSA_IO_PENDING)
-		m_serivce->post(op, err);
-#else
-	if (m_sock.connect(addr) == 0) {
-		// 链接成功
-		completed(SocketOperation::OP_CONNECT);
-	}
-
-	bool blocking = (errno == EINPROGRESS || errno == EWOULDBLOCK);
-	if (blocking){
-		// blocking:wait for triger
-		m_flags |= F_CONNECTING;
-		m_serivce->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
-	}else{
-		// error:notify 
-	}
-#endif
+	reconnect();
 }
 
 void SocketChannel::send(const Buffer & buf)
@@ -76,15 +87,11 @@ void SocketChannel::write()
 		}
 		else if (ret == -1)
 		{
-			error_t code = last_error();
-			if (code == ERR_IN_PROGRESS)
-			{
+			m_code = last_error();
+			if (m_code == ERR_IN_PROGRESS)
 				m_serivce->send(this);
-			}
 			else
-			{// notify error
-
-			}
+				notify(EV_ERROR);
 		}
 	}
 }
@@ -123,7 +130,9 @@ void SocketChannel::perform(IOOperation* op)
 {
 	if (!op->success())
 	{
+		m_code = op->code;
 		// close log notify
+		notify(EV_ERROR);
 		return;
 	}
 	if (op->isKindOf<SyncOperation>())
@@ -134,14 +143,20 @@ void SocketChannel::perform(IOOperation* op)
 			int len = m_sock.available();
 			if (len == 0)
 			{// error:socket closed
+				m_code = ERR_CONNECTION_RESET;
+				notify(EV_ERROR);
 			}
-			completed(SocketOperation::OP_READ);
+			else
+			{
+				completed(SocketOperation::OP_READ);
+			}
 		}
 
 		if (sop->isOutput())
 		{// for write
-			if (m_flags & F_CONNECTING)
+			if (m_connecting)
 				completed(SocketOperation::OP_CONNECT);
+			// also try read
 			completed(SocketOperation::OP_WRITE);
 		}
 	}
@@ -158,26 +173,26 @@ void SocketChannel::completed(uint8_t type)
 	{
 	case SocketOperation::OP_CONNECT:
 	{
-		m_flags &= ~F_CONNECTING;
-		// 通知
+		m_connecting = FALSE;
+		notify(EV_CONNECT);
 	}
 	break;
 	case SocketOperation::OP_WRITE:
 	{
-		m_flags &= ~F_WRITING;
 		write();
+		notify(EV_WRITE);
 	}
 	break;
 	case SocketOperation::OP_READ:
 	{// 同步读取直到结束
 		read();
+		notify(EV_READ);
 		// 继续监听读取
 		if (m_sock)
 			m_serivce->recv(this);
 	}
 	break;
 	}
-	notify(type);
 }
 
 CU_NS_END

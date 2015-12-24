@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#include "Client.h"
+#include "GameClient.h"
 
 int main(int argc, char** argv)
 {

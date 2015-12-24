@@ -12,6 +12,12 @@ struct signature_traits
 	static const uint length = 0;
 	typedef Tuple<> params_t;
 	typedef void result_t;
+	typedef void param0_t;
+	typedef void param1_t;
+	typedef void param2_t;
+	typedef void param3_t;
+	typedef void param4_t;
+	typedef void param5_t;
 	template<typename F>
 	inline static result_t call(F& fun, params_t& args)
 	{

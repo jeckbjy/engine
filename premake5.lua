@@ -68,6 +68,10 @@ function engine_vpaths()
 			"StringUtil.cpp",
 			"Buffer.h",
 			"Buffer.cpp",
+			"Config.h",
+			"Config.cpp",
+			"File.h",
+			"File.cpp",
 		},
 		["os"] = {
 			"Mutex.h",
@@ -108,6 +112,8 @@ function engine_vpaths()
 			"Acceptor.cpp",
 			"Channel.h",
 			"Channel.cpp",
+			"HandlerMgr.h",
+			"HandlerMgr.cpp",
 			"IOService.h",
 			"IOService.cpp",
 			"IOServicePool.h",
@@ -118,7 +124,12 @@ function engine_vpaths()
 			"Poller.cpp",
 			"Procotol.h",
 			"Procotol.cpp",
-			"ServerEvent.h",
+			"Proto.h",
+			"Proto.cpp",
+			"NetEvent.h",
+			"NetEvent.cpp",
+			"NetService.h",
+			"NetService.cpp",
 			"Session.h",
 			"Session.cpp",
 			"Socket.h",
@@ -127,8 +138,8 @@ function engine_vpaths()
 			"SocketAddress.cpp",
 			"SocketChannel.h",
 			"SocketChannel.cpp",
-			"Server.h",
-			"Server.cpp",
+
+			
 
 		},
 		["engine"] = {

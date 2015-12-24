@@ -96,8 +96,8 @@ public:
 	inline void setObject(void* obj){}
 	inline bool operator!() const { return false; }
 	inline operator bool() const { return true; }
-	inline operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
-	inline operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
+	inline bool operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
+	inline bool operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
 protected:
 	F m_fun;
 };
@@ -112,8 +112,8 @@ public:
 	inline void setObject(void* obj){}
 	inline bool operator!() const { return !m_fun; }
 	inline operator bool() const { return m_fun != NULL; }
-	inline operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
-	inline operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
+	inline bool operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
+	inline bool operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
 	// ×ªÒÆ
 	inline operator F() const { return m_fun; }
 private:
@@ -133,8 +133,8 @@ public:
 	Function(F fun, void* obj = NULL) :mem_func(fun, (class_t*)obj){}
 	inline bool operator!() const { return !(m_fun && m_obj); }
 	inline operator bool() const { return m_fun && m_obj; }
-	inline operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
-	inline operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
+	inline bool operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
+	inline bool operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
 };
 
 CU_NS_END

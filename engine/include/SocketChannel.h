@@ -15,6 +15,7 @@ public:
 
 	virtual void notify(uint8_t type) = 0;
 
+	void reconnect();
 	void connect(const SocketAddress& addr);
 	void send(const Buffer& buf);
 	void recv();
@@ -28,18 +29,20 @@ private:
 	void write();
 	void read();
 
-private:
+protected:
 	enum
 	{
-		F_CONNECTING = 0x01,
-		F_WRITING = 0x02,
+		EV_ERROR,
+		EV_CONNECT,
+		EV_READ,
+		EV_WRITE,
 	};
-
-	uchar  m_flags;
+	uchar  m_connecting:1;
 	Socket m_sock;
 	Mutex  m_mutex;
 	Buffer m_reader;
 	Buffer m_writer;
+	SocketAddress m_peer;
 };
 
 CU_NS_END

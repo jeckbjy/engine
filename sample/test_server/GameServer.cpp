@@ -1,3 +1,3 @@
-#include "Server.h"
+#include "GameServer.h"
 
-Server gGame;
+NetService gGame;

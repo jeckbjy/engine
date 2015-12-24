@@ -16,8 +16,10 @@ public:
 	void notify(uint8_t type);
 
 private:
-	IProcotol*		m_proto;
-	SocketChannel*	m_channel;
+	uint		m_type;
+	uint		m_id;
+	IProcotol*	m_proto;
+	void*		m_data;
 };
 
 CU_NS_END

@@ -1,11 +1,12 @@
 #pragma once
-#include "Server/TcpServer.h"
+#include "NetService.h"
 using namespace cute;
-#include "Message.h"
+//#include "Message.h"
 
-class Server : public TcpServer
+class GameServer : public NetService
 {
+public:
 
 };
 
-extern Server gGame;
+extern NetService gGame;

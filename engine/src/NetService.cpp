@@ -1,24 +1,25 @@
-#include "Server.h"
+#include "NetService.h"
 #include "Thread.h"
+#include "Proto.h"
 
 CU_NS_BEGIN
 
-Server* gServer = NULL;
+NetService* gNetService = NULL;
 
-Server::Server()
+NetService::NetService()
 : m_quit(true)
 , m_frame(33)
 {
-	gServer = this;
+	gNetService = this;
 }
 
-Server::~Server()
+NetService::~NetService()
 {
-	if (gServer == this)
-		gServer = NULL;
+	if (gNetService == this)
+		gNetService = NULL;
 }
 
-void Server::run()
+void NetService::run()
 {
 	if (!init())
 		return;
@@ -26,19 +27,19 @@ void Server::run()
 	quit();
 }
 
-void Server::stop()
+void NetService::stop()
 {
 	m_quit = true;
 }
 
-void Server::post(ServerEvent* se)
+void NetService::post(NetEvent* se)
 {
 	m_mutex.lock();
 	m_events.push(se);
 	m_mutex.unlock();
 }
 
-void Server::loop()
+void NetService::loop()
 {
 	m_quit = false;
 	while (!m_quit)
@@ -53,7 +54,7 @@ void Server::loop()
 			m_mutex.unlock();
 			while (!events.empty())
 			{
-				ServerEvent* se = events.front();
+				NetEvent* se = events.front();
 				events.pop();
 				bool ok = se->process(this);
 				if (!ok)
@@ -71,18 +72,29 @@ void Server::loop()
 	}
 }
 
-bool Server::init()
+bool NetService::init()
 {
 	return true;
 }
 
-void Server::quit()
+void NetService::quit()
 {
 }
 
-void Server::update()
+void NetService::update()
 {
 	Thread::sleep(m_frame);
+}
+
+void NetService::onAccept(Acceptor* acceptor, socket_t sock)
+{
+
+}
+
+bool NetService::onPacket(Session* sess, IPacket* msg)
+{
+	delete msg;
+	return true;
 }
 
 CU_NS_END

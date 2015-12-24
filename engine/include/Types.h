@@ -82,6 +82,8 @@ typedef char tchar_t;
 #define _T(x)	__T(x)
 #endif
 
+using std::size_t;
+
 typedef int8_t			sint8;
 typedef int16_t			sint16;
 typedef int32_t			sint32;
@@ -95,7 +97,7 @@ typedef unsigned char	uchar;
 typedef unsigned short	ushort;
 typedef unsigned int	uint;
 typedef unsigned long	ulong;
-typedef unsigned int	size_t;
+
 typedef std::basic_string<char>		String;
 typedef std::basic_string<wchar_t>  WString;
 typedef std::vector<String>			StringList;
@@ -129,7 +131,7 @@ typedef HMODULE module_t;
 typedef SOCKET	socket_t;
 typedef DWORD	error_t;
 #else
-#   define MAX_PATH MAXPATHLEN
+#   define MAX_PATH				MAXPATHLEN
 #	define INVALID_HANDLE_VALUE -1
 #	define INVALID_SOCKET		-1
 typedef int		handle_t;
@@ -163,6 +165,8 @@ extern LPFN_ACCEPTEX		FAcceptEx;
 enum ErrorCode
 {
 	ERR_SUCCESS					= 0,
+	ERR_ALREADY_OPEN			= 1,
+	ERR_EOF						= 2,	// 连接正常关闭
 	ERR_ACCESS					= CU_ERROR(EACCES),
 	ERR_AFNOSUPPORT				= CU_ERROR(EAFNOSUPPORT),
 	ERR_ADDRESS_IN_USE			= CU_ERROR(EADDRINUSE),
