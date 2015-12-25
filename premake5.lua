@@ -352,14 +352,14 @@ group "test"
 		kind "ConsoleApp"
 		includedirs {"."}
 		files { src_dir.."**.h", src_dir.."**.cpp" }
-	project "test_server"
-		src_dir = "sample/test_server/"
+	project "tnet_server"
+		src_dir = "sample/tnet_server/"
 		dependson {"engine"}
 		kind "ConsoleApp"
 		includedirs {"."}
 		files { src_dir.."**.h", src_dir.."**.cpp" }
-	project "test_client"
-		src_dir = "sample/test_client/"
+	project "tnet_client"
+		src_dir = "sample/tnet_client/"
 		dependson {"engine"}
 		kind "ConsoleApp"
 		includedirs {"."}

@@ -28,31 +28,29 @@ struct THandlerBase : public IHandler
 	typedef typename std::remove_pointer<typename func_traits<F>::param0_t>::type msg_t;
 	typedef Function<F> func_t;
 	func_t m_fun;
-	THandlerBase(F fun, void* owner) :m_fun(fun, owner){}
+	THandlerBase(F fun, void* owner = 0) :m_fun(fun, owner){}
+};
+
+template<typename F, typename >
+struct HandleTraits
+{
+
 };
 
 template<typename F>
 struct THandler : public THandlerBase<F>
 {
+	THandler(F fun, void* owner = 0) : THandlerBase<F>(fun, owner){}
 	int process(IPacket* pkg, Session* sess)
 	{
 		return 0;
 	}
 };
 
-// example//template<typename F>
-//struct TPlayerHandler : public THandlerBase<F>
-//{
-//	int process(IPacket* pkg, Session* sess)
-//	{
-//		// check player µÈ
-//		return 0;
-//	}
-//};
-
 class CU_API HandlerMgr
 {
 public:
+	static HandlerMgr* instance();
 	HandlerMgr();
 	~HandlerMgr();
 
@@ -60,17 +58,23 @@ public:
 	void add_handler(uint msgid, IHandler* handler);
 
 	template<typename F, template<class> class H>
-	void add(F fun)
+	void add_func(F fun, void* owner)
 	{
 		typedef typename std::remove_pointer<typename func_traits<F>::param0_t>::type TMsg;
-		uint msgid = TMsg::PACK_ID;
-		IHandler* handler = new H<F>(fun, this);
+		uint msgid = TMsg::MSG_ID;
+		IHandler* handler = new H<F>(fun, owner);
 		add_handler(msgid, handler);
+	}
+
+	template<typename F>
+	void add(F fun, void* owner)
+	{
+		add_func<F, THandler>(fun, owner);
 	}
 
 protected:
 	typedef std::vector<IHandler*> HandlerVec;
-
+	HandlerVec m_handlers;
 };
 
 CU_NS_END

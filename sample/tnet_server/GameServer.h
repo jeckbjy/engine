@@ -6,7 +6,7 @@ using namespace cute;
 class GameServer : public NetService
 {
 public:
-
+	GameServer();
 };
 
-extern NetService gGame;
+extern GameServer gGame;
