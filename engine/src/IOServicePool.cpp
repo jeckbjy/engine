@@ -18,6 +18,8 @@ void IOServicePool::run(size_t services /* = 1 */, size_t workers /* = 1 */)
 {
 	if (services < 1)
 		services = 1;
+	if (workers < 1)
+		workers = 1;
 	for (size_t i = 0; i < services; ++i)
 	{
 		IOService* service = new IOService();

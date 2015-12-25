@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "Session.h"
 
+class Player;
 class ServerHandlers
 {
 public:
@@ -9,5 +10,6 @@ public:
 
 	void init();
 
-	void onChat(ChatMsg* msg, Session* sess);
+	int onLogin(LoginMsg* msg, Session* sess);
+	int onChat(ChatMsg* msg, Player* player);
 };

@@ -3,6 +3,16 @@
 
 ServerHandlers gServerHandlers;
 
+// 显示偏特化,校验sess
+template<>
+struct cute::SessionConvertor<Player>
+{
+	static Player* convert(Session* sess)
+	{
+		return (Player*)sess->getData();
+	}
+};
+
 template<typename F>
 inline void add(F fun)
 {
@@ -19,7 +29,12 @@ void ServerHandlers::init()
 	add(&ServerHandlers::onChat);
 }
 
-void ServerHandlers::onChat(ChatMsg* msg, Session* sess)
+int ServerHandlers::onLogin(LoginMsg* msg, Session* sess)
 {
+	return ERR_OK;
+}
 
+int ServerHandlers::onChat(ChatMsg* msg, Player* player)
+{
+	return ERR_OK;
 }

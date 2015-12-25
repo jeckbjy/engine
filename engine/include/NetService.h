@@ -20,13 +20,13 @@ struct NetInfo
 	String	host;
 	NetInfo() :mode(T_NONE), type(0){}
 };
+typedef std::vector<NetInfo> NetInfoVec;
 
 struct NetConfig
 {
-	typedef Vector<NetInfo> InfoVec;
 	uint	services;
 	uint	workers;
-	InfoVec infos;
+	NetInfoVec infos;
 };
 
 // 网络线程处理消息分发
@@ -69,6 +69,7 @@ protected:
 	SessionList		m_closing;		// 需要关闭的socket
 	EventQueue		m_events;		// 待处理的消息
 	Mutex			m_mutex;		// 事件互斥锁
+	NetConfig		m_config;
 };
 
 extern NetService* gNetService;

@@ -17,12 +17,12 @@ SocketAddress::SocketAddress(ushort port /* = 0 */)
 	m_addr4.sin_port = htons(port);
 }
 
-SocketAddress::SocketAddress(const StringPiece& host_port)
+SocketAddress::SocketAddress(const String& host_port)
 {
 	parse(host_port);
 }
 
-SocketAddress::SocketAddress(const StringPiece& addr, ushort port)
+SocketAddress::SocketAddress(const String& addr, ushort port)
 {
 	parse(addr);
 	m_addr4.sin_port = htons(port);
@@ -39,16 +39,17 @@ void SocketAddress::swap(SocketAddress& addr)
 	std::swap(m_addr6, addr.m_addr6);
 }
 
-void SocketAddress::parse(const StringPiece& addr)
+void SocketAddress::parse(const String& addr)
 {
 	if (addr.empty())
 		return;
-	StringPiece host_tmp;
+	// split host and port
+	String host;
 	size_t index = addr.rfind(':');
 	if (index != addr.npos){
-		host_tmp = addr.slice(0, index);
+		host = addr.substr(0, index);
 		// port
-		const char* str_port = addr.slice(index + 1).data();
+		const char* str_port = &addr[index + 1];
 		//
 		unsigned port;
 		char tmp;
@@ -61,20 +62,22 @@ void SocketAddress::parse(const StringPiece& addr)
 				port = se->s_port;
 		}
 	}else{
-		host_tmp = addr;
+		host = addr;
 	}
 	// check host
 	int af;
-	if (host_tmp[0] == '['){
-		if (host_tmp.back() != ']')
+	if (host[0] == '['){
+		index = host.rfind(']');
+		if (index == String::npos)
 			throw std::runtime_error("parse ipv6 host error.");
-		host_tmp = host_tmp.slice(1, host_tmp.size() - 2);
+		host = host.substr(1, index);
 		af = IPv6;
 	}else{
 		af = IPv4;
 	}
+
+	// do parse
 	m_addr4.sin_family = af;
-	String host = host_tmp.toString();
 	if (af == IPv4){
 		inet_aton(host.c_str(), &m_addr4.sin_addr);
 	}else{

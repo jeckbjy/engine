@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClInclude Include="..\sample\tnet_server\GameServer.h" />
     <ClInclude Include="..\sample\tnet_server\Message.h" />
+    <ClInclude Include="..\sample\tnet_server\Player.h" />
     <ClInclude Include="..\sample\tnet_server\ServerHandlers.h" />
   </ItemGroup>
   <ItemGroup>

@@ -31,6 +31,10 @@ struct signature_traits<R()>
 	static const uint length = 0;
 	typedef Tuple<> params_t;
 	typedef R result_t;
+	// dirty for sometime traits
+	typedef void param0_t;
+	typedef void param1_t;
+	typedef void param2_t;
 
 	template<typename F>
 	inline static result_t call(F& fun, params_t& args)
@@ -46,6 +50,8 @@ struct signature_traits<R(T0)>
 	typedef Tuple<T0> params_t;
 	typedef R result_t;
 	typedef T0 param0_t;
+	typedef void param1_t;
+	typedef void param2_t;
 
 	template<typename F>
 	inline static result_t call(F& fun, params_t& args)
@@ -62,6 +68,7 @@ struct signature_traits<R(T0, T1)>
 	typedef R result_t;
 	typedef T0 param0_t;
 	typedef T1 param1_t;
+	typedef void param2_t;
 
 	template<class F>
 	inline static result_t call(F& fun, params_t& args)

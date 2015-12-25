@@ -4,7 +4,12 @@
 
 CU_NS_BEGIN
 
-Session::Session()
+Session::Session(IOService* service, uint id, uint type, IProtocol* proto)
+: SocketChannel(service)
+, m_id(id)
+, m_type(type)
+, m_proto(proto)
+, m_data(0)
 {
 
 }

@@ -11,6 +11,7 @@ enum Error
 	ERR_WAIT,	// 阻塞了，未完成,需要重新投递
 	ERR_FAIL,	// 失败
 	ERR_DECODE,
+	ERR_PARAM,	// 参数错误
 };
 
 struct IPacket;
@@ -26,15 +27,45 @@ template<typename F>
 struct THandlerBase : public IHandler
 {
 	typedef typename std::remove_pointer<typename func_traits<F>::param0_t>::type msg_t;
+	typedef typename std::remove_pointer<typename func_traits<F>::param1_t>::type arg_t;
 	typedef Function<F> func_t;
 	func_t m_fun;
 	THandlerBase(F fun, void* owner = 0) :m_fun(fun, owner){}
 };
 
-template<typename F, typename >
-struct HandleTraits
+template<typename T>
+struct SessionConvertor
 {
+	inline static T* convert(Session* sess);
+};
 
+template<>
+struct SessionConvertor<Session>
+{
+	inline static Session* convert(Session* sess) { return sess; }
+};
+
+// 2个参数时会自动萃取长度
+template<class F, class Msg, class Arg>
+struct Invoker
+{
+	static int call(F fun, Msg* msg, Session* sess)
+	{
+		Arg* arg = SessionConvertor<Arg>::convert(sess);
+		if (arg == 0)
+			return ERR_PARAM;
+		return fun(msg, arg);
+	}
+};
+
+// 1个参数时
+template<class F, class Msg>
+struct Invoker<F, Msg, void>
+{
+	static void call(F& fun, Msg* msg, Session* sess)
+	{
+		return fun(msg);
+	}
 };
 
 template<typename F>
@@ -43,6 +74,7 @@ struct THandler : public THandlerBase<F>
 	THandler(F fun, void* owner = 0) : THandlerBase<F>(fun, owner){}
 	int process(IPacket* pkg, Session* sess)
 	{
+		Invoker<func_t, msg_t, arg_t>::call(m_fun, (msg_t*)pkg, sess);
 		return 0;
 	}
 };

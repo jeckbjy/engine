@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="core">
@@ -165,9 +165,6 @@
     <ClInclude Include="..\engine\include\Poller.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\Procotol.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Proto.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -273,6 +270,9 @@
     <ClInclude Include="..\engine\include\WorkQueue.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Protocol.h">
+      <Filter>net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">
@@ -365,9 +365,6 @@
     <ClCompile Include="..\engine\src\Poller.cpp">
       <Filter>net</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\src\Procotol.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="..\engine\src\Proto.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -433,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\WorkQueue.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Protocol.cpp">
+      <Filter>net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

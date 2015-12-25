@@ -1,13 +1,13 @@
 #pragma once
 #include "SocketChannel.h"
-#include "Procotol.h"
+#include "Protocol.h"
 
 CU_NS_BEGIN
 
 class Session : public SocketChannel
 {
 public:
-	Session();
+	Session(IOService* service, uint id, uint type = 0, IProtocol * proto = PacketProtocol::InstancePtr());
 	~Session();
 
 	void shutdown(int how);
@@ -15,10 +15,13 @@ public:
 
 	void notify(uint8_t type);
 
+	void setData(void* data);
+	void* getData() { return m_data; }
+
 private:
-	uint		m_type;
 	uint		m_id;
-	IProcotol*	m_proto;
+	uint		m_type;
+	IProtocol*	m_proto;
 	void*		m_data;
 };
 

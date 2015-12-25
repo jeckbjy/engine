@@ -16,14 +16,14 @@ public:
 	enum { MAX_ADDR_LEN = sizeof(sockaddr_in6) };
 
 	SocketAddress(ushort port = 0);
-	SocketAddress(const StringPiece& host_port);
-	SocketAddress(const StringPiece& addr, ushort port);
+	SocketAddress(const String& host_port);
+	SocketAddress(const String& addr, ushort port);
 	SocketAddress(sockaddr* addr, socklen_t len);
 
 	String toString() const;
 
 	void swap(SocketAddress& addr);
-	void parse(const StringPiece& addr);
+	void parse(const String& addr);
 
 	const in_addr&  addr4() const { return m_addr4.sin_addr; }
 	const in6_addr& addr6() const { return m_addr6.sin6_addr; }
