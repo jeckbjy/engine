@@ -19,14 +19,17 @@ struct NetInfo
 	uint	type;	// 自定义类型
 	String	host;
 	NetInfo() :mode(T_NONE), type(0){}
+	NetInfo(uint mode, const String& host, uint type = 0) :mode(mode), type(type), host(host){}
 };
 typedef std::vector<NetInfo> NetInfoVec;
 
-struct NetConfig
+struct CU_API NetConfig
 {
 	uint	services;
 	uint	workers;
 	NetInfoVec infos;
+	NetConfig() :services(1), workers(1){}
+	void add_host(int mode, const String& host, uint type = 0);
 };
 
 // 网络线程处理消息分发
@@ -47,11 +50,13 @@ public:
 	virtual void loop();
 	virtual void update();
 
+	virtual bool onEvent(NetEvent* ev);
 	virtual void onError(Session* sess, error_t ec){}
-	virtual void onAccept(Acceptor* acceptor, socket_t sock);
+	virtual void onAccept(Acceptor* acceptor, socket_t sock){}
 	virtual void onConnect(Session* sess){}
-	virtual bool onPacket(Session* sess, IPacket* msg);
+	virtual bool onPacket(Session* sess, IPacket* msg){ return true; }
 
+	virtual IProtocol* getProtocol(int type);
 protected:
 	typedef HashMap<uint, Session*>		SessionMap;
 	// 根据不同类型注册acceptor

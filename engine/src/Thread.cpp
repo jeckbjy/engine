@@ -195,7 +195,7 @@ void Thread::process()
 	sigaddset(&sset, SIGPIPE);
 	pthread_sigmask(SIG_BLOCK, &sset, 0);
 #endif
-	m_func(this);
+	m_func(m_data);
 	m_func = 0;
 	m_data = 0;
 }

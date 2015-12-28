@@ -47,6 +47,8 @@
 #include <stdexcept>
 #include <type_traits>
 
+#include <string>
+#include <sstream>
 #include <vector>
 #include <list>
 #include <map>
@@ -98,9 +100,9 @@ typedef unsigned short	ushort;
 typedef unsigned int	uint;
 typedef unsigned long	ulong;
 
-typedef std::basic_string<char>		String;
-typedef std::basic_string<wchar_t>  WString;
-typedef std::vector<String>			StringList;
+typedef std::string			String;
+typedef std::wstring		WString;
+typedef std::vector<String>	StringList;
 
 template<class T>
 using Vector = std::vector<T>;

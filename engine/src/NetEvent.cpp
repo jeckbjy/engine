@@ -3,18 +3,28 @@
 
 CU_NS_BEGIN
 
-bool ConnectEvent::process(NetService* serivce)
+bool NetEvent::process(NetService* service)
 {
-	serivce->onConnect(sess);
+	return service->onEvent(this);
+}
+
+bool AcceptEvent::process(NetService* service)
+{
+	service->onAccept(m_acceptor, m_sock);
 	return true;
 }
 
-bool ErrorEvent::process(NetService* serivce)
+bool ConnectEvent::process(NetService* service)
 {
-	serivce->onError(sess, code);
+	service->onConnect(sess);
 	return true;
 }
 
+bool ErrorEvent::process(NetService* service)
+{
+	service->onError(sess, code);
+	return true;
+}
 
 bool PacketEvent::process(NetService* service)
 {

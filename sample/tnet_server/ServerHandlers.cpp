@@ -16,7 +16,7 @@ struct cute::SessionConvertor<Player>
 template<typename F>
 inline void add(F fun)
 {
-	HandlerMgr::instance()->add(fun, &gServerHandlers);
+	HandlerMgr::instance().add(fun, &gServerHandlers);
 }
 
 ServerHandlers::ServerHandlers()
@@ -31,10 +31,10 @@ void ServerHandlers::init()
 
 int ServerHandlers::onLogin(LoginMsg* msg, Session* sess)
 {
-	return ERR_OK;
+	return HRET_OK;
 }
 
 int ServerHandlers::onChat(ChatMsg* msg, Player* player)
 {
-	return ERR_OK;
+	return HRET_OK;
 }

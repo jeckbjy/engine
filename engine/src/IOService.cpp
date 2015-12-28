@@ -19,8 +19,15 @@ void IOService::WorkThread(void* param)
 }
 
 IOService::IOService()
+: m_stopped(TRUE)
+, m_threads(0)
+, m_blocks(0)
 {
-
+#ifdef CU_OS_WIN
+	m_handle = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 10000000);
+	if (m_handle == INVALID_HANDLE_VALUE)
+		throw std::runtime_error("create iocp error.");
+#endif
 }
 
 IOService::~IOService()

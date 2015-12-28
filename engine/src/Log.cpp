@@ -77,10 +77,10 @@ void Log::log(const LogMessage& msg)
 	m_messages.push(msg);
 	m_mutex.unlock();
 
-	//m_event.notify();
+	m_event.notify();
 }
 
-void Log::log(const string& text, LogLevel ll, const char* file /* = 0 */, int line /* = 0 */)
+void Log::log(const String& text, LogLevel ll, const char* file /* = 0 */, int line /* = 0 */)
 {
 	LogMessage msg(ll, file, line);
 	msg.text = text;
@@ -97,7 +97,7 @@ void Log::log(LogLevel ll, const char* file, int line, const char* fmt, ...)
 	log(msg);
 }
 
-void Log::setProperty(int type, const std::string& key, const std::string& value)
+void Log::setProperty(int type, const String& key, const String& value)
 {
 	for (auto itor = m_channels.begin(); itor != m_channels.end(); ++itor)
 	{

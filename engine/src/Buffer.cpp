@@ -31,7 +31,7 @@ void Buffer::itor_t::next()
 		size = leng;
 }
 
-Buffer::Buffer(size_t bytes /* = 0 */)
+Buffer::Buffer(size_t bytes)
 : m_head(0)
 , m_curr(0)
 , m_offs(0)
@@ -322,6 +322,11 @@ void Buffer::concat()
 	m_offs = m_cpos;
 }
 
+uint Buffer::find(char data, size_t off /* = 0 */)
+{
+	return 0;
+}
+
 Buffer::node_t* Buffer::alloc(size_t len)
 {
 	if (len == 0)
@@ -415,6 +420,17 @@ void Buffer::check_copy(node_t* node)
 	--buff->refs;
 	node->buff = temp;
 	node->data = temp->base;
+}
+
+String Buffer::toString()
+{
+	if (empty())
+		return "";
+	size_t len = size();
+	String str;
+	str.resize(len);
+	write(&str[0], len);
+	return str;
 }
 
 CU_NS_END

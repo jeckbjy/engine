@@ -51,7 +51,7 @@ void SocketAddress::parse(const String& addr)
 		// port
 		const char* str_port = &addr[index + 1];
 		//
-		unsigned port;
+		unsigned port = 0;
 		char tmp;
 		bool res = sscanf(str_port, "%u%c", &port, &tmp) == 1;
 		if (res && port <= 0xFFFF){
@@ -61,6 +61,7 @@ void SocketAddress::parse(const String& addr)
 			if (se)
 				port = se->s_port;
 		}
+		m_addr4.sin_port = port;
 	}else{
 		host = addr;
 	}

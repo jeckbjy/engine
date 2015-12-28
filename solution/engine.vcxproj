@@ -101,6 +101,7 @@
     <ClInclude Include="..\engine\include\Bits.h" />
     <ClInclude Include="..\engine\include\Buffer.h" />
     <ClInclude Include="..\engine\include\CMath.h" />
+    <ClInclude Include="..\engine\include\Console.h" />
     <ClInclude Include="..\engine\include\CProcess.h" />
     <ClInclude Include="..\engine\include\Camera.h" />
     <ClInclude Include="..\engine\include\Canvas.h" />
@@ -127,6 +128,8 @@
     <ClInclude Include="..\engine\include\IOService.h" />
     <ClInclude Include="..\engine\include\IOServicePool.h" />
     <ClInclude Include="..\engine\include\List.h" />
+    <ClInclude Include="..\engine\include\Log.h" />
+    <ClInclude Include="..\engine\include\LogChannel.h" />
     <ClInclude Include="..\engine\include\Macro.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
     <ClInclude Include="..\engine\include\Mutex.h" />
@@ -181,6 +184,7 @@
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
     <ClCompile Include="..\engine\src\Buffer.cpp" />
     <ClCompile Include="..\engine\src\CMath.cpp" />
+    <ClCompile Include="..\engine\src\Console.cpp" />
     <ClCompile Include="..\engine\src\CProcess.cpp" />
     <ClCompile Include="..\engine\src\Camera.cpp" />
     <ClCompile Include="..\engine\src\Channel.cpp" />
@@ -198,6 +202,8 @@
     <ClCompile Include="..\engine\src\IOOperation.cpp" />
     <ClCompile Include="..\engine\src\IOService.cpp" />
     <ClCompile Include="..\engine\src\IOServicePool.cpp" />
+    <ClCompile Include="..\engine\src\Log.cpp" />
+    <ClCompile Include="..\engine\src\LogChannel.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
     <ClCompile Include="..\engine\src\Mutex.cpp" />
     <ClCompile Include="..\engine\src\NetEvent.cpp" />

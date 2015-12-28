@@ -1,5 +1,5 @@
 #include "LogChannel.h"
-//#include "Console.h"
+#include "Console.h"
 #include "Util.h"
 #include <time.h>
 
@@ -78,12 +78,12 @@ void FileChannel::close()
 		m_file.close();
 }
 
-void SocketChannel::write(const Log* owner, const LogMessage& msg)
+void SocketLogChannel::write(const Log* owner, const LogMessage& msg)
 {
 
 }
 
-void SocketChannel::setProperty(const std::string& key, const std::string& value)
+void SocketLogChannel::setProperty(const std::string& key, const std::string& value)
 {
 
 }

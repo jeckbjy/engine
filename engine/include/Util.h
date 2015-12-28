@@ -25,6 +25,21 @@ public:
 	static bool isFile(const String& path);	// 是否是文件
 	static bool createDir(const String& path, bool recursive = true);	// 创建目录，以"/"分割
 	static bool createFile(const String& path, bool checkDir = true);	// 创建文件，checkDir:自动创建目录
+
+	static void vformat(String& result, const char* fmt, va_list& va);
+	static void vformat(String& result, const char* fmt, ...);
+	static String vformat(const char* fmt, ...);
+
+	static void trim(String& str);
+	static void trimLeft(String& str);
+	static void trimRight(String& str);
+	static void toUpper(String& str);
+	static void toLower(String& str);
+	static void replace(String& str, const String& old_word, const String& new_word);
+	static void split(StringList& tokens, const String& str, const String& delimiter = "|", bool compress = true);
+
+	static bool startsWith(const String& str, const String& pattern, bool lowerCase = true);
+	static bool endsWith(const String& str, const String& pattern, bool lowerCase = true);
 };
 
 CU_NS_END

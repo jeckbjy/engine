@@ -1,12 +1,8 @@
 #pragma once
-#include "LogChannel.h"
 #include "Mutex.h"
-#include "Event.h"
 #include "Thread.h"
-
-#include <vector>
-#include <queue>
-#include <sstream>
+#include "SyncEvent.h"
+#include "LogChannel.h"
 
 CU_NS_BEGIN
 //
@@ -25,11 +21,11 @@ public:
 	void stop();
 
 	void log(const LogMessage& msg);
-	void log(const string& text, LogLevel ll, const char* file = 0, int line = 0);
+	void log(const String& text, LogLevel ll, const char* file = 0, int line = 0);
 	void log(LogLevel ll, const char* file, int line, const char* fmt, ...);
 
 	void addChannel(LogChannel* channel);
-	void setProperty(int type, const std::string& key, const std::string& value);
+	void setProperty(int type, const String& key, const String& value);
 
 private:
 	void loop();
@@ -39,8 +35,8 @@ private:
 	typedef std::queue<LogMessage> MessageQueue;
 
 	bool			m_stopped;
-	Event			m_event;
 	Mutex			m_mutex;
+	SyncEvent		m_event;
 	Thread			m_thread;
 	ChannelVec		m_channels;
 	MessageQueue	m_messages;

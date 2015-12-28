@@ -2,10 +2,10 @@
 
 CU_NS_BEGIN
 
-HandlerMgr* HandlerMgr::instance()
+HandlerMgr& HandlerMgr::instance()
 {
 	static HandlerMgr mgr;
-	return &mgr;
+	return mgr;
 }
 
 HandlerMgr::HandlerMgr()

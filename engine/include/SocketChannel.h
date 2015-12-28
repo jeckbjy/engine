@@ -18,12 +18,15 @@ public:
 	void reconnect();
 	void connect(const SocketAddress& addr);
 	void send(const Buffer& buf);
+	void send(const char* str);
 	void recv();
 
 	void perform(IOOperation* op);
 	void completed(uint8_t type);
 
 	handle_t handle() const { return (handle_t)m_sock.native(); }
+	Buffer& getReader() { return m_reader; }
+	Buffer& getWriter() { return m_writer; }
 
 private:
 	void write();

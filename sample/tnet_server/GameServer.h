@@ -6,6 +6,9 @@ class GameServer : public NetService
 {
 public:
 	GameServer();
+
+	IProtocol* getProtocol(int type);
+	bool onEvent(NetEvent* ev);
 };
 
 extern GameServer gGame;

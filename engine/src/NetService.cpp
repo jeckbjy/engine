@@ -6,6 +6,12 @@ CU_NS_BEGIN
 
 NetService* gNetService = NULL;
 
+void NetConfig::add_host(int mode, const String& host, uint type /* = 0 */)
+{
+	NetInfo info(mode, host, type);
+	infos.push_back(info);
+}
+
 NetService::NetService()
 : m_quit(true)
 , m_frame(33)
@@ -89,15 +95,16 @@ bool NetService::init()
 		{
 			assert(m_acceptors.find(itor->type) == m_acceptors.end());
 			Acceptor* acceptor = new Acceptor(m_services.next(), itor->type);
-			acceptor->listen(itor->host);
 			m_acceptors[itor->type] = acceptor;
+			acceptor->listen(itor->host);
 		}
 		else if (itor->mode == NetInfo::T_CONNECT)
 		{
 			assert(m_connectors.find(itor->type) == m_connectors.end());
-			Session* connector = new Session(m_services.next(), m_maxID++, itor->type);
-			connector->connect(itor->host);
+			IProtocol* protocal = getProtocol(itor->type);
+			Session* connector = new Session(m_services.next(), m_maxID++, itor->type, protocal);
 			m_connectors[itor->type] = connector;
+			connector->connect(itor->host);
 		}
 	}
 	return true;
@@ -112,15 +119,14 @@ void NetService::update()
 	Thread::sleep(m_frame);
 }
 
-void NetService::onAccept(Acceptor* acceptor, socket_t sock)
+bool NetService::onEvent(NetEvent* ev)
 {
-
+	return true;
 }
 
-bool NetService::onPacket(Session* sess, IPacket* msg)
+IProtocol* NetService::getProtocol(int type)
 {
-	delete msg;
-	return true;
+	return PacketProtocol::InstancePtr();
 }
 
 CU_NS_END

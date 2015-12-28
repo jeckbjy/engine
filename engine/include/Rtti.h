@@ -37,7 +37,8 @@ public:
 	bool isKindOf(uint32_t type) const;
 
 	void*		create() { return m_creator ? m_creator() : NULL; }
-	FourCC		getType() const { return m_type; }
+	FourCC		getFourCC() const { return m_type; }
+	uint32_t	getType() const { return m_type; }
 	uint32_t	getDepth() const { return m_depth; }
 	const Rtti* getParent() const { return m_parent; }
 	const String& getName() const { return m_name; }
@@ -83,18 +84,17 @@ struct RootRtti
 	static Rtti* getStaticRtti() { return NULL; }
 };
 
-
 // 如果没有基类，Base使用RootRtti
-#define __DeclareRTTI(CLS, BASE, fourCC)	\
+#define __DeclareRTTI(CLS, BASE, FCC)	\
 public:\
 	static Rtti* getStaticRtti(){ \
-		static cute::Rtti rtti(BASE::getStaticRtti(), #CLS, fourCC, rtti_traits<CLS>::getCreator()); \
+		static cute::Rtti rtti(BASE::getStaticRtti(), #CLS, FCC, rtti_traits<CLS>::getCreator()); \
 		return &rtti; \
 	};\
 	virtual Rtti* getRtti() const { return getStaticRtti(); }
 
 #define DECLARE_RTTI(CLS, BASE, FOUR_CC) __DeclareRTTI(CLS, BASE, FOUR_CC)
 #define DECLARE_BASE_RTTI(CLS, FOUR_CC)  __DeclareRTTI(CLS, RootRtti, FOUR_CC)
-
+#define OBJECT_TYPE(OBJ) OBJ::getStaticRtti()->getType()
 
 CU_NS_END

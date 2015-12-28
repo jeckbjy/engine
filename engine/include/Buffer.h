@@ -13,7 +13,8 @@ class CU_API Buffer
 	struct buff_t;
 	struct node_t;
 public:
-	Buffer(size_t bytes = 10);
+	static const uint npos = (uint)-1;
+	Buffer(size_t bytes = 1024);
 	~Buffer();
 
 	void slice(Buffer& buf, size_t off, size_t len);
@@ -31,12 +32,14 @@ public:
 	void compact();
 	// 多个buff合并成一个
 	void concat();
+	uint find(char data, size_t off = 0);
 
 	bool eof() const { return m_cpos >= m_size; }
 	bool empty() const { return m_size == 0; }
 	size_t size() const { return m_size; }
 	size_t position() const { return m_cpos; }
 
+	String toString();
 	char*  data() { return m_head->data; }
 	char*  chunk_data() { return m_curr->data; }
 	size_t chunk_size() const { return m_curr->leng; }

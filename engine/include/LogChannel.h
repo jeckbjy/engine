@@ -5,7 +5,6 @@
 #include <time.h>
 
 CU_NS_BEGIN
-//
 
 enum LogLevel
 {
@@ -19,12 +18,12 @@ enum LogLevel
 
 struct LogMessage
 {
-	string output;		// 最终输出
-	string text;		// 原始信息
-	LogLevel level;
-	time_t timestamp;	// 时间戳
-	const char* file;	// 文件名
-	int line;			// 行号
+	std::string	output;		// 最终输出
+	std::string	text;		// 原始信息
+	LogLevel	level;		// 输出等级
+	time_t		timestamp;	// 时间戳
+	const char* file;		// 文件名
+	int			line;		// 行号
 
 	LogMessage(LogLevel ll, const char* file, int line);
 
@@ -95,11 +94,11 @@ private:
 };
 
 // 发送到某个特定服务器
-class SocketChannel : public LogChannel
+class SocketLogChannel : public LogChannel
 {
 public:
-	SocketChannel();
-	~SocketChannel();
+	SocketLogChannel();
+	~SocketLogChannel();
 	int type() const { return LOG_SOCKET; }
 	void write(const Log* owner, const LogMessage& msg);
 	void setProperty(const std::string& key, const std::string& value);

@@ -5,13 +5,13 @@
 
 CU_NS_BEGIN
 
-enum Error
+enum HandleResult
 {
-	ERR_OK,		// 成功
-	ERR_WAIT,	// 阻塞了，未完成,需要重新投递
-	ERR_FAIL,	// 失败
-	ERR_DECODE,
-	ERR_PARAM,	// 参数错误
+	HRET_OK,		// 成功
+	HRET_WAIT,		// 阻塞为完成，需要重新投递
+	HRET_FAIL,		// 失败
+	HRET_DECODE,	// 解码错误
+	HRET_PARAM,		// 参数错误
 };
 
 struct IPacket;
@@ -19,7 +19,7 @@ class Session;
 struct IHandler
 {
 	virtual ~IHandler(){}
-	virtual int process(IPacket* pkg, Session* sess) = 0;
+	virtual int process(void* arg0, void* arg1) = 0;
 };
 
 // traits func
@@ -53,7 +53,7 @@ struct Invoker
 	{
 		Arg* arg = SessionConvertor<Arg>::convert(sess);
 		if (arg == 0)
-			return ERR_PARAM;
+			return HRET_PARAM;
 		return fun(msg, arg);
 	}
 };
@@ -72,17 +72,26 @@ template<typename F>
 struct THandler : public THandlerBase<F>
 {
 	THandler(F fun, void* owner = 0) : THandlerBase<F>(fun, owner){}
-	int process(IPacket* pkg, Session* sess)
+	int process(void* arg0, void* arg1)
 	{
-		Invoker<func_t, msg_t, arg_t>::call(m_fun, (msg_t*)pkg, sess);
-		return 0;
+		return Invoker<func_t, msg_t, arg_t>::call(m_fun, (msg_t*)arg0, (Session*)arg1);
 	}
 };
+
+//template<typename F>
+//struct TAdminHandler : public THandlerBase<F>
+//{
+//	TAdminHandler(F fun, void* owner = 0) : THandlerBase<F>(fun, owner){}
+//	int process(void* arg0, void* arg1)
+//	{
+//		return HRET_OK;
+//	}
+//};
 
 class CU_API HandlerMgr
 {
 public:
-	static HandlerMgr* instance();
+	static HandlerMgr& instance();
 	HandlerMgr();
 	~HandlerMgr();
 

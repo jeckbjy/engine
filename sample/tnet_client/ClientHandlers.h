@@ -9,5 +9,5 @@ public:
 
 	void init();
 
-	void onChat(ChatMsg* msg, Session* sess);
+	int onChat(ChatMsg* msg, Session* sess);
 };

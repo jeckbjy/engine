@@ -4,7 +4,9 @@
 CU_NS_BEGIN
 
 SocketChannel::SocketChannel(IOService* loop)
-:Channel(loop)
+: Channel(loop)
+, m_sock(INVALID_SOCKET)
+, m_connecting(0)
 {
 
 }
@@ -48,7 +50,7 @@ void SocketChannel::reconnect()
 
 void SocketChannel::connect(const SocketAddress& addr)
 {
-	if (!m_sock)
+	if (m_sock == INVALID_SOCKET)
 	{
 		m_sock.create(addr.family());
 		// iocp need bind
@@ -65,6 +67,13 @@ void SocketChannel::send(const Buffer & buf)
 	LockGuard<Mutex> guard(m_mutex);
 	m_writer.append(buf);
 	write();
+}
+
+void SocketChannel::send(const char* str)
+{
+	Buffer buf;
+	buf.write(str, strlen(str));
+	send(buf);
 }
 
 void SocketChannel::recv()

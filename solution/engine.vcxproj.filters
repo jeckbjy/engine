@@ -273,6 +273,15 @@
     <ClInclude Include="..\engine\include\Protocol.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Log.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\LogChannel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Console.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">
@@ -433,6 +442,15 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Protocol.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\LogChannel.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Log.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Console.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

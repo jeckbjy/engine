@@ -6,7 +6,7 @@ ClientHandlers gClientHandlers;
 template<typename F>
 inline void add(F fun)
 {
-	HandlerMgr::instance()->add(fun, &gClientHandlers);
+	HandlerMgr::instance().add(fun, &gClientHandlers);
 }
 
 ClientHandlers::ClientHandlers()
@@ -19,7 +19,7 @@ void ClientHandlers::init()
 	add(&ClientHandlers::onChat);
 }
 
-void ClientHandlers::onChat(ChatMsg* msg, Session* sess)
+int ClientHandlers::onChat(ChatMsg* msg, Session* sess)
 {
-
+	return 0;
 }

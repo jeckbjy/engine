@@ -4,7 +4,8 @@
 CU_NS_BEGIN
 
 AcceptChannel::AcceptChannel(IOService* service)
-:Channel(service)
+: Channel(service)
+, m_sock(INVALID_SOCKET)
 {
 
 }
@@ -46,7 +47,7 @@ void AcceptChannel::accept()
 
 void AcceptChannel::listen(const SocketAddress& addr)
 {
-	if (m_sock)
+	if (m_sock != INVALID_SOCKET)
 		return;
 	m_addr = addr;
 	m_sock.create(addr.family());
@@ -79,6 +80,8 @@ void AcceptChannel::perform(IOOperation* op)
 
 void AcceptChannel::completed(socket_t sock)
 {
+	// default
+	Socket::close_socket(sock);
 }
 
 CU_NS_END

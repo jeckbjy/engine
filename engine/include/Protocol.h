@@ -16,11 +16,17 @@ public:
 };
 
 // 基于自定义消息包协议
-class PacketProtocol : public IProtocol, public Singleton<PacketProtocol>
+class CU_API PacketProtocol : public IProtocol, public Singleton<PacketProtocol>
 {
 public:
 	void process(Session* sess);
 };
 
+// 文本行协议,CRLF结束
+class CU_API TextProtocol : public IProtocol, public Singleton<TextProtocol>
+{
+public:
+	void process(Session* sess);
+};
 
 CU_NS_END

@@ -339,4 +339,130 @@ bool Util::createFile(const String& path, bool checkDir)
 #endif
 }
 
+void Util::vformat(String& result, const char* fmt, va_list& va)
+{
+	int size = vsnprintf(0, 0, fmt, va);
+	if (size > 0)
+	{
+		result.resize(size + 1);
+		size = vsnprintf(&result[0], size + 1, fmt, va);
+		if (size == -1)
+			result.clear();
+		else
+			result[size] = '\0';
+	}
+}
+
+void Util::vformat(String& result, const char* fmt, ...)
+{
+	va_list va;
+	va_start(va, fmt);
+	vformat(result, fmt, va);
+	va_end(va);
+}
+
+String Util::vformat(const char* fmt, ...)
+{
+	std::string result;
+	va_list va;
+	va_start(va, fmt);
+	vformat(result, fmt, va);
+	va_end(va);
+	return result;
+}
+
+void Util::split(StringList& tokens, const String& str, const String& delimiter /* = "|" */, bool compress /* = true */)
+{
+	size_t last_pos = 0;
+	size_t pos;
+	do
+	{
+		pos = str.find_first_of(delimiter, last_pos);
+		if (pos == std::string::npos)
+		{
+			if (last_pos != str.length())
+				tokens.push_back(str.substr(last_pos, str.length() - last_pos));
+			break;
+		}
+		tokens.push_back(str.substr(last_pos, pos - last_pos));
+
+		if (compress)
+			last_pos = str.find_first_not_of(delimiter, pos);
+		else
+			last_pos = pos + delimiter.length();
+
+		if (last_pos == std::string::npos || last_pos == str.length())
+		{// delimiters是最后结尾
+			tokens.push_back("");
+			break;
+		}
+
+	} while (true);
+}
+
+void Util::toUpper(String& str)
+{
+	for (String::iterator it = str.begin(); it != str.end(); ++it)
+		*it = ::toupper(*it);
+}
+
+void Util::toLower(String& str)
+{
+	for (String::iterator it = str.begin(); it != str.end(); ++it)
+		*it = ::tolower(*it);
+}
+
+void Util::trim(String& str)
+{
+	size_t first = 0;
+	size_t last = str.size() - 1;
+
+	while (first <= last && ::isspace(str[first])) ++first;
+	while (last >= first && ::isspace(str[last])) --last;
+
+	str.resize(last + 1);
+	str.erase(0, first);
+}
+
+void Util::trimLeft(String& str)
+{
+	size_t first = 0;
+	size_t last = str.size() - 1;
+	while (first <= last && ::isspace(str[first]))
+		++first;
+	str.erase(0, first);
+}
+
+void Util::trimRight(String& str)
+{
+	size_t last = str.size() - 1;
+	while (last >= 0 && ::isspace(str[last]))
+		--last;
+	str.resize(last + 1);
+}
+
+bool Util::startsWith(const String& str, const String& pattern, bool lowerCase /* = true */)
+{
+	size_t len = pattern.size();
+	if (len == 0 || str.size() < len)
+		return false;
+
+	if (lowerCase)
+		return strncasecmp(str.c_str(), pattern.c_str(), len) == 0;
+	else
+		return strncmp(str.c_str(), pattern.c_str(), len) == 0;
+}
+
+bool Util::endsWith(const String& str, const String& pattern, bool lowerCase /* = true */)
+{
+	size_t len = pattern.size();
+	if (len == 0 || str.size() < len)
+		return false;
+	const char* ptr = str.c_str() + (str.size() - len);
+	if (lowerCase)
+		return strncasecmp(ptr, pattern.c_str(), len) == 0;
+	else
+		return strncmp(ptr, pattern.c_str(), len) == 0;
+}
+
 CU_NS_END
