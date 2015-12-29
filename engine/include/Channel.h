@@ -5,6 +5,7 @@
 CU_NS_BEGIN
 //#define CU_HAS_AIO
 
+// 要求外部引用必须使用引用计数，因为IOOperation中使用了
 class IOService;
 class CU_API Channel : public Object
 {

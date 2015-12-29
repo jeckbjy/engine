@@ -6,7 +6,13 @@ CU_NS_BEGIN
 
 // ÐÞÕý£¿£¿
 template<class S>
-class DelegateBase {};
+class DelegateBase 
+{
+protected:
+	struct ICallable : public Ref
+	{};
+	SharedPtr<ICallable> m_fun;
+};
 
 template<class R>
 class DelegateBase<R()>
@@ -32,7 +38,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()() { return m_fun->call(); }
 };
 
@@ -59,7 +64,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1) { return m_fun->call(t1); }
 };
 
@@ -86,7 +90,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1, T2 t2) { return m_fun->call(t1, t2); }
 };
 
@@ -114,7 +117,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1, T2 t2, T3 t3) { return m_fun->call(t1, t2, t3); }
 };
 
@@ -141,7 +143,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1, T2 t2, T3 t3, T4 t4) { return m_fun->call(t1, t2, t3, t4); }
 };
 
@@ -168,7 +169,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5) { return m_fun->call(t1, t2, t3, t4, t5); }
 };
 
@@ -195,7 +195,6 @@ protected:
 	SharedPtr<ICallable> m_fun;
 public:
 	DelegateBase(ICallable* fun) :m_fun(fun){}
-	~DelegateBase() { delete m_fun; }
 	inline R operator()(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6) { return m_fun->call(t1, t2, t3, t4, t5, t6); }
 };
 
@@ -213,7 +212,11 @@ public:
 	Delegate(F fun, void* obj) : DelegateBase<S>(new TCallable<F>(fun)) { setObject(obj); }
 
 	inline void setObject(void* obj) { m_fun->set(obj); }
-	inline bool empty() const { return !m_fun || m_fun->empty(); }
+	inline void reset() { m_fun.reset(); }
+	inline bool empty() const 
+	{
+		return !m_fun || m_fun->empty(); 
+	}
 	inline bool operator!() const { return empty(); }
 	inline operator bool() const { return !empty(); }
 };

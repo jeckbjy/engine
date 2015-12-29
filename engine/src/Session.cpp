@@ -4,41 +4,50 @@
 
 CU_NS_BEGIN
 
-Session::Session(IOService* service, uint id, uint type, IProtocol* proto)
-: SocketChannel(service)
-, m_id(id)
-, m_type(type)
+Session::Session(uint id, IOService* service, IProtocol* proto, socket_t sock)
+: m_id(id)
+, m_type(0)
 , m_proto(proto)
 , m_data(0)
 {
-
+	m_channel = new SocketChannel(&Session::notify,service, sock);
+	m_channel->setCallbackOwner(this);
+	m_channel->retain();
 }
 
 Session::~Session()
 {
+	m_channel->reset();
+	m_channel->release();
+}
 
+void Session::send(const char* str)
+{
+	Buffer buf;
+	buf.write(str, strlen(str));
+	send(buf);
 }
 
 void Session::notify(uint8_t type)
 {
 	switch (type)
 	{
-	case EV_ERROR:
+	case SocketChannel::EV_ERROR:
 	{
 		ErrorEvent* ev = new ErrorEvent();
 		ev->sess = this;
-		ev->code = m_code;
+		ev->code = m_channel->getLastCode();
 		gNetService->post(ev);
 		break;
 	}
-	case EV_CONNECT:
+	case SocketChannel::EV_CONNECT:
 	{
 		ConnectEvent* ev = new ConnectEvent();
 		ev->sess = this;
 		gNetService->post(ev);
 		break;
 	}
-	case EV_READ:
+	case SocketChannel::EV_READ:
 	{
 		if (m_proto)
 			m_proto->process(this);

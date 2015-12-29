@@ -161,8 +161,9 @@ int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 *
 
 int Socket::available()
 {
-	int result;
-	ioctl(FIONREAD, result);
+	// why cannot get bytes
+	int result = 0;
+	ioctl(FIONREAD, &result);
 	return result;
 }
 
@@ -190,7 +191,7 @@ SocketAddress Socket::peerAddress() const
 	return SocketAddress();
 }
 
-void Socket::ioctl(int request, void* arg)
+void Socket::ioctl(ioctl_req_t request, void* arg)
 {
 #ifdef CU_OS_WIN
 	int rc = ioctlsocket(m_sock, request, reinterpret_cast<u_long*>(&arg));
@@ -261,7 +262,7 @@ void Socket::getLinger(bool& on, int& seconds) const
 void Socket::setBlocking(bool flag)
 {
 	int arg = flag ? 0 : 1;
-	ioctl(FIONBIO, arg);
+	ioctl(FIONBIO, &arg);
 }
 
 CU_NS_END

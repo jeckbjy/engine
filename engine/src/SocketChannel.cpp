@@ -3,12 +3,18 @@
 
 CU_NS_BEGIN
 
-SocketChannel::SocketChannel(IOService* loop)
+SocketChannel::SocketChannel(Callback fun, IOService* loop, socket_t sock)
 : Channel(loop)
-, m_sock(INVALID_SOCKET)
 , m_connecting(0)
+, m_sock(sock)
+, m_fun(fun)
 {
-
+	if (!m_sock.invalid())
+	{
+		m_sock.setBlocking(false);
+		attach();
+		recv();
+	}
 }
 
 SocketChannel::~SocketChannel()
@@ -69,13 +75,6 @@ void SocketChannel::send(const Buffer & buf)
 	write();
 }
 
-void SocketChannel::send(const char* str)
-{
-	Buffer buf;
-	buf.write(str, strlen(str));
-	send(buf);
-}
-
 void SocketChannel::recv()
 {
 	m_serivce->recv(this);
@@ -83,6 +82,7 @@ void SocketChannel::recv()
 
 void SocketChannel::write()
 {
+	// todo:cannot seek
 	while (!m_writer.eof())
 	{
 		char* buf = m_writer.chunk_data();
@@ -114,6 +114,8 @@ void SocketChannel::read()
 	for (;;)
 	{
 		int len = m_sock.available();
+		char buff[1024];
+		int aa = m_sock.recv(buff, 1024);
 		if (len <= 0)
 			return;
 		// ÏÈÔ¤·ÖÅäÄÚ´æ
@@ -204,6 +206,12 @@ void SocketChannel::completed(uint8_t type)
 	}
 	break;
 	}
+}
+
+void SocketChannel::notify(uint8_t type)
+{
+	if (!m_fun.empty())
+		m_fun(type);
 }
 
 CU_NS_END

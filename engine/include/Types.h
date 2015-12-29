@@ -127,6 +127,7 @@ typedef HANDLE	handle_t;
 typedef HMODULE module_t;
 typedef SOCKET	socket_t;
 typedef DWORD	error_t;
+typedef long	ioctl_req_t;
 #else
 #   define MAX_PATH				MAXPATHLEN
 #	define INVALID_HANDLE_VALUE -1
@@ -135,6 +136,11 @@ typedef int		handle_t;
 typedef void*	module_t;
 typedef int		socket_t;
 typedef int		error_t;
+#ifdef CU_OS_BSD
+typedef ulong	ioctl_req_t;
+#else
+typedef int		ioctl_req_t;
+#endif
 #endif
 
 #ifdef _WIN32

@@ -52,11 +52,12 @@ public:
 
 	virtual bool onEvent(NetEvent* ev);
 	virtual void onError(Session* sess, error_t ec){}
-	virtual void onAccept(Acceptor* acceptor, socket_t sock){}
+	virtual void onAccept(Acceptor* acceptor, socket_t sock);
 	virtual void onConnect(Session* sess){}
 	virtual bool onPacket(Session* sess, IPacket* msg){ return true; }
 
 	virtual IProtocol* getProtocol(int type);
+
 protected:
 	typedef HashMap<uint, Session*>		SessionMap;
 	// 根据不同类型注册acceptor

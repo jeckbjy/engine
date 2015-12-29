@@ -82,7 +82,7 @@ void NetService::loop()
 		// wait for next frame to run
 		swap(waits, m_events);
 		m_mutex.unlock();
-		// 
+		// execute one frame
 		update();
 	}
 }
@@ -104,7 +104,7 @@ bool NetService::init()
 		{
 			assert(m_connectors.find(itor->type) == m_connectors.end());
 			IProtocol* protocal = getProtocol(itor->type);
-			Session* connector = new Session(m_services.next(), m_maxID++, itor->type, protocal);
+			Session* connector = new Session(m_maxID++, m_services.next(), protocal);
 			m_connectors[itor->type] = connector;
 			connector->connect(itor->host);
 		}
@@ -124,6 +124,12 @@ void NetService::update()
 bool NetService::onEvent(NetEvent* ev)
 {
 	return true;
+}
+
+void NetService::onAccept(Acceptor* acceptor, socket_t sock)
+{
+	Session* sess = new Session(m_maxID++, m_services.next(), getProtocol(0), sock);
+	m_sessions[sess->getId()] = sess;
 }
 
 IProtocol* NetService::getProtocol(int type)

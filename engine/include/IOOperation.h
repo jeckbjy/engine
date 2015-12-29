@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "SmartPtr.h"
 
 CU_NS_BEGIN
 
@@ -75,7 +76,6 @@ public:
 		, sock(INVALID_SOCKET)
 	{
 	}
-	virtual ~AcceptOperation(){}
 };
 
 CU_NS_END

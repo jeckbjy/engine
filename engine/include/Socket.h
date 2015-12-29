@@ -14,6 +14,8 @@ public:
 	Socket(int af, int type, int proto = IPPROTO_IP);
 	~Socket();
 
+	bool invalid() const { return m_sock == INVALID_SOCKET; }
+
 	void create(int af = AF_INET, int type = SOCK_STREAM, int proto = IPPROTO_IP, bool blocking = false);
 	void set(socket_t sock);
 	void reset();
@@ -34,8 +36,7 @@ public:
 	SocketAddress address() const;
 	SocketAddress peerAddress() const;
 
-	void ioctl(int request, void* arg);
-	void ioctl(int request, int& arg){ this->ioctl(request, (void*)(&arg)); }
+	void ioctl(ioctl_req_t request, void* arg);
 
 	void setOption(int level, int option, const void* value, socklen_t lengh);
 	void getOption(int level, int option, void* value, socklen_t length) const;

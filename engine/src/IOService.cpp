@@ -84,6 +84,7 @@ void IOService::run_once(int msec)
 	IOOperation::IOData* io_data = (IOOperation::IOData*)overlapped;
 	IOOperation* op = io_data->op;
 	Channel* channel = op->channel;
+
 	if (completion_key == KEY_COMPLETION)
 	{
 		error = io_data->Offset;
@@ -178,19 +179,20 @@ void IOService::recv(Channel* channel)
 #ifdef CU_OS_WIN
 	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_READ);
 	WSABUF buf = { 0, 0 };
-	DWORD bytes, flag;
+	DWORD bytes = 0, flag = 0;
 	int result = ::WSARecv((SOCKET)channel->handle(), &buf, 1, &bytes, &flag, &op->data, 0);
-	DWORD ec = ::WSAGetLastError();
 	if (result != ERROR_SUCCESS)
 	{
-		if (ec == ERROR_NETNAME_DELETED)
-			ec = WSAECONNRESET;
-		else if (ec == ERROR_PORT_UNREACHABLE)
-			ec = WSAECONNREFUSED;
+		DWORD ec = ::WSAGetLastError();
 		if (ec != WSA_IO_PENDING)
+		{
+			if (ec == ERROR_NETNAME_DELETED)
+				ec = WSAECONNRESET;
+			else if (ec == ERROR_PORT_UNREACHABLE)
+				ec = WSAECONNREFUSED;
 			post(op, ec, bytes);
+		}
 	}
-
 #else
 	modify(channel, EV_CTL_MOD, EV_IN);
 #endif

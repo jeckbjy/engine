@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-AcceptChannel::AcceptChannel(IOService* service)
+AcceptChannel::AcceptChannel(Callback func, IOService* service)
 : Channel(service)
 , m_sock(INVALID_SOCKET)
+, m_func(func)
 {
-
 }
 
 AcceptChannel::~AcceptChannel()
@@ -45,14 +45,14 @@ void AcceptChannel::accept()
 #endif
 }
 
-void AcceptChannel::listen(const SocketAddress& addr)
+void AcceptChannel::listen(const SocketAddress& addr, int backlog)
 {
 	if (m_sock != INVALID_SOCKET)
 		return;
 	m_addr = addr;
 	m_sock.create(addr.family());
 	m_sock.bind(addr, true);
-	m_sock.listen();
+	m_sock.listen(backlog);
 	attach();
 	accept();
 }
@@ -66,7 +66,7 @@ void AcceptChannel::perform(IOOperation* op)
 		{
 			socket_t sock = m_sock.accept();
 			error_t ec = last_error();
-			completed(sock);
+			m_func(ec, sock);
 		}
 	}
 	else if (op->isKindOf<AcceptOperation>())
@@ -74,14 +74,8 @@ void AcceptChannel::perform(IOOperation* op)
 		AcceptOperation* aop = op->cast<AcceptOperation>();
 		if (!aop)
 			return;
-		completed(aop->sock);
+		m_func(aop->code, aop->sock);
 	}
-}
-
-void AcceptChannel::completed(socket_t sock)
-{
-	// default
-	Socket::close_socket(sock);
 }
 
 CU_NS_END

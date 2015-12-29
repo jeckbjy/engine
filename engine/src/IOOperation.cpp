@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+// 暂时不考虑引用计数
 IOOperation::IOOperation(Channel* channel)
 :channel(channel), next(0), code(0)
 {

@@ -9,9 +9,20 @@ class SharedPtr
 {
 public:
 	SharedPtr() :m_ptr(0){}
-	SharedPtr(const SharedPtr<T>& rhs) :m_ptr(rhs.m_ptr){ retain(); }
-	explicit SharedPtr(T* ptr) :m_ptr(ptr){ retain(); }
-	~SharedPtr(){ release(); }
+	SharedPtr(const SharedPtr<T>& rhs)
+		:m_ptr(rhs.m_ptr)
+	{ 
+		retain(); 
+	}
+	explicit SharedPtr(T* ptr) 
+		:m_ptr(ptr)
+	{
+		retain();
+	}
+	~SharedPtr()
+	{
+		release(); 
+	}
 
 	void reset(){ release(); }
 
