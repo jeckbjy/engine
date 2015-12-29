@@ -69,7 +69,7 @@ class CU_API AcceptOperation : public IOOperation
 public:
 	enum { ADDR_LEN = sizeof(sockaddr_in6) + 16 };
 	socket_t sock;
-	char buff[ADDR_LEN];
+	char buff[ADDR_LEN * 2];
 	AcceptOperation(Channel* channel)
 		: IOOperation(channel)
 		, sock(INVALID_SOCKET)
