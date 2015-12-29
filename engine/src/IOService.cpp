@@ -63,7 +63,7 @@ void IOService::stop()
 void IOService::wakeup()
 {
 #if defined(CU_OS_WIN)
-	if (::PostQueuedCompletionStatus((HANDLE)m_handle, 0, KEY_WAKEUP, 0) == 0)
+	if (::PostQueuedCompletionStatus(m_handle, 0, KEY_WAKEUP, 0) == 0)
 		throw std::runtime_error("wakeup:PostQueuedCompletionStatus error.");
 #else
 	((Poller*)m_handle)->wakeup();

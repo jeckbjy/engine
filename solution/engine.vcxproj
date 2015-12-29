@@ -97,6 +97,7 @@
     <ClInclude Include="..\engine\include\Algo.h" />
     <ClInclude Include="..\engine\include\Application.h" />
     <ClInclude Include="..\engine\include\AssetCache.h" />
+    <ClInclude Include="..\engine\include\Atomic.h" />
     <ClInclude Include="..\engine\include\Attribute.h" />
     <ClInclude Include="..\engine\include\Bits.h" />
     <ClInclude Include="..\engine\include\Buffer.h" />

@@ -4,7 +4,7 @@
 
 CU_NS_BEGIN
 
-class Session : public SocketChannel
+class CU_API Session : public SocketChannel
 {
 public:
 	Session(IOService* service, uint id, uint type = 0, IProtocol * proto = PacketProtocol::InstancePtr());

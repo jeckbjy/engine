@@ -122,8 +122,6 @@ int Socket::send(const void* buf, int len, int flags /* = 0 */)
 	{
 		rc = ::send(m_sock, (const char*)buf, len, flags);
 	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
-	if (rc < 0)
-		throw std::runtime_error("socket send error.");
 	return rc;
 }
 
@@ -135,8 +133,6 @@ int Socket::recv(void* buf, int len, int flags /* = 0 */)
 	{
 		rc = ::recv(m_sock, (char*)buf, len, flags);
 	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
-	if (rc < 0)
-		throw std::runtime_error("socker recv error.");
 	return rc;
 }
 
@@ -148,8 +144,6 @@ int Socket::sendTo(const SocketAddress& addr, const void* buf, int len, int flag
 	{
 		rc = ::sendto(m_sock, (const char*)(buf), len, flags, addr.address(), addr.length());
 	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
-	if (rc < 0)
-		throw std::runtime_error("socket sendto error.");
 	return rc;
 }
 
@@ -162,8 +156,6 @@ int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 *
 	{
 		rc = ::recvfrom(m_sock, (char*)buf, len, flags, addr.address(), &salen);
 	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
-	if (rc < 0)
-		throw std::runtime_error("socket recvfrom error.");
 	return rc;
 }
 

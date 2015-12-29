@@ -88,19 +88,21 @@ void SocketChannel::write()
 		char* buf = m_writer.chunk_data();
 		int len = m_writer.chunk_size();
 		int ret = m_sock.send(buf, len);
-		if (ret > 0) 
-		{
-			m_writer.seek(len, SEEK_CUR);
-			if (ret < len)
-				m_serivce->send(this);
-		}
-		else if (ret == -1)
-		{
+		if (ret <= 0)
+		{// has error
 			m_code = last_error();
 			if (m_code == ERR_IN_PROGRESS)
 				m_serivce->send(this);
 			else
 				notify(EV_ERROR);
+			break;
+		}
+
+		m_writer.seek(len, SEEK_CUR);
+		if (ret < len)
+		{
+			m_serivce->send(this);
+			break;
 		}
 	}
 }

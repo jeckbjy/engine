@@ -2,8 +2,9 @@
 #include "API.h"
 #include "List.h"
 #include "Mutex.h"
-#include "SyncEvent.h"
 #include "Thread.h"
+#include "Atomic.h"
+#include "SyncEvent.h"
 #include "Singleton.h"
 
 CU_NS_BEGIN
@@ -51,7 +52,7 @@ private:
 	ItemList	m_items;
 	ItemList	m_urgent;	// 必须执行完才能执行主线程
 	size_t		m_maxPool;
-	Atomic8		m_working;	// 不能超过256个线程
+	Atomic		m_working;
 	SpinLock	m_spin;
 	SyncEvent	m_event;
 };

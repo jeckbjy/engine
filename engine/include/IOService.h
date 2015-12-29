@@ -1,5 +1,6 @@
 #pragma once
 #include "API.h"
+#include "Atomic.h"
 #ifndef _WIN32
 #include "Poller.h"
 #endif
@@ -41,10 +42,10 @@ private:
 #else
 	typedef Poller service;
 #endif
-	service	 m_handle;
-	Atomic8	 m_stopped;
-	Atomic32 m_threads;	// 运行中的线程
-	Atomic32 m_blocks;	// 阻塞中的
+	service	m_handle;
+	Atomic	m_stopped;
+	Atomic	m_threads;	// 运行中的线程
+	Atomic	m_blocks;	// 阻塞中的
 };
 
 CU_NS_END

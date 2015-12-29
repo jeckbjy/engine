@@ -1,6 +1,7 @@
 #include "NetService.h"
 #include "Thread.h"
 #include "Proto.h"
+#include "Log.h"
 
 CU_NS_BEGIN
 
@@ -35,8 +36,9 @@ void NetService::run()
 		loop();
 		quit();
 	}
-	catch (std::exception&)
+	catch (std::exception& e)
 	{
+		LOG_ERROR("%s", e.what());
 	}
 }
 

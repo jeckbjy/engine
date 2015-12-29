@@ -282,6 +282,9 @@
     <ClInclude Include="..\engine\include\Console.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Atomic.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">

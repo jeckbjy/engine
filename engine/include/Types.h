@@ -110,11 +110,6 @@ template<class T>
 using HashSet = std::unordered_set<T>;
 template<class U, class V>
 using HashMap = std::unordered_map<U, V>;
-template<class T>
-using Atomic = std::atomic<T>;
-typedef Atomic<int8_t>	Atomic8;
-typedef Atomic<int16_t>	Atomic16;
-typedef Atomic<int32_t> Atomic32;
 
 //////////////////////////////////////////////////////////////////////////
 // 不同平台间类型差异

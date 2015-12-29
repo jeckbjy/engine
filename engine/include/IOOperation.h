@@ -75,6 +75,7 @@ public:
 		, sock(INVALID_SOCKET)
 	{
 	}
+	virtual ~AcceptOperation(){}
 };
 
 CU_NS_END
