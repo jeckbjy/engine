@@ -76,6 +76,7 @@ void IOService::run_once(int msec)
 	DWORD bytes;
 	DWORD_PTR completion_key = 0;
 	LPOVERLAPPED overlapped = NULL;
+	SetLastError(0);
 	BOOL result = ::GetQueuedCompletionStatus(m_handle, &bytes, &completion_key, &overlapped, (DWORD)msec);
 	// »½ÐÑ´¦Àí
 	if (completion_key == KEY_WAKEUP || overlapped == NULL)
@@ -141,7 +142,7 @@ void IOService::run_once(int msec)
 bool IOService::attach(Channel* channel)
 {
 #ifdef CU_OS_WIN
-	return ::CreateIoCompletionPort((HANDLE)channel->handle(), m_handle, 0, 0) == 0;
+	return ::CreateIoCompletionPort((HANDLE)channel->handle(), m_handle, 0, 0) != INVALID_HANDLE_VALUE;
 #else
 	return m_handle.ctrl(channel->handle(), EV_CTL_ADD, EV_IN | EV_OUT, channel) == 0;
 #endif

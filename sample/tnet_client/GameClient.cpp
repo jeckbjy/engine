@@ -34,6 +34,7 @@ void Client::onConnect(Session* sess)
 	//ChatMsg msg;
 	//msg.chat = "client chat";
 	//m_connector->sendMsg(&msg);
+	cout << "connect,do send" << endl;
 	sess->send("client chat \r\n");
 }
 

@@ -82,6 +82,7 @@ void SocketChannel::recv()
 
 void SocketChannel::write()
 {
+	m_writer.seek(0, SEEK_SET);
 	// todo:cannot seek
 	while (!m_writer.eof())
 	{
@@ -105,6 +106,7 @@ void SocketChannel::write()
 			break;
 		}
 	}
+	m_writer.discard();
 }
 
 void SocketChannel::read()
@@ -198,7 +200,7 @@ void SocketChannel::completed(uint8_t type)
 	{
 		m_connecting = FALSE;
 		notify(EV_CONNECT);
-		if (m_sock)
+		if (m_sock != INVALID_SOCKET)
 			m_serivce->recv(this);
 	}
 	break;
@@ -213,7 +215,7 @@ void SocketChannel::completed(uint8_t type)
 		read();
 		notify(EV_READ);
 		// ¼ÌÐø¼àÌý¶ÁÈ¡
-		if (m_sock)
+		if (m_sock != INVALID_SOCKET)
 			m_serivce->recv(this);
 	}
 	break;

@@ -518,8 +518,13 @@ String Buffer::toString()
 		return "";
 	size_t len = size();
 	String str;
-	str.resize(len);
-	write(&str[0], len);
+	str.reserve(len);
+	itor_t itor(m_head, 0, len);
+	while (!itor.eof())
+	{
+		str.append(itor.data, itor.leng);
+		itor.next();
+	}
 	return str;
 }
 
