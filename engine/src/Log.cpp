@@ -12,11 +12,9 @@ void Log::LogThread(void* param)
 }
 
 Log::Log()
-	:m_stopped(true)
+	: m_stopped(true)
 	, m_level(LL_LOG_MAX)
 {
-	m_channels.push_back(new FileChannel());
-	m_channels.push_back(new ConsoleChannel());
 }
 
 Log::~Log()
@@ -108,6 +106,19 @@ void Log::setProperty(int type, const String& key, const String& value)
 			break;
 		}
 	}
+}
+
+void Log::addChannel(LogChannel* channel)
+{
+	m_mutex.lock();
+	m_channels.push_back(channel);
+	m_mutex.unlock();
+}
+
+void Log::addDefault()
+{
+	m_channels.push_back(new FileChannel());
+	m_channels.push_back(new ConsoleChannel());
 }
 
 CU_NS_END

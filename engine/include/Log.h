@@ -24,8 +24,9 @@ public:
 	void log(const String& text, LogLevel ll, const char* file = 0, int line = 0);
 	void log(LogLevel ll, const char* file, int line, const char* fmt, ...);
 
-	void addChannel(LogChannel* channel);
 	void setProperty(int type, const String& key, const String& value);
+	void addChannel(LogChannel* channel);
+	void addDefault();
 
 private:
 	void loop();

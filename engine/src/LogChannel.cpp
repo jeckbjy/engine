@@ -4,7 +4,6 @@
 #include <time.h>
 
 CU_NS_BEGIN
-//
 
 LogMessage::LogMessage(LogLevel ll, const char* file, int line)
 {

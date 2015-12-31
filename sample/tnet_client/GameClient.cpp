@@ -1,4 +1,5 @@
 #include "GameClient.h"
+#include "Log.h"
 #include <iostream>
 using namespace std;
 //#include "Message.h"
@@ -15,6 +16,19 @@ IProtocol* Client::getProtocol(int type)
 	return TextProtocol::InstancePtr();
 }
 
+bool Client::onEvent(NetEvent* ev)
+{
+	if (ev->isKindOf<TextEvent>())
+	{
+		TextEvent* tev = (TextEvent*)ev;
+		tev->sess->send("client chat\r\n");
+		cout << tev->text.toString() << endl;
+		//LOG_TRACE("%s", tev->text.toString().c_str());
+	}
+
+	return true;
+}
+
 void Client::onConnect(Session* sess)
 {
 	//ChatMsg msg;
@@ -23,7 +37,7 @@ void Client::onConnect(Session* sess)
 	sess->send("client chat \r\n");
 }
 
-void Client::onError(Session* sess)
+void Client::onError(Session* sess, error_t ec)
 {
-	cout<<"连接失败"<<endl;
+	cout<<"连接失败\t"<<ec<<endl;
 }

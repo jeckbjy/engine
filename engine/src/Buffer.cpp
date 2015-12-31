@@ -2,33 +2,49 @@
 
 CU_NS_BEGIN
 
-Buffer::itor_t::itor_t(node_t* node, size_t offs, size_t leng)
-:node(node), leng(leng), index(0)
+Buffer::itor_t::itor_t(node_t* node, size_t offs, size_t nums)
+:node(node), nums(nums), index(0)
 {
-	// 要求leng一定足够，否则会异常
-	if (node->leng > offs)
-	{
-		data = node->data + offs;
-		size = node->leng - offs;
-	}
-	else
+	assert(offs <= node->leng);
+	// 忽略结尾，直接跳掉下一个
+	if (node->leng == offs)
 	{
 		node = node->next;
 		data = node->data;
-		size = node->leng;
+		leng = node->leng;
 	}
-	if (size > leng)
-		size = leng;
+	else
+	{// 正常偏移
+		data = node->data + offs;
+		leng = node->leng - offs;
+	}
+
+	// 太长截断
+	if (leng > nums)
+		leng = nums;
 }
 
 void Buffer::itor_t::next()
 {
-	assert(leng > 0);
-	index += size;
-	leng -= size;
-	node = node->next;
-	if (size > leng)
-		size = leng;
+	// 向前移动
+	nums  -= leng;
+	data  += leng;
+	index += leng;
+	// 更新节点
+	if (nums != 0)
+	{
+		node = node->next;
+		data = node->data;
+		leng = node->leng;
+		if (leng > nums)
+			leng = nums;
+	}
+}
+
+void Buffer::itor_t::to_end()
+{
+	while (!eof())
+		next();
 }
 
 Buffer::Buffer(size_t bytes)
@@ -39,44 +55,32 @@ Buffer::Buffer(size_t bytes)
 , m_size(0)
 , m_alloc(bytes)
 {
-
+	assert(bytes > 0);
 }
 
 Buffer::~Buffer()
 {
-	while (m_head)
-		destroy(m_head);
+	release();
 }
 
-void Buffer::slice(Buffer& buf, size_t off, size_t len)
+void Buffer::front(Buffer& buf, size_t len)
 {
-	assert(off + len < m_size);
-	seek(off, SEEK_SET);
-	node_t* node = m_curr;
-	size_t  offs = m_offs;
-	while (len > 0)
+	// buf必须是空buf,用于传出
+	assert(buf.empty());
+	node_t* temp;
+	node_t* node;
+	itor_t itor(m_head, 0, len);
+	while (!itor.eof())
 	{
-		size_t count = node->leng - offs;
-		if (count > 0)
-		{
-			if (count > len)
-				count = len;
-			node_t* temp = new node_t;
-			temp->buff = node->buff;
-			temp->data = node->data + offs;
-			temp->leng = count;
-			buf.push_back(temp);
-			len -= count;
-			offs = 0;
-		}
-		node = node->next;
-		assert(node != m_head);
+		node = itor.node;
+		temp = new node_t();
+		temp->buff = node->buff;
+		temp->data = itor.data;
+		temp->leng = itor.leng;
+		buf.push_back(temp);
+		itor.next();
 	}
-
-	buf.m_curr = buf.m_head;
-	buf.m_offs = 0;
-	buf.m_cpos = 0;
-	buf.m_size = len;
+	buf.seek(0, SEEK_SET);
 }
 
 bool Buffer::append(const Buffer & buf)
@@ -110,9 +114,9 @@ bool Buffer::peek(void* buf, size_t len)
 	char* ptr = (char*)buf;
 
 	itor_t itor(m_curr, m_offs, len);
-	while (itor.has_data())
+	while (!itor.eof())
 	{
-		memcpy(ptr + itor.index, itor.data, itor.size);
+		memcpy(ptr + itor.index, itor.data, itor.leng);
 		itor.next();
 	}
 
@@ -148,9 +152,9 @@ bool Buffer::write(const void* buf, size_t len)
 	{// 写入数据
 		const char* ptr = (const char*)buf;
 		itor_t itor(m_curr, m_offs, len);
-		while (itor.has_data())
+		while (!itor.eof())
 		{
-			memcpy(itor.data, ptr + itor.index, itor.size);
+			memcpy(itor.data, ptr + itor.index, itor.leng);
 			itor.next();
 		}
 		// 修改游标
@@ -208,6 +212,14 @@ bool Buffer::expand(size_t len)
 	return len == 0;
 }
 
+//void Buffer::advance(size_t len)
+//{
+//	// 扩展
+//	node_t* tail = m_head->prev;
+//	assert(len <= tail->writable() && tail->buff->refs < 2);
+//	tail->leng += len;
+//}
+
 void Buffer::seek(long len, int origin /* = SEEK_BEG */)
 {
 	size_t cpos;
@@ -221,44 +233,88 @@ void Buffer::seek(long len, int origin /* = SEEK_BEG */)
 	}
 	if (cpos > m_size || cpos == m_cpos)
 		return;
-	// 计算
-	if (origin == SEEK_CUR && m_curr)
-	{
-		seek(m_curr, m_offs, len);
+
+	if (cpos == 0 || cpos < m_head->leng)
+	{// 头部
+		m_curr = m_head;
+		m_offs = cpos;
+	}
+	else if (cpos == m_size)
+	{// 忽略末尾无效的数据段,通常应该没有
+		node_t* tail = m_head->prev;
+		while (tail->leng == 0)
+			tail = tail->prev;
+		m_curr = tail;
+		m_offs = tail->leng;
 	}
 	else
-	{
-		size_t halfs = m_size >> 2;
-		if (cpos < halfs)
-			seek(m_head, 0, cpos);
+	{// 非头非尾
+		if (!m_curr)
+		{
+			m_curr = m_head;
+			m_offs = 0;
+			m_cpos = 0;
+		}
+		// find
+		if (m_cpos < cpos)
+		{
+			// 从前向后
+			itor_t itor(m_curr, m_offs, cpos - m_cpos);
+			while (!itor.eof())
+				itor.next();
+			m_curr = itor.node;
+			m_offs = itor.offset();
+		}
 		else
-			seek(m_head->prev, m_head->prev->leng, (long)cpos - (long)m_size);
+		{
+			// 从后向前
+			node_t* node = m_curr;
+			size_t  leng = m_offs;
+			size_t  nums = m_cpos - cpos;
+			while (nums > 0)
+			{
+				if (leng > nums)
+				{
+					leng -= nums;
+					nums = 0;
+				}
+				else
+				{
+					nums -= leng;
+					node = node->prev;
+					leng = node->leng;
+				}
+			}
+			// 设置
+			m_curr = node;
+			m_offs = leng;
+		}
 	}
+
+	m_cpos = cpos;
 }
 
-void Buffer::seek(node_t* node, size_t offs, long len)
+void Buffer::release()
 {
-	if (len > 0)
+	if (m_head != 0)
 	{
-		// 从前向后
-		itor_t itor(node, offs, len);
-		while (itor.has_data())
-			itor.next();
-		m_curr = itor.node;
-		m_offs = itor.offset();
-	}
-	else
-	{
-		// 从后向前
-		long size = (long)offs;
-		do 
+		// 断开链
+		m_head->prev->next = 0;
+		// 释放
+		node_t* temp;
+		node_t* node = m_head;
+		while (node)
 		{
-			len -= size;
+			temp = node;
 			node = node->next;
-			size = (long)node->leng;
-		} while (len > 0);
-		m_curr = node;
-		m_offs = (size_t)(-len);
+			destroy(temp);
+		}
+
+		m_head = 0;
+		m_curr = 0;
+		m_offs = 0;
+		m_cpos = 0;
+		m_size = 0;
 	}
 }
 
@@ -267,20 +323,35 @@ void Buffer::discard()
 	// 删除0-cpos之间的数据
 	if (m_cpos == 0)
 		return;
+	if (m_cpos == m_size)
+	{
+		release();
+		return;
+	}
+	node_t* temp;
+	node_t* tail = m_head->prev;
 	m_size -= m_cpos;
-	while (m_cpos > 0 && m_head)
+	while (m_cpos > 0)
 	{
 		if (m_head->leng > m_cpos)
-		{// 删除数据
+		{
 			m_head->data += m_cpos;
 			m_cpos = 0;
 		}
 		else
-		{// 删除node
+		{
+			temp = m_head;
 			m_cpos -= m_head->leng;
-			destroy(m_head);
+			m_head = m_head->next;
+			destroy(temp);
 		}
 	}
+	// 修正数据
+	assert(m_cpos == 0);
+	m_head->prev = tail;
+	tail->prev = m_head;
+	m_curr = m_head;
+	m_offs = 0;
 }
 
 void Buffer::compact()
@@ -307,24 +378,40 @@ void Buffer::concat()
 	buff->leng = m_size;
 	seek(0, SEEK_SET);
 	peek(buff->base, m_size);
-	while (m_head)
-	{
-		destroy(m_head);
-	}
 	node_t* node = new node_t;
 	node->prev = node;
 	node->next = node;
 	node->buff = buff;
 	node->data = buff->base;
 	node->leng = buff->leng;
+
+	release();
 	m_head = node;
 	m_curr = node;
 	m_offs = m_cpos;
 }
 
-uint Buffer::find(char data, size_t off /* = 0 */)
+uint Buffer::find(char ch, size_t off /* = 0 */)
 {
-	return 0;
+	if (!m_head)
+		return npos;
+	itor_t pre_itor(m_head, 0, off);
+	pre_itor.to_end();
+	itor_t itor(pre_itor.node, pre_itor.offset(), m_size - off);
+	while (!itor.eof())
+	{
+		char* ptr = itor.data;
+		char* end = itor.data + itor.leng;
+		while (ptr != end)
+		{
+			if (*ptr == ch)
+				return off + itor.index + (ptr - itor.data);
+			++ptr;
+		}
+		itor.next();
+	}
+
+	return npos;
 }
 
 Buffer::node_t* Buffer::alloc(size_t len)
@@ -357,30 +444,14 @@ Buffer::node_t* Buffer::alloc(size_t len)
 
 void Buffer::destroy(node_t* node)
 {
+	// 注:外部会修改node索引和curr等数据
 	buff_t* buff = node->buff;
 	if (--buff->refs == 0)
 	{
 		free(buff->base);
 		free(buff);
 	}
-	// 释放node
-	if (node->next == node)
-	{// 只有1个了
-		m_head = 0;
-	}
-	else
-	{
-		node->prev->next = node->next;
-		node->next->prev = node->prev;
-		if (m_head == node)
-			m_head = node->next;
-	}
 
-	if (node == m_curr)
-	{
-		m_curr = 0;
-	}
-	// 释放
 	delete node;
 }
 
@@ -402,6 +473,8 @@ void Buffer::push_back(node_t* node)
 		node->next = node;
 		m_head = node;
 		m_curr = node;
+		m_offs = 0;
+		m_cpos = 0;
 	}
 }
 
@@ -420,6 +493,23 @@ void Buffer::check_copy(node_t* node)
 	--buff->refs;
 	node->buff = temp;
 	node->data = temp->base;
+}
+
+void Buffer::get_free(char*& data, uint& leng)
+{
+	node_t* tail = m_head ? m_head->prev : 0;
+	if (tail)
+	{
+		check_copy(tail);
+		leng = tail->buff->leng - tail->leng - (tail->data - tail->buff->base);
+		data = tail->data + tail->leng;
+		if (leng > 0)
+			return;
+	}
+	// 需要创建新的
+	tail = alloc(m_alloc);
+	data = tail->buff->base;
+	leng = tail->buff->leng;
 }
 
 String Buffer::toString()

@@ -1,5 +1,7 @@
 #include "GameServer.h"
 #include "Log.h"
+#include <iostream>
+using namespace std;
 
 GameServer gGame;
 
@@ -19,7 +21,8 @@ bool GameServer::onEvent(NetEvent* ev)
 	{
 		TextEvent* tev = (TextEvent*)ev;
 		tev->sess->send("server chat\r\n");
-		LOG_TRACE("%s", tev->text.toString().c_str());
+		cout << tev->text.toString() << endl;
+		//LOG_TRACE("%s", tev->text.toString().c_str());
 	}
 
 	return true;

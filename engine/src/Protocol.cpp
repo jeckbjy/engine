@@ -27,8 +27,8 @@ void TextProtocol::process(Session* sess)
 	// ½âÎö³övalue
 	TextEvent* ev = new TextEvent();
 	ev->sess = sess;
-	reader.slice(ev->text, 0, rpos);
-	reader.seek(epos, SEEK_SET);
+	reader.front(ev->text, rpos);
+	reader.seek(epos + 1, SEEK_SET);
 	reader.discard();
 	gNetService->post(ev);
 }

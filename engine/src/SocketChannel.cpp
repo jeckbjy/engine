@@ -86,7 +86,7 @@ void SocketChannel::write()
 	while (!m_writer.eof())
 	{
 		char* buf = m_writer.chunk_data();
-		int len = m_writer.chunk_size();
+		int len = (int)m_writer.chunk_size();
 		int ret = m_sock.send(buf, len);
 		if (ret <= 0)
 		{// has error
@@ -111,32 +111,42 @@ void SocketChannel::read()
 {
 	// 从尾部添加数据
 	m_reader.seek(0, SEEK_END);
+	// available()无效暂时无法MSG_PEEK
+	char* buf;
+	uint len;
 	for (;;)
 	{
-		int len = m_sock.available();
-		char buff[1024];
-		int aa = m_sock.recv(buff, 1024);
-		if (len <= 0)
-			return;
-		// 先预分配内存
-		m_reader.expand((size_t)len);
-		int bytes = 0;
-		// 读取填充每段buf
-		for (;;)
-		{
-			char*  buf = m_reader.chunk_data();
-			size_t len = m_reader.chunk_size();
-			int ret = m_sock.recv(buf, len);
-			if (ret <= 0)
-			{// error
-				break;
-			}
-			// 向前移动
-			bytes += ret;
-			m_reader.seek(ret, SEEK_CUR);
-		}
-		assert(bytes == len);
+		m_reader.get_free(buf, len);
+		int ret = m_sock.recv(buf, len);
+		if (ret < 0)
+			break;
+		m_reader.expand((size_t)ret);
+		m_reader.seek(ret, SEEK_CUR);
 	}
+	//for (;;)
+	//{
+	//	int len = m_sock.available();
+	//	if (len <= 0)
+	//		return;
+	//	// 先预分配内存
+	//	m_reader.expand((size_t)len);
+	//	int bytes = 0;
+	//	// 读取填充每段buf
+	//	for (;;)
+	//	{
+	//		char*  buf = m_reader.chunk_data();
+	//		size_t len = m_reader.chunk_size();
+	//		int ret = m_sock.recv(buf, len);
+	//		if (ret <= 0)
+	//		{// error
+	//			break;
+	//		}
+	//		// 向前移动
+	//		bytes += ret;
+	//		m_reader.seek(ret, SEEK_CUR);
+	//	}
+	//	assert(bytes == len);
+	//}
 }
 
 void SocketChannel::perform(IOOperation* op)
@@ -188,6 +198,8 @@ void SocketChannel::completed(uint8_t type)
 	{
 		m_connecting = FALSE;
 		notify(EV_CONNECT);
+		if (m_sock)
+			m_serivce->recv(this);
 	}
 	break;
 	case SocketOperation::OP_WRITE:

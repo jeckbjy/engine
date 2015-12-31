@@ -89,6 +89,7 @@ void NetService::loop()
 
 bool NetService::init()
 {
+	gLog.run();
 	m_services.run(m_config.services, m_config.workers);
 	NetInfoVec& infos = m_config.infos;
 	for (NetInfoVec::iterator& itor = infos.begin(); itor != infos.end(); ++itor)
@@ -114,6 +115,25 @@ bool NetService::init()
 
 void NetService::quit()
 {
+	if (m_quit)
+		return;
+	m_quit = true;
+
+	// close all socket
+	for (SessionMap::iterator itor = m_sessions.begin(); itor != m_sessions.end(); ++itor)
+	{
+		Session* sess = itor->second;
+		sess->close();
+		delete sess;
+	}
+	m_sessions.clear();
+
+	// close all acceptor
+
+	// close all connector
+
+	m_services.stop();
+	gLog.stop();
 }
 
 void NetService::update()

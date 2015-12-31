@@ -17,7 +17,7 @@ public:
 	Buffer(size_t bytes = 1024);
 	~Buffer();
 
-	void slice(Buffer& buf, size_t off, size_t len);
+	void front(Buffer& buf,size_t len);
 	bool append(const Buffer& buf);
 
 	bool peek(void* buf, size_t len);
@@ -25,7 +25,10 @@ public:
 	bool write(const void* buf, size_t len);
 	bool append(const void* buf, size_t len);
 	bool expand(size_t len);
+	//void advance(size_t len);
 	void seek(long len, int origin = SEEK_CUR);
+
+	void release();
 	// 删除头部数据到cpos处
 	void discard();
 	// 将数据移动到头部,
@@ -36,20 +39,22 @@ public:
 
 	bool eof() const { return m_cpos >= m_size; }
 	bool empty() const { return m_size == 0; }
-	size_t size() const { return m_size; }
-	size_t position() const { return m_cpos; }
+	uint size() const { return m_size; }
+	uint position() const { return m_cpos; }
+
+	char* chunk_data() { return m_curr->data; }
+	uint  chunk_size() const { return m_curr->leng; }
+	
+	// 最后空闲数据,没有会创建,for recv
+	void get_free(char*& data, uint& leng);
 
 	String toString();
-	char*  data() { return m_head->data; }
-	char*  chunk_data() { return m_curr->data; }
-	size_t chunk_size() const { return m_curr->leng; }
 
 private:
 	node_t* alloc(size_t len);
 	void destroy(node_t* node);
 	void push_back(node_t* node);
 	void check_copy(node_t* node);
-	void seek(node_t* node, size_t offs, long len);
 
 private:
 	// 底层内存块
@@ -69,6 +74,7 @@ private:
 		char*	data;	// 数据起始
 		size_t	leng;	// 数据长度
 		node_t() :prev(0), next(0), buff(0), data(0), leng(0){}
+		size_t	writable() const { return buff->leng - leng - (data - buff->base); }
 	};
 
 	// 会自动过滤0数据
@@ -76,12 +82,13 @@ private:
 	{
 		node_t* node;	// 当前节点
 		char*	data;	// 当前可用数据
-		size_t	size;	// 当前可用长度
-		size_t	leng;	// 剩余数据长度
-		size_t	index;	// 累计偏移
-		itor_t(node_t* node, size_t offs, size_t leng);
+		size_t	leng;	// 当前可用长度
+		size_t	nums;	// 剩余数据长度
+		size_t	index;	// 累计总偏移
+		itor_t(node_t* node, size_t offs, size_t nums);
 		void next();
-		bool has_data() const { return leng > 0; }
+		void to_end();
+		bool eof() const { return nums == 0; }
 		size_t offset() const { return data - node->data; }
 	};
 	// 链表头
