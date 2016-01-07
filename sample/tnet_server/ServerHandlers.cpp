@@ -5,7 +5,7 @@ ServerHandlers gServerHandlers;
 
 // 显示偏特化,校验sess
 template<>
-struct cute::SessionConvertor<Player>
+struct cute::SessionConverter<Player>
 {
 	static Player* convert(Session* sess)
 	{

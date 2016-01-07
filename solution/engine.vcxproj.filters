@@ -165,9 +165,6 @@
     <ClInclude Include="..\engine\include\Poller.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\Proto.h">
-      <Filter>net</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Quaternion.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -285,6 +282,9 @@
     <ClInclude Include="..\engine\include\Atomic.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Packet.h">
+      <Filter>net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">
@@ -377,9 +377,6 @@
     <ClCompile Include="..\engine\src\Poller.cpp">
       <Filter>net</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\src\Proto.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
     <ClCompile Include="..\engine\src\Quaternion.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -454,6 +451,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Console.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Packet.cpp">
+      <Filter>net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

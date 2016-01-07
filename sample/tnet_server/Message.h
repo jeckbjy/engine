@@ -1,5 +1,5 @@
 #pragma once
-#include "Proto.h"
+#include "Packet.h"
 using namespace cute;
 using namespace std;
 
@@ -10,12 +10,28 @@ enum MsgDefine
 	SOC_INFO = 3,
 };
 
-struct ChatMsg
+struct ChatMsg : TPacket<S2C_CHAT>
 {
-	enum { MSG_ID = S2C_CHAT,};
+	void encode(pt_encoder& stream) const
+	{
+
+	}
+
+	void decode(pt_decoder& stream)
+	{
+
+	}
 };
 
-struct LoginMsg
+struct LoginMsg : TPacket<S2C_LOGIN>
 {
-	enum { MSG_ID = S2C_LOGIN, };
+	void encode(pt_encoder& stream) const
+	{
+
+	}
+
+	void decode(pt_decoder& stream)
+	{
+
+	}
 };

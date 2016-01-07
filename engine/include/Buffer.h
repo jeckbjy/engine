@@ -41,6 +41,8 @@ public:
 	bool empty() const { return m_size == 0; }
 	uint size() const { return m_size; }
 	uint position() const { return m_cpos; }
+	uint get_mark() const { return m_mark; }
+	void set_mark(uint mark) { m_mark = mark; }
 
 	char* chunk_data() { return m_curr->data; }
 	uint  chunk_size() const { return m_curr->leng; }
@@ -97,6 +99,7 @@ private:
 	size_t	m_offs;		// 相对于curr的偏移
 	size_t	m_cpos;		// position
 	size_t	m_size;		// 总大小
+	size_t	m_mark;		// 纯标识使用,没任何限制
 	size_t	m_alloc;	// 分配内存大小
 };
 

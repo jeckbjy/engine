@@ -25,7 +25,7 @@ public:
 	void send(const Buffer& buf) { m_channel->send(buf); }
 	void send(const char* str);
 
-	void shutdown(int how) { m_channel->shutdown(how); }
+	void shutdown(int how = SHUT_RDWR) { m_channel->shutdown(how); }
 	void close() { m_channel->close(); }
 
 private:

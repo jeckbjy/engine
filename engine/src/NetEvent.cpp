@@ -1,5 +1,8 @@
 #include "NetEvent.h"
 #include "NetService.h"
+#include "HandlerMgr.h"
+#include "Log.h"
+#include "Packet.h"
 
 CU_NS_BEGIN
 
@@ -26,9 +29,22 @@ bool ErrorEvent::process(NetService* service)
 	return true;
 }
 
+PacketEvent::~PacketEvent()
+{
+	if (msg)
+		delete msg;
+}
+
 bool PacketEvent::process(NetService* service)
 {
-	return service->onPacket(sess, msg);
+	int hr = handler->process(sess, msg);
+	// for log
+	if (hr != HRET_OK && hr != HRET_WAIT)
+	{
+		LOG_ERROR("process fail:msgid=%d", msg->msgid());
+	}
+	// return can free
+	return hr != HRET_WAIT;
 }
 
 CU_NS_END

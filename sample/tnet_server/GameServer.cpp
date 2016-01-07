@@ -7,7 +7,7 @@ GameServer gGame;
 
 GameServer::GameServer()
 {
-	m_config.add_host(NetInfo::T_ACCEPT, "0.0.0.0:6666");
+	m_config.add_host(NET_ACCEPTOR, "0.0.0.0:6666");
 }
 
 IProtocol* GameServer::getProtocol(int type)

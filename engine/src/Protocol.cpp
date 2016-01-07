@@ -1,17 +1,49 @@
 #include "Protocol.h"
 #include "NetService.h"
-#include "Proto.h"
+#include "Packet.h"
+#include "HandlerMgr.h"
+#include "Log.h"
 
 CU_NS_BEGIN
 
 void PacketProtocol::process(Session* sess)
 {
 	// parse packet and post to process
-	PacketEvent* ev = new PacketEvent();
-	ev->sess = sess;
-	ev->msg = 0;
-	gNetService->post(ev);
-
+	pt_decoder decoder(&sess->getReader());
+	for (;;)
+	{
+		if (!decoder.parse())
+			break;
+	 	IHandler* handler = HandlerMgr::instance().find(decoder.msgid());
+		if (handler)
+		{
+			pt_message* msg = handler->create();
+			// decoder
+			if (decoder.decode(*msg))
+			{
+				PacketEvent* ev = new PacketEvent();
+				ev->sess = sess;
+				ev->handler = handler;
+				ev->msg = msg;
+				gNetService->post(ev);
+			}
+			else
+			{
+				delete msg;
+				// todo:dump msg
+				LOG_ERROR("decode msg fail:msgid = %d, msglen = %d", decoder.msgid(), decoder.msglen());
+			}
+		}
+		else
+		{
+			BufferEvent* ev = new BufferEvent();
+			ev->sess = sess;
+			ev->buff = decoder.split();
+			gNetService->post(ev);
+		}
+		// for next
+		decoder.discard();
+	}
 }
 
 void TextProtocol::process(Session* sess)

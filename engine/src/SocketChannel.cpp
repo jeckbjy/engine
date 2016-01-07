@@ -5,8 +5,8 @@ CU_NS_BEGIN
 
 SocketChannel::SocketChannel(Callback fun, IOService* loop, socket_t sock)
 : Channel(loop)
-, m_connecting(0)
 , m_sock(sock)
+, m_state(sock == INVALID_SOCKET ? S_DISCONNECT : S_ESTABLISH)
 , m_fun(fun)
 {
 	if (!m_sock.invalid())
@@ -23,6 +23,9 @@ SocketChannel::~SocketChannel()
 
 void SocketChannel::reconnect()
 {
+	if (m_state != S_DISCONNECT)
+		return;
+	m_state = S_CONNECTING;
 #ifdef CU_OS_WIN
 	if (FConnectEx == NULL)
 		throw std::runtime_error("cannot find connectex");
@@ -43,7 +46,6 @@ void SocketChannel::reconnect()
 		bool blocking = (m_code == EINPROGRESS || m_code == EWOULDBLOCK);
 		if (blocking)
 		{// blocking:wait for triger
-			m_connecting = TRUE;
 			m_serivce->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
 		}
 		else
@@ -179,7 +181,7 @@ void SocketChannel::perform(IOOperation* op)
 
 		if (sop->isOutput())
 		{// for write
-			if (m_connecting)
+			if (m_state == S_CONNECTING)
 				completed(SocketOperation::OP_CONNECT);
 			// also try read
 			completed(SocketOperation::OP_WRITE);
@@ -198,7 +200,7 @@ void SocketChannel::completed(uint8_t type)
 	{
 	case SocketOperation::OP_CONNECT:
 	{
-		m_connecting = FALSE;
+		m_state = S_ESTABLISH;
 		notify(EV_CONNECT);
 		if (m_sock != INVALID_SOCKET)
 			m_serivce->recv(this);
@@ -224,6 +226,10 @@ void SocketChannel::completed(uint8_t type)
 
 void SocketChannel::notify(uint8_t type)
 {
+	if (type == EV_ERROR)
+	{
+		m_state = S_DISCONNECT;
+	}
 	if (!m_fun.empty())
 		m_fun(type);
 }

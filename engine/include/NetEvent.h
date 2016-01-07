@@ -5,10 +5,11 @@
 
 CU_NS_BEGIN
 
-struct IPacket;
+struct pt_message;
 class Session;
 class NetService;
 
+// need time limits??
 struct CU_API NetEvent : public Object
 {
 	DECLARE_RTTI(NetEvent, Object, "NEVT");
@@ -41,12 +42,21 @@ struct CU_API ErrorEvent : NetEvent
 	bool process(NetService* service);
 };
 
+struct IHandler;
 struct CU_API PacketEvent : NetEvent
 {
 	DECLARE_RTTI(PacketEvent, NetEvent, "PNEV");
-	Session* sess;
-	IPacket* msg;
+	Session*	sess;
+	IHandler*	handler;
+	pt_message*	msg;
+	~PacketEvent();
 	bool process(NetService* service);
+};
+
+struct CU_API BufferEvent : NetEvent
+{
+	Session* sess;
+	Buffer	 buff;
 };
 
 struct CU_API TextEvent : NetEvent

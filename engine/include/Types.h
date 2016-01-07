@@ -105,11 +105,17 @@ typedef std::wstring		WString;
 typedef std::vector<String>	StringList;
 
 template<class T>
-using Vector = std::vector<T>;
+class Vector : public std::vector<T>{};
 template<class T>
-using HashSet = std::unordered_set<T>;
+class HashSet : public std::unordered_set<T>{};
 template<class U, class V>
-using HashMap = std::unordered_map<U, V>;
+class HashMap : public std::unordered_map<U, V>{};
+//template<class T>
+//using Vector = std::vector<T>;
+//template<class T>
+//using HashSet = std::unordered_set<T>;
+//template<class U, class V>
+//using HashMap = std::unordered_map<U, V>;
 
 //////////////////////////////////////////////////////////////////////////
 // 不同平台间类型差异

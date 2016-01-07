@@ -47,8 +47,14 @@ private:
 	void read();
 
 protected:
-	uchar  m_connecting:1;
+	enum State
+	{
+		S_DISCONNECT,
+		S_CONNECTING,
+		S_ESTABLISH,
+	};
 	Socket m_sock;
+	State  m_state;
 	Mutex  m_mutex;
 	Buffer m_reader;
 	Buffer m_writer;

@@ -8,7 +8,7 @@ Client gClient;
 
 Client::Client()
 {
-	m_config.add_host(NetInfo::T_CONNECT, "127.0.0.1:6666");
+	m_config.add_host(NET_CONNECTOR, "127.0.0.1:6666");
 }
 
 IProtocol* Client::getProtocol(int type)

@@ -5,7 +5,7 @@
 CU_NS_BEGIN
 
 class Session;
-// 消息协议
+// 消息协议,processor
 class IProtocol
 {
 public:

@@ -142,7 +142,7 @@
     <ClInclude Include="..\engine\include\Plugin.h" />
     <ClInclude Include="..\engine\include\Poller.h" />
     <ClInclude Include="..\engine\include\Protocol.h" />
-    <ClInclude Include="..\engine\include\Proto.h" />
+    <ClInclude Include="..\engine\include\Packet.h" />
     <ClInclude Include="..\engine\include\Quaternion.h" />
     <ClInclude Include="..\engine\include\Range.h" />
     <ClInclude Include="..\engine\include\Ray.h" />
@@ -213,7 +213,7 @@
     <ClCompile Include="..\engine\src\Plane.cpp" />
     <ClCompile Include="..\engine\src\Poller.cpp" />
     <ClCompile Include="..\engine\src\Protocol.cpp" />
-    <ClCompile Include="..\engine\src\Proto.cpp" />
+    <ClCompile Include="..\engine\src\Packet.cpp" />
     <ClCompile Include="..\engine\src\Quaternion.cpp" />
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />

@@ -9,6 +9,7 @@ public:
 	Acceptor(IOService* service, uint type = 0);
 	~Acceptor();
 
+	void close() { m_channel->close(); }
 	void completed(error_t ec, socket_t sock);
 
 	void setType(uint type) { m_type = type; }
