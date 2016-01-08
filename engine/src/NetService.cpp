@@ -19,7 +19,7 @@ BOOL WINAPI onTermSignal(DWORD cevent)
 	case CTRL_CLOSE_EVENT:		// 点击close按钮
 	case CTRL_LOGOFF_EVENT:		// 用户退出
 	case CTRL_SHUTDOWN_EVENT:	// 系统关闭
-		gNetService->quit();
+		gNetService->stop();
 		return FALSE;
 	}
 	return FALSE;
@@ -34,7 +34,7 @@ void onTermSignal(int signal_code)
 {
 	if (signal_code != SIGTERM)
 		return;
-	gNetService->quit();
+	gNetService->stop();
 }
 void hook_quit()
 {
@@ -193,7 +193,7 @@ void NetService::quit()
 	if (m_quit)
 		return;
 	m_quit = true;
-	LOG_WARN("quit net service");
+	LOG_TRACE("quit net service");
 
 	// close all socket
 	for (SessionMap::iterator itor = m_sessions.begin(); itor != m_sessions.end(); ++itor)
