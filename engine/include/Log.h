@@ -46,10 +46,10 @@ private:
 
 extern CU_API Log gLog;
 
-#define LOG_FATAL(fmt, ...) gLog.log(LL_FATAL,__FUNC__, __LINE__, fmt, ##__VA_ARGS__)
-#define LOG_ERROR(fmt, ...) gLog.log(LL_ERROR,__FUNC__, __LINE__, fmt, ##__VA_ARGS__)
-#define LOG_WARN(fmt, ...)	gLog.log(LL_WARN, __FUNC__, __LINE__, fmt, ##__VA_ARGS__)
-#define LOG_DEBUG(fmt, ...) gLog.log(LL_DEBUG,__FUNC__, __LINE__, fmt, ##__VA_ARGS__)
-#define LOG_TRACE(fmt, ...) gLog.log(LL_TRACE,__FUNC__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_FATAL(fmt, ...) gLog.log(LL_FATAL,__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_ERROR(fmt, ...) gLog.log(LL_ERROR,__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_WARN(fmt, ...)	gLog.log(LL_WARN, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_DEBUG(fmt, ...) gLog.log(LL_DEBUG,__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+#define LOG_TRACE(fmt, ...) gLog.log(LL_TRACE,__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 CU_NS_END

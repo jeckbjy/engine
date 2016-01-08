@@ -13,6 +13,7 @@ Session::Session(uint id, IOService* service, IProtocol* proto, socket_t sock)
 	m_channel = new SocketChannel(&Session::notify,service, sock);
 	m_channel->setCallbackOwner(this);
 	m_channel->retain();
+	m_connector = sock == INVALID_SOCKET ? true : false;
 }
 
 Session::~Session()
@@ -34,6 +35,12 @@ void Session::notify(uint8_t type)
 	{
 	case SocketChannel::EV_ERROR:
 	{
+		// 连接失败,尝试重连
+		if (m_connector && m_channel->isConnecting())
+		{
+			gNetService->setConnectFail();
+		}
+
 		ErrorEvent* ev = new ErrorEvent();
 		ev->sess = this;
 		ev->code = m_channel->getLastCode();

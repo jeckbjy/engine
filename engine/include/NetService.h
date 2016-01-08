@@ -29,9 +29,9 @@ struct CU_API NetConfig
 {
 	uint	services;
 	uint	workers;
-	uint	reconnect_time;	// 重新尝试连接时间，sec
+	uint	reconnect_time;	// 重新尝试连接时间，msec
 	NetInfoVec infos;
-	NetConfig() :services(1), workers(1),reconnect_time(10){}
+	NetConfig() :services(1), workers(1),reconnect_time(10000){}
 	void add_host(int mode, const String& host, uint type = 0);
 };
 
@@ -61,6 +61,8 @@ public:
 
 	virtual IProtocol* getProtocol(int type);
 
+	void setConnectFail() { m_connect_fail = true; }
+
 protected:
 	typedef HashMap<uint, Session*>		SessionMap;
 	// 根据不同类型注册acceptor
@@ -79,7 +81,8 @@ protected:
 	EventQueue		m_events;		// 待处理的消息
 	Mutex			m_mutex;		// 事件互斥锁
 	NetConfig		m_config;		// 配置信息
-	uint64			m_reconnecting;	// 重新尝试连接时间，0：表示无需连接
+	uint64			m_connect_time;	// 连接时间
+	bool			m_connect_fail;	// 连接失败
 	// timestamp
 	uint64			m_tstart;		// 起始时间
 	uint64			m_timestamp;	// 当前时间戳

@@ -52,7 +52,8 @@ NetService::NetService()
 : m_quit(true)
 , m_frame(33)
 , m_maxID(0)
-, m_reconnecting(0)
+, m_connect_time(0)
+, m_connect_fail(false)
 {
 	gNetService = this;
 	m_tstart = m_timestamp = Util::time();
@@ -147,11 +148,13 @@ void NetService::loop()
 void NetService::update()
 {
 	// reconnect
-	if (!m_reconnecting && m_timestamp - m_reconnecting > m_config.reconnect_time)
+	if (m_connect_fail && m_timestamp - m_connect_time > m_config.reconnect_time)
 	{
-		m_reconnecting = 0;
+		m_connect_time = m_timestamp;
+		m_connect_fail = false;
 		for (size_t i = 0; i < m_connectors.size(); ++i)
 		{
+			LOG_TRACE("reconnect host:%s", m_connectors[i]->getPeer().toString().c_str());
 			m_connectors[i]->reconnect();
 		}
 	}
@@ -233,11 +236,7 @@ bool NetService::onEvent(NetEvent* ev)
 
 void NetService::onError(Session* sess, error_t ec)
 {
-	if (sess->getType() == NET_CONNECTOR)
-	{
-		m_reconnecting = m_timestamp;
-	}
-	else
+	if (!sess->isConnector())
 	{
 		// kick session
 		LOG_WARN("sess error:sessID = %d,error_code = %d", sess->getId(), ec);
@@ -247,7 +246,13 @@ void NetService::onError(Session* sess, error_t ec)
 
 void NetService::onAccept(Acceptor* acceptor, socket_t sock)
 {
-	Session* sess = new Session(m_maxID++, m_services.next(), getProtocol(0), sock);
+	IProtocol* protocal = getProtocol(acceptor->getType());
+	if (!protocal)
+	{
+		LOG_ERROR("create protocal fail:type = %d", acceptor->getType());
+		return;
+	}
+	Session* sess = new Session(m_maxID++, m_services.next(), protocal, sock);
 	sess->setType(NET_SESSION);
 	m_sessions[sess->getId()] = sess;
 }

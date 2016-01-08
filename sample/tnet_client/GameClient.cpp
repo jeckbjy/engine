@@ -37,8 +37,3 @@ void Client::onConnect(Session* sess)
 	cout << "connect,do send" << endl;
 	sess->send("client chat \r\n");
 }
-
-void Client::onError(Session* sess, error_t ec)
-{
-	cout<<"Á¬½ÓÊ§°Ü\t"<<ec<<endl;
-}

@@ -14,21 +14,28 @@ LogMessage::LogMessage(LogLevel ll, const char* file, int line)
 
 void LogMessage::format()
 {
+	char time_str[50];
 	timestamp = time(NULL);
-	//struct tm* tm_info = localtime(&timestamp);
-	char* time_str = ctime(&timestamp);
-	if (!time_str)
-		return;
-	size_t len = strlen(time_str);
-	// 去除\n
-	time_str[len - 1] = '\0';
+	struct tm* timeinfo = localtime(&timestamp);
+	strftime(time_str, sizeof(time_str), "%Y/%m/%d %H:%M:%S", timeinfo);
 	if (file == NULL)
 	{
 		Util::vformat(output, "[%s][%s]:%s", time_str, levelName(), text.c_str());
 	}
 	else
 	{
-		Util::vformat(output, "[%s][%s][%s:%d]:%s", time_str, levelName(), file, line, text.c_str());
+		// 只保留文件名
+		size_t len = strlen(file);
+		const char* ptr = file + len;
+		for (; ptr != file; --ptr)
+		{
+			if (*ptr == '\\' || *ptr == '/')
+			{
+				ptr++;
+				break;
+			}
+		}
+		Util::vformat(output, "[%s][%s]:%s in %s:%d", time_str, levelName(), text.c_str(), ptr, line);
 	}
 }
 

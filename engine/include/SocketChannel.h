@@ -18,6 +18,14 @@ public:
 		EV_READ,
 		EV_WRITE,
 	};
+	
+	enum State
+	{
+		S_DISCONNECT,
+		S_CONNECTING,
+		S_ESTABLISH,
+	};
+
 	typedef Delegate<void(uint8_t)> Callback;
 
 	SocketChannel(Callback fun, IOService* loop, socket_t sock = INVALID_SOCKET);
@@ -42,17 +50,14 @@ public:
 	void reset(){ m_fun.reset(); }
 	void setCallbackOwner(void* owner) { m_fun.setObject(owner); }
 
+	int getState() const { return m_state; }
+	bool isConnecting() const { return m_state == S_CONNECTING; }
+	const SocketAddress& getPeer() const { return m_peer; }
 private:
 	void write();
 	void read();
 
 protected:
-	enum State
-	{
-		S_DISCONNECT,
-		S_CONNECTING,
-		S_ESTABLISH,
-	};
 	Socket m_sock;
 	State  m_state;
 	Mutex  m_mutex;

@@ -11,6 +11,7 @@ SocketChannel::SocketChannel(Callback fun, IOService* loop, socket_t sock)
 {
 	if (!m_sock.invalid())
 	{
+		m_peer = m_sock.peerAddress();
 		m_sock.setBlocking(false);
 		attach();
 		recv();
@@ -226,12 +227,11 @@ void SocketChannel::completed(uint8_t type)
 
 void SocketChannel::notify(uint8_t type)
 {
-	if (type == EV_ERROR)
-	{
-		m_state = S_DISCONNECT;
-	}
 	if (!m_fun.empty())
 		m_fun(type);
+	// ÐÞ¸ÄÁ¬½Ó×´Ì¬
+	if (type == EV_ERROR)
+		m_state = S_DISCONNECT;
 }
 
 CU_NS_END

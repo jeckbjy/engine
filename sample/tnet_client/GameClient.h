@@ -10,7 +10,6 @@ public:
 	IProtocol* getProtocol(int type);
 	bool onEvent(NetEvent* ev);
 	void onConnect(Session* sess);
-	void onError(Session* sess, error_t ec);
 };
 
 extern Client gClient;
