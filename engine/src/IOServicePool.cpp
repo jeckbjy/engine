@@ -39,14 +39,26 @@ void IOServicePool::stop()
 	if (m_stopped)
 		return;
 	m_stopped = true;
+	// stop
 	for (ServiceVec::iterator itor = m_services.begin(); itor != m_services.end(); ++itor)
 	{
 		(*itor)->stop();
-		delete (*itor);
+		// 不能立即delete，需要等线程结束
+		//delete (*itor);
 	}
 	for (ThreadVec::iterator itor = m_threads.begin(); itor != m_threads.end(); ++itor)
 	{
 		(*itor)->join();
+		//delete (*itor);
+	}
+
+	// free
+	for (ServiceVec::iterator itor = m_services.begin(); itor != m_services.end(); ++itor)
+	{
+		delete (*itor);
+	}
+	for (ThreadVec::iterator itor = m_threads.begin(); itor != m_threads.end(); ++itor)
+	{
 		delete (*itor);
 	}
 	m_services.clear();

@@ -15,12 +15,21 @@ LogMessage::LogMessage(LogLevel ll, const char* file, int line)
 void LogMessage::format()
 {
 	timestamp = time(NULL);
-	struct tm* tm_info = localtime(&timestamp);
-	char* time_str = asctime(tm_info);
+	//struct tm* tm_info = localtime(&timestamp);
+	char* time_str = ctime(&timestamp);
+	if (!time_str)
+		return;
+	size_t len = strlen(time_str);
+	// È¥³ý\n
+	time_str[len - 1] = '\0';
 	if (file == NULL)
+	{
 		Util::vformat(output, "[%s][%s]:%s", time_str, levelName(), text.c_str());
+	}
 	else
+	{
 		Util::vformat(output, "[%s][%s][%s:%d]:%s", time_str, levelName(), file, line, text.c_str());
+	}
 }
 
 void ConsoleChannel::write(const Log* owner, const LogMessage& msg)
@@ -62,10 +71,12 @@ bool FileChannel::open()
 			m_path += Util::exeName();
 			m_path += ".log";
 		}
+		//int mode = std::ios::out | std::ios::app;
+		int mode = std::ios::out;
 #ifdef CU_OS_WIN
-		m_file.open(m_path.c_str(), std::ios::out | std::ios::app, _SH_DENYNO);
+		m_file.open(m_path.c_str(), mode, _SH_DENYNO);
 #else
-		m_file.open(m_path.c_str(), std::ios::out | std::ios::app);
+		m_file.open(m_path.c_str(), mode);
 #endif
 	}
 	return m_file.is_open();

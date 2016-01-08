@@ -51,19 +51,25 @@ void Log::loop()
 		m_event.wait();
 
 		m_mutex.lock();
-		MessageQueue msgQueue;
-		std::swap(m_messages, msgQueue);
-		m_mutex.unlock();
-
-		while (!msgQueue.empty())
+		while (!m_messages.empty())
 		{
-			LogMessage& msg = msgQueue.front();
-			for (auto itor = m_channels.begin(); itor != m_channels.end(); ++itor)
+			MessageQueue msgs;
+			std::swap(msgs, m_messages);
+			m_mutex.unlock();
+			// Ö´ÐÐ
+			while (!msgs.empty())
 			{
-				(*itor)->write(this, msg);
+				LogMessage& msg = msgs.front();
+				msg.format();
+				for (ChannelVec::iterator itor = m_channels.begin(); itor != m_channels.end(); ++itor)
+				{
+					(*itor)->write(this, msg);
+				}
+				msgs.pop();
 			}
-			msgQueue.pop();
+			m_mutex.lock();
 		}
+		m_mutex.unlock();
 	}
 }
 

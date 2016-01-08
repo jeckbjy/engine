@@ -18,7 +18,6 @@
 #	include <fcntl.h>
 #	include <errno.h>
 #	include <utime.h>
-#	include <signal.h>
 
 #	include <sys/stat.h>
 #	include <sys/types.h>
@@ -46,6 +45,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <type_traits>
+#include <signal.h>
 
 #include <string>
 #include <sstream>
@@ -67,6 +67,10 @@ CU_NS_BEGIN
 //////////////////////////////////////////////////////////////////////////
 // 数据类型
 //////////////////////////////////////////////////////////////////////////
+#ifndef TRUE
+#define TRUE	1
+#define FALSE	0
+#endif
 #if _UNICODE
 typedef wchar_t tchar_t;
 #define tvsprintf vswprintf

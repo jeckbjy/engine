@@ -7,6 +7,41 @@ CU_NS_BEGIN
 
 NetService* gNetService = NULL;
 
+#ifdef CU_OS_WIN
+BOOL WINAPI onTermSignal(DWORD cevent)
+{
+	// 返回值含义：TRUE:阻止系统响应,FALSE:不阻止
+	switch (cevent)
+	{
+	case CTRL_C_EVENT:			// ctrl + c
+	case CTRL_BREAK_EVENT:		// ctrl + break
+		return TRUE;
+	case CTRL_CLOSE_EVENT:		// 点击close按钮
+	case CTRL_LOGOFF_EVENT:		// 用户退出
+	case CTRL_SHUTDOWN_EVENT:	// 系统关闭
+		gNetService->quit();
+		return FALSE;
+	}
+	return FALSE;
+}
+void hook_quit()
+{
+	SetConsoleCtrlHandler(onTermSignal, TRUE);
+}
+#else
+// 监听退出
+void onTermSignal(int signal_code)
+{
+	if (signal_code != SIGTERM)
+		return;
+	gNetService->quit();
+}
+void hook_quit()
+{
+	signal(SIGTERM, &onTermSignal);
+}
+#endif
+
 void NetConfig::add_host(int mode, const String& host, uint type /* = 0 */)
 {
 	NetInfo info(mode, host, type);
@@ -35,6 +70,8 @@ void NetService::run()
 	{
 		if (!init())
 			return;
+		LOG_TRACE("server run");
+		hook_quit();
 		loop();
 		quit();
 	}
@@ -125,6 +162,7 @@ void NetService::update()
 
 bool NetService::init()
 {
+	gLog.addDefault();
 	gLog.run();
 	m_services.run(m_config.services, m_config.workers);
 	NetInfoVec& infos = m_config.infos;
@@ -155,6 +193,7 @@ void NetService::quit()
 	if (m_quit)
 		return;
 	m_quit = true;
+	LOG_WARN("quit net service");
 
 	// close all socket
 	for (SessionMap::iterator itor = m_sessions.begin(); itor != m_sessions.end(); ++itor)

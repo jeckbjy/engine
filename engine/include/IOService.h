@@ -18,6 +18,7 @@ public:
 	IOService();
 	~IOService();
 
+	bool isStopped() const { return m_stopped == TRUE; }
 	void run();
 	void stop();
 	void wakeup();

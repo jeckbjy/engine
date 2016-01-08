@@ -164,6 +164,11 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
+// FUNC
+#ifndef __FUNC__
+#define __FUNC__ __FUNCTION__
+#endif
+
 // 自动执行函数
 #if defined(_MSC_VER)
 // 不能随意加上下面这句，vs2013会导致莫名的宕机

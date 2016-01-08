@@ -29,7 +29,7 @@ struct LogMessage
 
 	const char* levelName() const
 	{
-		static const char* names[LL_LOG_MAX] = { "FATAL", "ERROR", "WARNING", "DEBUG", "TRACE" };
+		static const char* names[LL_LOG_MAX] = { "FATAL", "ERROR", "WARN ", "DEBUG", "TRACE" };
 		return names[level];
 	}
 
