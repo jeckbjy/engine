@@ -54,7 +54,7 @@ public:
 	const Setting& operator[](const char* key) const;
 private:
 	typedef std::vector<Setting>	ValueVec;
-	typedef std::map<const char*, Setting>		ValueMap;
+	typedef std::map<String, Setting>		ValueMap;
 	union
 	{
 		bool	 bval;
@@ -68,7 +68,13 @@ private:
 	Type m_type : 8;
 };
 
-// config like json
+/*
+规则：类似json但是没有那么严格
+1:root不要求必须含{},但是必须匹配
+2:string不要求必须含""，但是有歧义的必须含有引号,即非纯数字，非符号,且不能是true，false，和null
+3:obj分割符可以是：或者=
+4:不强制要求最后一个分隔符,可含或者不含逗号
+*/
 class CU_API Config
 {
 public:

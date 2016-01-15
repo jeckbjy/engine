@@ -8,21 +8,29 @@ class Reader
 private:
 	enum TokenType
 	{
+		TOKEN_NONE,
 		TOKEN_EOF,
+		TOKEN_COMMENT,
+
+		// const
 		TOKEN_NULL,
 		TOKEN_TRUE,
 		TOKEN_FALSE,
+
 		TOKEN_STR,
 		TOKEN_NUM,
+
 		TOKEN_OBJ_BEG,
 		TOKEN_OBJ_END,
+		TOKEN_OBJ_SEP,	// SEPARATOR
+
 		TOKEN_ARRAY_BEG,
 		TOKEN_ARRAY_END,
-		TOKEN_ARRAY_SEPARATOR,
-		TOKEN_MEMBER_SEPARATOR,
-		TOKEN_COMMENT,
+		TOKEN_ARRAY_SEP,
+
 		TOKEN_ERROR,
 	};
+
 	typedef const char* Location;
 	typedef std::stack<Setting*> NodeStack;
 	struct Token
@@ -61,34 +69,29 @@ public:
 		}
 	}
 
-	bool match(const char* pattern, size_t len)
-	{
-		if (m_end - m_cur < (int)len)
-			return false;
-		const char* ptr = m_cur;
-		while (*ptr++ != *pattern++)
-			return false;
-		m_cur += len;
-		return true;
-	}
-
 	bool readValue()
 	{
-		bool ok = true;
-		return ok;
-	}
-
-	void nextToken(Token& token)
-	{
+		Token token;
 		do 
 		{
 			readToken(token);
 		} while (token.type == TOKEN_COMMENT);
+
+		bool ok = true;
+		switch (token.type)
+		{
+		case TOKEN_OBJ_BEG:
+			break;
+		case TOKEN_ARRAY_BEG:
+			break;
+		}
+		return ok;
 	}
 
-	void readToken(Token& token)
+	bool readToken(Token& token)
 	{
 		skipSpaces();
+		token.type = TOKEN_NONE;
 		token.start = m_cur;
 		char c = getNextChar();
 		bool ok = true;
@@ -97,11 +100,19 @@ public:
 		case 0:
 			token.type = TOKEN_EOF;
 			break;
+		case '/':
+			token.type = TOKEN_COMMENT;
+			ok = readComment();
+			break;
 		case '{':
 			token.type = TOKEN_OBJ_BEG;
 			break;
 		case '}':
 			token.type = TOKEN_OBJ_END;
+			break;
+		case '=':
+		case ':':
+			token.type = TOKEN_OBJ_SEP;
 			break;
 		case '[':
 			token.type = TOKEN_ARRAY_BEG;
@@ -109,31 +120,8 @@ public:
 		case ']':
 			token.type = TOKEN_ARRAY_END;
 			break;
-		case ':':
-			token.type = TOKEN_MEMBER_SEPARATOR;
-			break;
 		case ',':
-			token.type = TOKEN_ARRAY_SEPARATOR;
-			break;
-		case '"':
-			token.type = TOKEN_STR;
-			ok = readString();
-			break;
-		case '/':
-			token.type = TOKEN_COMMENT;
-			ok = readComment();
-			break;
-		case 't':
-			token.type = TOKEN_TRUE;
-			ok = match("rue", 3);
-			break;
-		case 'f':
-			token.type = TOKEN_FALSE;
-			ok = match("alse", 4);
-			break;
-		case 'n':
-			token.type = TOKEN_NULL;
-			ok = match("ull", 3);
+			token.type = TOKEN_ARRAY_SEP;
 			break;
 		case '0':
 		case '1':
@@ -146,16 +134,52 @@ public:
 		case '8':
 		case '9':
 		case '-':
+		case '+':
 			token.type = TOKEN_NUM;
 			readNumber();
 			break;
-		default:
-			ok = false;
+		case '"':
+			token.type = TOKEN_STR;
+			ok = readString();
 			break;
+		default:
+		{
+			if (!std::isalpha(c))
+			{
+				ok = false;
+				break;
+			}
+			token.type = TOKEN_STR;
+
+			// 必须是字符，遇到其他字符则结束
+			// str or true false null
+			while (m_cur != m_end)
+			{
+				char tmp = *m_cur;
+				if (!std::isalpha(tmp))
+				{
+					break;
+				}
+				++m_cur;
+			}
+			// check specil const str
+			const char* str_const[3] = { "true", "false", "null" };
+			TokenType str_type[3] { TOKEN_TRUE, TOKEN_FALSE, TOKEN_NULL};
+			for (int i = 0; i < 3; ++i)
+			{
+				if (strncmp(token.start, str_const[i], token.end - token.start) == 0)
+				{
+					token.type = str_type[i];
+					break;
+				}
+			}
+		}
+		break;
 		}
 		if (!ok)
 			token.type = TOKEN_ERROR;
 		token.end = m_cur;
+		return ok;
 	}
 
 	bool readString()
@@ -177,8 +201,8 @@ public:
 		while (m_cur != m_end)
 		{
 			char c = *m_cur;
-			// 16进制？？0xcccc
-			if (!(c >= '0' && c <= '9') && strchr(".+-eE", c) != 0)
+			// 0x
+			if (!(c >= '0' && c <= '9') && strchr(".+-eEx", c) != 0)
 				break;
 			++m_cur;
 		}
@@ -210,6 +234,45 @@ public:
 			return true;
 		}
 		return false;
+	}
+
+	bool readObject(Token& token)
+	{
+		// 注意外部已经读取了{
+		while (readToken(token))
+		{
+			if (token.type == TOKEN_COMMENT)
+				continue;
+			if (token.type == TOKEN_OBJ_END || token.type == TOKEN_EOF)
+				break;
+			if (token.type != TOKEN_STR)
+				return false;
+			// 解析str
+			String name;
+			if (!parseString(token, name))
+				return false;
+			// read colon
+			if (!readToken(token) || token.type != TOKEN_OBJ_SEP)
+				return false;
+			// read value
+			if (!readValue())
+				return false;
+			// read comma,最后一个可以没有逗号分隔符
+			if (!readToken(token))
+				return false;
+			// 直接结束
+			if (token.type == TOKEN_OBJ_END || token.type == TOKEN_EOF)
+				break;
+			// must 
+			if (token.type != TOKEN_ARRAY_SEP || token.type != TOKEN_COMMENT)
+				return false;
+		}
+	}
+
+	//
+	bool parseString(Token& token, String& str)
+	{
+		return true;
 	}
 };
 

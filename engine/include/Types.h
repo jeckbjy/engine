@@ -46,6 +46,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <signal.h>
+#include <cctype>
 
 #include <string>
 #include <sstream>
