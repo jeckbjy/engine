@@ -43,8 +43,9 @@ public:
 	bool open(const String& path, int mode);
 	void close();
 	void flush();
-	void seek(long pos);
+	void seek(long offset, int origin);
 	bool is_open() const;
+	uint position() const;
 	uint size() const { return m_size; }
 	handle_t native() const { return m_handle; }
 private:
