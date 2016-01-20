@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="core">
@@ -6,6 +6,15 @@
     </Filter>
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\include">
+      <UniqueIdentifier>{6ECEB398-5A9C-A79E-4330-18C52F9D8303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\src">
+      <UniqueIdentifier>{921F4884-7ED7-89D1-E7DE-622DD3B524C2}</UniqueIdentifier>
     </Filter>
     <Filter Include="graphics">
       <UniqueIdentifier>{36EF08BC-22BC-63C7-4BD5-516F37019955}</UniqueIdentifier>
@@ -45,6 +54,9 @@
     <ClInclude Include="..\engine\include\AssetCache.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Atomic.h">
+      <Filter>engine\include</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Attribute.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -80,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Config.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Console.h">
+      <Filter>engine\include</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Context.h">
       <Filter>engine</Filter>
@@ -120,6 +135,9 @@
     <ClInclude Include="..\engine\include\Graphics.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\GraphicsDef.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\HandlerMgr.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -134,6 +152,12 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\List.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Log.h">
+      <Filter>engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\LogChannel.h">
+      <Filter>engine\include</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Macro.h">
       <Filter>core</Filter>
@@ -153,6 +177,12 @@
     <ClInclude Include="..\engine\include\Object.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Packet.h">
+      <Filter>engine\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\PixelFormat.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Plane.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -164,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Poller.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Protocol.h">
+      <Filter>engine\include</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Quaternion.h">
       <Filter>math</Filter>
@@ -267,24 +300,6 @@
     <ClInclude Include="..\engine\include\WorkQueue.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\Protocol.h">
-      <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\Log.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\LogChannel.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\Console.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\Atomic.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\Packet.h">
-      <Filter>net</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">
@@ -326,6 +341,9 @@
     <ClCompile Include="..\engine\src\Config.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Console.cpp">
+      <Filter>engine\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Context.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -356,6 +374,12 @@
     <ClCompile Include="..\engine\src\IOServicePool.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Log.cpp">
+      <Filter>engine\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\LogChannel.cpp">
+      <Filter>engine\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Matrix4.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -371,11 +395,20 @@
     <ClCompile Include="..\engine\src\Object.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Packet.cpp">
+      <Filter>engine\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\PixelFormat.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Plane.cpp">
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Poller.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Protocol.cpp">
+      <Filter>engine\src</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Quaternion.cpp">
       <Filter>math</Filter>
@@ -439,21 +472,6 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\WorkQueue.cpp">
       <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\Protocol.cpp">
-      <Filter>net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\LogChannel.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\Log.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\Console.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\Packet.cpp">
-      <Filter>net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

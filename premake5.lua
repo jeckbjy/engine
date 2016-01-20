@@ -33,167 +33,167 @@ function my_vpaths(files)
 end
 
 function engine_vpaths()
-		my_vpaths {
-		["core"] = {
-			"API.h",
-			"Macro.h",
-			"Platform.h",
-			"Algo.h",
-			"Bits.h",
-			"Types.h",
-			"Types.cpp",
-			"List.h",
-			"Tuple.h",
-			"Traits.h",
-			"FuncTraits.h",
-			"Function.h",
-			"Delegate.h",
-			"Singleton.h",
-			"Range.h",
-			"FourCC.h",
-			"Util.h",
-			"Util.cpp",
-			"Ref.h",
-			"Ref.cpp",
-			"SmartPtr.h",
-			"Variant.h",
-			"Variant.cpp",
-			"Attribute.h",
-			"Rtti.h",
-			"Rtti.cpp",
-			-- todo:合并?StringUtil->Util StringPiece->Range
-			"StringPiece.h",
-			"StringPiece.cpp",
-			"StringUtil.h",
-			"StringUtil.cpp",
-			"Buffer.h",
-			"Buffer.cpp",
-			"Config.h",
-			"Config.cpp",
-			"File.h",
-			"File.cpp",
-		},
-		["os"] = {
-			"Mutex.h",
-			"Mutex.cpp",
-			"Condition.h",
-			"Condition.cpp",
-			"SyncEvent.h",
-			"SyncEvent.cpp",
-			"Thread.h",
-			"Thread.cpp",
-			"CProcess.h",
-			"CProcess.cpp",
-			"DynLib.h",
-			"DynLib.cpp",
-		},
-		["math"] = {
-			"CMath.h",
-			"CMath.cpp",
-			"Rect.h",
-			"Vector2.h",
-			"Vector3.h",
-			"Vector4.h",
-			"Matrix4.h",
-			"Matrix4.cpp",
-			"Quaternion.h",
-			"Quaternion.cpp",
-			"Plane.h",
-			"Plane.cpp",
-			"Ray.h",
-			"Ray.cpp",
-			"Frustum.h",
-			"Frustum.cpp",
-		},
-		["net"] = {
-			"AcceptChannel.h",
-			"AcceptChannel.cpp",
-			"Acceptor.h",
-			"Acceptor.cpp",
-			"Channel.h",
-			"Channel.cpp",
-			"HandlerMgr.h",
-			"HandlerMgr.cpp",
-			"IOService.h",
-			"IOService.cpp",
-			"IOServicePool.h",
-			"IOServicePool.cpp",
-			"IOOperation.h",
-			"IOOperation.cpp",
-			"Poller.h",
-			"Poller.cpp",
-			"Procotol.h",
-			"Procotol.cpp",
-			"Proto.h",
-			"Proto.cpp",
-			"NetEvent.h",
-			"NetEvent.cpp",
-			"NetService.h",
-			"NetService.cpp",
-			"Session.h",
-			"Session.cpp",
-			"Socket.h",
-			"Socket.cpp",
-			"SocketAddress.h",
-			"SocketAddress.cpp",
-			"SocketChannel.h",
-			"SocketChannel.cpp",
-
-			
-
-		},
-		["engine"] = {
-			"Event.h",
-			"Plugin.h",
-			"Object.h",
-			"Object.cpp",
-			"Context.h",
-			"Context.cpp",
-			"WorkQueue.h",
-			"WorkQueue.cpp",
-			"AssetCache.h",
-			"AssetCache.cpp",
-			"Engine.h",
-			"Engine.cpp",
-		},
-		["graphics"] = {
-			"Color.h",
-			"Color.cpp",
-			"Graphics.h",
-			"Texture.h",
-			"GpuBuffer.h",
-		},
-		["render"] = {
-			"Renderer.h",
-			"RenderPath.h",
-			"RenderPath.cpp",
-			"Scene.h",
-			"Scene.cpp",
-			"Component.h",
-			"Component.cpp",
-			"Transform.h",
-			"Transform.cpp",
-			"Drawable.h",
-			"Drawable.cpp",
-			"Canvas.h",
-			"Camera.h",
-			"Camera.cpp",
-			"View.h",
-			"View.cpp",
-		},
-		["ui"] = {
-			"Application.h",
-			"Application.cpp",
-			"Window.h",
-			"Window.cpp",
-			"UIView.h",
-			"UIWidget.h"
-			--"UIElement.h",
-			--"UIElement.cpp",
-		},
-		["audio"] = {
-		},
-	}
+	my_vpaths {
+	["core"] = {
+		"API.h",
+		"Macro.h",
+		"Platform.h",
+		"Algo.h",
+		"Bits.h",
+		"Types.h",
+		"Types.cpp",
+		"List.h",
+		"Tuple.h",
+		"Traits.h",
+		"FuncTraits.h",
+		"Function.h",
+		"Delegate.h",
+		"Singleton.h",
+		"Range.h",
+		"FourCC.h",
+		"Util.h",
+		"Util.cpp",
+		"Ref.h",
+		"Ref.cpp",
+		"SmartPtr.h",
+		"Variant.h",
+		"Variant.cpp",
+		"Attribute.h",
+		"Rtti.h",
+		"Rtti.cpp",
+		-- todo:合并?StringUtil->Util StringPiece->Range
+		"StringPiece.h",
+		"StringPiece.cpp",
+		"StringUtil.h",
+		"StringUtil.cpp",
+		"Buffer.h",
+		"Buffer.cpp",
+		"Config.h",
+		"Config.cpp",
+		"File.h",
+		"File.cpp",
+	},
+	["os"] = {
+		"Mutex.h",
+		"Mutex.cpp",
+		"Condition.h",
+		"Condition.cpp",
+		"SyncEvent.h",
+		"SyncEvent.cpp",
+		"Thread.h",
+		"Thread.cpp",
+		"CProcess.h",
+		"CProcess.cpp",
+		"DynLib.h",
+		"DynLib.cpp",
+	},
+	["math"] = {
+		"CMath.h",
+		"CMath.cpp",
+		"Rect.h",
+		"Vector2.h",
+		"Vector3.h",
+		"Vector4.h",
+		"Matrix4.h",
+		"Matrix4.cpp",
+		"Quaternion.h",
+		"Quaternion.cpp",
+		"Plane.h",
+		"Plane.cpp",
+		"Ray.h",
+		"Ray.cpp",
+		"Frustum.h",
+		"Frustum.cpp",
+	},
+	["net"] = {
+		"AcceptChannel.h",
+		"AcceptChannel.cpp",
+		"Acceptor.h",
+		"Acceptor.cpp",
+		"Channel.h",
+		"Channel.cpp",
+		"HandlerMgr.h",
+		"HandlerMgr.cpp",
+		"IOService.h",
+		"IOService.cpp",
+		"IOServicePool.h",
+		"IOServicePool.cpp",
+		"IOOperation.h",
+		"IOOperation.cpp",
+		"Poller.h",
+		"Poller.cpp",
+		"Procotol.h",
+		"Procotol.cpp",
+		"Proto.h",
+		"Proto.cpp",
+		"NetEvent.h",
+		"NetEvent.cpp",
+		"NetService.h",
+		"NetService.cpp",
+		"Session.h",
+		"Session.cpp",
+		"Socket.h",
+		"Socket.cpp",
+		"SocketAddress.h",
+		"SocketAddress.cpp",
+		"SocketChannel.h",
+		"SocketChannel.cpp",
+	},
+	["engine"] = {
+		"Event.h",
+		"Plugin.h",
+		"Object.h",
+		"Object.cpp",
+		"Context.h",
+		"Context.cpp",
+		"WorkQueue.h",
+		"WorkQueue.cpp",
+		"AssetCache.h",
+		"AssetCache.cpp",
+		"Engine.h",
+		"Engine.cpp",
+	},
+	["graphics"] = {
+		"Color.h",
+		"Color.cpp",
+		"Graphics.h",
+		"GraphicsDef.h",
+		"Texture.h",
+		"GpuBuffer.h",
+		"PixelFormat.h",
+		"PixelFormat.cpp",
+	},
+	["render"] = {
+		"Renderer.h",
+		"RenderPath.h",
+		"RenderPath.cpp",
+		"Scene.h",
+		"Scene.cpp",
+		"Component.h",
+		"Component.cpp",
+		"Transform.h",
+		"Transform.cpp",
+		"Drawable.h",
+		"Drawable.cpp",
+		"Canvas.h",
+		"Camera.h",
+		"Camera.cpp",
+		"View.h",
+		"View.cpp",
+	},
+	["ui"] = {
+		"Application.h",
+		"Application.cpp",
+		"Window.h",
+		"Window.cpp",
+		"UIView.h",
+		"UIWidget.h"
+		--"UIElement.h",
+		--"UIElement.cpp",
+	},
+	["audio"] = {
+	},
+}
 end
 
 workspace "engine"
@@ -240,57 +240,49 @@ project("engine")
 	kind (iif(_ACTION =="gmake","StaticLib", "SharedLib"))
 	files {"engine/include/**.*", "engine/src/**.*"}
 	engine_vpaths()
-	
---[[ 暂时先不开启这些工程
+
 group "render"
 	project("plugin_ogl")
-		src_dir = "plugins/ogl/"
+		src_dir = "plugins/render_ogl/"
 		dependson {"engine"}
 		kind("SharedLib")
 		defines {"CU_OGL_BUILD", "GLEW_BUILD", "GLEW_NO_GLU"}
-		includedirs {src_dir.."include", src_dir.."glew/include"}
-		files { src_dir .. "**.*"}
-		--removefiles {src_dir.."glew/src/glewinfo.c", src_dir.."glew/src/visualinfo.c"}
-		vpaths{
-			["glew"] = {src_dir.."glew/**.*"},
-			["src"] = {src_dir.."src/**.*", src_dir.."include/**.h"}
-		}
+		if os.is("windows") then
+			includedirs {src_dir.."src", src_dir.."glew/include"}
+			files { src_dir .. "**.*"}
+			vpaths{
+				["glew"] = {src_dir.."glew/**.*"},
+				["src"]  = {src_dir.."**.*"}
+			}
+		else
+		end
+				
 	project("plugin_vulkan")
-		src_dir = "plugins/vulkan/"
+		src_dir = "plugins/render_vulkan/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_VULKAN_BUILD" }
-		includedirs { src_dir .. "include" }
+		includedirs { src_dir .. "src" }
 		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
 		
 	project("plugin_d3d11")
-		src_dir = "plugins/d3d11/"
+		src_dir = "plugins/render_d3d11/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_D3D11_BUILD" }
-		includedirs { src_dir.."include"}
+		includedirs { src_dir .. "src" }
 		includedirs { "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/Include" }
 		libdirs	{"D:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x64"}
 		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
 		
 	project("plugin_d3d12")
-		src_dir = "plugins/d3d12/"
+		src_dir = "plugins/render_d3d12/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_D3D12_BUILD" }
-		includedirs { src_dir .. "include" }
+		includedirs { src_dir .. "src" }
 		includedirs { "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/um", "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/shared"}
 		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
-	]]	
 --[[
 group "importer"
 	project("plugin_fbx")

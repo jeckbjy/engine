@@ -98,8 +98,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sample\tnet_server\GameServer.cpp" />
-    <ClCompile Include="..\sample\tnet_server\main.cpp" />
     <ClCompile Include="..\sample\tnet_server\ServerHandlers.cpp" />
+    <ClCompile Include="..\sample\tnet_server\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

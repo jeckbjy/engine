@@ -102,7 +102,6 @@
     <ClInclude Include="..\engine\include\Bits.h" />
     <ClInclude Include="..\engine\include\Buffer.h" />
     <ClInclude Include="..\engine\include\CMath.h" />
-    <ClInclude Include="..\engine\include\Console.h" />
     <ClInclude Include="..\engine\include\CProcess.h" />
     <ClInclude Include="..\engine\include\Camera.h" />
     <ClInclude Include="..\engine\include\Canvas.h" />
@@ -111,6 +110,7 @@
     <ClInclude Include="..\engine\include\Component.h" />
     <ClInclude Include="..\engine\include\Condition.h" />
     <ClInclude Include="..\engine\include\Config.h" />
+    <ClInclude Include="..\engine\include\Console.h" />
     <ClInclude Include="..\engine\include\Context.h" />
     <ClInclude Include="..\engine\include\Delegate.h" />
     <ClInclude Include="..\engine\include\Drawable.h" />
@@ -124,6 +124,7 @@
     <ClInclude Include="..\engine\include\Function.h" />
     <ClInclude Include="..\engine\include\GpuBuffer.h" />
     <ClInclude Include="..\engine\include\Graphics.h" />
+    <ClInclude Include="..\engine\include\GraphicsDef.h" />
     <ClInclude Include="..\engine\include\HandlerMgr.h" />
     <ClInclude Include="..\engine\include\IOOperation.h" />
     <ClInclude Include="..\engine\include\IOService.h" />
@@ -137,12 +138,13 @@
     <ClInclude Include="..\engine\include\NetEvent.h" />
     <ClInclude Include="..\engine\include\NetService.h" />
     <ClInclude Include="..\engine\include\Object.h" />
+    <ClInclude Include="..\engine\include\Packet.h" />
+    <ClInclude Include="..\engine\include\PixelFormat.h" />
     <ClInclude Include="..\engine\include\Plane.h" />
     <ClInclude Include="..\engine\include\Platform.h" />
     <ClInclude Include="..\engine\include\Plugin.h" />
     <ClInclude Include="..\engine\include\Poller.h" />
     <ClInclude Include="..\engine\include\Protocol.h" />
-    <ClInclude Include="..\engine\include\Packet.h" />
     <ClInclude Include="..\engine\include\Quaternion.h" />
     <ClInclude Include="..\engine\include\Range.h" />
     <ClInclude Include="..\engine\include\Ray.h" />
@@ -185,7 +187,6 @@
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
     <ClCompile Include="..\engine\src\Buffer.cpp" />
     <ClCompile Include="..\engine\src\CMath.cpp" />
-    <ClCompile Include="..\engine\src\Console.cpp" />
     <ClCompile Include="..\engine\src\CProcess.cpp" />
     <ClCompile Include="..\engine\src\Camera.cpp" />
     <ClCompile Include="..\engine\src\Channel.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="..\engine\src\Component.cpp" />
     <ClCompile Include="..\engine\src\Condition.cpp" />
     <ClCompile Include="..\engine\src\Config.cpp" />
+    <ClCompile Include="..\engine\src\Console.cpp" />
     <ClCompile Include="..\engine\src\Context.cpp" />
     <ClCompile Include="..\engine\src\Drawable.cpp" />
     <ClCompile Include="..\engine\src\DynLib.cpp" />
@@ -210,10 +212,11 @@
     <ClCompile Include="..\engine\src\NetEvent.cpp" />
     <ClCompile Include="..\engine\src\NetService.cpp" />
     <ClCompile Include="..\engine\src\Object.cpp" />
+    <ClCompile Include="..\engine\src\Packet.cpp" />
+    <ClCompile Include="..\engine\src\PixelFormat.cpp" />
     <ClCompile Include="..\engine\src\Plane.cpp" />
     <ClCompile Include="..\engine\src\Poller.cpp" />
     <ClCompile Include="..\engine\src\Protocol.cpp" />
-    <ClCompile Include="..\engine\src\Packet.cpp" />
     <ClCompile Include="..\engine\src\Quaternion.cpp" />
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />
