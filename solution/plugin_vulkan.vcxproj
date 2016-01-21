@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;CU_VULKAN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;..\plugins\render_vulkan\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -74,7 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;CU_VULKAN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;..\plugins\render_vulkan\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -91,11 +91,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\plugins\render_vulkan\src\VK_API.h" />
-    <ClInclude Include="..\plugins\render_vulkan\src\VK_Plugin.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_API.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\plugins\render_vulkan\src\VK_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

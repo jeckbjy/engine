@@ -72,6 +72,13 @@ function engine_vpaths()
 		"Config.cpp",
 		"File.h",
 		"File.cpp",
+		"Atomic.h",
+		"Console.h",
+		"Console.cpp",
+		"LogChannel.h",
+		"LogChannel.cpp",
+		"Log.h",
+		"Log.cpp",
 	},
 	["os"] = {
 		"Mutex.h",
@@ -138,6 +145,10 @@ function engine_vpaths()
 		"SocketAddress.cpp",
 		"SocketChannel.h",
 		"SocketChannel.cpp",
+		"Packet.h",
+		"Packet.cpp",
+		"Protocol.h",
+		"Protocol.cpp",
 	},
 	["engine"] = {
 		"Event.h",
@@ -247,14 +258,18 @@ group "render"
 		dependson {"engine"}
 		kind("SharedLib")
 		defines {"CU_OGL_BUILD", "GLEW_BUILD", "GLEW_NO_GLU"}
+		--includedirs {src_dir}
 		if os.is("windows") then
-			includedirs {src_dir.."src", src_dir.."glew/include"}
+			includedirs {src_dir.."glew/include"}
 			files { src_dir .. "**.*"}
 			vpaths{
 				["glew"] = {src_dir.."glew/**.*"},
 				["src"]  = {src_dir.."**.*"}
 			}
 		else
+			--不用递归
+			files { src_dir .. "/src/*.*"}
+			vpaths { ["src"] = {src_dir.. "**.*"} }
 		end
 				
 	project("plugin_vulkan")
@@ -262,27 +277,30 @@ group "render"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_VULKAN_BUILD" }
-		includedirs { src_dir .. "src" }
+		--includedirs { src_dir}
 		files { src_dir .. "**.*" }
+		vpaths { ["src"] = {src_dir.. "**.*"} }
 		
 	project("plugin_d3d11")
 		src_dir = "plugins/render_d3d11/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_D3D11_BUILD" }
-		includedirs { src_dir .. "src" }
+		--includedirs { src_dir}
 		includedirs { "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/Include" }
 		libdirs	{"D:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x64"}
 		files { src_dir .. "**.*" }
+		vpaths { ["src"] = {src_dir.. "**.*"} }
 		
 	project("plugin_d3d12")
 		src_dir = "plugins/render_d3d12/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_D3D12_BUILD" }
-		includedirs { src_dir .. "src" }
+		--includedirs { src_dir }
 		includedirs { "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/um", "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/shared"}
 		files { src_dir .. "**.*" }
+		vpaths { ["src"] = {src_dir.. "**.*"} }
 --[[
 group "importer"
 	project("plugin_fbx")
