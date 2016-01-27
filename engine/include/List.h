@@ -166,6 +166,7 @@ public:
 	void swap(List& rhs);
 	size_t size() const;
 	void push_back(node_t* data) { append(data); }
+	void push(node_t* data) { append(data); }
 	bool empty() const { return m_head == 0; }
 
 	void pop_front() { erase(begin()); }
@@ -173,7 +174,7 @@ public:
 
 	iterator begin() const { return iterator(m_head); }
 	iterator end() const { return iterator(); }
-
+	iterator& erase(iterator& itor) { erase(*(itor++)); return itor; }
 private:
 	node_t* m_head;
 };

@@ -13,7 +13,7 @@ CU_NS_BEGIN
 // 可用于实现分屏,多加一个Camera
 class CU_API Camera : public Component
 {
-	DECLARE_RTTI(Camera, Component, "CAME");
+	DECLARE_RTTI(Camera, Component, TYPE_CAMERA);
 	enum 
 	{ 
 		FLAG_ORTHO		= 0x01, 

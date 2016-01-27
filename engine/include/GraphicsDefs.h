@@ -232,7 +232,7 @@ enum TexType
 };
 
 // 绑定标识
-enum BindFlag
+enum BIND_FLAG
 {
 	BIND_VERTEX_BUFFER = 0x01,
 	BIND_INDEX_BUFFER = 0x02,
@@ -242,21 +242,21 @@ enum BindFlag
 	BIND_RENDER_TARGET = 0x20,
 	BIND_DEPTH_STENCIL = 0x40,
 	BIND_UNORDERED_ACCESS = 0x80,
-	BIND_DECODER = 0x200L,
-	BIND_VIDEO_ENCODER = 0x400L,
+	//BIND_DECODER = 0x200L,
+	//BIND_VIDEO_ENCODER = 0x400L,
 };
 
 enum MAP_FLAG
 {
+	MAP_READ_WRITE,
 	MAP_READ_ONLY,
 	MAP_WRITE_ONLY,
-	MAP_READ_WRITE,
-	MAP_WRITE_DISCARD,
-	MAP_WRITE_ON_OVERWRITE,
+	MAP_WRITE_ONLY_DISCARD,
+	MAP_WRITE_ONLY_ON_OVERWRITE,
 };
 
 // 标识
-enum ResFlag
+enum RES_FLAG
 {
 	RES_CPU_READ = 0x01,
 	RES_CPU_WRITE = 0x02,
@@ -270,7 +270,6 @@ enum ResFlag
 	RES_APPEND = 0x200,
 	RES_COUNTER = 0x400,
 
-	RES_STATIC = 0x800,
 	RES_DYNAMIC = 0x1000,
 	RES_SYSTEM = 0x2000,
 	RES_RENDER_TARGET = 0x4000,	// for texture
@@ -405,13 +404,6 @@ enum VertexUsage
 
 	VERTEX_USAGE_MAX,
 	VU_TEXCOORD_MAX = 8,
-};
-
-class CU_API GpuResource : public Object
-{
-	DECLARE_RTTI(GpuResource, Object, "GRES");
-public:
-	virtual ~GpuResource() {}
 };
 
 CU_NS_END

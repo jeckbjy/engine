@@ -92,10 +92,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_API.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Buffer.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_CommandBuffer.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_DescriptorSet.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderTexture.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderWindow.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Texture.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_VertexLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Buffer.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_CommandBuffer.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_DescriptorSet.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Device.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Mapping.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderTexture.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderWindow.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Texture.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_VertexLayout.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

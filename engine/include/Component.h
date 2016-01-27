@@ -1,18 +1,32 @@
 #pragma once
+#include "List.h"
+#include "Stream.h"
 #include "Object.h"
+#include "Animatable.h"
 
 CU_NS_BEGIN
 
-// node??
-class CU_API Component : public Object
+class Entity;
+class CU_API Component : public Object, public Animatable, public ListNode<Component>
 {
-	DECLARE_RTTI(Component, Object, "COMP")
+	friend class Entity;
+	DECLARE_RTTI(Component, Object, TYPE_COMPONENT);
 public:
 	Component();
-	~Component();
+	virtual ~Component();
+
+	virtual void draw(){}
+	virtual void load(Stream* stream){}
+	virtual void save(Stream* stream){}
+
+	const String& getName() const { return m_name; }
+	Entity* getEntity() { return m_owner; }
 
 protected:
-	bool m_enable;
+	Entity*	m_owner;
+	String	m_name;
 };
+
+typedef Vector<Component*> ComponentVec;
 
 CU_NS_END

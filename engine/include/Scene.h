@@ -1,23 +1,18 @@
 #pragma once
 #include "API.h"
+#include "Transform.h"
 
 CU_NS_BEGIN
 
-// 顶层,可带有Layer
-class CU_API Node
-{
-
-};
-
-// layer层？？
-// ui canvas in scene up scene
-class CU_API Scene
+// 场景中包含各种物件，地形等
+class CU_API Scene :public Transform
 {
 public:
 	Scene();
 	~Scene();
 
-private:
+	void attach(Component* component);
+	void detach(Component* component);
 };
 
 CU_NS_END

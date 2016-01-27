@@ -147,6 +147,182 @@ private:
 	template <class U> WeakPtr<T>& operator =(const WeakPtr<U>& rhs);
 };
 
+struct IUnknown;
+// just for windows Com
+template<typename T>
+class ComPtr
+{
+public:
+	typedef T type_t;
+
+	ComPtr() :m_ptr(0){}
+	ComPtr(const ComPtr& other) : m_ptr(other.m_ptr)
+	{
+		addRef();
+	}
+	template<class U>
+	ComPtr(U *other) : m_ptr(other)
+	{
+		addRef();
+	}
+	template<class U>
+	ComPtr(const ComPtr<U>& other)
+		:m_ptr(other.m_ptr)
+	{
+		addRef();
+	}
+
+	~ComPtr()
+	{
+		release();
+	}
+
+	ComPtr& operator=(T* other)
+	{
+		if (m_ptr != other)
+		{
+			ComPtr(other).swap(*this);
+		}
+		return *this;
+	}
+
+	ComPtr& operator=(const ComPtr& other)
+	{
+		if (m_ptr != other.m_ptr)
+		{
+			ComPtr(other).swap(*this);
+		}
+		return *this;
+	}
+
+	template<class U>
+	ComPtr& operator=(U* other)
+	{
+		ComPtr(other).swap(*this);
+		return *this;
+	}
+
+	template<class U>
+	ComPtr& operator=(const ComPtr<U>& other)
+	{
+		ComPtr(other).swap(*this);
+		return *this;
+	}
+
+	typename T* operator->() const
+	{
+		return m_ptr;
+	}
+
+	operator bool() const
+	{
+		return m_ptr != 0;
+	}
+
+	void reset()
+	{
+		release();
+	}
+
+	T* detach() const
+	{
+		T* ptr = m_ptr;
+		m_ptr = 0;
+		return ptr;
+	}
+
+	T* get() const
+	{
+		return m_ptr;
+	}
+
+	T* const* getAddressOf() const
+	{
+		return &m_ptr;
+	}
+
+	T** getAddressOf()
+	{
+		return &m_ptr;
+	}
+
+	void swap(ComPtr& r)
+	{
+		T* tmp = m_ptr;
+		m_ptr = r.m_ptr;
+		r.m_ptr = tmp;
+	}
+
+#ifdef CU_OS_WIN
+	template<typename U>
+	HRESULT as(ComPtr<U>* p) const
+	{
+		return m_ptr->QueryInterface(__uuidof(U), reinterpret_cast<void**>(p->ReleaseAndGetAddressOf()));
+	}
+
+	HRESULT asIID(REFIID riid, ComPtr<IUnknown>* p) const
+	{
+		return m_ptr->QueryInterface(__uuidof(U), reinterpret_cast<void**>(p->ReleaseAndGetAddressOf()));
+	}
+
+#endif
+
+#ifdef CU_CPP11
+	ComPtr(ComPtr&& other)
+		: m_ptr(0)
+	{
+		this->swap(other);
+	}
+	template<class U>
+	ComPtr(ComPtr<U>&& other)
+		: m_ptr(other.m_ptr)
+	{
+		other.m_ptr = 0;
+	}
+
+	ComPtr& operator=(ComPtr&& other)
+	{
+		ComPtr(static_cast<ComPtr&&>(other)).swap(*this);
+		return *this;
+	}
+
+	template<class U>
+	ComPtr& operator=(ComPtr<U>&& other)
+	{
+		ComPtr(static_cast<ComPtr<U>&&>(other)).swap(*this);
+		return *this;
+	}
+
+	void swap(ComPtr&& r)
+	{
+		T* tmp = m_ptr;
+		m_ptr = r.m_ptr;
+		r.m_ptr = tmp;
+	}
+#endif
+
+protected:
+	void addRef() const throw()
+	{
+		if (m_ptr != 0)
+			m_ptr->AddRef();
+	}
+
+	unsigned long release() throw()
+	{
+		unsigned long ref = 0;
+		if (m_ptr != 0)
+		{
+			ref = m_ptr->Release();
+			m_ptr = 0;
+		}
+		return ref;
+	}
+protected:
+	template<class U> friend class ComPtr;
+	T* m_ptr;
+};
+
 // 局部作用域
 template<class T>
 class ScopedPtr

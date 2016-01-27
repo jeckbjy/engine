@@ -12,7 +12,43 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_API.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Buffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_CommandBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_DescriptorSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Device.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Mapping.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Pipeline.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\OGL_Plugin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Program.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_RenderTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_RenderWindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_VertexLayout.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glew.h">
@@ -26,7 +62,43 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Buffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_CommandBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_DescriptorSet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Device.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Mapping.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Pipeline.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Plugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Program.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_RenderTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_RenderWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_VertexLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\glew\src\glew.c">

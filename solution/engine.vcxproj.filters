@@ -7,15 +7,6 @@
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine">
-      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="engine\include">
-      <UniqueIdentifier>{6ECEB398-5A9C-A79E-4330-18C52F9D8303}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="engine\src">
-      <UniqueIdentifier>{921F4884-7ED7-89D1-E7DE-622DD3B524C2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="graphics">
       <UniqueIdentifier>{36EF08BC-22BC-63C7-4BD5-516F37019955}</UniqueIdentifier>
     </Filter>
@@ -48,14 +39,29 @@
     <ClInclude Include="..\engine\include\Algo.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Animatable.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Animation.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Animator.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Application.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Array.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Asset.h">
+      <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\AssetCache.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Atomic.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Attribute.h">
       <Filter>core</Filter>
@@ -94,7 +100,7 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Console.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Context.h">
       <Filter>engine</Filter>
@@ -110,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Engine.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Entity.h">
+      <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Event.h">
       <Filter>engine</Filter>
@@ -129,13 +138,13 @@
     <ClInclude Include="..\engine\include\Function.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\GpuBuffer.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Graphics.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\GraphicsDef.h">
+    <ClInclude Include="..\engine\include\GraphicsDefs.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\GraphicsDesc.h">
       <Filter>graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\HandlerMgr.h">
@@ -150,20 +159,26 @@
     <ClInclude Include="..\engine\include\IOServicePool.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Light.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\List.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Log.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\LogChannel.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Macro.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Matrix4.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Model.h">
+      <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Mutex.h">
       <Filter>os</Filter>
@@ -178,7 +193,7 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Packet.h">
-      <Filter>engine\include</Filter>
+      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\PixelFormat.h">
       <Filter>graphics</Filter>
@@ -189,6 +204,12 @@
     <ClInclude Include="..\engine\include\Platform.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\PlayController.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Playable.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Plugin.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -196,7 +217,7 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Protocol.h">
-      <Filter>engine\include</Filter>
+      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Quaternion.h">
       <Filter>math</Filter>
@@ -231,6 +252,9 @@
     <ClInclude Include="..\engine\include\Singleton.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Skeleton.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\SmartPtr.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -243,6 +267,9 @@
     <ClInclude Include="..\engine\include\SocketChannel.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Stream.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\StringPiece.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -252,9 +279,6 @@
     <ClInclude Include="..\engine\include\SyncEvent.h">
       <Filter>os</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\Texture.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Thread.h">
       <Filter>os</Filter>
     </ClInclude>
@@ -263,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Transform.h">
       <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Tree.h">
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Tuple.h">
       <Filter>core</Filter>
@@ -291,6 +318,9 @@
     <ClInclude Include="..\engine\include\Vector4.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\VertexLayout.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\View.h">
       <Filter>render</Filter>
     </ClInclude>
@@ -307,6 +337,15 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Acceptor.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Animatable.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Animation.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Animator.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Application.cpp">
       <Filter>ui</Filter>
@@ -326,6 +365,9 @@
     <ClCompile Include="..\engine\src\Camera.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Canvas.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Channel.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -342,7 +384,7 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Console.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Context.cpp">
       <Filter>engine</Filter>
@@ -356,11 +398,20 @@
     <ClCompile Include="..\engine\src\Engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Entity.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\File.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Frustum.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Graphics.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\GraphicsDesc.cpp">
+      <Filter>graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\HandlerMgr.cpp">
       <Filter>net</Filter>
@@ -374,11 +425,14 @@
     <ClCompile Include="..\engine\src\IOServicePool.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Light.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Log.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\LogChannel.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Matrix4.cpp">
       <Filter>math</Filter>
@@ -396,7 +450,7 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Packet.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\PixelFormat.cpp">
       <Filter>graphics</Filter>
@@ -404,11 +458,17 @@
     <ClCompile Include="..\engine\src\Plane.cpp">
       <Filter>math</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\PlayController.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Playable.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Poller.cpp">
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Protocol.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Quaternion.cpp">
       <Filter>math</Filter>
@@ -431,6 +491,9 @@
     <ClCompile Include="..\engine\src\Session.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Skeleton.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Socket.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -439,6 +502,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\SocketChannel.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Stream.cpp">
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\StringPiece.cpp">
       <Filter>core</Filter>
@@ -463,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Variant.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\VertexLayout.cpp">
+      <Filter>graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\View.cpp">
       <Filter>render</Filter>

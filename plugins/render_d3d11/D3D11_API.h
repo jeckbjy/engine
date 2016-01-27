@@ -30,9 +30,11 @@
 
 #include <D3D11Shader.h>
 #include <D3Dcompiler.h>
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "DXGI.lib")
 
-#define D3D_RELEASE(x)		if(x != NULL) { x->Release(); x = NULL; }
-#define D3D_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);
+#define D3D11_RELEASE(x)		if(x != NULL) { x->Release(); x = NULL; }
+#define D3D11_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);
 
 CU_NS_BEGIN
 
@@ -60,14 +62,10 @@ typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
 
 #endif
 
-// 全局变量,方便使用,在RenderSystem中初始化
-extern ID3D11DeviceN*			gD3D11Device;
-extern IDXGIFactoryN*			gD3D11Factory;
-
-//class CU_D3D11_API D3D11RenderTarget : public RenderTarget
-//{
-//public:
-//	virtual void bind(ID3D11DeviceContextN* context) = 0;
-//};
+class CU_D3D11_API D3D11RenderTarget : public RenderTarget
+{
+public:
+	virtual void bind(ID3D11DeviceContextN* context) = 0;
+};
 
 CU_NS_END

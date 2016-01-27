@@ -4,9 +4,24 @@
 
 CU_NS_BEGIN
 
+// 系统已知类型定义
+enum ObjectType
+{
+	TYPE_UNKNOWN,
+
+	TYPE_OBJECT,
+
+	// render 
+	TYPE_COMPONENT,
+	TYPE_CAMERA,
+	TYPE_LIGHT,
+	TYPE_ANIMATOR,
+	TYPE_NODE,
+};
+
 class CU_API Object : public RefCounted
 {
-	DECLARE_RTTI(Object, RootRtti, "objt");
+	DECLARE_RTTI(Object, RootRtti, TYPE_OBJECT);
 public:
 	virtual ~Object();
 

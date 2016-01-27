@@ -42,6 +42,7 @@ private:
 class CU_API Ref
 {
 public:
+	typedef int ref_t;
 	Ref() :m_refs(0){}
 	virtual ~Ref(){}
 	void retain() 
@@ -53,9 +54,9 @@ public:
 		if (--m_refs <= 0) 
 			delete this;
 	}
-	void unlink() 
+	int unlink() 
 	{ 
-		--m_refs; 
+		return --m_refs; 
 	}
 	int  refs() const { return m_refs; }
 private:

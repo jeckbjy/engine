@@ -9,12 +9,78 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_API.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Buffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_CommandBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_DescriptorSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Pipeline.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderWindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_VertexLayout.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Buffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_CommandBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_DescriptorSet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Device.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Mapping.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Pipeline.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Plugin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_VertexLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

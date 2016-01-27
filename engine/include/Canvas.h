@@ -4,15 +4,10 @@
 
 CU_NS_BEGIN
 
-// 层级？？
-class CU_API Layer
-{
-
-};
-
 // 用于绘制所有ui控件，可以有三种空间
-class CU_API Canvas : public Drawable
+class CU_API Canvas : public Component
 {
+	DECLARE_RTTI(Canvas, Component, 1)
 public:
 	Canvas();
 	~Canvas();

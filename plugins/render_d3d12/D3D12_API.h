@@ -20,8 +20,6 @@
 #include "Graphics.h"
 #include <d3d12.h>
 #include <d3dcompiler.h>
-//#include <wrl/client.h>
 
-//using Microsoft::WRL::ComPtr;
-#define D3D_RELEASE(handle) if(handle != NULL){ handle->Release(); handle = NULL; }
-#define CHK(hr) if(FAILED(hr)) throw std::runtime_error("HRESULT is failed value.")
+#define D3D12_RELEASE(handle) if(handle != NULL){ handle->Release(); handle = NULL; }
+#define D3D12_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);

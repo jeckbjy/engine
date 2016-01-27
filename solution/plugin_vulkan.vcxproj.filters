@@ -9,11 +9,23 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_API.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\VK_Device.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_vulkan\VK_CommandQueue.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp">
       <Filter>src</Filter>
     </ClCompile>
