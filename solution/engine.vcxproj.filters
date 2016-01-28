@@ -174,10 +174,16 @@
     <ClInclude Include="..\engine\include\Macro.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Material.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Matrix4.h">
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Model.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\ModelRender.h">
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Mutex.h">
@@ -237,6 +243,9 @@
     <ClInclude Include="..\engine\include\RenderPath.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\RenderQueue.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Renderer.h">
       <Filter>render</Filter>
     </ClInclude>
@@ -248,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Session.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Shader.h">
+      <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Singleton.h">
       <Filter>core</Filter>
@@ -434,8 +446,17 @@
     <ClCompile Include="..\engine\src\LogChannel.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Material.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Matrix4.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Model.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\ModelRender.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Mutex.cpp">
       <Filter>os</Filter>
@@ -482,6 +503,9 @@
     <ClCompile Include="..\engine\src\RenderPath.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\RenderQueue.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Rtti.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -490,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Session.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Shader.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Skeleton.cpp">
       <Filter>render</Filter>

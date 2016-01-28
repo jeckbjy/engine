@@ -40,6 +40,11 @@ Entity* Transform::findEntityByPath(const String& path) const
 	return NULL;
 }
 
+Transform* Transform::getChild(const String& name, bool recursive /* = false */) const
+{
+	return NULL;
+}
+
 void Transform::translate(const Vector3& position, TransformSpace space /* = TS_LOCAL */)
 {
 

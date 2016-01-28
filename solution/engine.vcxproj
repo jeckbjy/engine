@@ -140,8 +140,10 @@
     <ClInclude Include="..\engine\include\Log.h" />
     <ClInclude Include="..\engine\include\LogChannel.h" />
     <ClInclude Include="..\engine\include\Macro.h" />
+    <ClInclude Include="..\engine\include\Material.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
     <ClInclude Include="..\engine\include\Model.h" />
+    <ClInclude Include="..\engine\include\ModelRender.h" />
     <ClInclude Include="..\engine\include\Mutex.h" />
     <ClInclude Include="..\engine\include\NetEvent.h" />
     <ClInclude Include="..\engine\include\NetService.h" />
@@ -161,10 +163,12 @@
     <ClInclude Include="..\engine\include\Rect.h" />
     <ClInclude Include="..\engine\include\Ref.h" />
     <ClInclude Include="..\engine\include\RenderPath.h" />
+    <ClInclude Include="..\engine\include\RenderQueue.h" />
     <ClInclude Include="..\engine\include\Renderer.h" />
     <ClInclude Include="..\engine\include\Rtti.h" />
     <ClInclude Include="..\engine\include\Scene.h" />
     <ClInclude Include="..\engine\include\Session.h" />
+    <ClInclude Include="..\engine\include\Shader.h" />
     <ClInclude Include="..\engine\include\Singleton.h" />
     <ClInclude Include="..\engine\include\Skeleton.h" />
     <ClInclude Include="..\engine\include\SmartPtr.h" />
@@ -228,7 +232,10 @@
     <ClCompile Include="..\engine\src\Light.cpp" />
     <ClCompile Include="..\engine\src\Log.cpp" />
     <ClCompile Include="..\engine\src\LogChannel.cpp" />
+    <ClCompile Include="..\engine\src\Material.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
+    <ClCompile Include="..\engine\src\Model.cpp" />
+    <ClCompile Include="..\engine\src\ModelRender.cpp" />
     <ClCompile Include="..\engine\src\Mutex.cpp" />
     <ClCompile Include="..\engine\src\NetEvent.cpp" />
     <ClCompile Include="..\engine\src\NetService.cpp" />
@@ -244,9 +251,11 @@
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />
     <ClCompile Include="..\engine\src\RenderPath.cpp" />
+    <ClCompile Include="..\engine\src\RenderQueue.cpp" />
     <ClCompile Include="..\engine\src\Rtti.cpp" />
     <ClCompile Include="..\engine\src\Scene.cpp" />
     <ClCompile Include="..\engine\src\Session.cpp" />
+    <ClCompile Include="..\engine\src\Shader.cpp" />
     <ClCompile Include="..\engine\src\Skeleton.cpp" />
     <ClCompile Include="..\engine\src\Socket.cpp" />
     <ClCompile Include="..\engine\src\SocketAddress.cpp" />

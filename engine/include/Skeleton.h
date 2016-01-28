@@ -11,7 +11,7 @@ struct Bone : public ListNode<Bone>
 	typedef List<Bone> BoneList;
 	uint	index;
 	String	name;
-	Matrix4	pos;
+	Matrix4	pose;
 	Bone*	parent;
 	BoneList children;
 };

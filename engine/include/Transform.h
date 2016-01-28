@@ -25,6 +25,8 @@ public:
 	Entity* findEntity(const String& name) const;
 	Entity* findEntityByPath(const String& path) const;
 
+	Transform* getChild(const String& name, bool recursive = false) const;
+
 	void translate(const Vector3& position, TransformSpace space = TS_LOCAL);
 	void rotate(const Quaternion& rotation, TransformSpace space = TS_LOCAL);
 	void scale(const Vector3& s, TransformSpace space = TS_LOCAL);
