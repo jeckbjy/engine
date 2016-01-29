@@ -2,6 +2,7 @@
 #include "API.h"
 #include "List.h"
 #include "Matrix4.h"
+#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -16,11 +17,14 @@ struct Bone : public ListNode<Bone>
 	BoneList children;
 };
 
-class CU_API Skeleton
+class CU_API Skeleton : public Ref
 {
 public:
 	Skeleton();
 	~Skeleton();
+
+	bool load(Stream* stream);
+	void save(Stream* stream);
 
 	void addBone(Bone* bone);
 
@@ -28,6 +32,7 @@ public:
 	const Bone* getBone(size_t index) const { return m_bones[index]; }
 	size_t getBoneCount() const { return m_bones.size(); }
 	bool hasBone(const String& name) const { return getBone(name) != NULL; }
+
 private:
 	typedef Vector<Bone*> BoneVec;
 	typedef std::map<String, Bone*> BoneMap;

@@ -73,13 +73,15 @@ public:
 	virtual ~VertexLayout(){}
 
 	void setBuffer(VertexBuffer* vb, int slot = 0);
-	void setStart(size_t off) { m_start = off; }
+	const VertexDeclaration& getDesc() const { return m_desc; }
 
 protected:
 	typedef std::map<int, VertexBuffer*> BufferList;
 	bool		m_dirty;
-	size_t		m_start;
 	BufferList	m_buffers;
+	VertexDeclaration m_desc;
 };
+
+typedef SharedPtr<VertexLayout> VertexLayoutPtr;
 
 CU_NS_END

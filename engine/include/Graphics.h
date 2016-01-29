@@ -57,6 +57,9 @@ protected:
 typedef GpuBuffer VertexBuffer;
 typedef GpuBuffer IndexBuffer;
 typedef GpuBuffer UniformBuffer;
+typedef SharedPtr<VertexBuffer>		VertexBufferPtr;
+typedef SharedPtr<IndexBuffer>		IndexBufferPtr;
+typedef SharedPtr<UniformBuffer>	UniformBufferPtr;
 
 class CU_API Texture : public GpuResource
 {

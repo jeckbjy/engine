@@ -25,13 +25,13 @@ Entity::~Entity()
 
 bool Entity::load(Stream* stream)
 {
-	uint32 fourCC;
-	uint comp_size = stream->readVariantInt();
+	uint32 magic;
+	uint comp_size = stream->readVariant();
 	for (uint i = 0; i < comp_size; ++i)
 	{
-		stream->read(fourCC);
+		stream->read(magic);
 		// 根据类型创建
-		Component* component = Rtti::create<Component>(fourCC);
+		Component* component = Rtti::create<Component>(magic);
 		if (!component)
 			continue;
 		component->load(stream);
@@ -41,14 +41,14 @@ bool Entity::load(Stream* stream)
 
 void Entity::save(Stream* stream)
 {
-	uint32 fourCC;
+	uint32 magic;
 	Component* component;
-	stream->writeVariantInt(m_components.size());
+	stream->writeVariant(m_components.size());
 	for (iterator itor = m_components.begin(); itor != m_components.end(); ++itor)
 	{
 		component = *itor;
-		fourCC = component->getRtti()->getFourCC();
-		stream->write(fourCC);
+		magic = component->getRtti()->getFourCC();
+		stream->write(magic);
 		component->save(stream);
 	}
 }

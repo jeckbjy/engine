@@ -37,7 +37,9 @@ public:
 	MeshSkin* getSkin() { return m_skin.get(); }
 
 protected:
+	typedef std::vector<MaterialPtr> MaterialVec;
 	Model* m_model;
+	MaterialVec m_materials;	// 动态的材质，如果没有设置，则使用默认的Model中材质
 	MeshSkinPtr m_skin;
 };
 

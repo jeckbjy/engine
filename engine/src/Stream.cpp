@@ -89,8 +89,9 @@ void Stream::skipLine(uint len)
 	}
 }
 
-bool Stream::readMagic(int magic, size_t num /* = 4 */)
+bool Stream::readMagic(uint32& magic)
 {
+	int num = 4;
 	assert(num <= 4);
 	size_t pos = position();
 	char buf[4] = { 0 };
@@ -105,12 +106,12 @@ bool Stream::readMagic(int magic, size_t num /* = 4 */)
 	return false;
 }
 
-uint Stream::readVariantInt()
+uint Stream::readVariant()
 {
 	return 0;
 }
 
-void Stream::writeVariantInt(uint data)
+void Stream::writeVariant(uint data)
 {
 	// Ð´Èë
 }

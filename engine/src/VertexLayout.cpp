@@ -105,8 +105,7 @@ bool VertexDeclaration::operator==(const VertexDeclaration& rhs) const
 // VertexLayout
 //////////////////////////////////////////////////////////////////////////
 VertexLayout::VertexLayout(VertexDeclaration& desc)
-	: m_start(0)
-	, m_dirty(true)
+	: m_dirty(true)
 {
 	desc.build();
 }

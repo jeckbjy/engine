@@ -1,5 +1,6 @@
 #pragma once
-#include "Asset.h"
+#include "API.h"
+#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -75,9 +76,9 @@ private:
 };
 
 // 动画资源,含有多个切片,和至少1个AnimTrackSet
-class CU_API Animation : public Asset
+class CU_API Animation : public Ref
 {
-	DECLARE_RTTI(Animation, Asset, "ANIM");
+	//DECLARE_RTTI(Animation, Asset, "ANIM");
 public:
 	Animation();
 	~Animation();

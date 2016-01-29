@@ -7,40 +7,44 @@
 
 CU_NS_BEGIN
 
-// 需要包含的信息：Material：
-class CU_API Renderable
+/*
+区别于其他引擎：如Unity,GamePlay
+MeshPart中持有了一个Material材质，作为默认，可以从磁盘中加载
+*/
+struct CU_API MeshPart : public Ref
 {
+	VertexLayoutPtr	vertices;	// 顶点信息，含结构信息
+	IndexBufferPtr	indexs;		// 面索引
+	uint8_t			topology;	// Topology结构
+	uint32_t		offset;		// 起始偏移，通常为0
+	uint32_t		count;		// 顶点数量
+	MaterialPtr		material;	// 材质,放到外边？？
+};
+typedef SharedPtr<MeshPart> MeshPartPtr;
 
+class CU_API Mesh : public Ref
+{
+public:
+	Mesh(){}
+	~Mesh(){}
+
+	bool load(Stream* stream);
+	void save(Stream* stream);
+
+	void add(MeshPart* part) { m_parts.push_back(part); }
+	size_t size() const { return m_parts.size(); }
+	MeshPart* at(size_t index) { return m_parts[index]; }
+
+protected:
+	friend class Model;
+	typedef std::vector<MeshPart*> Parts;
+	Parts m_parts;
 };
 
-// 一个最基本的渲染提
-struct RenderData : public Ref
-{
-	Material*		material;
-	VertexLayout*	vertex;
-	IndexBuffer*	index;
-	uint8_t			topology;
-	size_t			veritces_num;
-	size_t			vertices_off;
-	size_t			instance_num;
-	size_t			instance_off;
-	RenderData() : vertex(NULL), index(NULL), topology(PT_TRIANGLE_LIST),
-		veritces_num(0), vertices_off(0), instance_num(0), instance_off(0)
-	{}
-};
-
-class CU_API SubMesh
-{
-
-};
-
-class CU_API Mesh
-{
-
-};
-
-// 模型数据,需要包含：Mesh, Materail, Skeleton,Animation
-// 所有资源的加载都需要通过Model,即使分开的：
+/*
+模型数据信息：需要包含三部分数据：Mesh(含Material),Skeleton,Animation
+其中可以都包含，或者只包含其中一部分信息，也可以链接到其他Model中
+*/
 class CU_API Model : public Asset
 {
 public:
@@ -55,6 +59,7 @@ public:
 	Animation* getAnimation() const { return m_animation; }
 
 private:
+	uint8_t		m_flags;		// 标识需要保存哪部分数据
 	Mesh*		m_mesh;
 	Skeleton*	m_skeleton;
 	Animation*	m_animation;

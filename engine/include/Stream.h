@@ -31,9 +31,9 @@ public:
 	virtual char* readLine(char* str, int num);
 	void skipWhiteSpace();							// 忽略空白字符
 	void skipLine(uint len = 1);					// 忽略行
-	bool readMagic(int magic, size_t num = 4);		// 读取标识，最多4个字符
-	uint readVariantInt();
-	void writeVariantInt(uint data);
+	bool readMagic(uint32& magic);					// 读取标识，最多4个字符
+	uint readVariant();
+	void writeVariant(uint data);
 
 	uint read(String& data);
 	uint write(const String& data);
