@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "Stream.h"
 
 CU_NS_BEGIN
 

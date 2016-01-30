@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics.h"
+#include "Asset.h"
 
 CU_NS_BEGIN
 
@@ -36,7 +37,7 @@ private:
 	PassVec	m_passes;
 };
 
-class CU_API Shader
+class CU_API Shader : public Asset
 {
 public:
 	typedef Vector<Technique*>		 TechVec;
@@ -45,6 +46,9 @@ public:
 
 	Shader();
 	~Shader();
+
+	bool load(Stream* stream);
+	void save(Stream* stream);
 
 	Technique* find(const String& name) const;
 	Technique* findBest(Scheme scheme = SCHEME_AUTO) const;

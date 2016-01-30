@@ -1,6 +1,5 @@
 #pragma once
 #include "API.h"
-#include "StringPiece.h"
 
 CU_NS_BEGIN
 

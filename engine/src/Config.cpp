@@ -768,7 +768,7 @@ bool Config::load(const String& path)
 		return true;
 	String data;
 	data.resize(len);
-	file.read(&data[0], len);
+	file.read(&data[0], (uint)len, 1);
 	return parse(data);
 }
 

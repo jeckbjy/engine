@@ -51,6 +51,9 @@
     <ClInclude Include="..\engine\include\Application.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Archive.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Array.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -285,11 +288,11 @@
     <ClInclude Include="..\engine\include\StringPiece.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\StringUtil.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\SyncEvent.h">
       <Filter>os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Table.h">
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Thread.h">
       <Filter>os</Filter>
@@ -536,11 +539,11 @@
     <ClCompile Include="..\engine\src\StringPiece.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\src\StringUtil.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\engine\src\SyncEvent.cpp">
       <Filter>os</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Table.cpp">
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Thread.cpp">
       <Filter>os</Filter>

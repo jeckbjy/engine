@@ -68,4 +68,14 @@ void Shader::setProperty(const String& key, String& val)
 	m_properties[key] = val;
 }
 
+bool Shader::load(Stream* stream)
+{
+	return true;
+}
+
+void Shader::save(Stream* stream)
+{
+
+}
+
 CU_NS_END

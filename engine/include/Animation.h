@@ -1,6 +1,5 @@
 #pragma once
 #include "API.h"
-#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -75,6 +74,7 @@ private:
 	uint	 m_length;
 };
 
+class Stream;
 // 动画资源,含有多个切片,和至少1个AnimTrackSet
 class CU_API Animation : public Ref
 {

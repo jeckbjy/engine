@@ -1,5 +1,4 @@
 #pragma once
-#include "StringPiece.h"
 #include "Event.h"
 #include "Plugin.h"
 #include "DynLib.h"

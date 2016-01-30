@@ -54,7 +54,9 @@ public:
 	{
 		typedef func_traits<F>::class_t  class_t;
 		typedef std::remove_pointer<func_traits<F>::param0_t>::type event_t;
-		addListener(new TEventHandler<F>((class_t*)this, fun, udata), (const Rtti*)event_t::getStaticRtti(), sender);
+		const Rtti* rtti = event_t::getStaticRtti();
+		EventHandler* handler = new TEventHandler<F>(fun, rtti->getType(), (class_t*)this, sender, udata);
+		addListener(handler);
 	}
 
 	template<typename TEVENT>

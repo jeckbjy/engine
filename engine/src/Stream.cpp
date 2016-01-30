@@ -61,6 +61,11 @@ char* Stream::readLine(char* str, int num)
 	return str; // what if first read failed?
 }
 
+bool Stream::readLine(String& str)
+{
+	return true;
+}
+
 void Stream::skipWhiteSpace()
 {
 	char c;
@@ -75,7 +80,7 @@ void Stream::skipWhiteSpace()
 		throw std::runtime_error("Failed to seek backwards one character after skipping whitespace.");
 }
 
-void Stream::skipLine(uint len)
+bool Stream::skipLine(uint len)
 {
 	char c;
 	while (len > 0)
@@ -83,10 +88,11 @@ void Stream::skipLine(uint len)
 		do
 		{
 			if (read(c) != 1)
-				return;
+				return true;
 		} while (c != '\n');
 		--len;
 	}
+	return eof();
 }
 
 bool Stream::readMagic(uint32& magic)

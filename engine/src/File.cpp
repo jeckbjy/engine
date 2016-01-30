@@ -53,21 +53,19 @@ void File::flush()
 		fflush(m_handle);
 }
 
-void File::seek(long offset, int origin)
+bool File::seek(long offset, int origin)
 {
-	if (!m_handle)
-		return;
-	fseek(m_handle, offset, origin);
+	return fseek(m_handle, offset, origin) != -1;
 }
 
-uint File::read(void* dst, size_t len)
+uint File::read(void* buf, uint size, uint count)
 {
-	return fread(dst, len, 1, m_handle);
+	return fread(buf, size, count, m_handle);
 }
 
-uint File::write(const void* data, size_t len)
+uint File::write(const void* buf, uint size, uint count)
 {
-	return fwrite(data, len, 1, m_handle);
+	return fwrite(buf, size, count, m_handle);
 }
 
 uint File::position() const

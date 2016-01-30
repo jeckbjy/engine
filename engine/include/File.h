@@ -1,5 +1,6 @@
 #pragma once
 #include "API.h"
+#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -30,23 +31,23 @@ enum FileShare
 };
 
 // 打开文件并自动过滤bom
-class CU_API File
+class CU_API File : public Stream
 {
 public:
 	File();
 	File(const String& path, int mode = FMODE_OPEN_CREATE);
 	~File();
 	
-	uint read(void* dst, size_t len);
-	uint write(const void* data, size_t len);
+	uint read(void* buf, uint size, uint count);
+	uint write(const void* buf, uint size, uint count);
 
-	bool open(const String& path, int mode);
+	bool open(const String& path, int mode = 0);
 	void close();
 	void flush();
-	void seek(long offset, int origin);
+	bool seek(long offset, int origin);
 	bool is_open() const;
 	uint position() const;
-	uint size() const { return m_size; }
+	uint length() const { return m_size; }
 	handle_t native() const { return m_handle; }
 private:
 	FILE*	m_handle;

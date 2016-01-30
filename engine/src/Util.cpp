@@ -1,5 +1,8 @@
 #include "Util.h"
 
+#ifdef CU_CPP11
+#include <codecvt>
+#endif
 #ifdef _WIN32
 #include <Windows.h>
 #include <direct.h>
@@ -18,6 +21,7 @@
 #include <sstream>
 #include <iomanip>
 #include <time.h>
+#include <locale>
 
 CU_NS_BEGIN
 
@@ -463,6 +467,68 @@ bool Util::endsWith(const String& str, const String& pattern, bool lowerCase /* 
 		return strncasecmp(ptr, pattern.c_str(), len) == 0;
 	else
 		return strncmp(ptr, pattern.c_str(), len) == 0;
+}
+
+String Util::getExtension(const String& str)
+{
+	size_t npos = str.find_last_of("/\\");
+	if (npos == String::npos)
+		return str;
+	return str.substr(npos + 1);
+}
+
+WString Util::utf8_to_wstring(const String& str)
+{
+#ifdef CU_CPP11
+	std::wstring_convert<std::codecvt_utf8<wchar_t> > conv;
+	WString result = conv.from_bytes(str);
+	return result;
+#elif defined(CU_OS_WIN)
+	WString result;
+	const int len = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str.data(), str.size(), NULL, 0);
+	if (len != 0)
+	{
+		result.resize(len);
+		::MultiByteToWideChar(CP_UTF8, 0, str.data(), str.size(), &result[0], len)
+	}
+	return result;
+#else
+	WString result;
+	size_t len = mbstowcs(0, str.data(), 0);
+	if (len != size_t(-1))
+	{
+		result.resize(len);
+		mbstowcs(&result[0], str.data(), len);
+	}
+	return result;
+#endif
+}
+
+String Util::wstring_to_utf8(const WString& str)
+{
+#ifdef CU_CPP11
+	std::wstring_convert<std::codecvt_utf8<wchar_t> > conv;
+	String result = conv.to_bytes(str);
+	return result;
+#elif defined(CU_OS_WIN)
+	String result;
+	const int len = ::WideCharToMultiByte(CP_UTF8, 0, str.data(), str.size(), NULL, 0, NULL, NULL);
+	if (len != 0)
+	{
+		result.resize(len);
+		::WideCharToMultiByte(CP_UTF8, 0, str.data(), str.size(), &result[0], len, NULL, NULL);
+	}
+	return result;
+#else
+	String result;
+	size_t len = wcstombs(0, str.data(), 0);
+	if (len != size_t(-1))
+	{
+		result.resize(len);
+		wcstombs(&result[0], str.data(), len);
+	}
+	return result;
+#endif
 }
 
 CU_NS_END

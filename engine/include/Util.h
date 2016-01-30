@@ -1,6 +1,6 @@
 #pragma once
 #include "API.h"
-#include "StringUtil.h"
+#include "StringPiece.h"
 
 CU_NS_BEGIN
 
@@ -40,6 +40,13 @@ public:
 
 	static bool startsWith(const String& str, const String& pattern, bool lowerCase = true);
 	static bool endsWith(const String& str, const String& pattern, bool lowerCase = true);
+	static String getExtension(const String& str);
+	
+	static WString utf8_to_wstring(const String& str);
+	static String  wstring_to_utf8(const WString& str);
+
+	template<typename T> inline static T toInteger(const String& str) { return (T)atoi(str.data()); }
+	template<typename T> inline static T toFloat(const String& str) { return (T)atof(str.data()); }
 };
 
 CU_NS_END

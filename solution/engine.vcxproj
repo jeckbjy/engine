@@ -99,6 +99,7 @@
     <ClInclude Include="..\engine\include\Animation.h" />
     <ClInclude Include="..\engine\include\Animator.h" />
     <ClInclude Include="..\engine\include\Application.h" />
+    <ClInclude Include="..\engine\include\Archive.h" />
     <ClInclude Include="..\engine\include\Array.h" />
     <ClInclude Include="..\engine\include\Asset.h" />
     <ClInclude Include="..\engine\include\AssetCache.h" />
@@ -177,8 +178,8 @@
     <ClInclude Include="..\engine\include\SocketChannel.h" />
     <ClInclude Include="..\engine\include\Stream.h" />
     <ClInclude Include="..\engine\include\StringPiece.h" />
-    <ClInclude Include="..\engine\include\StringUtil.h" />
     <ClInclude Include="..\engine\include\SyncEvent.h" />
+    <ClInclude Include="..\engine\include\Table.h" />
     <ClInclude Include="..\engine\include\Thread.h" />
     <ClInclude Include="..\engine\include\Traits.h" />
     <ClInclude Include="..\engine\include\Transform.h" />
@@ -262,8 +263,8 @@
     <ClCompile Include="..\engine\src\SocketChannel.cpp" />
     <ClCompile Include="..\engine\src\Stream.cpp" />
     <ClCompile Include="..\engine\src\StringPiece.cpp" />
-    <ClCompile Include="..\engine\src\StringUtil.cpp" />
     <ClCompile Include="..\engine\src\SyncEvent.cpp" />
+    <ClCompile Include="..\engine\src\Table.cpp" />
     <ClCompile Include="..\engine\src\Thread.cpp" />
     <ClCompile Include="..\engine\src\Transform.cpp" />
     <ClCompile Include="..\engine\src\Types.cpp" />

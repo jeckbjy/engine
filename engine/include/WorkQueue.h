@@ -31,9 +31,9 @@ public:
 
 	void execute(bool urgent_only = true);
 	void create(int threads = -1);
-	WorkItem* newItem();
 	void freeItem(WorkItem* item);
 	void addItem(WorkItem* item, bool urgent);
+	WorkItem* newItem();
 
 private:
 	void loop(size_t index);

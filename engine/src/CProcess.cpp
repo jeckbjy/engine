@@ -130,12 +130,12 @@ handle_t Process::getProcess(pid_t pid)
 #endif
 }
 
-pid_t Process::launch(const StringPiece& cmd, const Args& args, const Env& env, const char* dir /* = NULL */)
+pid_t Process::launch(const String& cmd, const Args& args, const Env& env, const char* dir /* = NULL */)
 {
 #ifdef CU_OS_WIN
 	// utf8 to Unicode
-	WString wcmd = toWString(cmd);
-	WString wdir = toWString(dir);
+	WString wcmd = Util::utf8_to_wstring(cmd);
+	WString wdir = Util::utf8_to_wstring(dir);
 
 	BOOL bInheritHandles = FALSE;
 	STARTUPINFOW startupInfo;
@@ -186,7 +186,7 @@ pid_t Process::launch(const StringPiece& cmd, const Args& args, const Env& env, 
 #endif
 }
 
-bool Process::open(const StringPiece& file, const StringPiece& mode)
+bool Process::open(const String& file, const String& mode)
 {
 #ifdef CU_OS_WIN
 	bool success = (size_t)ShellExecuteA(0, mode.data(), file.data(), 0, 0, SW_SHOW) > 32;

@@ -1,4 +1,5 @@
 #include "Skeleton.h"
+#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -23,7 +24,7 @@ void Skeleton::save(Stream* stream)
 	// write bone
 	size_t count = m_bones.size();
 	stream->writeVariant(count);
-	for (int i = 0; i < count; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
 		const Bone* bone = m_bones[i];
 		stream->writeVariant(bone->index + 1);

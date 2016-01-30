@@ -2,7 +2,6 @@
 #include "API.h"
 #include "List.h"
 #include "Matrix4.h"
-#include "Stream.h"
 
 CU_NS_BEGIN
 
@@ -17,6 +16,7 @@ struct Bone : public ListNode<Bone>
 	BoneList children;
 };
 
+class Stream;
 class CU_API Skeleton : public Ref
 {
 public:
