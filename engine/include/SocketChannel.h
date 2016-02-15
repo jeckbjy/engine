@@ -48,7 +48,7 @@ public:
 	Buffer& getWriter() { return m_writer; }
 
 	void reset(){ m_fun.reset(); }
-	void setCallbackOwner(void* owner) { m_fun.setObject(owner); }
+	void setCallbackOwner(void* owner) { m_fun.setOwner(owner); }
 
 	int getState() const { return m_state; }
 	bool isConnecting() const { return m_state == S_CONNECTING; }

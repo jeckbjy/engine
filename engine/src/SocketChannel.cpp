@@ -227,8 +227,7 @@ void SocketChannel::completed(uint8_t type)
 
 void SocketChannel::notify(uint8_t type)
 {
-	if (!m_fun.empty())
-		m_fun(type);
+	m_fun(type);
 	// ÐÞ¸ÄÁ¬½Ó×´Ì¬
 	if (type == EV_ERROR)
 		m_state = S_DISCONNECT;

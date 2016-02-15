@@ -19,7 +19,7 @@ public:
 
 	void close() { m_sock.close(); }
 	void reset() { m_func.reset(); }
-	void setCallbackOwner(void* owner) { m_func.setObject(owner); }
+	void setCallbackOwner(void* owner) { m_func.setOwner(owner); }
 	handle_t handle() const { return (handle_t)m_sock.native(); }
 
 protected:

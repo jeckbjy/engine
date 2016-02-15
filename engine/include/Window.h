@@ -34,14 +34,12 @@ enum WindowFlag
 	WF_RESIZABLE = 0x02,
 	WF_FULLSCREEN = 0x04,
 	WF_DECORATED = 0x08,	// 标题，系统按钮
-	WF_CLOSED = 0x10,	// 关闭
+	WF_CLOSED = 0x10,		// 关闭
 	WF_AUTO_FREE = 0x20,	// 是否需要释放
 	WF_GAMMA = 0x40,
 	WF_VSYNC = 0x80,
 };
 
-// UIWidget 单独的UI编辑器??
-// 用于代表原生窗口，可拥有父子关系,可容器Widget,需要处理消息循环,可以挂接外部句柄
 class CU_API Window
 {
 public:
@@ -60,7 +58,7 @@ public:
 
 	virtual void onClose();
 	virtual void onActive(bool flag);
-	virtual void onResize(size_t width, size_t height);
+	virtual void onResize(size_t w, size_t h);
 	virtual void onPaint(){}
 
 	bool isClosed() const { return (m_flags & WF_CLOSED) != 0; }
