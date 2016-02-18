@@ -21,27 +21,27 @@ public:
 	OGLWindowContext()
 		:_free(false), _hwnd(NULL), _hdc(NULL), _hrc(NULL)
 	{
-		_hrc = wglGetCurrentContext();
+		/*_hrc = wglGetCurrentContext();
 		if (_hrc)
-			return;
+		return;
 		if (Window::current() == NULL)
 		{
-			_hwnd = Window::create_window("__gl_init_tmp", 0, 0);
-			_free = true;
+		_hwnd = Window::create_window("__gl_init_tmp", 0, 0);
+		_free = true;
 		}
 		else
 		{
-			_hwnd = Window::current()->handle();
-			_free = false;
+		_hwnd = Window::current()->handle();
+		_free = false;
 		}
 		if (_hwnd)
 		{
-			_hdc = GetDC(_hwnd);
-			_hrc = wglCreateContext(_hdc);
-			if (_hdc && _hrc)
-				wglMakeCurrent(_hdc, _hrc);
+		_hdc = GetDC(_hwnd);
+		_hrc = wglCreateContext(_hdc);
+		if (_hdc && _hrc)
+		wglMakeCurrent(_hdc, _hrc);
 
-		}
+		}*/
 	}
 	~OGLWindowContext()
 	{

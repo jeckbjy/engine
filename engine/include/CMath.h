@@ -1,12 +1,30 @@
 #pragma once
 #include "API.h"
-#include "Macro.h"
 
 CU_NS_BEGIN
+
+enum EulerAngleOrder
+{
+	EAO_XYZ,
+	EAO_XZY,
+	EAO_YXZ,
+	EAO_YZX,
+	EAO_ZXY,
+	EAO_ZYX
+};
 
 class CU_API Math
 {
 public:
+	static const float POS_INFINITY;
+	static const float NEG_INFINITY;
+	static const float PI;
+	static const float TWO_PI;
+	static const float HALF_PI;
+	static const float DEG2RAD;
+	static const float RAD2DEG;
+	static const float LOG2;
+
 	static float toDegree(float radian) { return MATH_RAD_TO_DEG(radian);}
 	static float toRadian(float degree) { return MATH_DEG_TO_RAD(degree); }
 

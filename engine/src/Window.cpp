@@ -2,6 +2,8 @@
 
 CU_NS_BEGIN
 
+static uint32 __WIN_MAXID = 0;
+
 #ifdef CU_OS_WINNT
 
 static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -23,7 +25,7 @@ static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	{
 	case WM_CLOSE:
 	{
-		wnd->onClose();
+		//wnd->onClose();
 	}
 	break;
 	case WM_ACTIVATE:
@@ -32,19 +34,19 @@ static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		BOOL iconified = HIWORD(wParam) ? TRUE : FALSE;
 		if (focused && iconified)
 			focused = FALSE;
-		wnd->onActive(focused == TRUE);
+		//wnd->onActive(focused == TRUE);
 	}
 	break;
 	case WM_PAINT:
 	{
-		wnd->onPaint();
+		//wnd->onPaint();
 		break;
 	}
 	case WM_SIZE:
 	{
 		size_t w = LOWORD(lParam);
 		size_t h = HIWORD(lParam);
-		wnd->onResize(w, h);
+		//wnd->onResize(w, h);
 		break;
 	}
 	case WM_SIZING:
@@ -54,7 +56,7 @@ static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		GetWindowRect(wnd->handle(), &rect);
 		ClientToScreen(wnd->handle(), &topLeftClient);
 		OffsetRect(&rect, topLeftClient.x, topLeftClient.y);
-		wnd->onResize(rect.right - rect.left, rect.bottom - rect.top);
+		//wnd->onResize(rect.right - rect.left, rect.bottom - rect.top);
 		break;
 	}
 	default:
@@ -64,63 +66,143 @@ static LRESULT CALLBACK __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-const CHAR* __CLASS_NAME = "CLS_CUTE";
-
-static void registerClass()
+window_t create_window(const WINDOW_DESC& desc)
 {
-	// 标识是否已经注册
-	static bool has_register = false;
-	if (has_register)
-		return;
-	// 注册窗体类
-	WNDCLASSEX wc;
-	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc = (WNDPROC)(__WndProc);
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = sizeof(void*) + sizeof(int);// Make room for one pointer
-	wc.hInstance = ::GetModuleHandle(NULL);
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hIconSm = NULL;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = NULL;  // No brush - we are going to paint our own background
-	wc.lpszMenuName = NULL;  // No default menu
-	wc.lpszClassName = __CLASS_NAME;
-
-	if (!::RegisterClassEx(&wc))
+	if (desc.hwnd != INVALID_HANDLE_VALUE)
 	{
-		throw std::runtime_error("RegisterClassEx error");
-		return;
+		return desc.hwnd;
 	}
 
-	has_register = true;
-}
+	INT32 left = desc.left;
+	INT32 top = desc.top;
+	UINT32 width = desc.width;
+	UINT32 height = desc.height;
 
-window_t Window::create_window(const char* name, size_t width, size_t height, int flags /* = 0 */, void* udata /* = NULL */)
-{
-	registerClass();
-	// 初始化参数
-	int xpos = CW_USEDEFAULT;
-	int ypos = CW_USEDEFAULT;
-
-	// 创建窗体
+	bool isChild = (desc.parent != INVALID_HANDLE_VALUE);
+	bool isFullscreen = desc.isFullscreen && !isChild;
+	// Check Style And StyleEx
 	DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 	DWORD styleEx = WS_EX_APPWINDOW;
-	if (flags & WF_FULLSCREEN)
+	if (isFullscreen)
 	{
 		style |= WS_POPUP;
 	}
 	else
 	{
-		if (flags & WF_RESIZABLE)
-			style |= WS_OVERLAPPEDWINDOW;
+		// toolwindow
+		if (desc.isToolWindow)
+			styleEx = WS_EX_TOOLWINDOW;
+
+		// child
+		if (isChild)
+			style |= WS_CHILD;
+
+		// border
+		if (desc.border == WIN_BORDER_NONE)
+			style |= WS_POPUP;
+		else if (desc.border == WIN_BORDER_FIXED)
+			style |= WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 		else
-			style |= WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU;
-		styleEx |= WS_EX_WINDOWEDGE;
+			style |= WS_OVERLAPPEDWINDOW;
 	}
-	HWND hwnd = CreateWindowEx(styleEx, __CLASS_NAME, name, style,
-		xpos, ypos, width, height,
-		NULL, NULL, ::GetModuleHandle(NULL), udata);
+
+	// check monitor and set to center when left==-1
+	if (!isFullscreen)
+	{
+		HMONITOR monitor = NULL;
+		if (monitor == NULL)
+		{
+			POINT point = { left, top };
+			monitor = MonitorFromPoint(point, MONITOR_DEFAULTTOPRIMARY);
+		}
+
+		// Get the target monitor info
+		MONITORINFO monitorInfo;
+		memset(&monitorInfo, 0, sizeof(MONITORINFO));
+		monitorInfo.cbSize = sizeof(MONITORINFO);
+		GetMonitorInfo(monitor, &monitorInfo);
+
+		if (left == -1 || top == -1)
+		{
+			int screenw = monitorInfo.rcWork.right - monitorInfo.rcWork.left;
+			int screenh = monitorInfo.rcWork.bottom - monitorInfo.rcWork.top;
+
+			// clamp window dimensions to screen size
+			int outerw = (int(width) < screenw) ? int(width) : screenw;
+			int outerh = (int(height) < screenh) ? int(height) : screenh;
+
+			if (left == -1)
+				left = monitorInfo.rcWork.left + (screenw - outerw) / 2;
+			else if (monitor != NULL)
+				left += monitorInfo.rcWork.left;
+
+			if (top == -1)
+				top = monitorInfo.rcWork.top + (screenh - outerh) / 2;
+			else if (monitor != NULL)
+				top += monitorInfo.rcWork.top;
+		}
+		else if (monitor != NULL)
+		{
+			left += monitorInfo.rcWork.left;
+			top += monitorInfo.rcWork.top;
+		}
+
+		if (!desc.isOuterDimensions)
+		{
+			// Calculate window dimensions required to get the requested client area
+			RECT rect;
+			SetRect(&rect, 0, 0, width, height);
+			AdjustWindowRect(&rect, style, false);
+			width = rect.right - rect.left;
+			height = rect.bottom - rect.top;
+
+			// Clamp width and height to the desktop dimensions
+			int screenw = GetSystemMetrics(SM_CXSCREEN);
+			int screenh = GetSystemMetrics(SM_CYSCREEN);
+
+			if ((int)width > screenw)
+				width = screenw;
+
+			if ((int)height > screenh)
+				height = screenh;
+
+			if (left < 0)
+				left = (screenw - width) / 2;
+
+			if (top < 0)
+				top = (screenh - height) / 2;
+		}
+	}
+
+	HINSTANCE module;
+#ifdef CU_BUILD_LIB
+	module = GetModuleHandle(NULL);
+#else
+	module = GetModuleHandle("engine.dll");
+#endif
+	if (module == NULL)
+		module = GetModuleHandle(NULL);
+
+	// Create Window
+	const CHAR* class_name = "CLASS_WIN32WND";
+	UINT classStyle = 0;
+	if (desc.isDoubleClick)
+		classStyle |= CS_DBLCLKS;
+	WNDCLASS wc = {
+		classStyle, __WndProc, 0, 0, module,
+		LoadIcon(NULL, IDI_APPLICATION), LoadCursor(NULL, IDC_ARROW),
+		(HBRUSH)GetStockObject(BLACK_BRUSH), 0, class_name
+	};
+
+	if (!::RegisterClass(&wc))
+	{
+		throw std::runtime_error("RegisterClassEx error");
+		return NULL;
+	}
+
+	window_t hwnd = CreateWindowEx(style, class_name, desc.title.c_str(), style,
+		left, top, width, height, desc.parent, NULL, module, desc.udata);
+
 	if (hwnd == NULL)
 	{
 		throw std::runtime_error("CreateWindowEx error");
@@ -143,107 +225,121 @@ window_t Window::create_window(const char* name, size_t width, size_t height, in
 			::SetPixelFormat(hdc, format, &pfd);
 		::ReleaseDC(hwnd, hdc);
 	}
-
-	// 设置是否可见
-	if (flags & WF_VISIBLE)
-		::ShowWindow(hwnd, SW_SHOW);
 	return hwnd;
 }
 
-bool Window::destroy_window(window_t hwnd)
+bool destroy_window(window_t hwnd)
 {
 	return ::DestroyWindow(hwnd) == TRUE;
 }
 
-//bool Window::pollEvents()
-//{
-//	MSG msg;
-//	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-//	{
-//		if (msg.message == WM_QUIT)
-//			return true;
-//		TranslateMessage(&msg);
-//		DispatchMessage(&msg);
-//	}
-//	return false;
-//}
-
 #endif
 
-Window* g_cur_wnd = NULL;
-Window* Window::current() { return g_cur_wnd; }
-
-Window::Window(window_t hwnd)
-	:m_hwnd(hwnd), m_flags(0), m_width(0), m_height(0), m_udata(NULL)
+Window::Window(const WINDOW_DESC& desc)
 {
-	if (m_hwnd != NULL)
-		g_cur_wnd = this;
+	m_hwnd = create_window(desc);
+	m_id = ++__WIN_MAXID;
+	m_udata = desc.udata;
+	m_flags = 0;
+	m_multisample = desc.multisample;
+	m_vsync = desc.vsync;
+	m_refreshRate = desc.refreshRate;
+	setFlag(WF_FULLSCREEN, desc.isFullscreen);
+	setFlag(WF_HIDDEN, desc.isHidden);
+	setFlag(WF_DEPTH_STENCIL, desc.isDepthStencil);
+	setFlag(WF_GAMMA, desc.isGamma);
 }
 
 Window::~Window()
 {
-	if ((m_flags & WF_AUTO_FREE) && m_hwnd)
+	if ((m_hwnd != NULL) && (m_flags & WF_AUTO_FREE))
 	{
 		destroy_window(m_hwnd);
+		m_hwnd = NULL;
 	}
-	if (g_cur_wnd == this)
-		g_cur_wnd = NULL;
 }
 
-bool Window::create(const char* name, size_t width /* = 1024 */, size_t height /* = 768 */, int flags /* = 0 */)
+void Window::resize(size_t width, size_t height)
 {
-	m_hwnd = create_window(name, width, height, flags, this);
-	if (m_hwnd == NULL)
-		return false;
-	m_width = width;
-	m_height = height;
-	m_flags = flags;
-	m_flags |= WF_AUTO_FREE;
-	g_cur_wnd = this;
-	return true;
-}
-
-void Window::resize(size_t w, size_t h)
-{
-	m_width = w;
-	m_height = h;
-}
-
-void Window::show()
-{
-	if (m_flags & WF_VISIBLE)
-		return;
-	m_flags |= WF_VISIBLE;
 #ifdef CU_OS_WINNT
-	::ShowWindow(m_hwnd, SW_SHOW);
-#endif
-}
-
-void Window::hide()
-{
-	if (m_flags & WF_VISIBLE)
+	if (m_hwnd)
 	{
-		CU_CLEAR_MASK(m_flags, WF_VISIBLE);
-#ifdef CU_OS_WINNT
-		::ShowWindow(m_hwnd, SW_HIDE);
-#endif
+		RECT rc = { 0, 0, (LONG)width, (LONG)height };
+		AdjustWindowRect(&rc, GetWindowLong(m_hwnd, GWL_STYLE), false);
+		m_width = rc.right - rc.left;
+		m_height = rc.bottom - rc.top;
+
+		SetWindowPos(m_hwnd, HWND_TOP, m_left, m_top, m_width, m_height, SWP_NOMOVE);
 	}
+#endif
 }
 
-void Window::onClose()
+void Window::move(int32_t x, int32_t y)
 {
-	m_flags |= WF_CLOSED;
+#ifdef CU_OS_WINNT
+	if (m_hwnd)
+	{
+		m_left = x;
+		m_top = y;
+		SetWindowPos(m_hwnd, HWND_TOP, m_left, m_top, m_width, m_height, SWP_NOSIZE);
+	}
+#endif
 }
 
-void Window::onActive(bool flag)
+void Window::minimize()
 {
-
+#ifdef CU_OS_WINNT
+	if (m_hwnd)
+		ShowWindow(m_hwnd, WS_MINIMIZE);
+#endif
 }
 
-void Window::onResize(size_t width, size_t height)
+void Window::maximize()
 {
-	m_width = width;
-	m_height = height;
+#ifdef CU_OS_WINNT
+	if (m_hwnd)
+		ShowWindow(m_hwnd, SW_MAXIMIZE);
+#endif
+}
+
+void Window::restore()
+{
+#ifdef CU_OS_WINNT
+	if (m_hwnd)
+		ShowWindow(m_hwnd, SW_RESTORE);
+#endif
+}
+
+void Window::setFlag(WindowFlag mask, bool flag)
+{
+	if (flag)
+		m_flags |= mask;
+	else
+		m_flags &= ~mask;
+}
+
+void Window::setHidden(bool hidden)
+{
+#ifdef CU_OS_WINNT
+	if (hidden)
+		ShowWindow(m_hwnd, SW_HIDE);
+	else
+		ShowWindow(m_hwnd, SW_SHOW);
+#endif
+
+	// 修改状态标识
+	setFlag(WF_HIDDEN, hidden);
+}
+
+void Window::setActive(bool state)
+{
+#ifdef CU_OS_WINNT
+	if (state)
+		ShowWindow(m_hwnd, SW_RESTORE);
+	else
+		ShowWindow(m_hwnd, SW_SHOWMINNOACTIVE);
+#endif
+	setFlag(WF_ACTIVE, state);
 }
 
 CU_NS_END

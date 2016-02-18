@@ -142,6 +142,7 @@
     <ClInclude Include="..\engine\include\LogChannel.h" />
     <ClInclude Include="..\engine\include\Macro.h" />
     <ClInclude Include="..\engine\include\Material.h" />
+    <ClInclude Include="..\engine\include\Matrix3.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
     <ClInclude Include="..\engine\include\Model.h" />
     <ClInclude Include="..\engine\include\ModelRender.h" />
@@ -167,7 +168,7 @@
     <ClInclude Include="..\engine\include\RenderQueue.h" />
     <ClInclude Include="..\engine\include\Renderer.h" />
     <ClInclude Include="..\engine\include\Rtti.h" />
-    <ClInclude Include="..\engine\include\Scene.h" />
+    <ClInclude Include="..\engine\include\SceneManager.h" />
     <ClInclude Include="..\engine\include\Session.h" />
     <ClInclude Include="..\engine\include\Shader.h" />
     <ClInclude Include="..\engine\include\Singleton.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="..\engine\src\Log.cpp" />
     <ClCompile Include="..\engine\src\LogChannel.cpp" />
     <ClCompile Include="..\engine\src\Material.cpp" />
+    <ClCompile Include="..\engine\src\Matrix3.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
     <ClCompile Include="..\engine\src\Model.cpp" />
     <ClCompile Include="..\engine\src\ModelRender.cpp" />
@@ -253,8 +255,9 @@
     <ClCompile Include="..\engine\src\Ref.cpp" />
     <ClCompile Include="..\engine\src\RenderPath.cpp" />
     <ClCompile Include="..\engine\src\RenderQueue.cpp" />
+    <ClCompile Include="..\engine\src\Renderer.cpp" />
     <ClCompile Include="..\engine\src\Rtti.cpp" />
-    <ClCompile Include="..\engine\src\Scene.cpp" />
+    <ClCompile Include="..\engine\src\SceneManager.cpp" />
     <ClCompile Include="..\engine\src\Session.cpp" />
     <ClCompile Include="..\engine\src\Shader.cpp" />
     <ClCompile Include="..\engine\src\Skeleton.cpp" />

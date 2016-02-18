@@ -14,7 +14,7 @@ public:
 	static String localIP();		// 获得一个本地IP
 	static size_t cpuCount();		// 获取cpu个数
 
-	static uint64_t time();		// 当前毫秒时间：millsecond
+	static uint64_t time();			// 当前毫秒时间：millsecond
 	static void msleep(long millsec);
 
 	static bool readUtf8Bom(std::ifstream& ifs);

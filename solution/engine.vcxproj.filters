@@ -180,6 +180,9 @@
     <ClInclude Include="..\engine\include\Material.h">
       <Filter>render</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Matrix3.h">
+      <Filter>math</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Matrix4.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -255,7 +258,7 @@
     <ClInclude Include="..\engine\include\Rtti.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\Scene.h">
+    <ClInclude Include="..\engine\include\SceneManager.h">
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Session.h">
@@ -452,6 +455,9 @@
     <ClCompile Include="..\engine\src\Material.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Matrix3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Matrix4.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -509,10 +515,13 @@
     <ClCompile Include="..\engine\src\RenderQueue.cpp">
       <Filter>render</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Renderer.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Rtti.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\engine\src\Scene.cpp">
+    <ClCompile Include="..\engine\src\SceneManager.cpp">
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Session.cpp">

@@ -10,12 +10,16 @@ public:
 	Application();
 	~Application();
 
-	virtual void init(){}
+	virtual bool init(){ return true; }
 	virtual void release(){}
-	int run();
+	virtual void update(){}
+	void run();
+
+	void pumpMsg();
 
 protected:
-	//Window* m_main;	// 主窗体
+	bool	m_quit;
+	Window* m_main;	// 主窗体
 };
 
 CU_NS_END

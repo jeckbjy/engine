@@ -60,42 +60,42 @@ Matrix4 Matrix4::perspectiveFov(float fov, float width, float height, float zNea
 
 Matrix4 Matrix4::lookAt(Vector3 const& eye, Vector3 const& center, Vector3 const& up)
 {
-	Vector3 f = normalize(center - eye);
-	Vector3 u = normalize(up);
-	Vector3 s = normalize(cross(f, u));
-	u = cross(s, f);
+	Vector3 f = Vector3::normalize(center - eye);
+	Vector3 u = Vector3::normalize(up);
+	Vector3 s = Vector3::normalize(Vector3::cross(f, u));
+	u = Vector3::cross(s, f);
 
 	return Matrix4(
 		s.x, u.x, -f.x, 0,
 		s.y, u.y, -f.y, 0,
 		s.z, u.z, -f.z, 0,
-		-dot(s, eye), -dot(u, eye), dot(f, eye), 1);
+		-Vector3::dot(s, eye), -Vector3::dot(u, eye), Vector3::dot(f, eye), 1);
 }
 
 Matrix4 Matrix4::lookAtLH(Vector3 const& eye, Vector3 const& center, Vector3 const& up)
 {
-	Vector3 z = normalize(center - eye);
-	Vector3 x = normalize(cross(up, z));
-	Vector3 y = cross(z, x);
+	Vector3 z = Vector3::normalize(center - eye);
+	Vector3 x = Vector3::normalize(Vector3::cross(up, z));
+	Vector3 y = Vector3::cross(z, x);
 
 	return Matrix4(
 		x.x, y.x, z.x, 0,
 		x.y, y.y, z.y, 0,
 		x.z, y.z, z.z, 0,
-		-dot(x, eye), -dot(y, eye), -dot(z, eye), 1);
+		-Vector3::dot(x, eye), -Vector3::dot(y, eye), -Vector3::dot(z, eye), 1);
 }
 
 Matrix4 Matrix4::lookAtRH(Vector3 const& eye, Vector3 const& center, Vector3 const& up)
 {
-	Vector3 z = normalize(eye - center);
-	Vector3 x = normalize(cross(up, z));
-	Vector3 y = cross(z, x);
+	Vector3 z = Vector3::normalize(eye - center);
+	Vector3 x = Vector3::normalize(Vector3::cross(up, z));
+	Vector3 y = Vector3::cross(z, x);
 
 	return Matrix4(
 		x.x, y.x, z.x, 0,
 		x.y, y.y, z.y, 0,
 		x.z, y.z, z.z, 0,
-		-dot(x, eye), -dot(y, eye), -dot(z, eye), 1);
+		-Vector3::dot(x, eye), -Vector3::dot(y, eye), -Vector3::dot(z, eye), 1);
 }
 
 Matrix4 Matrix4::createTranslation(const Vector3& t)
@@ -179,6 +179,14 @@ Matrix4::Matrix4(
 	m10 = t10; m11 = t11; m12 = t12; m13 = t13;
 	m20 = t20; m21 = t21; m22 = t22; m23 = t23;
 	m30 = t30; m31 = t31; m32 = t32; m33 = t33;
+}
+
+Matrix4::Matrix4(const Matrix3& mat3)
+{
+	m[0][0] = mat3[0][0]; m[0][1] = mat3[0][1]; m[0][2] = mat3[0][2]; m[0][3] = 0.0f;
+	m[1][0] = mat3[1][0]; m[1][1] = mat3[1][1]; m[1][2] = mat3[1][2]; m[1][3] = 0.0f;
+	m[2][0] = mat3[2][0]; m[2][1] = mat3[2][1]; m[2][2] = mat3[2][2]; m[2][3] = 0.0f;
+	m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
 }
 
 Matrix4::Matrix4(const Vector3& t, const Vector3& s, const Quaternion& r)
@@ -505,6 +513,19 @@ Quaternion Matrix4::getRotation() const
 	q.y = q.y * Math::sign(m20 - m02);
 	q.z = q.z * Math::sign(m01 - m10);
 	return q;
+}
+
+void Matrix4::toMatrix3(Matrix3& mat3) const
+{
+	mat3[0][0] = m[0][0];
+	mat3[0][1] = m[0][1];
+	mat3[0][2] = m[0][2];
+	mat3[1][0] = m[1][0];
+	mat3[1][1] = m[1][1];
+	mat3[1][2] = m[1][2];
+	mat3[2][0] = m[2][0];
+	mat3[2][1] = m[2][1];
+	mat3[2][2] = m[2][2];
 }
 
 void Matrix4::setPerspective(float fovy, float aspectRatio, float zNear, float zFar)

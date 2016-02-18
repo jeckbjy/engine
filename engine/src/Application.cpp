@@ -13,19 +13,37 @@ Application::~Application()
 
 }
 
-int Application::run()
+void Application::run()
 {
 	try
 	{
-		init();
-
+		if (!init() || !gEngine.init())
+			return;
+		while (!m_quit)
+		{
+			gEngine.update();
+			update();
+			pumpMsg();
+		}
 	}
 	catch (std::exception exp)
 	{
 		release();
-		return EXIT_FAILURE;
 	}
-	return 0;
+}
+
+void Application::pumpMsg()
+{
+#ifdef CU_OS_WINNT
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+#else
+
+#endif
 }
 
 CU_NS_END

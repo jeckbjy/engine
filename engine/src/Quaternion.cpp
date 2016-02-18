@@ -1,9 +1,20 @@
 #include "Quaternion.h"
+#include "Matrix3.h"
 
 CU_NS_BEGIN
 
-const Quaternion Quaternion::Zero(0.0f, 0.0f, 0.0f, 0.0f);
-const Quaternion Quaternion::Identity(0.0f, 0.0f, 0.0f, 1.0f);
+struct EulerAngleOrderData
+{
+	int a, b, c;
+};
+
+const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+const Quaternion Quaternion::IDENTITY(0.0f, 0.0f, 0.0f, 1.0f);
+
+static const EulerAngleOrderData EA_LOOKUP[6] = {
+	{ 0, 1, 2 }, { 0, 2, 1 }, { 1, 0, 2 },
+	{ 1, 2, 0 }, { 2, 0, 1 }, { 2, 1, 0 } 
+};
 
 void Quaternion::lerp(Quaternion* dst, const Quaternion& q1, const Quaternion& q2, float t)
 {
@@ -155,6 +166,56 @@ void Quaternion::squad(Quaternion* dst, const Quaternion& q1, const Quaternion& 
 	slerp_squad(dst, dstQ, dstS, 2.0f * t * (1.0f - t));
 }
 
+Quaternion Quaternion::getRotationFromTo(const Vector3& from, const Vector3& dest, const Vector3& fallbackAxis /* = Vector3::ZERO */)
+{
+	// Based on Stan Melax's article in Game Programming Gems
+	Quaternion q;
+
+	Vector3 v0 = from;
+	Vector3 v1 = dest;
+	v0.normalize();
+	v1.normalize();
+
+	float d = Vector3::dot(v0, v1);
+
+	// If dot == 1, vectors are the same
+	if (d >= 1.0f)
+		return Quaternion::IDENTITY;
+
+	if (d < (1e-6f - 1.0f))
+	{
+		if (fallbackAxis != Vector3::ZERO)
+		{
+			// Rotate 180 degrees about the fallback axis
+			q.fromAxisAngle(fallbackAxis, Math::PI);
+		}
+		else
+		{
+			// Generate an axis
+			Vector3 axis = Vector3::cross(Vector3::UNIT_X, from);
+			if (axis.isZeroLength()) // Pick another if colinear
+				axis = Vector3::cross(Vector3::UNIT_Y, from);
+			axis.normalize();
+			q.fromAxisAngle(axis, Math::PI);
+		}
+	}
+	else
+	{
+		float s = Math::sqrt((1 + d) * 2);
+		float invs = 1 / s;
+
+		Vector3 c = Vector3::cross(v0, v1);
+
+		q.x = c.x * invs;
+		q.y = c.y * invs;
+		q.z = c.z * invs;
+		q.w = s * 0.5f;
+		q.normalize();
+	}
+
+	return q;
+}
+
 Quaternion::Quaternion()
 	:x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 {
@@ -163,14 +224,6 @@ Quaternion::Quaternion()
 Quaternion::Quaternion(float x, float y, float z, float w)
 	: x(x), y(y), z(z), w(w)
 {
-}
-
-Quaternion::Quaternion(float* arrays)
-{
-	x = arrays[0];
-	y = arrays[1];
-	z = arrays[2];
-	w = arrays[3];
 }
 
 Quaternion Quaternion::inverse() const
@@ -183,7 +236,7 @@ Quaternion Quaternion::inverse() const
 	}
 
 	// Return an invalid result to flag the error
-	return Zero;
+	return ZERO;
 }
 
 Quaternion Quaternion::conjugate() const
@@ -219,6 +272,56 @@ void Quaternion::multiply(const Quaternion& q2)
 	this->y = ry;
 	this->z = rz;
 	this->w = rw;
+}
+
+Vector3 Quaternion::rotate(const Vector3& v) const
+{
+	Matrix3 rot;
+	toRotationMatrix(rot);
+	return rot.transform(v);
+}
+
+void Quaternion::lookRotation(const Vector3& forwardDir)
+{
+	if (forwardDir == Vector3::ZERO)
+		return;
+
+	Vector3 nrmForwardDir = Vector3::normalize(forwardDir);
+	Vector3 currentForwardDir = -zAxis();
+
+	Quaternion targetRotation;
+	if ((nrmForwardDir + currentForwardDir).squared() < 0.00005f)
+	{
+		// Oops, a 180 degree turn (infinite possible rotation axes)
+		// Default to yaw i.e. use current UP
+		*this = Quaternion(-y, -z, w, x);
+	}
+	else
+	{
+		// Derive shortest arc to new direction
+		Quaternion rotQuat = getRotationFromTo(currentForwardDir, nrmForwardDir);
+		*this = rotQuat * *this;
+	}
+}
+
+void Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
+{
+	Vector3 forward = Vector3::normalize(forwardDir);
+	Vector3 up = Vector3::normalize(upDir);
+
+	if (Math::equal(Vector3::dot(forward, up), 1.0f))
+	{
+		lookRotation(forward);
+		return;
+	}
+
+	Vector3 x = Vector3::cross(forward, up);
+	Vector3 y = Vector3::cross(x, forward);
+
+	x.normalize();
+	y.normalize();
+
+	*this = Quaternion(x, y, -forward);
 }
 
 Vector3 Quaternion::xAxis() const
@@ -263,6 +366,202 @@ Vector3 Quaternion::zAxis() const
 	float fTyz = fTz*y;
 
 	return Vector3(fTxz + fTwy, fTyz - fTwx, 1.0f - (fTxx + fTyy));
+}
+
+void Quaternion::fromRotationMatrix(const Matrix3& mat)
+{
+	// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
+	// article "Quaternion Calculus and Fast Animation".
+
+	float trace = mat[0][0] + mat[1][1] + mat[2][2];
+	float root;
+
+	if (trace > 0.0f)
+	{
+		// |w| > 1/2, may as well choose w > 1/2
+		root = Math::sqrt(trace + 1.0f);  // 2w
+		w = 0.5f*root;
+		root = 0.5f / root;  // 1/(4w)
+		x = (mat[2][1] - mat[1][2])*root;
+		y = (mat[0][2] - mat[2][0])*root;
+		z = (mat[1][0] - mat[0][1])*root;
+	}
+	else
+	{
+		// |w| <= 1/2
+		static UINT32 nextLookup[3] = { 1, 2, 0 };
+		UINT32 i = 0;
+
+		if (mat[1][1] > mat[0][0])
+			i = 1;
+
+		if (mat[2][2] > mat[i][i])
+			i = 2;
+
+		UINT32 j = nextLookup[i];
+		UINT32 k = nextLookup[j];
+
+		root = Math::sqrt(mat[i][i] - mat[j][j] - mat[k][k] + 1.0f);
+
+		float* cmpntLookup[3] = { &x, &y, &z };
+		*cmpntLookup[i] = 0.5f*root;
+		root = 0.5f / root;
+
+		w = (mat[k][j] - mat[j][k])*root;
+		*cmpntLookup[j] = (mat[j][i] + mat[i][j])*root;
+		*cmpntLookup[k] = (mat[k][i] + mat[i][k])*root;
+	}
+
+	normalize();
+}
+
+void Quaternion::fromAxisAngle(const Vector3& axis, float angle)
+{
+	float halfAngle(0.5f*angle);
+	float sin = Math::sin(halfAngle);
+
+	w = Math::cos(halfAngle);
+	x = sin*axis.x;
+	y = sin*axis.y;
+	z = sin*axis.z;
+}
+
+void Quaternion::fromAxes(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
+{
+	Matrix3 kRot;
+
+	kRot[0][0] = xaxis.x;
+	kRot[1][0] = xaxis.y;
+	kRot[2][0] = xaxis.z;
+
+	kRot[0][1] = yaxis.x;
+	kRot[1][1] = yaxis.y;
+	kRot[2][1] = yaxis.z;
+
+	kRot[0][2] = zaxis.x;
+	kRot[1][2] = zaxis.y;
+	kRot[2][2] = zaxis.z;
+
+	fromRotationMatrix(kRot);
+}
+
+void Quaternion::fromEulerAngles(float xAngle, float yAngle, float zAngle)
+{
+	float halfXAngle = xAngle * 0.5f;
+	float halfYAngle = yAngle * 0.5f;
+	float halfZAngle = zAngle * 0.5f;
+
+	float cx = Math::cos(halfXAngle);
+	float sx = Math::sin(halfXAngle);
+
+	float cy = Math::cos(halfYAngle);
+	float sy = Math::sin(halfYAngle);
+
+	float cz = Math::cos(halfZAngle);
+	float sz = Math::sin(halfZAngle);
+
+	Quaternion quatX(cx, sx, 0.0f, 0.0f);
+	Quaternion quatY(cy, 0.0f, sy, 0.0f);
+	Quaternion quatZ(cz, 0.0f, 0.0f, sz);
+
+	*this = (quatY * quatX) * quatZ;
+}
+
+void Quaternion::fromEulerAngles(float xAngle, float yAngle, float zAngle, EulerAngleOrder order)
+{
+	const EulerAngleOrderData& l = EA_LOOKUP[(int)order];
+
+	float halfXAngle = xAngle * 0.5f;
+	float halfYAngle = yAngle * 0.5f;
+	float halfZAngle = zAngle * 0.5f;
+
+	float cx = Math::cos(halfXAngle);
+	float sx = Math::sin(halfXAngle);
+
+	float cy = Math::cos(halfYAngle);
+	float sy = Math::sin(halfYAngle);
+
+	float cz = Math::cos(halfZAngle);
+	float sz = Math::sin(halfZAngle);
+
+	Quaternion quats[3];
+	quats[0] = Quaternion(cx, sx, 0.0f, 0.0f);
+	quats[1] = Quaternion(cy, 0.0f, sy, 0.0f);
+	quats[2] = Quaternion(cz, 0.0f, 0.0f, sz);
+
+	*this = (quats[l.a] * quats[l.b]) * quats[l.c];
+}
+
+void Quaternion::toRotationMatrix(Matrix3& mat) const
+{
+	float tx = x + x;
+	float ty = y + y;
+	float fTz = z + z;
+	float twx = tx*w;
+	float twy = ty*w;
+	float twz = fTz*w;
+	float txx = tx*x;
+	float txy = ty*x;
+	float txz = fTz*x;
+	float tyy = ty*y;
+	float tyz = fTz*y;
+	float tzz = fTz*z;
+
+	mat[0][0] = 1.0f - (tyy + tzz);
+	mat[0][1] = txy - twz;
+	mat[0][2] = txz + twy;
+	mat[1][0] = txy + twz;
+	mat[1][1] = 1.0f - (txx + tzz);
+	mat[1][2] = tyz - twx;
+	mat[2][0] = txz - twy;
+	mat[2][1] = tyz + twx;
+	mat[2][2] = 1.0f - (txx + tyy);
+}
+
+void Quaternion::toAxisAngle(Vector3& axis, float& angle) const
+{
+	float sqrLength = x*x + y*y + z*z;
+	if (sqrLength > 0.0)
+	{
+		angle = 2.0*Math::acos(w);
+		float invLength = Math::invsqrt(sqrLength);
+		axis.x = x*invLength;
+		axis.y = y*invLength;
+		axis.z = z*invLength;
+	}
+	else
+	{
+		// Angle is 0 (mod 2*pi), so any axis will do
+		angle = 0.0;
+		axis.x = 1.0;
+		axis.y = 0.0;
+		axis.z = 0.0;
+	}
+}
+
+void Quaternion::toAxes(Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
+{
+	Matrix3 matRot;
+	toRotationMatrix(matRot);
+
+	xaxis.x = matRot[0][0];
+	xaxis.y = matRot[1][0];
+	xaxis.z = matRot[2][0];
+
+	yaxis.x = matRot[0][1];
+	yaxis.y = matRot[1][1];
+	yaxis.z = matRot[2][1];
+
+	zaxis.x = matRot[0][2];
+	zaxis.y = matRot[1][2];
+	zaxis.z = matRot[2][2];
+}
+
+bool Quaternion::toEulerAngles(float& xAngle, float& yAngle, float& zAngle) const
+{
+	Matrix3 matRot;
+	toRotationMatrix(matRot);
+	return matRot.toEulerAngles(xAngle, yAngle, zAngle);
 }
 
 Quaternion& Quaternion::operator +=(const Quaternion& rhs)

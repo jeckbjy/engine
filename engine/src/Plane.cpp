@@ -25,7 +25,7 @@ void Plane::normalize()
 
 float Plane::distance(const Vector3& point) const
 {
-	return dot(m_normal, point) + m_distance;
+	return Vector3::dot(m_normal, point) + m_distance;
 }
 
 void Plane::setNormal(const Vector3& normal)

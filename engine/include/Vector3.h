@@ -9,11 +9,45 @@ class TVector3
 public:
 	typedef typename T type_t;
 
-	static const TVector3 Zero;
-	static const TVector3 One;
-	static const TVector3 UnitX;
-	static const TVector3 UnitY;
-	static const TVector3 UnitZ;
+	static const TVector3 ZERO;
+	static const TVector3 ONE;
+	static const TVector3 UNIT_X;
+	static const TVector3 UNIT_Y;
+	static const TVector3 UNIT_Z;
+
+	static T length(const TVector3& v)
+	{
+		return v.length(); 
+	}
+
+	static T squared(const TVector3& v) 
+	{
+		return v.squared(); 
+	}
+
+	static T distance(const TVector3& p0, const TVector3& p1)
+	{
+		return length(p1 - p0); 
+	}
+
+	static T dot(const TVector3<T>& v1, const TVector3<T>& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	}
+
+	static TVector3 normalize(const TVector3& v)
+	{
+		T len = v.length();
+		return len > 0 ? (v / len) : v;
+	}
+
+	static TVector3 cross(const TVector3& v1, const TVector3& v2)
+	{
+		return TVector3(
+			v1.y * v2.z - v2.y * v1.z,
+			v1.z * v2.x - v2.z * v1.x,
+			v1.x * v2.y - v2.x * v1.y);
+	}
 
 public:
 	TVector3() : x(0), y(0), z(0){}
@@ -26,6 +60,8 @@ public:
 	inline T squared() const { return x*x + y*y + z*z; }
 	inline void normalize() { *this /= length(); }
 
+	inline bool isZeroLength() const { return squared() < (1e-06 * 1e-06); }
+
 	inline size_t size() const{ return sizeof(*this); }
 	
 	inline T* data() { return m; }
@@ -33,7 +69,7 @@ public:
 
 	inline T operator[](size_t i) const { return m[i]; }
 	inline T& operator[](size_t i) { return m[i]; }
-	inline TVector3 operator-() const { return Vector_T(-x, -y, -z); }
+	inline TVector3 operator-() const { return TVector3(-x, -y, -z); }
 
 	TVector3& operator+=(const TVector3& v){ x += v.x; y += v.y; z += v.z; return *this; }
 	TVector3& operator-=(const TVector3& v){ x -= v.x; y -= v.y; z -= v.z; return *this; }
@@ -48,10 +84,22 @@ public:
 	friend TVector3 operator-(TVector3 lhs, const TVector3& rhs) { return lhs -= rhs; }
 	friend TVector3 operator*(TVector3 lhs, const TVector3& rhs) { return lhs *= rhs; }
 	friend TVector3 operator/(TVector3 lhs, const TVector3& rhs) { return lhs /= rhs; }
+
 	friend TVector3 operator+(TVector3 lhs, const T& rhs) { return lhs += rhs; }
 	friend TVector3 operator-(TVector3 lhs, const T& rhs) { return lhs -= rhs; }
 	friend TVector3 operator*(TVector3 lhs, const T& rhs) { return lhs *= rhs; }
 	friend TVector3 operator/(TVector3 lhs, const T& rhs) { return lhs /= rhs; }
+
+	friend TVector3 operator+(const T& lhs, const TVector3& rhs) { return rhs += lhs; }
+	friend TVector3 operator*(const T& lhs, const TVector3& rhs) { return rhs *= lhs; }
+	friend TVector3 operator-(const T& lhs, const TVector3& rhs) { return TVector3(lhs - rhs.x, lhs - rhs.y, lhs - rhs.z); }
+	friend TVector3 operator/(const T& lhs, const TVector3& rhs)
+	{
+		T rx = rhs.x != 0 ? lhs / rhs.x : rhs.x;
+		T ry = rhs.x != 0 ? lhs / rhs.y : rhs.y;
+		T rz = rhs.x != 0 ? lhs / rhs.z : rhs.z;
+		return TVector3(rx, ry, rz);
+	}
 
 	friend bool operator==(const TVector3& lhs, const TVector3& rhs) { return memcmp(lhs.m, rhs.m, sizeof(lhs.m)) == 0; }
 	friend bool operator!=(const TVector3& lhs, const TVector3& rhs) { return memcmp(lhs.m, rhs.m, sizeof(lhs.m)) != 0; }
@@ -65,52 +113,11 @@ public:
 	};
 };
 
-template<typename T> const TVector3<T> TVector3<T>::Zero(0, 0, 0);
-template<typename T> const TVector3<T> TVector3<T>::One(1, 1, 1);
-template<typename T> const TVector3<T> TVector3<T>::UnitX(1, 0, 0);
-template<typename T> const TVector3<T> TVector3<T>::UnitY(0, 1, 0);
-template<typename T> const TVector3<T> TVector3<T>::UnitZ(0, 0, 1);
-
-template<typename T>
-inline TVector3<T> normalize(const TVector3<T>& v)
-{
-	int len = v.length();
-	return len > 0 ? (v / len) : v;
-}
-
-template<typename T>
-inline T length(const TVector3<T>& v)
-{
-	return v.length();
-}
-
-template<typename T>
-inline T squared(const TVector3<T>& v)
-{
-	return v.squared();
-}
-
-
-template<typename T>
-inline T distance(const TVector3<T>& p0, const TVector3<T>& p1)
-{
-	return length(p1 - p0);
-}
-
-template<typename T>
-T dot(const TVector3<T>& v1, const TVector3<T>& v2)
-{
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-
-template<typename T>
-TVector3<T> cross(const TVector3<T>& v1, const TVector3<T>& v2)
-{
-	return TVector3<T>(
-		v1.y * v2.z - v2.y * v1.z,
-		v1.z * v2.x - v2.z * v1.x,
-		v1.x * v2.y - v2.x * v1.y);
-}
+template<typename T> const TVector3<T> TVector3<T>::ZERO(0, 0, 0);
+template<typename T> const TVector3<T> TVector3<T>::ONE(1, 1, 1);
+template<typename T> const TVector3<T> TVector3<T>::UNIT_X(1, 0, 0);
+template<typename T> const TVector3<T> TVector3<T>::UNIT_Y(0, 1, 0);
+template<typename T> const TVector3<T> TVector3<T>::UNIT_Z(0, 0, 1);
 
 typedef TVector3<int>	Vector3i;
 typedef TVector3<float>	Vector3f;

@@ -27,6 +27,7 @@ public:
 	{
 		if (m_obj)
 			return (m_obj->*m_fun)(args...); 
+		return R();
 	}
 };
 

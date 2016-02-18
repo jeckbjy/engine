@@ -28,54 +28,113 @@ typedef ::Window	window_t;
 typedef ::Display	display_t;
 #endif
 
-enum WindowFlag
+enum WindowBorder
 {
-	WF_VISIBLE = 0x01,
-	WF_RESIZABLE = 0x02,
-	WF_FULLSCREEN = 0x04,
-	WF_DECORATED = 0x08,	// 标题，系统按钮
-	WF_CLOSED = 0x10,		// 关闭
-	WF_AUTO_FREE = 0x20,	// 是否需要释放
-	WF_GAMMA = 0x40,
-	WF_VSYNC = 0x80,
+	WIN_BORDER_NORMAL,
+	WIN_BORDER_NONE,
+	WIN_BORDER_FIXED,
+};
+
+// 窗体初始化信息
+struct WINDOW_DESC
+{
+	String	title;
+	WindowBorder border;
+	int32_t left;		// -1=screen center
+	int32_t	top;
+	size_t	width;
+	size_t	height;
+	size_t	outputIdx;
+	float	refreshRate;
+	size_t	vsync;		// 0:not vsync;FPS =refreshRate/vsyncInterval
+	size_t	multisample;
+	bool	isCustom;
+	bool	isFullscreen;
+	bool	isHidden;
+	bool	isDepthStencil;
+	bool	isGamma;
+	bool	isDoubleClick;
+	bool	isModal;
+	bool	isToolWindow;
+	bool	isOuterDimensions;
+	window_t hwnd;		// 可以挂接到外部已有窗体
+	window_t parent;	// 父窗体
+	void*	udata;
+
+	WINDOW_DESC()
+		: border(WIN_BORDER_NORMAL), left(-1), top(-1), width(1024), height(768), outputIdx(0), refreshRate(60.f)
+		, vsync(0), multisample(0)
+		, isCustom(true), isFullscreen(false), isHidden(false), isDepthStencil(true), isGamma(false)
+		, isDoubleClick(true), isModal(false), isToolWindow(false), isOuterDimensions(false)
+		, hwnd(NULL), parent(NULL), udata(NULL)
+	{
+	}
 };
 
 class CU_API Window
 {
+	enum WindowFlag
+	{
+		WF_AUTO_FREE = 0x01,
+		WF_HIDDEN = 0x02,
+		WF_ACTIVE = 0x04,
+		WF_FULLSCREEN = 0x08,
+		WF_GAMMA = 0x10,
+		WF_MODAL = 0x20,
+		WF_DEPTH_STENCIL = 0x40,
+	};
 public:
-	static window_t create_window(const char* name, size_t w, size_t h, int flags = 0, void* udata = NULL);
-	static bool destroy_window(window_t hwnd);
-	static Window* current();
-
-public:
-	Window(window_t hwnd = NULL);
+	Window(const WINDOW_DESC& desc);
 	~Window();
 
-	bool create(const char* name, size_t w = 1024, size_t h = 768, int flags = WF_VISIBLE);
-	void resize(size_t w, size_t h);
-	virtual void show();
-	virtual void hide();
+	void resize(size_t width, size_t height);
+	void move(int32_t x, int32_t y);
 
-	virtual void onClose();
-	virtual void onActive(bool flag);
-	virtual void onResize(size_t w, size_t h);
-	virtual void onPaint(){}
+	void minimize();
+	void maximize();
+	void restore();
 
-	bool isClosed() const { return (m_flags & WF_CLOSED) != 0; }
-	bool isVisible() const { return (m_flags & WF_VISIBLE) != 0; }
-	bool isFullScreen() const { return (m_flags & WF_FULLSCREEN) != 0; }
-	bool isMultisample() const { return false; }
+	void setHidden(bool hidden);
+	void setActive(bool state);
+	void setFullscreen();
+	void setWindowed();
+
+	//virtual void onClose();
+	//virtual void onActive(bool flag);
+	//virtual void onResize(size_t w, size_t h);
+	//virtual void onPaint(){}
+
+	//bool isClosed() const { return (m_flags & WF_CLOSED) != 0; }
+	bool isHidden() const { return hasFlag(WF_HIDDEN); }
+	bool isActive() const { return hasFlag(WF_ACTIVE); }
+	bool isModal() const { return hasFlag(WF_MODAL); }
+	bool isFullScreen() const { return hasFlag(WF_FULLSCREEN); }
+	bool isMultiSample() const { return m_multisample > 0; }
 
 	window_t handle() { return m_hwnd; }
-	size_t width() const { return m_width; }
-	size_t height() const { return m_height; }
+	int32_t	getLeft() const { return m_left; }
+	int32_t getTop() const { return m_top; }
+	size_t	getWidth() const { return m_width; }
+	size_t	getHeight() const { return m_height; }
+	size_t	getMultiSampleCount() const { return m_multisample; }
+	size_t	getVsyncInterval() const { return m_vsync; }
+	float	getRefreshRate() const { return m_refreshRate; }
+
+	bool hasFlag(WindowFlag mask) const { return (m_flags & mask) == mask; }
+	void setFlag(WindowFlag mask, bool flag);
 
 protected:
 	window_t m_hwnd;
-	uint8_t	 m_flags;	// 位标识
+	void*	 m_udata;	// user data
+	uint32	 m_id;		// 唯一id,不能改变
+	uint32	 m_flags;	// 位标识
+	int32_t	 m_left;
+	int32_t	 m_top;
 	size_t	 m_width;
 	size_t	 m_height;
-	void*	 m_udata;	// user data
+	size_t	 m_multisample;
+	size_t	 m_vsync;
+	float	 m_refreshRate;
 };
 
 CU_NS_END

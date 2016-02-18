@@ -8,10 +8,56 @@ class TVector2
 {
 public:
 	typedef typename T type_t;
-	static const TVector2 Zero;
-	static const TVector2 One;
-	static const TVector2 UnitX;
-	static const TVector2 UnitY;
+	static const TVector2 ZERO;
+	static const TVector2 ONE;
+	static const TVector2 UNIT_X;
+	static const TVector2 UNIT_Y;
+
+	static TVector2 normalize(const TVector2& v)
+	{
+		T len = v.length();
+		return len > 0 ? (v / len) : v;
+	}
+
+	static T length(const TVector2<T>& v)
+	{
+		return v.length();
+	}
+
+	static T squared(const TVector2& v)
+	{
+		return v.squared();
+	}
+
+	static T distance(const TVector2& p0, const TVector2& p1)
+	{
+		return length(p1 - p0);
+	}
+
+	// 点乘:v1*v2 = |v1|*|v2|*cos<v1,v2>
+	static T dot(const TVector2& v1, const TVector2& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+
+	// 可用于计算点在直线左右
+	static T cross(const TVector2& v1, const TVector2& v2)
+	{
+		return v1.x * v2.y - v1.y * v2.x;
+	}
+
+	// 计算点p在直线p1p2的左右
+	static T cross(const TVector2& p, const TVector2& p1, const TVector2& p2)
+	{
+		TVector2<T> v1 = p2 - p1;
+		TVector2<T> v2 = p - p1;
+		return cross(v1, v2);
+	}
+
+	static TVector2 reflect(const TVector2& v, const TVector2& n)
+	{
+		return v - 2 * dot(v, n) * n;
+	}
 
 public:
 	TVector2():x(0),y(0){}
@@ -63,65 +109,10 @@ public:
 	};
 };
 
-template<typename T> const TVector2<T> TVector2<T>::Zero(0, 0);
-template<typename T> const TVector2<T> TVector2<T>::One(1, 1);
-template<typename T> const TVector2<T> TVector2<T>::UnitX(1, 0);
-template<typename T> const TVector2<T> TVector2<T>::UnitY(0, 1);
-
-template<typename T>
-inline TVector2<T> normalize(const TVector2<T>& v)
-{
-	int len = v.length();
-	return len > 0 ? (v / len) : v;
-}
-
-template<typename T>
-inline T length(const TVector2<T>& v)
-{
-	return v.length();
-}
-
-template<typename T>
-inline T squared(const TVector2<T>& v)
-{
-	return v.squared();
-}
-
-
-template<typename T>
-inline T distance(const TVector2<T>& p0, const TVector2<T>& p1)
-{
-	return length(p1 - p0);
-}
-
-// 点乘:v1*v2 = |v1|*|v2|*cos<v1,v2>
-template<typename T>
-inline T dot(const TVector2<T>& v1, const TVector2<T>& v2)
-{
-	return v1.x * v2.x + v1.y * v2.y;
-}
-
-// 可用于计算点在直线左右
-template<typename T>
-inline T cross(const TVector2<T>& v1, const TVector2<T>& v2)
-{
-	return v1.x * v2.y - v1.y * v2.x;
-}
-
-// 计算点p在直线p1p2的左右
-template<typename T>
-inline T cross(const TVector2<T>& p, const TVector2<T>& p1, const TVector2<T>& p2)
-{
-	TVector2<T> v1 = p2 - p1;
-	TVector2<T> v2 = p - p1;
-	return cross(v1, v2);
-}
-
-template<typename T>
-TVector2<T> reflect(const TVector2<T>& v, const TVector2<T>& n)
-{
-	return v - 2 * dot(v, n) * n;
-}
+template<typename T> const TVector2<T> TVector2<T>::ZERO(0, 0);
+template<typename T> const TVector2<T> TVector2<T>::ONE(1, 1);
+template<typename T> const TVector2<T> TVector2<T>::UNIT_X(1, 0);
+template<typename T> const TVector2<T> TVector2<T>::UNIT_Y(0, 1);
 
 typedef TVector2<int>	Vector2i;
 typedef TVector2<float>	Vector2f;

@@ -1,11 +1,12 @@
 #pragma once
+#include "Matrix3.h"
 #include "Quaternion.h"
 
 CU_NS_BEGIN
 
-#define ROW_MAJOR
-//#define COL_MAJOR
-#define MATRIX_SIZE (sizeof(float) * 16)
+//#define ROW_MAJOR
+////#define COL_MAJOR
+//#define MATRIX_SIZE (sizeof(float) * 16)
 
 // �д洢 to �д洢??
 class CU_API Matrix4
@@ -35,6 +36,7 @@ public:
 		float t10, float t11, float t12, float t13,
 		float t20, float t21, float t22, float t23,
 		float t30, float t31, float t32, float t33);
+	Matrix4(const Matrix3& mat3);
 	Matrix4(const Vector3& t, const Vector3& s, const Quaternion& r);
 
 	void set(float t);
@@ -67,6 +69,8 @@ public:
 	Vector3 getTranslation() const { return Vector3(m30, m31, m32); }
 	Vector3 getScale() const { return Vector3(m00, m11, m22); }
 	Quaternion getRotation() const;
+
+	void toMatrix3(Matrix3& mat3) const;
 
 	void setPerspective(float fovy, float aspectRatio, float zNear, float zFar);
 	bool getPerspective(float& fovy, float& aspectRatio, float& zNear, float& zFar) const;

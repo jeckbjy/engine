@@ -9,8 +9,8 @@ D3D11RenderWindow::D3D11RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.OutputWindow = wnd->handle();
-	desc.BufferDesc.Width = wnd->width();
-	desc.BufferDesc.Height = wnd->height();
+	desc.BufferDesc.Width = wnd->getWidth();
+	desc.BufferDesc.Height = wnd->getHeight();
 	desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;	// Ð´ËÀ£¿£¿
 
 	desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -53,7 +53,7 @@ void D3D11RenderWindow::create(ID3D11DeviceN* device)
 	D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
 	ZeroMemory(&rtv_desc, sizeof(rtv_desc));
 	rtv_desc.Format = tex_desc.Format;
-	rtv_desc.ViewDimension = m_wnd->isMultisample() ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
+	rtv_desc.ViewDimension = m_wnd->isMultiSample() ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
 	rtv_desc.Texture2D.MipSlice = 0;
 	hr = device->CreateRenderTargetView(m_buffer, &rtv_desc, &m_rtv);
 	if (FAILED(hr))

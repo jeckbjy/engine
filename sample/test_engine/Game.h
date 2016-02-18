@@ -1,4 +1,13 @@
 #pragma once
+#include "Application.h"
+using namespace cute;
+
+class GameApp : public Application
+{
+public:
+	bool init();
+};
+
 //#include "Window.h"
 ////#include "Root.h"
 //#include "Transform.h"

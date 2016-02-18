@@ -8,13 +8,40 @@ class TVector4
 {
 public:
 	typedef typename T type_t;
-	static const TVector4 Zero;
-	static const TVector4 One;
-	static const TVector4 UnitX;
-	static const TVector4 UnitY;
-	static const TVector4 UnitZ;
-	static const TVector4 UnitW;
+	static const TVector4 ZERO;
+	static const TVector4 ONE;
+	static const TVector4 UNIT_X;
+	static const TVector4 UNIT_Y;
+	static const TVector4 UNIT_Z;
+	static const TVector4 UNIT_W;
 
+	static T length(const TVector4& v)
+	{
+		return v.length();
+	}
+
+	static T squared(const TVector4& v)
+	{
+		return v.squared();
+	}
+
+	static T distance(const TVector4& p0, const TVector4& p1)
+	{
+		return length(p1 - p0);
+	}
+
+	static T dot(const TVector4& v1, const TVector4& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	}
+
+	TVector4 normalize(const TVector4& v)
+	{
+		T len = v.length();
+		return len > 0 ? (v / len) : v;
+	}
+
+public:
 	TVector4() :x(0), y(0), z(0), w(0){}
 	TVector4(T v) :x(v), y(v), z(v), w(v){}
 	TVector4(T x, T y, T z, T w) :x(x), y(y), z(z), w(w){}
@@ -31,7 +58,7 @@ public:
 	inline T& operator[](size_t i) { return m[i]; }
 
 	inline const TVector4& operator+() const { return *this; }
-	inline TVector4 operator-() const { return Vector_T(-x, -y, -z, -w); }
+	inline TVector4 operator-() const { return TVector4(-x, -y, -z, -w); }
 
 	TVector4& operator+=(const TVector4& v){ x += v.x; y += v.y; z += v.z; w += v.w; return *this; }
 	TVector4& operator-=(const TVector4& v){ x -= v.x; y -= v.y; z -= v.z; w -= v.w; return *this; }
@@ -63,43 +90,12 @@ public:
 	};
 };
 
-template<typename T> const TVector4<T> TVector4<T>::Zero(0);
-template<typename T> const TVector4<T> TVector4<T>::One(1);
-template<typename T> const TVector4<T> TVector4<T>::UnitX(1, 0, 0, 0);
-template<typename T> const TVector4<T> TVector4<T>::UnitY(0, 1, 0, 0);
-template<typename T> const TVector4<T> TVector4<T>::UnitZ(0, 0, 1, 0);
-template<typename T> const TVector4<T> TVector4<T>::UnitW(0, 0, 0, 1);
-
-template<typename T>
-inline TVector4<T> normalize(const TVector4<T>& v)
-{
-	int len = v.length();
-	return len > 0 ? (v / len) : v;
-}
-
-template<typename T>
-inline T length(const TVector4<T>& v)
-{
-	return v.length();
-}
-
-template<typename T>
-inline T squared(const TVector4<T>& v)
-{
-	return v.squared();
-}
-
-template<typename T>
-inline T distance(const TVector4<T>& p0, const TVector4<T>& p1)
-{
-	return length(p1 - p0);
-}
-
-template<typename T>
-T dot(const TVector4<T>& v1, const TVector4<T>& v2)
-{
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
+template<typename T> const TVector4<T> TVector4<T>::ZERO(0);
+template<typename T> const TVector4<T> TVector4<T>::ONE(1);
+template<typename T> const TVector4<T> TVector4<T>::UNIT_X(1, 0, 0, 0);
+template<typename T> const TVector4<T> TVector4<T>::UNIT_Y(0, 1, 0, 0);
+template<typename T> const TVector4<T> TVector4<T>::UNIT_Z(0, 0, 1, 0);
+template<typename T> const TVector4<T> TVector4<T>::UNIT_W(0, 0, 0, 1);
 
 typedef TVector4<int>	Vector4i;
 typedef TVector4<float>	Vector4f;

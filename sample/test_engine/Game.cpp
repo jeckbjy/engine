@@ -1,4 +1,15 @@
 #include "Game.h"
+#include "AssetCache.h"
+#include "Model.h"
+
+bool GameApp::init()
+{
+	// º”‘ÿ◊ ‘¥
+	Model* model = AssetCache::load<Model>("animation.model");
+	return true;
+}
+
+
 //#include <iostream>
 //#include <fstream>
 //#include <streambuf>

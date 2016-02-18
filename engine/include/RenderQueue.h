@@ -3,6 +3,11 @@
 
 CU_NS_BEGIN
 
+class CU_API Item
+{
+
+};
+
 // ‰÷»æ∂”¡–
 class CU_API RenderQueue
 {
