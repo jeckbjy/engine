@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ≥£”√∫Í
 //////////////////////////////////////////////////////////////////////////
-#define CU_NO_USE(x)				(void)(x)
+#define CU_UNUSED(x)				(void)(x)
 #define CU_NONCOPYABLE(CLASS)		CLASS(CLASS const&); CLASS& operator=(CLASS const&)
 
 #define CU_SAFE_DELETE(ptr)			if(ptr){ delete ptr; ptr = NULL; }

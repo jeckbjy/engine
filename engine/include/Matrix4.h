@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix3.h"
+#include "Vector4.h"
 #include "Quaternion.h"
 
 CU_NS_BEGIN
@@ -70,8 +71,6 @@ public:
 	Vector3 getScale() const { return Vector3(m00, m11, m22); }
 	Quaternion getRotation() const;
 
-	void toMatrix3(Matrix3& mat3) const;
-
 	void setPerspective(float fovy, float aspectRatio, float zNear, float zFar);
 	bool getPerspective(float& fovy, float& aspectRatio, float& zNear, float& zFar) const;
 
@@ -84,7 +83,82 @@ public:
 	void setLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 	void getLookAt(Vector3& eye, Vector3& center, Vector3& up, float lookDistance) const;
 
-	bool isAffine() const { return (m03 == 0) && (m13 == 0) && (m23 == 0) && (m33 == 1); }
+	bool isAffine() const { return (m30 == 0) && (m31 == 0) && (m32 == 0) && (m33 == 1); }
+
+	void toMatrix3(Matrix3& mat3) const;
+
+	/**
+	* Transform a 3D point by this matrix.
+	*
+	* @note	Matrix must be affine, if it is not use multiply() method.
+	*/
+	Vector3 multiplyAffine(const Vector3& v) const
+	{
+		return Vector3(
+			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3],
+			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3],
+			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]);
+	}
+
+	/**
+	* Transform a 4D vector by this matrix.
+	*
+	* @note	Matrix must be affine, if it is not use multiply() method.
+	*/
+	Vector4 multiplyAffine(const Vector4& v) const
+	{
+		return Vector4(
+			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3] * v.w,
+			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3] * v.w,
+			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3] * v.w,
+			v.w);
+	}
+
+	/** Transform a 3D direction by this matrix. */
+	Vector3 multiplyDirection(const Vector3& v) const
+	{
+		return Vector3(
+			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z,
+			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z,
+			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z);
+	}
+
+	/**
+	* Transform a 3D point by this matrix.
+	*
+	* @note
+	* w component of the vector is assumed to be 1. After transformation all components
+	* are projected back so that w remains 1.
+	* @note
+	* If your matrix doesn't contain projection components use multiplyAffine() method as it is faster.
+	*/
+	Vector3 multiply(const Vector3& v) const
+	{
+		Vector3 r;
+
+		float fInvW = 1.0f / (m[3][0] * v.x + m[3][1] * v.y + m[3][2] * v.z + m[3][3]);
+
+		r.x = (m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3]) * fInvW;
+		r.y = (m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3]) * fInvW;
+		r.z = (m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]) * fInvW;
+
+		return r;
+	}
+
+	/**
+	* Transform a 4D vector by this matrix.
+	*
+	* @note	If your matrix doesn't contain projection components use multiplyAffine() method as it is faster.
+	*/
+	Vector4 multiply(const Vector4& v) const
+	{
+		return Vector4(
+			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3] * v.w,
+			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3] * v.w,
+			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3] * v.w,
+			m[3][0] * v.x + m[3][1] * v.y + m[3][2] * v.z + m[3][3] * v.w
+			);
+	}
 
 	inline size_t size() const { return sizeof(*this); }
 	inline const float* data() const { return (const float*)m; }

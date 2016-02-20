@@ -18,15 +18,11 @@ class CU_API Transform : public Component, public ListNode<Transform, 2>
 	DECLARE_RTTI(Transform, Component, "TRAN")
 public:
 	Transform();
-	Transform(const Quaternion& rotation, const Vector3& position, const Vector3& scalar, TransformSpace space = TS_LOCAL);
 	virtual ~Transform();
-
-	Transform* getChild(const String& name, bool recursive = false) const;
 
 	void translate(const Vector3& vec, TransformSpace space = TS_LOCAL);
 	void rotate(const Quaternion& q);
 	void rotate(const Vector3& axis, float angle);
-	//void scale(const Vector3& s, TransformSpace space = TS_LOCAL);
 
 	void lookAt(const Vector3& location, const Vector3& up = Vector3::UNIT_Y);
 	void roll(float angle);
@@ -58,6 +54,9 @@ public:
 	Vector3 getRight() const { return getWorldRotation().rotate(Vector3::UNIT_X); }
 
 	virtual void setValue(const String& name, const AnimValue& values, float weight = 1.0f);
+
+	void setParent(Transform* parent, bool keepWorldTransform = true);
+	Transform* findChild(const String& name, bool recursive = false) const;
 
 protected:
 	void markWorldDirty();

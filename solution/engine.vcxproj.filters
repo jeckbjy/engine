@@ -27,6 +27,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\engine\include\AABox.h">
+      <Filter>math</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\API.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -204,6 +207,9 @@
     <ClInclude Include="..\engine\include\Object.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Octree.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Packet.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -285,6 +291,9 @@
     <ClInclude Include="..\engine\include\SocketChannel.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Sphere.h">
+      <Filter>math</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Stream.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -350,6 +359,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\engine\src\AABox.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\AcceptChannel.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -479,6 +491,9 @@
     <ClCompile Include="..\engine\src\Object.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Octree.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Packet.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -541,6 +556,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\SocketChannel.cpp">
       <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Sphere.cpp">
+      <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Stream.cpp">
       <Filter>core</Filter>

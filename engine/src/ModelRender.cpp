@@ -41,7 +41,7 @@ void MeshSkin::update(Transform* root, uint32 now)
 	for (size_t i = 0; i < bone_count; ++i)
 	{
 		const Bone* bone = m_skeleton->getBone(i);
-		Transform* node = root->getChild(bone->name, true);
+		Transform* node = root->findChild(bone->name, true);
 		if (!node)
 			continue;
 		m_matrixs[i] = node->getWorldMatrix() * bone->pose;

@@ -10,7 +10,7 @@ public:
 	~VKDevice();
 
 private:
-	VK_DEVICE m_handle;
+	VkDevice m_handle;
 };
 
 CU_NS_END

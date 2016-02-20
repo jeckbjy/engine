@@ -10,7 +10,7 @@ public:
 	~VKCommandQueue();
 
 private:
-	VK_QUEUE m_queue;
+	VkQueue m_queue;
 };
 
 CU_NS_END

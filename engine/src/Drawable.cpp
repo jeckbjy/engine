@@ -12,4 +12,9 @@ Drawable::~Drawable()
 
 }
 
+const AABox& Drawable::getWorldBox() const
+{
+	return m_worldBox;
+}
+
 CU_NS_END

@@ -1,4 +1,7 @@
 #include "Plane.h"
+#include "AABox.h"
+#include "Sphere.h"
+#include "CMath.h"
 
 CU_NS_BEGIN
 
@@ -23,7 +26,54 @@ void Plane::normalize()
 	m_distance *= factor;
 }
 
-float Plane::distance(const Vector3& point) const
+Plane::Side Plane::getSide(const Vector3& point) const
+{
+	float dist = getDistance(point);
+
+	if (dist < 0.0f)
+		return Plane::NEGATIVE_SIDE;
+
+	if (dist > 0.0f)
+		return Plane::POSITIVE_SIDE;
+
+	return Plane::NO_SIDE;
+}
+
+Plane::Side Plane::getSide(const AABox& box) const
+{
+	// Calculate the distance between box centre and the plane
+	float dist = getDistance(box.getCenter());
+
+	// Calculate the maximize allows absolute distance for
+	// the distance between box centre and plane
+	Vector3 halfSize = box.getHalfSize();
+	float maxAbsDist = Math::abs(m_normal.x * halfSize.x) + Math::abs(m_normal.y * halfSize.y) + Math::abs(m_normal.z * halfSize.z);
+
+	if (dist < -maxAbsDist)
+		return Plane::NEGATIVE_SIDE;
+
+	if (dist > +maxAbsDist)
+		return Plane::POSITIVE_SIDE;
+
+	return Plane::BOTH_SIDE;
+}
+
+Plane::Side Plane::getSide(const Sphere& sphere) const
+{
+	// Calculate the distance between box centre and the plane
+	float dist = getDistance(sphere.getCenter());
+	float radius = sphere.getRadius();
+
+	if (dist < -radius)
+		return Plane::NEGATIVE_SIDE;
+
+	if (dist > +radius)
+		return Plane::POSITIVE_SIDE;
+
+	return Plane::BOTH_SIDE;
+}
+
+float Plane::getDistance(const Vector3& point) const
 {
 	return Vector3::dot(m_normal, point) + m_distance;
 }

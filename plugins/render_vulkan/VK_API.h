@@ -16,5 +16,7 @@
 #pragma comment(lib, "plugin_vulkan.lib")
 #endif
 
+#include <vulkan/vulkan.h>
+
 #include "API.h"
 #include "Graphics.h"

@@ -4,6 +4,7 @@
 
 CU_NS_BEGIN
 
+//
 // 管理器,管理所有Object,只能有一个大场景,多个场景则为其子节点
 class CU_API SceneManager : public Singleton<SceneManager>
 {

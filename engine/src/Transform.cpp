@@ -11,23 +11,14 @@ enum
 };
 
 Transform::Transform()
-{
-
-}
-
-Transform::Transform(const Quaternion& rotation, const Vector3& position, const Vector3& scale, TransformSpace space /* = TS_LOCAL */)
+	: m_parent(NULL)
 {
 
 }
 
 Transform::~Transform()
 {
-
-}
-
-Transform* Transform::getChild(const String& name, bool recursive /* = false */) const
-{
-	return NULL;
+	// todo: destroy
 }
 
 void Transform::translate(const Vector3& vec, TransformSpace space /* = TS_LOCAL */)
@@ -58,11 +49,6 @@ void Transform::rotate(const Vector3& axis, float angle)
 	q.fromAxisAngle(axis, angle);
 	rotate(q);
 }
-
-//void Transform::scale(const Vector3& s, TransformSpace space /* = TS_LOCAL */)
-//{
-//
-//}
 
 void Transform::lookAt(const Vector3& location, const Vector3& up /* = Vector3::UNIT_Y */)
 {
@@ -242,7 +228,11 @@ void Transform::updateWorldTransform() const
 void Transform::markWorldDirty()
 {
 	m_flags[DIRTY_WORLD] = true;
-	// todo:递归设置children
+	// 
+	for (ChildList::iterator itor = m_children.begin(); itor != m_children.end(); ++itor)
+	{
+		itor->markWorldDirty();
+	}
 }
 
 void Transform::setValue(const String& name, const AnimValue& values, float weight /* = 1.0f */)
@@ -250,4 +240,59 @@ void Transform::setValue(const String& name, const AnimValue& values, float weig
 	// 修正数据
 }
 
+Transform* Transform::findChild(const String& name, bool recursive /* = false */) const
+{
+	Transform* result = NULL;
+	// 先查找
+	for (ChildList::iterator itor = m_children.begin(); itor != m_children.end(); ++itor)
+	{
+		if (itor->getEntity()->getName() == name)
+			return *itor;
+	}
+
+	// 继续从子节点中查找
+	if (recursive)
+	{
+		for (ChildList::iterator itor = m_children.begin(); itor != m_children.end(); ++itor)
+		{
+			result = itor->findChild(name, true);
+			if (result)
+				return result;
+		}
+	}
+
+	return NULL;
+}
+
+void Transform::setParent(Transform* parent, bool keepWorldTransform /* = true */)
+{
+	if (parent == m_parent)
+		return;
+	if (keepWorldTransform)
+		updateWorldTransform();
+	
+	// 先取消连接
+	if (m_parent)
+	{
+		m_parent->m_children.erase(this);
+		m_parent = NULL;
+	}
+
+	// 添加
+	if (parent)
+	{
+		m_children.push_back(this);
+	}
+
+	m_parent = parent;
+
+	if (keepWorldTransform)
+	{
+		setWorldPosition(m_worldPosition);
+		setWorldRotation(m_worldRotation);
+		setWorldScale(m_worldScale);
+	}
+}
+
 CU_NS_END
+ 

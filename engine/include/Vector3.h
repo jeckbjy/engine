@@ -54,22 +54,46 @@ public:
 	TVector3(T v) : x(v), y(v), z(v){}
 	TVector3(T x, T y, T z) : x(x), y(y), z(z){}
 
-	inline void set(T x, T y, T z){ this->x = x; this->y = y; this->z = z; }
+	void set(T x, T y, T z){ this->x = x; this->y = y; this->z = z; }
 
-	inline T length() const { return sqrt((float)squared()); }
-	inline T squared() const { return x*x + y*y + z*z; }
-	inline void normalize() { *this /= length(); }
+	T length() const { return sqrt((float)squared()); }
+	T squared() const { return x*x + y*y + z*z; }
+	void normalize() { *this /= length(); }
 
-	inline bool isZeroLength() const { return squared() < (1e-06 * 1e-06); }
+	TVector3 cross(const TVector3& other) const
+	{
+		return TVector3::cross(*this, other);
+	}
 
-	inline size_t size() const{ return sizeof(*this); }
+	T dot(const TVector3& vec) const
+	{
+		return x * vec.x + y * vec.y + z * vec.z;
+	}
+
+	void floor(const TVector3& cmp)
+	{
+		if (cmp.x < x) x = cmp.x;
+		if (cmp.y < y) y = cmp.y;
+		if (cmp.z < z) z = cmp.z;
+	}
+
+	void ceil(const TVector3& cmp)
+	{
+		if (cmp.x > x) x = cmp.x;
+		if (cmp.y > y) y = cmp.y;
+		if (cmp.z > z) z = cmp.z;
+	}
+
+	bool isZeroLength() const { return squared() < (1e-06 * 1e-06); }
+
+	size_t size() const{ return sizeof(*this); }
 	
-	inline T* data() { return m; }
-	inline const T* data() const { return m; }
+	T* data() { return m; }
+	const T* data() const { return m; }
 
-	inline T operator[](size_t i) const { return m[i]; }
-	inline T& operator[](size_t i) { return m[i]; }
-	inline TVector3 operator-() const { return TVector3(-x, -y, -z); }
+	T operator[](size_t i) const { return m[i]; }
+	T& operator[](size_t i) { return m[i]; }
+	TVector3 operator-() const { return TVector3(-x, -y, -z); }
 
 	TVector3& operator+=(const TVector3& v){ x += v.x; y += v.y; z += v.z; return *this; }
 	TVector3& operator-=(const TVector3& v){ x -= v.x; y -= v.y; z -= v.z; return *this; }

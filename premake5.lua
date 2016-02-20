@@ -112,6 +112,10 @@ function engine_vpaths()
 		"Matrix4.cpp",
 		"Quaternion.h",
 		"Quaternion.cpp",
+		"AABox.h",
+		"AABox.cpp",
+		"Sphere.h",
+		"Sphere.cpp",
 		"Plane.h",
 		"Plane.cpp",
 		"Ray.h",
@@ -231,6 +235,8 @@ function engine_vpaths()
 		"Material.cpp",
 		"Shader.h",
 		"Shader.cpp",
+		"Octree.h",
+		"Octree.cpp",
 	},
 	["ui"] = {
 		"Application.h",
@@ -318,6 +324,7 @@ group "render"
 		kind("SharedLib")
 		defines { "CU_VULKAN_BUILD" }
 		--includedirs { src_dir}
+		includedirs { "D:/Program Files/VulkanSDK1.0.3.1/Include" }
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }
 		
