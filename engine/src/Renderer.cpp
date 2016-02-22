@@ -15,8 +15,12 @@ Renderer::~Renderer()
 
 void Renderer::update()
 {
-	SceneManager* gSceneMgr = SceneManager::InstancePtr();
 	// ªÊ÷∆≥°æ∞
+	CameraList& cameras = gSceneMgr().getCameras();
+	for (CameraList::iterator itor = cameras.begin(); itor != cameras.end(); ++itor)
+	{
+		// ≤È’“visiable
+	}
 }
 
 CU_NS_END

@@ -21,6 +21,13 @@ AABox::AABox(const Vector3& min, const Vector3& max)
 {
 }
 
+AABox::AABox(float min, float max)
+	: m_min(min, min, min)
+	, m_max(max, max, max)
+{
+
+}
+
 Vector3 AABox::getCenter() const
 {
 	return (m_min + m_max) * 0.5f;

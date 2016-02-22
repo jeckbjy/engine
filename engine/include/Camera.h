@@ -11,7 +11,7 @@ CU_NS_BEGIN
 
 // 相当于一个View,渲染到Texture
 // 可用于实现分屏,多加一个Camera
-class CU_API Camera : public Component
+class CU_API Camera : public Component, public ListNode<Camera, 2>
 {
 	DECLARE_RTTI(Camera, Component, TYPE_CAMERA);
 	enum 

@@ -37,6 +37,7 @@ public:
 
 	AABox();
 	AABox(const Vector3& min, const Vector3& max);
+	AABox(float min, float max);
 	~AABox(){}
 
 	void scale(const Vector3& s);

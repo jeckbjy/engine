@@ -15,7 +15,6 @@ public:
 	void update();
 
 private:
-
 };
 
 CU_NS_END

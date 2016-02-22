@@ -3,6 +3,7 @@
 CU_NS_BEGIN
 
 Drawable::Drawable()
+:m_octant(NULL)
 {
 
 }

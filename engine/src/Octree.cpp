@@ -2,6 +2,8 @@
 
 CU_NS_BEGIN
 
+static const float DEFAULT_OCTREE_SIZE = 1000.0f;
+
 Octant::Octant(const AABox& box, Octant* parent, Octree* root, size_t level, size_t index /* = ROOT_INDEX */)
 : m_root(root)
 , m_parent(parent)
@@ -71,7 +73,7 @@ bool Octant::checkBoxFit(const AABox& box) const
 	return false;
 }
 
-void Octant::insert(Drawable* drawable)
+void Octant::insertDrawable(Drawable* drawable)
 {
 	const AABox& box = drawable->getWorldBox();
 	// If root octant, insert all non-occludees here, so that octant occlusion does not hide the drawable.
@@ -85,6 +87,14 @@ void Octant::insert(Drawable* drawable)
 	if (insertHere)
 	{
 		// old
+		Octant* oldOctant = drawable->m_octant;
+		if (oldOctant != this)
+		{
+			// Add first, then remove, because drawable count going to zero deletes the octree branch in question
+			addDrawable(drawable);
+			if (oldOctant)
+				oldOctant->removeDrawable(drawable, false);
+		}
 	}
 	else
 	{// 需要放到子节点中
@@ -93,16 +103,46 @@ void Octant::insert(Drawable* drawable)
 		size_t y = center.y < m_center.y ? 0 : 2;
 		size_t z = center.z < m_center.z ? 0 : 4;
 
-		getChild(x + y + z)->insert(drawable);
+		getChild(x + y + z)->insertDrawable(drawable);
 	}
 }
 
-void Octant::add(Drawable* drawable)
+void Octant::addDrawable(Drawable* drawable)
+{
+	drawable->m_octant = this;
+	m_drawables.push_back(drawable);
+	++m_count;
+	Octant* parent = m_parent;
+	while (parent)
+	{
+		++parent->m_count;
+		parent = parent->m_parent;
+	}
+}
+
+void Octant::removeDrawable(Drawable* drawable, bool resetOctant)
+{
+	//m_drawables.erase(drawable);
+	if (resetOctant)
+		drawable->m_octant = 0;
+	--m_count;
+	// 递归删除
+	//if (m_count == 0)
+	//{
+
+	//}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+Octree::Octree()
+	:Octant(AABox(-DEFAULT_OCTREE_SIZE, DEFAULT_OCTREE_SIZE), NULL, this, 0, ROOT_INDEX)
 {
 
 }
 
-void Octant::remove(Drawable* drawable)
+Octree::~Octree()
 {
 
 }

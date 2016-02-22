@@ -5,7 +5,8 @@
 
 CU_NS_BEGIN
 
-class CU_API Drawable : public Component
+class Octant;
+class CU_API Drawable : public Component, public ListNode<Drawable, 2>
 {
 	DECLARE_RTTI(Drawable, Component, "DRAW")
 
@@ -24,9 +25,11 @@ public:
 	bool isOccludee() const { return m_flags[FLAG_OCCLUDEE]; }
 
 protected:
+	friend class Octant;
 	AABox	m_localBox;
 	AABox	m_worldBox;
 	Mask8	m_flags;
+	Octant*	m_octant;
 };
 
 CU_NS_END

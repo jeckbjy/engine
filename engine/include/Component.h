@@ -19,6 +19,9 @@ public:
 	virtual void load(Stream* stream){}
 	virtual void save(Stream* stream){}
 
+	virtual void attach(Entity* entity);
+	virtual void detach();
+
 	const String& getName() const { return m_name; }
 	Entity* getEntity() { return m_owner; }
 

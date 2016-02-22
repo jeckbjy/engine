@@ -56,14 +56,14 @@ void Entity::save(Stream* stream)
 void Entity::addComponent(Component* component)
 {
 	m_components.push(component);
-	component->m_owner = this;
+	component->attach(this);
 }
 
 void Entity::removeComponent(Component* component)
 {
 	assert(!component->isKindOf<Transform>());
+	component->detach();
 	m_components.erase(component);
-	component->m_owner = NULL;
 }
 
 Component* Entity::getComponent(const Rtti* rtti) const

@@ -6,7 +6,7 @@
 CU_NS_BEGIN
 
 class Octree;
-class Octant
+class CU_API Octant
 {
 public:
 	enum
@@ -25,9 +25,9 @@ public:
 
 	bool checkBoxFit(const AABox& box) const;
 
-	void insert(Drawable* drawable);
-	void add(Drawable* drawable);
-	void remove(Drawable* drawable);
+	void insertDrawable(Drawable* drawable);
+	void addDrawable(Drawable* drawable);
+	void removeDrawable(Drawable* drawable, bool resetOctant = true);
 
 private:
 	typedef Vector<Drawable*> DrawableVec;
@@ -45,7 +45,7 @@ private:
 };
 
 // 八叉树管理可渲染物体
-class Octree : public Octant
+class CU_API Octree : public Octant
 {
 public:
 	Octree();
@@ -54,7 +54,6 @@ public:
 	size_t getMaxLevel() const { return m_levels; }
 
 protected:
-	Octant	m_root;		// 根节点
 	size_t	m_levels;	// 共有多少层
 };
 
