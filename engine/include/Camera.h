@@ -11,6 +11,7 @@ CU_NS_BEGIN
 
 // 相当于一个View,渲染到Texture
 // 可用于实现分屏,多加一个Camera
+// 可以设置RenderPath
 class CU_API Camera : public Component, public ListNode<Camera, 2>
 {
 	DECLARE_RTTI(Camera, Component, TYPE_CAMERA);
@@ -55,6 +56,8 @@ public:
 	const Matrix4& getView() const;
 	const Matrix4& getProjection() const;
 	const Frustum& getFrustum() const;
+
+	RenderPath* getRenderPath();
 
 private:
 	void getProjection(Matrix4& mat, bool ogl_format) const;

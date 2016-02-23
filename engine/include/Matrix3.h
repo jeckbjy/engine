@@ -34,6 +34,7 @@ public:
 	// Gram - Schmidt orthonormalization(applied to columns of rotation matrix)
 	void orthonormalize();
 
+	Matrix3 scaled(const Vector3& scale) const;
 	Matrix3 transpose() const;
 	Vector3 transform(const Vector3& vec) const;
 	Matrix3 inverse(float tolerance = 1e-06f) const;
@@ -96,11 +97,24 @@ protected:
 	// Support for singular value decomposition
 	static void bidiagonalize(Matrix3& matA, Matrix3& matL, Matrix3& matR);
 	static void golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR);
-protected:
+
+public:
 	union
 	{
 		float m[3][3];
 		float _m[9];
+		struct  
+		{
+#ifdef COL_MAJOR
+			float m00, m10, m20;
+			float m01, m11, m21;
+			float m02, m12, m22;
+#else
+			float m00, m01, m02;
+			float m10, m11, m12;
+			float m20, m21, m22;
+#endif
+		};
 	};
 };
 

@@ -177,4 +177,9 @@ float Camera::getLodDistance(float distance, float scale, float bias) const
 	return 0;
 }
 
+RenderPath* Camera::getRenderPath()
+{
+	return m_render;
+}
+
 CU_NS_END

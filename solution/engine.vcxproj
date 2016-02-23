@@ -144,6 +144,7 @@
     <ClInclude Include="..\engine\include\Macro.h" />
     <ClInclude Include="..\engine\include\Material.h" />
     <ClInclude Include="..\engine\include\Matrix3.h" />
+    <ClInclude Include="..\engine\include\Matrix3x4.h" />
     <ClInclude Include="..\engine\include\Matrix4.h" />
     <ClInclude Include="..\engine\include\Model.h" />
     <ClInclude Include="..\engine\include\ModelRender.h" />
@@ -151,7 +152,9 @@
     <ClInclude Include="..\engine\include\NetEvent.h" />
     <ClInclude Include="..\engine\include\NetService.h" />
     <ClInclude Include="..\engine\include\Object.h" />
+    <ClInclude Include="..\engine\include\Occlusion.h" />
     <ClInclude Include="..\engine\include\Octree.h" />
+    <ClInclude Include="..\engine\include\OctreeQuery.h" />
     <ClInclude Include="..\engine\include\Packet.h" />
     <ClInclude Include="..\engine\include\PixelFormat.h" />
     <ClInclude Include="..\engine\include\Plane.h" />
@@ -198,7 +201,6 @@
     <ClInclude Include="..\engine\include\Vector3.h" />
     <ClInclude Include="..\engine\include\Vector4.h" />
     <ClInclude Include="..\engine\include\VertexLayout.h" />
-    <ClInclude Include="..\engine\include\View.h" />
     <ClInclude Include="..\engine\include\Window.h" />
     <ClInclude Include="..\engine\include\WorkQueue.h" />
   </ItemGroup>
@@ -240,6 +242,7 @@
     <ClCompile Include="..\engine\src\LogChannel.cpp" />
     <ClCompile Include="..\engine\src\Material.cpp" />
     <ClCompile Include="..\engine\src\Matrix3.cpp" />
+    <ClCompile Include="..\engine\src\Matrix3x4.cpp" />
     <ClCompile Include="..\engine\src\Matrix4.cpp" />
     <ClCompile Include="..\engine\src\Model.cpp" />
     <ClCompile Include="..\engine\src\ModelRender.cpp" />
@@ -247,6 +250,7 @@
     <ClCompile Include="..\engine\src\NetEvent.cpp" />
     <ClCompile Include="..\engine\src\NetService.cpp" />
     <ClCompile Include="..\engine\src\Object.cpp" />
+    <ClCompile Include="..\engine\src\Occlusion.cpp" />
     <ClCompile Include="..\engine\src\Octree.cpp" />
     <ClCompile Include="..\engine\src\Packet.cpp" />
     <ClCompile Include="..\engine\src\PixelFormat.cpp" />
@@ -280,7 +284,6 @@
     <ClCompile Include="..\engine\src\Util.cpp" />
     <ClCompile Include="..\engine\src\Variant.cpp" />
     <ClCompile Include="..\engine\src\VertexLayout.cpp" />
-    <ClCompile Include="..\engine\src\View.cpp" />
     <ClCompile Include="..\engine\src\Window.cpp" />
     <ClCompile Include="..\engine\src\WorkQueue.cpp" />
   </ItemGroup>

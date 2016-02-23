@@ -186,6 +186,9 @@
     <ClInclude Include="..\engine\include\Matrix3.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Matrix3x4.h">
+      <Filter>math</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Matrix4.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -207,7 +210,13 @@
     <ClInclude Include="..\engine\include\Object.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Occlusion.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Octree.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\OctreeQuery.h">
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Packet.h">
@@ -348,9 +357,6 @@
     <ClInclude Include="..\engine\include\VertexLayout.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\View.h">
-      <Filter>render</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Window.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -470,6 +476,9 @@
     <ClCompile Include="..\engine\src\Matrix3.cpp">
       <Filter>math</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Matrix3x4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Matrix4.cpp">
       <Filter>math</Filter>
     </ClCompile>
@@ -490,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Object.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Occlusion.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Octree.cpp">
       <Filter>render</Filter>
@@ -589,9 +601,6 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\VertexLayout.cpp">
       <Filter>graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\View.cpp">
-      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Window.cpp">
       <Filter>ui</Filter>

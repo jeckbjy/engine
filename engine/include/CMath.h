@@ -13,6 +13,14 @@ enum EulerAngleOrder
 	EAO_ZYX
 };
 
+/// Intersection test result.
+enum Intersection
+{
+	OUTSIDE,
+	INTERSECTS,
+	INSIDE
+};
+
 class CU_API Math
 {
 public:

@@ -1,3 +1,4 @@
+#pragma once
 #include "API.h"
 #include "Color.h"
 #include "Vector2.h"

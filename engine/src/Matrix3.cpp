@@ -135,6 +135,14 @@ void Matrix3::orthonormalize()
 	m[2][2] *= invLength;
 }
 
+Matrix3 Matrix3::scaled(const Vector3& scale) const
+{
+	return Matrix3(
+		m00 * scale.x, m01 * scale.y, m02 * scale.z,
+		m10 * scale.x, m11 * scale.y, m12 * scale.z,
+		m20 * scale.x, m21 * scale.y, m22 * scale.z);
+}
+
 Matrix3 Matrix3::transpose() const
 {
 	Matrix3 mat;
