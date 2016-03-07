@@ -1,5 +1,12 @@
 #pragma once
 #include "API.h"
+#include "Vector3.h"
+#include "Vector4.h"
+
+// Defined by Windows headers
+#ifdef TRANSPARENT
+#undef TRANSPARENT
+#endif
 
 CU_NS_BEGIN
 
@@ -11,62 +18,92 @@ typedef uint32_t BGRA;
 class CU_API Color
 {
 public:
-	static const Color Zero;
-	static const Color Black;
-	static const Color White;
-	static const Color Red;
-	static const Color Green;
-	static const Color Blue;
-	static const Color Default;
+	static const Color ZERO;
+	static const Color BLACK;
+	static const Color WHITE;
+	static const Color RED;
+	static const Color GREEN;
+	static const Color BLUE;
+	static const Color GRAY;
+	static const Color YELLOW;
+	static const Color CYAN;
+	static const Color MAGENTA;
+	static const Color TRANSPARENT;
+	static const Color DEFAULT;
 
 public:
 	float r, g, b, a;
 
 public:
-	Color() = default;
-	Color(float red, float green = 1.0f, float blue = 1.0f, float alpha = 1.0f);
+	Color();
+	Color(float red, float green, float blue, float alpha = 1.0f);
+	Color(const float* data);
 
+	float sum() const { return r + g + b; }
+	float average() const { return (r + g + b) / 3.0f; }
+
+	/// Return the 'grayscale' representation of RGB values, as used by JPEG and PAL/NTSC among others.
+	float luma() const { return r *0.299f + g*0.587f + b*0.114f; }
+	/// Return the colorfulness relative to the brightness of a similarly illuminated white.
+	float chroma() const;
+	float hue() const;
+	/// Return lightness as defined for HSL: average of the largest and smallest values of the RGB components.
+	float lightness() const;
+	float saturationHSL() const;
+	float saturationHSV() const;
+
+	void bounds(float& min, float& max, bool clipped = false) const;
 	void saturate();	// 裁剪 clamps[0,1]
 	// hsb都映射到[0,1]:色相(0-360)，饱和度(0-100)，亮度模型(0-100)
 	void setHSB(float hue, float saturation, float brightness);
 	void getHSB(float& hue, float& saturation, float& brightness) const;
 
 	// 转换成int模式
-	inline RGBA getRGBA() const { return convertTo(r, g, b, a); }
-	inline ARGB getARGB() const { return convertTo(a, r, g, b); }
-	inline BGRA getBGRA() const { return convertTo(b, g, r, a); }
-	inline ABGR getABGR() const { return convertTo(a, b, g, r); }
+	RGBA getRGBA() const { return convertTo(r, g, b, a); }
+	ARGB getARGB() const { return convertTo(a, r, g, b); }
+	BGRA getBGRA() const { return convertTo(b, g, r, a); }
+	ABGR getABGR() const { return convertTo(a, b, g, r); }
 
-	inline void setRGBA(RGBA val){ convertFrom(val, r, g, b, a); }
-	inline void setARGB(ARGB val){ convertFrom(val, a, r, g, b); }
-	inline void setBGRA(BGRA val){ convertFrom(val, b, g, r, a); }
-	inline void setABGR(ABGR val){ convertFrom(val, a, b, g, r); }
+	void setRGBA(RGBA val){ convertFrom(val, r, g, b, a); }
+	void setARGB(ARGB val){ convertFrom(val, a, r, g, b); }
+	void setBGRA(BGRA val){ convertFrom(val, b, g, r, a); }
+	void setABGR(ABGR val){ convertFrom(val, a, b, g, r); }
 
-	inline float operator[](const size_t i) const{ return *(&r + i); }
-	inline float& operator[](const size_t i) { return *(&r + i); }
+	Vector3 toVector3() const { return Vector3(r, g, b); }
+	Vector4 toVector4() const { return Vector4(r, g, b, a); }
+	String  toString() const;
 
-	inline bool operator ==(const Color& rhs) const { return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a; }
-	inline bool operator !=(const Color& rhs) const { return !(*this == rhs); }
+	const float* data() const { return &r; }
+	float* data() { return &r; }
 
-	inline Color& operator +=(const Color& rhs);
-	inline Color& operator -=(const Color& rhs);
-	inline Color& operator *=(const Color& rhs);
-	inline Color& operator /=(const Color& rhs);
-	inline Color& operator *=(const float scalar);
-	inline Color& operator /=(const float scalar);
+	float operator[](const size_t i) const{ return *(&r + i); }
+	float& operator[](const size_t i) { return *(&r + i); }
 
-	inline Color operator+(const Color& rhs) const { Color tmp = *this; tmp += rhs; return tmp; }
-	inline Color operator-(const Color& rhs) const { Color tmp = *this; tmp -= rhs; return tmp; }
-	inline Color operator*(const Color& rhs) const { Color tmp = *this; tmp *= rhs; return tmp; }
-	inline Color operator/(const Color& rhs) const { Color tmp = *this; tmp /= rhs; return tmp; }
-	inline Color operator*(const float scalar) const { Color tmp = *this; tmp *= scalar; return tmp; }
-	inline Color operator/(const float scalar) const { Color tmp = *this; tmp /= scalar; return tmp; }
+	bool operator ==(const Color& rhs) const { return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a; }
+	bool operator !=(const Color& rhs) const { return !(*this == rhs); }
 
-	inline friend Color operator*(const float scalar, const Color& color) { Color tmp = color; tmp *= scalar; return tmp; }
+	Color& operator +=(const Color& rhs);
+	Color& operator -=(const Color& rhs);
+	Color& operator *=(const Color& rhs);
+	Color& operator /=(const Color& rhs);
+	Color& operator *=(const float scalar);
+	Color& operator /=(const float scalar);
+
+	Color operator+(const Color& rhs) const { Color tmp = *this; tmp += rhs; return tmp; }
+	Color operator-(const Color& rhs) const { Color tmp = *this; tmp -= rhs; return tmp; }
+	Color operator*(const Color& rhs) const { Color tmp = *this; tmp *= rhs; return tmp; }
+	Color operator/(const Color& rhs) const { Color tmp = *this; tmp /= rhs; return tmp; }
+	Color operator*(const float scalar) const { Color tmp = *this; tmp *= scalar; return tmp; }
+	Color operator/(const float scalar) const { Color tmp = *this; tmp /= scalar; return tmp; }
+
+	friend Color operator*(const float scalar, const Color& color) { return color * scalar; }
 
 private:
 	uint32_t convertTo(float c0, float c1, float c2, float c3) const;
 	void convertFrom(uint32_t val, float& c0, float& c1, float& c2, float& c3) const;
+	float calcHue(float min, float max) const;
+	float calcSaturationHSL(float min, float max) const;
+	float calcSaturationHSV(float min, float max) const;
 };
 
 //inline std::ostream& operator <<(std::ostream& os, const Color& c)

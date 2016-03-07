@@ -5,7 +5,6 @@
 CU_NS_BEGIN
 
 /** A 3x3 matrix. Can be used for non-homogenous transformations of three dimensional vectors and points. */
-class Quaternion;
 class CU_API Matrix3
 {
 public:
@@ -62,6 +61,10 @@ public:
 	void toQuaternion(Quaternion& quat) const;
 	bool toEulerAngles(float& xAngle, float& yAngle, float& zAngle) const;
 
+	String toString() const;
+
+	const float* data() const { return (const float*)m; }
+	float* data() { return (float*)m; }
 	float* operator[](size_t row) const { return (float*)m[row]; }
 
 	Matrix3 operator-() const;

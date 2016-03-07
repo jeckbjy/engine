@@ -1,9 +1,16 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "WorkQueue.h"
-#include "Camera.h"
+#include "View.h"
+#include "RenderPath.h"
 
 CU_NS_BEGIN
+
+void UpdateViewWork(const WorkItem* item)
+{
+	View* view = (View*)item->data;
+	view->update();
+}
 
 Renderer::Renderer()
 {
@@ -17,45 +24,58 @@ Renderer::~Renderer()
 
 void Renderer::update()
 {
-	// 绘制场景
-	CameraList& cameras = gSceneMgr().getCameras();
-	for (CameraList::iterator itor = cameras.begin(); itor != cameras.end(); ++itor)
+	// 多线程更新View
+	//for (size_t i = 0; i < m_views.size(); ++i)
+	//{
+	//	gWorkQueue().addItem(&UpdateViewWork, m_views[i], NULL, NULL);
+	//}
+	//gWorkQueue().execute();
+	// 先单线程执行
+	for (size_t i = 0; i < m_views.size(); ++i)
 	{
-		// 查找visiable
+		m_views[i]->update();
+	}
+	// 绘制每一个场景
+	for (size_t i = 0; i < m_views.size(); ++i)
+	{
+		m_views[i]->render();
 	}
 }
 
-void Renderer::render(Camera* camera)
+Texture* Renderer::getGBuffer(size_t width, size_t height, size_t format, bool cubemap, bool filtered, bool srgb, unsigned persistent)
 {
-	RenderPath* renderPath = camera->getRenderPath();
-	for (size_t i = 0; i < renderPath->commands.size(); ++i)
+	if (PixelUtil::isDepthStencil((PixelFormat)format))
 	{
-		RenderCommand& command = renderPath->commands[i];
-		// 执行每一个command
-		switch (command.type)
-		{
-		case CMD_CLEAR:
-		{
-			break;
-		}
-		case CMD_SCENE_PASS:
-		{
-			break;
-		}
-		case CMD_QUAD:
-		{
-			break;
-		}
-		case CMD_FORWARD_LIGHTS:
-		{
-			break;
-		}
-		case CMD_DEFER_LIGHTS:
-		{
-			break;
-		}
-		}
+		filtered = false;
+		srgb = false;
 	}
+	if (cubemap)
+		height = width;
+
+	uint64 key = ((uint64)format << 32) | (width << 16) | height;
+	if (filtered)
+		key |= 0x8000000000000000LL;
+	if (srgb)
+		key |= 0x4000000000000000LL;
+	if (cubemap)
+		key |= 0x2000000000000000LL;
+	if (persistent)
+		key += ((uint64)persistent << 32);
+
+	TextureMap::iterator itor = m_gbuffers.find(key);
+	if (itor != m_gbuffers.end())
+		return itor->second;
+	TEXTURE_DESC desc;
+	desc.type = cubemap ? TEX_CUBE : TEX_2D;
+	desc.width = width;
+	desc.height = height;
+	desc.depth = 1;
+	desc.format = (PixelFormat)format;
+	Texture* texture;
+	//Texture* texture = m_device->newTexture();
+	// filter?
+	m_gbuffers[key] = texture;
+	return texture;
 }
 
 CU_NS_END

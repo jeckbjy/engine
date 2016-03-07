@@ -3,8 +3,6 @@
 
 CU_NS_BEGIN
 
-class AABox;
-class Sphere;
 class Plane
 {
 public:

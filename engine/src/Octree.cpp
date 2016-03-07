@@ -147,4 +147,9 @@ Octree::~Octree()
 
 }
 
+void Octree::query(OctreeQuery& result)
+{
+	// Вщев
+}
+
 CU_NS_END

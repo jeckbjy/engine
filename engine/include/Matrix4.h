@@ -86,6 +86,7 @@ public:
 	bool isAffine() const { return (m30 == 0) && (m31 == 0) && (m32 == 0) && (m33 == 1); }
 
 	void toMatrix3(Matrix3& mat3) const;
+	String toString() const;
 
 	/**
 	* Transform a 3D point by this matrix.

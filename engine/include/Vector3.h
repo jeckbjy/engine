@@ -91,6 +91,13 @@ public:
 	T* data() { return m; }
 	const T* data() const { return m; }
 
+	String toString() const
+	{
+		std::stringstream ss;
+		ss << x << " " << y << " " << z;
+		return ss.str();
+	}
+
 	T operator[](size_t i) const { return m[i]; }
 	T& operator[](size_t i) { return m[i]; }
 	TVector3 operator-() const { return TVector3(-x, -y, -z); }

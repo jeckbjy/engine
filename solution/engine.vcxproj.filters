@@ -7,6 +7,9 @@
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{2839F3DC-1406-4EE8-3D1F-3C90294B8376}</UniqueIdentifier>
+    </Filter>
     <Filter Include="graphics">
       <UniqueIdentifier>{36EF08BC-22BC-63C7-4BD5-516F37019955}</UniqueIdentifier>
     </Filter>
@@ -15,9 +18,6 @@
     </Filter>
     <Filter Include="net">
       <UniqueIdentifier>{4C94880B-B89D-887C-4119-9F7CAD21947C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="os">
-      <UniqueIdentifier>{07795900-F304-880B-5CB3-880B485E880B}</UniqueIdentifier>
     </Filter>
     <Filter Include="render">
       <UniqueIdentifier>{E5CF2C19-D171-57EF-BA2C-6B43A66DDE3F}</UniqueIdentifier>
@@ -72,6 +72,9 @@
     <ClInclude Include="..\engine\include\Attribute.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Batch.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Bits.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -82,7 +85,7 @@
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\CProcess.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Camera.h">
       <Filter>render</Filter>
@@ -100,7 +103,7 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Condition.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Config.h">
       <Filter>core</Filter>
@@ -111,6 +114,9 @@
     <ClInclude Include="..\engine\include\Context.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Convert.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Delegate.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -118,7 +124,7 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\DynLib.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Engine.h">
       <Filter>engine</Filter>
@@ -143,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\Function.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Geometry.h">
+      <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Graphics.h">
       <Filter>graphics</Filter>
@@ -199,7 +208,7 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Mutex.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\NetEvent.h">
       <Filter>net</Filter>
@@ -243,6 +252,12 @@
     <ClInclude Include="..\engine\include\Poller.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\Predeclare.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\Profiler.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Protocol.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -262,9 +277,6 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\RenderPath.h">
-      <Filter>render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\RenderQueue.h">
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Renderer.h">
@@ -310,13 +322,13 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\SyncEvent.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Table.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Thread.h">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Traits.h">
       <Filter>core</Filter>
@@ -357,11 +369,23 @@
     <ClInclude Include="..\engine\include\VertexLayout.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\View.h">
+      <Filter>render</Filter>
+    </ClInclude>
     <ClInclude Include="..\engine\include\Window.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\WorkQueue.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\XMLFile.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\src\xml\pugiconfig.hpp">
+      <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\src\xml\pugixml.hpp">
+      <Filter>external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +413,9 @@
     <ClCompile Include="..\engine\src\AssetCache.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Batch.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Buffer.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -396,7 +423,7 @@
       <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\CProcess.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Camera.cpp">
       <Filter>render</Filter>
@@ -414,7 +441,7 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Condition.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Config.cpp">
       <Filter>core</Filter>
@@ -425,11 +452,14 @@
     <ClCompile Include="..\engine\src\Context.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Convert.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Drawable.cpp">
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\DynLib.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Engine.cpp">
       <Filter>engine</Filter>
@@ -442,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\Frustum.cpp">
       <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\Geometry.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Graphics.cpp">
       <Filter>graphics</Filter>
@@ -489,7 +522,7 @@
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Mutex.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\NetEvent.cpp">
       <Filter>net</Filter>
@@ -524,6 +557,9 @@
     <ClCompile Include="..\engine\src\Poller.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\Profiler.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Protocol.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -537,9 +573,6 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\RenderPath.cpp">
-      <Filter>render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\engine\src\RenderQueue.cpp">
       <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Renderer.cpp">
@@ -579,13 +612,13 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\SyncEvent.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Table.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Thread.cpp">
-      <Filter>os</Filter>
+      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Transform.cpp">
       <Filter>render</Filter>
@@ -602,11 +635,20 @@
     <ClCompile Include="..\engine\src\VertexLayout.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\engine\src\View.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
     <ClCompile Include="..\engine\src\Window.cpp">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\WorkQueue.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\XMLFile.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\xml\pugixml.cpp">
+      <Filter>external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

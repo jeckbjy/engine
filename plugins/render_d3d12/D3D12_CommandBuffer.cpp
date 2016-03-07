@@ -33,11 +33,6 @@ void D3D12CommandBuffer::setRenderTarget(RenderTarget* target)
 
 }
 
-void D3D12CommandBuffer::setTopology(Topology primitive)
-{
-
-}
-
 void D3D12CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
 
@@ -58,12 +53,7 @@ void D3D12CommandBuffer::setIndexBuffer(IndexBuffer* ib)
 
 }
 
-void D3D12CommandBuffer::draw(size_t vnum, size_t voff, size_t instance_num, size_t instance_off)
-{
-
-}
-
-void D3D12CommandBuffer::drawIndexed(size_t inum, size_t ioff, size_t instance_num, size_t instance_off, int vertex_base)
+void D3D12CommandBuffer::draw(const DrawParam& params)
 {
 
 }

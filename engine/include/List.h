@@ -122,7 +122,7 @@ protected:
 	inline static void set_next_prev(node_t* n1, node_t* n2) { set_prev(get_next(n1), n2); }	// n1->m_next->m_prev = n2;
 	inline static void set_prev_next(node_t* n1, node_t* n2) { set_next(get_prev(n1), n2); }	// n1->m_prev->m_next = n2;
 	inline static void set_node_next(node_t* n1, node_t* n2) { set_next(n1, get_next(n2)); }	// n1->m_next = n2->m_next;
-	inline static void destroy(node_t* node) { set_prev(node, NULL); set_next(node, NULL); }
+	inline static void destroy_node(node_t* node) { set_prev(node, NULL); set_next(node, NULL); }
 public:
 	class iterator
 	{
@@ -163,6 +163,8 @@ public:
 	
 	void clear();
 	void release();
+	void free();
+
 	void swap(List& rhs);
 	size_t size() const;
 	void push_back(node_t* data) { append(data); }
@@ -261,7 +263,7 @@ void List<T, N>::erase(node_t* node)
 			m_head = get_next(node);
 	}
 
-	destroy(node);
+	destroy_node(node);
 }
 
 template<typename T, int N>
@@ -273,7 +275,7 @@ void List<T, N>::clear()
 	{
 		temp = node;
 		node = get_next(node);
-		destroy(temp);
+		destroy_node(temp);
 	}
 	m_head = 0;
 }
@@ -287,9 +289,23 @@ void List<T, N>::release()
 	{
 		temp = node;
 		node = get_next(node);
-		destroy(temp);
+		destroy_node(temp);
 		temp->release();
-		//Policy::destroy(temp);
+	}
+	m_head = 0;
+}
+
+template<typename T, int N>
+void List<T, N>::free()
+{
+	node_t* node = m_head;
+	node_t* temp;
+	while (node)
+	{
+		temp = node;
+		node = get_next(node);
+		destroy_node(temp);
+		delete temp;
 	}
 	m_head = 0;
 }

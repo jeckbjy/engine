@@ -17,7 +17,7 @@ struct CU_API BUFFER_DESC
 struct CU_API TEXTURE_DESC
 {
 	TexType		type;
-	RES_FLAG		usage;
+	RES_FLAG	usage;
 	PixelFormat format;
 	uint32_t	width;
 	uint32_t	height;

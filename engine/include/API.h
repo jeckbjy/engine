@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform.h"
+#include "Predeclare.h"
 #include "Types.h"
 #include "Macro.h"
 #include "Ref.h"

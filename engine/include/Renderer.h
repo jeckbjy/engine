@@ -1,7 +1,6 @@
 #pragma once
 #include "Object.h"
 #include "Graphics.h"
-#include "RenderPath.h"
 
 CU_NS_BEGIN
 
@@ -15,7 +14,6 @@ CU_NS_BEGIN
 4:处理阴影
 5:执行RenderPath渲染
 */
-class Camera;
 class CU_API Renderer : public Object
 {
 	DECLARE_RTTI(Renderer, Object, "REND")
@@ -24,11 +22,17 @@ public:
 	~Renderer();
 
 	void update();
-	void render(Camera* camera);
+
+	Texture* getGBuffer(size_t width, size_t height, size_t format, bool cubemap, bool filtered, bool srgb, unsigned persistent);
 
 private:
+	typedef Vector<View*> ViewList;
 	typedef std::map<String, RenderPath*> RenderPathMap;
-	RenderPathMap m_renderer;
+	typedef std::map<uint64, Texture*>		TextureMap;
+	Device*			m_device;
+	RenderPathMap	m_renderer;
+	ViewList		m_views;
+	TextureMap		m_gbuffers;
 };
 
 CU_NS_END

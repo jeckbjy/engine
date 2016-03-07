@@ -16,7 +16,10 @@ function my_vpaths(files)
 		local array = {}
 		result[k] = array
 		for _,file in pairs(v) do
-			if string.sub(file, -2, -1) == ".h" then
+			local index,_ = string.find(file, "/")
+			if index ~= nil then
+				table.insert(array, file)
+			elseif string.sub(file, -2, -1) == ".h" then
 				table.insert(array, "engine/include/"..file)
 			elseif string.sub(file, -4, -1) == ".cpp" then
 				table.insert(array, "engine/src/"..file)
@@ -34,10 +37,29 @@ end
 
 function engine_vpaths()
 	my_vpaths {
+	["external"] = {
+		"engine/src/xml/pugiconfig.hpp",
+		"engine/src/xml/pugixml.hpp",
+		"engine/src/xml/pugixml.cpp"
+	},
+	
 	["core"] = {
 		"API.h",
 		"Macro.h",
 		"Platform.h",
+		"Predeclare.h",
+		"Mutex.h",
+		"Mutex.cpp",
+		"Condition.h",
+		"Condition.cpp",
+		"SyncEvent.h",
+		"SyncEvent.cpp",
+		"Thread.h",
+		"Thread.cpp",
+		"CProcess.h",
+		"CProcess.cpp",
+		"DynLib.h",
+		"DynLib.cpp",
 		"Algo.h",
 		"Bits.h",
 		"Types.h",
@@ -84,20 +106,12 @@ function engine_vpaths()
 		"LogChannel.cpp",
 		"Log.h",
 		"Log.cpp",
-	},
-	["os"] = {
-		"Mutex.h",
-		"Mutex.cpp",
-		"Condition.h",
-		"Condition.cpp",
-		"SyncEvent.h",
-		"SyncEvent.cpp",
-		"Thread.h",
-		"Thread.cpp",
-		"CProcess.h",
-		"CProcess.cpp",
-		"DynLib.h",
-		"DynLib.cpp",
+		"Profiler.h",
+		"Profiler.cpp",
+		"Convert.h",
+		"Convert.cpp",
+		"XMLFile.h",
+		"XMLFile.cpp",
 	},
 	["math"] = {
 		"CMath.h",
@@ -202,12 +216,14 @@ function engine_vpaths()
 		"Playable.cpp",
 		"PlayController.h",
 		"PlayController.cpp",
+		"Batch.h",
+		"Batch.cpp",
+		"View.h",
+		"View.cpp",
 		"Renderer.h",
 		"Renderer.cpp",
 		"RenderPath.h",
 		"RenderPath.cpp",
-		"RenderQueue.h",
-		"RenderQueue.cpp",
 		"SceneManager.h",
 		"SceneManager.cpp",
 		"Entity.h",
@@ -227,6 +243,8 @@ function engine_vpaths()
 		"Model.h",
 		"Skeleton.h",
 		"Skeleton.cpp",
+		"Geometry.h",
+		"Geometry.cpp",
 		"Model.h",
 		"Model.cpp",
 		"ModelRender.h",

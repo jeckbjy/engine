@@ -7,7 +7,6 @@
 CU_NS_BEGIN
 
 // 当前动画播放控制
-class Animator;
 class CU_API AnimState : public Playable
 {
 public:
@@ -25,7 +24,6 @@ private:
 	bool	  m_enable;
 };
 
-class Animation;
 // 动画播放器
 class CU_API Animator : public Component
 {

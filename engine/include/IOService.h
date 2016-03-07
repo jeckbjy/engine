@@ -8,7 +8,6 @@
 CU_NS_BEGIN
 
 class IOOperation;
-class Channel;
 // iocp or poller
 class CU_API IOService
 {

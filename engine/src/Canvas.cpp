@@ -12,4 +12,9 @@ Canvas::~Canvas()
 
 }
 
+void Canvas::draw(View* view)
+{
+
+}
+
 CU_NS_END

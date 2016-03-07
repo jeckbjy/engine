@@ -24,6 +24,7 @@ class CU_API Camera : public Component, public ListNode<Camera, 2>
 	};
 public:
 	Camera();
+	Camera(RenderTarget* target, float left = 0.0f, float top = 0.0f, float width = 1.0f, float height = 0.0f);
 	~Camera();
 
 	bool isOrthographic() const{ return m_flag[FLAG_ORTHO]; }
@@ -42,12 +43,13 @@ public:
 	float getNearClip() const { return m_near; }
 	float getFarClip() const { return m_far; }
 	float getFov() const { return m_fov; }
-	float getOrthoSize() const { return m_size; }
+	float getOrthoSize() const { return m_orthoSize; }
 	float getAspectRatio() const { return m_aspect; }
 	float getZoom() const { return m_zoom; }
 	float getLodBias() const { return m_lodBias; }
 
-	float getDistance(const Vector3& pos) const;
+	float getDistance(const Vector3& world_pos) const;
+	float getDistanceSquared(const Vector3& world_pos) const;
 	float getLodDistance(float distance, float scale, float bias) const;
 
 	//float getWidth() const { return 2 * m_ortho / m_aspect; }
@@ -58,22 +60,24 @@ public:
 	const Frustum& getFrustum() const;
 
 	RenderPath* getRenderPath();
+	RenderTarget* getSurface() { return m_surface; }
 
 private:
 	void getProjection(Matrix4& mat, bool ogl_format) const;
 
 private:
-	uint	m_cullMask;	// just or layer？？
+	uint	m_cullMask;		// just or layer？？
 	float	m_near;
 	float	m_far;
-	float	m_fov;		// field of view
-	float	m_size;		// height/2
-	float	m_aspect;	// x/y
+	float	m_fov;			// field of view
+	float	m_orthoSize;	// height/2
+	float	m_aspect;		// x/y
 	float	m_zoom;
-	float	m_lodBias;	// 斜率
+	float	m_lodBias;		// 斜率
 	Vector2 m_offset;
-	RectI	m_viewport;	// 视窗,用于分屏,百分比
-	RenderPath* m_render;	// 渲染通路？？
+	Rect	m_viewport;		// 视窗,用于分屏,百分比
+	RenderTarget* m_surface;// 渲染目标
+	RenderPath*	m_render;	// 渲染通路？？
 	// cached
 	mutable Mask8	m_flag;
 	mutable Matrix4 m_view;

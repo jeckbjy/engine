@@ -7,8 +7,9 @@ CU_NS_BEGIN
 template<typename T>
 struct CU_API TRect
 {
-	T left, top, right, bottom;
-	TRect() :left(0), top(0),right(0),bottom(0){}
+	T x, y, width, height;
+	TRect() :x(0), y(0), width(0), height(0){}
+	TRect(T left, T top, T w, T h) :x(left), y(top), width(w), height(h){}
 };
 
 typedef TRect<float> Rect;

@@ -40,19 +40,20 @@ struct RenderCommand
 	};
 
 	typedef Vector<Output> OutputList;
+
+	bool		enabled;
 	CommandType type;
 	String		tag;
+	String		meta;
 	OutputList	outputs;
-	// 参数union？？
 	Clear		clear;
-	// 其他 pass light
 };
 
 enum SizeMode
 {
-	SIZE_ABSOLUTE,		// 绝对值
-	SIZE_DIVISOR,		// 除因子
-	SIZE_MULTIPLIER		// 乘因子
+	SIZE_MODE_ABSOLUTE,		// 绝对值
+	SIZE_MODE_DIVISOR,		// 除因子
+	SIZE_MODE_MULTIPLIER	// 乘因子
 };
 
 // 渲染目标，默认只有一个viewport
@@ -60,25 +61,30 @@ struct RenderTargetInfo
 {
 	String	name;
 	String	tag;
-	size_t	format;
+	uint	format;
 	Vector2	size;
 	SizeMode mode;
-	char	enable : 1;
-	char	cubemap : 1;
-	char	filtered : 1;
-	char	sRGB : 1;
-	char	persistent : 1;
+	bool	cubemap;
+	bool	filtered;
+	bool	sRGB;
+	bool	persistent;
 };
 
 // 渲染路径
-struct CU_API RenderPath
+class CU_API RenderPath
 {
+public:
 	typedef Vector<RenderTargetInfo> TargetList;
 	typedef Vector<RenderCommand>	CommandList;
 	TargetList	targets;
 	CommandList commands;
 
-	bool load();
+	bool load(XMLFile* file);
+	bool append(XMLFile* file);
+
+private:
+	void loadTarget(const XMLNode& node);
+	void loadCommand(const XMLNode& node);
 };
 
 CU_NS_END

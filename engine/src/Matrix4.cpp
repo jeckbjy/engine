@@ -528,6 +528,17 @@ void Matrix4::toMatrix3(Matrix3& mat3) const
 	mat3[2][2] = m[2][2];
 }
 
+String Matrix4::toString() const
+{
+	char buf[256];
+	snprintf(buf, sizeof(buf), "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g", 
+		m00, m01, m02, m03,
+		m10, m11, m12, m13,
+		m20, m21, m22, m23,
+		m30, m31, m32, m33);
+	return String(buf);
+}
+
 void Matrix4::setPerspective(float fovy, float aspectRatio, float zNear, float zFar)
 {
 

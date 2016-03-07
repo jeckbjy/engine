@@ -6,7 +6,6 @@
 
 CU_NS_BEGIN
 
-class Entity;
 class CU_API Component : public Object, public Animatable, public ListNode<Component>
 {
 	friend class Entity;
@@ -15,7 +14,6 @@ public:
 	Component();
 	virtual ~Component();
 
-	virtual void draw(){}
 	virtual void load(Stream* stream){}
 	virtual void save(Stream* stream){}
 

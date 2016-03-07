@@ -16,7 +16,6 @@ struct Bone : public ListNode<Bone>
 	BoneList children;
 };
 
-class Stream;
 class CU_API Skeleton : public Ref
 {
 public:

@@ -217,12 +217,12 @@ Quaternion Quaternion::getRotationFromTo(const Vector3& from, const Vector3& des
 }
 
 Quaternion::Quaternion()
-	:x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+	: w(1.0f), x(0.0f), y(0.0f), z(0.0f)
 {
 }
 
-Quaternion::Quaternion(float x, float y, float z, float w)
-	: x(x), y(y), z(z), w(w)
+Quaternion::Quaternion(float w, float x, float y, float z)
+	: w(w), x(x), y(y), z(z)
 {
 }
 
@@ -241,7 +241,7 @@ Quaternion Quaternion::inverse() const
 
 Quaternion Quaternion::conjugate() const
 {
-	return Quaternion(-x, -y, -z, w);
+	return Quaternion(w, - x, -y, -z);
 }
 
 float Quaternion::normalize()
@@ -309,7 +309,7 @@ void Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
 	Vector3 forward = Vector3::normalize(forwardDir);
 	Vector3 up = Vector3::normalize(upDir);
 
-	if (Math::equal(Vector3::dot(forward, up), 1.0f))
+	if (Math::equals(Vector3::dot(forward, up), 1.0f))
 	{
 		lookRotation(forward);
 		return;
@@ -389,8 +389,8 @@ void Quaternion::fromRotationMatrix(const Matrix3& mat)
 	else
 	{
 		// |w| <= 1/2
-		static UINT32 nextLookup[3] = { 1, 2, 0 };
-		UINT32 i = 0;
+		static uint32 nextLookup[3] = { 1, 2, 0 };
+		uint32 i = 0;
 
 		if (mat[1][1] > mat[0][0])
 			i = 1;
@@ -398,8 +398,8 @@ void Quaternion::fromRotationMatrix(const Matrix3& mat)
 		if (mat[2][2] > mat[i][i])
 			i = 2;
 
-		UINT32 j = nextLookup[i];
-		UINT32 k = nextLookup[j];
+		uint32 j = nextLookup[i];
+		uint32 k = nextLookup[j];
 
 		root = Math::sqrt(mat[i][i] - mat[j][j] - mat[k][k] + 1.0f);
 
@@ -562,6 +562,13 @@ bool Quaternion::toEulerAngles(float& xAngle, float& yAngle, float& zAngle) cons
 	Matrix3 matRot;
 	toRotationMatrix(matRot);
 	return matRot.toEulerAngles(xAngle, yAngle, zAngle);
+}
+
+String Quaternion::toString() const
+{
+	char buf[128];
+	snprintf(buf, sizeof(buf), "%g %g %g %g", w, x, y, z);
+	return String(buf);
 }
 
 Quaternion& Quaternion::operator +=(const Quaternion& rhs)

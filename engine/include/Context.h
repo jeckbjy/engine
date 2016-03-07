@@ -6,7 +6,6 @@
 
 CU_NS_BEGIN
 
-class Object;
 class LibInfo;
 // 全局上下文,FileSystem, ResourceCache
 class CU_API Context : public Singleton<Context>

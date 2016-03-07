@@ -909,6 +909,13 @@ bool Matrix3::toEulerAngles(float& xAngle, float& yAngle, float& zAngle) const
 	}
 }
 
+String Matrix3::toString() const
+{
+	char buf[256];
+	snprintf(buf, sizeof(buf), "%g %g %g %g %g %g %g %g %g", m00, m01, m02, m10, m11, m12, m20, m21, m22);
+	return String(buf);
+}
+
 Matrix3 Matrix3::operator -() const
 {
 	Matrix3 neg;

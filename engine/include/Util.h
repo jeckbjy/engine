@@ -30,6 +30,7 @@ public:
 	static void vformat(String& result, const char* fmt, ...);
 	static String vformat(const char* fmt, ...);
 
+	static int  compare(const String& lhs, const String& rhs, bool sensitive = false);
 	static void trim(String& str);
 	static void trimLeft(String& str);
 	static void trimRight(String& str);
@@ -37,6 +38,7 @@ public:
 	static void toLower(String& str);
 	static void replace(String& str, const String& old_word, const String& new_word);
 	static void split(StringList& tokens, const String& str, const String& delimiter = "|", bool compress = true);
+	static uint indexOf(const String& value, const char** arrays, uint defaultIndex, bool sensitive = false);
 
 	static bool startsWith(const String& str, const String& pattern, bool lowerCase = true);
 	static bool endsWith(const String& str, const String& pattern, bool lowerCase = true);

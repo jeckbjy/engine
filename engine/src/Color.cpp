@@ -1,20 +1,159 @@
 #include "Color.h"
+#include "CMath.h"
 #include <limits>
 
 CU_NS_BEGIN
 
-const Color Color::Zero = Color(0.0, 0.0, 0.0, 0.0);
-const Color Color::Black = Color(0.0, 0.0, 0.0);
-const Color Color::White = Color(1.0, 1.0, 1.0);
-const Color Color::Red = Color(1.0, 0.0, 0.0);
-const Color Color::Green = Color(0.0, 1.0, 0.0);
-const Color Color::Blue = Color(0.0, 0.0, 1.0);
+const Color Color::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+const Color Color::BLACK(0.0f, 0.0f, 0.0f);
+const Color Color::WHITE(1.0f, 1.0f, 1.0f);
+const Color Color::RED(1.0f, 0.0f, 0.0f);
+const Color Color::GREEN(0.0f, 1.0f, 0.0f);
+const Color Color::BLUE(0.0f, 0.0f, 1.0f);
+const Color Color::GRAY(0.5f, 0.5f, 0.5f);
+const Color Color::YELLOW(1.0f, 1.0f, 0.0f);
+const Color Color::CYAN(0.0f, 1.0f, 1.0f);
+const Color Color::MAGENTA(1.0f, 0.0f, 1.0f);
+const Color Color::TRANSPARENT(0.0f, 0.0f, 0.0f, 0.0f);
 
-const Color Color::Default = Color(143.0f / 255.0f, 111.0f / 255.0f, 0);
+const Color Color::DEFAULT = Color(143.0f / 255.0f, 111.0f / 255.0f, 0);
 
-Color::Color(float red /* = 1.0f */, float green /* = 1.0f */, float blue /* = 1.0f */, float alpha /* = 1.0f */)
+Color::Color()
+	:r(1.0f), g(1.0f), b(1.0f), a(1.0f)
+{
+
+}
+
+Color::Color(float red, float green, float blue, float alpha /* = 1.0f */)
 	:r(red), g(green), b(blue), a(alpha)
 {
+}
+
+Color::Color(const float* data)
+	: r(data[0])
+	, g(data[1])
+	, b(data[2])
+	, a(data[3])
+{
+
+}
+
+float Color::chroma() const
+{
+	float min, max;
+	bounds(min, max, true);
+	return max - min;
+}
+
+float Color::hue() const
+{
+	float min, max;
+	bounds(min, max, true);
+	return calcHue(min, max);
+
+}
+
+float Color::lightness() const
+{
+	float min, max;
+	bounds(min, max, true);
+
+	return (max + min) * 0.5f;
+}
+
+float Color::saturationHSL() const
+{
+	float min, max;
+	bounds(min, max, true);
+	return calcSaturationHSL(min, max);
+}
+
+float Color::saturationHSV() const
+{
+	float min, max;
+	bounds(min, max, true);
+	return calcSaturationHSV(min, max);
+}
+
+
+float Color::calcHue(float min, float max) const
+{
+	float chroma = max - min;
+
+	// If chroma equals zero, hue is undefined
+	if (chroma <= MATH_EPSILON)
+		return 0.0f;
+
+	// Calculate and return hue
+	if (Math::equals(g, max))
+		return (b + 2.0f * chroma - r) / (6.0f * chroma);
+	else if (Math::equals(b, max))
+		return (4.0f * chroma - g + r) / (6.0f * chroma);
+	else
+	{
+		float tr = (g - b) / (6.0f * chroma);
+		return (tr < 0.0f) ? 1.0f + tr : ((tr >= 1.0f) ? tr - 1.0f : tr);
+	}
+}
+
+float Color::calcSaturationHSL(float min, float max) const
+{
+	// Avoid div-by-zero: result undefined
+	if (max <= MATH_EPSILON || min >= 1.0f - MATH_EPSILON)
+		return 0.0f;
+
+	// Chroma = max - min, lightness = (max + min) * 0.5
+	float hl = (max + min);
+	if (hl <= 1.0f)
+		return (max - min) / hl;
+	else
+		return (min - max) / (hl - 2.0f);
+}
+
+float Color::calcSaturationHSV(float min, float max) const
+{
+	// Avoid div-by-zero: result undefined
+	if (max <= MATH_EPSILON)
+		return 0.0f;
+
+	// Saturation equals chroma:value ratio
+	return 1.0f - (min / max);
+}
+
+void Color::bounds(float& min, float& max, bool clipped /* = false */) const
+{
+	if (r > g)
+	{
+		if (g > b)
+		{
+			max = r;
+			min = b;
+		}
+		else
+		{
+			max = r > b ? r : b;
+			min = g;
+		}
+	}
+	else
+	{
+		if (b > g)
+		{
+			max = b;
+			min = r;
+		}
+		else
+		{
+			max = g;
+			min = r < b ? r : b;
+		}
+	}
+
+	if (clipped)
+	{
+		max = max > 1.0f ? 1.0f : (max < 0.0f ? 0.0f : max);
+		min = min > 1.0f ? 1.0f : (min < 0.0f ? 0.0f : min);
+	}
 }
 
 void Color::saturate()
@@ -196,8 +335,8 @@ void Color::setHSB(float hue, float saturation, float brightness)
 
 void Color::getHSB(float& hue, float& saturation, float& brightness) const
 {
-	float vMin = std::min(r, std::min(g, b));
-	float vMax = std::max(r, std::max(g, b));
+	float vMin, vMax;
+	bounds(vMin, vMax);
 	float delta = vMax - vMin;
 
 	brightness = vMax;
@@ -230,6 +369,13 @@ void Color::getHSB(float& hue, float& saturation, float& brightness) const
 		if (hue > 1.0f)
 			hue -= 1.0f;
 	}
+}
+
+String Color::toString() const
+{
+	char buf[128];
+	sprintf(buf, "%g %g %g %g", r, g, b, a);
+	return String(buf);
 }
 
 CU_NS_END

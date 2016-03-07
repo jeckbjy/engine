@@ -159,11 +159,13 @@ typedef int		ioctl_req_t;
 #ifdef _WIN32
 extern LPFN_CONNECTEX		FConnectEx;
 extern LPFN_ACCEPTEX		FAcceptEx;
-#define strcasecmp			stricmp
-#define strncasecmp			strnicmp 
 #define cu_close_socket(s)	::closesocket(s)
 #define cu_close_handle(h)	::CloseHandle(h)
 #define cu_last_error()		::GetLastError()
+#define snprintf			sprintf_s
+// 忽略字符大小写，strncasecmp比较前n个字符
+#define strcasecmp			stricmp
+#define strncasecmp			strnicmp 
 #else
 #define cu_close_socket(s)	::close(s)
 #define cu_close_handle(s)	::close(s)

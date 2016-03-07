@@ -3,10 +3,6 @@
 
 CU_NS_BEGIN
 
-class Matrix4;
-class Plane;
-class Sphere;
-class Ray;
 /** Axis aligned box represented by minimum and maximum point. */
 class CU_API AABox
 {

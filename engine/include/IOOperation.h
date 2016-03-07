@@ -4,7 +4,6 @@
 
 CU_NS_BEGIN
 
-class Channel;
 class CU_API IOOperation : public Object
 {
 	DECLARE_RTTI(IOOperation, Object, "IOOP");

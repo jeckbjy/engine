@@ -404,6 +404,18 @@ void Util::split(StringList& tokens, const String& str, const String& delimiter 
 	} while (true);
 }
 
+uint Util::indexOf(const String& value, const char** arrays, uint defaultIndex, bool sensitive /* = false */)
+{
+	size_t i = 0;
+	while (!arrays[i])
+	{
+		if (compare(value, arrays[i], sensitive) == 0)
+			return i;
+		++i;
+	}
+	return defaultIndex;
+}
+
 void Util::toUpper(String& str)
 {
 	for (String::iterator it = str.begin(); it != str.end(); ++it)
@@ -414,6 +426,14 @@ void Util::toLower(String& str)
 {
 	for (String::iterator it = str.begin(); it != str.end(); ++it)
 		*it = ::tolower(*it);
+}
+
+int Util::compare(const String& lhs, const String& rhs, bool sensitive)
+{
+	if (sensitive)
+		return strcmp(lhs.c_str(), rhs.c_str());
+	else
+		return strcasecmp(lhs.c_str(), rhs.c_str());
 }
 
 void Util::trim(String& str)

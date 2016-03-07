@@ -73,6 +73,7 @@ public:
 	virtual ~VertexLayout(){}
 
 	void setBuffer(VertexBuffer* vb, int slot = 0);
+	size_t getVertexCount() const;
 	const VertexDeclaration& getDesc() const { return m_desc; }
 
 protected:

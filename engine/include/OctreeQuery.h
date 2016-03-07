@@ -27,10 +27,11 @@ class TOctreeQuery : public OctreeQuery
 public:
 	Intersection intersects(const AABox& box, bool inside)
 	{
-		if (inside)
-			return INSIDE;
-		else
-			return m_box.intersects(box);
+		//if (inside)
+		//	return INSIDE;
+		//else
+		//	return m_box.intersects(box);
+		return INSIDE;
 	}
 
 	void test(Drawable* drawable)

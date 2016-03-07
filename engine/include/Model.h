@@ -1,27 +1,14 @@
 #pragma once
 #include "Asset.h"
 #include "Graphics.h"
+#include "Geometry.h"
+#include "Material.h"
 #include "Skeleton.h"
 #include "Animation.h"
-#include "Material.h"
 
 CU_NS_BEGIN
 
-/*
-区别于其他引擎：如Unity,GamePlay
-MeshPart中持有了一个Material材质，作为默认，可以从磁盘中加载
-*/
-struct CU_API MeshPart : public Ref
-{
-	VertexLayoutPtr	vertices;	// 顶点信息，含结构信息
-	IndexBufferPtr	indexs;		// 面索引
-	uint8_t			topology;	// Topology结构
-	uint32_t		offset;		// 起始偏移，通常为0
-	uint32_t		count;		// 顶点数量
-	MaterialPtr		material;	// 材质,放到外边？？
-};
-typedef SharedPtr<MeshPart> MeshPartPtr;
-
+// lod support
 class CU_API Mesh : public Ref
 {
 public:
@@ -31,14 +18,25 @@ public:
 	bool load(Stream* stream);
 	void save(Stream* stream);
 
-	void add(MeshPart* part) { m_parts.push_back(part); }
-	size_t size() const { return m_parts.size(); }
-	MeshPart* at(size_t index) { return m_parts[index]; }
+	void setGeometry(size_t index, size_t lod, Geometry* geo);
+	void setMaterial(size_t index, Material* mat);
+	void addMaterial(Material* mat);
+
+	size_t getMaterialSize() const { return m_materials.size(); }
+	size_t getGeometrySize() const { return m_geometries.size(); }
+	size_t getGeometryLodLevel(size_t index) const { return m_geometries[index].size(); }
+
+	Geometry* getGeometry(size_t index, float distance);
+	Geometry* getGeometry(size_t index, size_t lod) { return m_geometries[index][lod]; }
+	Material* getMaterial(size_t index) { return m_materials[index]; }
 
 protected:
 	friend class Model;
-	typedef std::vector<MeshPart*> Parts;
-	Parts m_parts;
+	typedef Vector<Geometry*>	GeometryLod;
+	typedef Vector<GeometryLod>	GeometryVec;
+	typedef Vector<Material*>	MaterialVec;
+	GeometryVec m_geometries;
+	MaterialVec m_materials;
 };
 
 /*

@@ -99,6 +99,12 @@ public:
 
 	void decompose(Vector3& translation, Quaternion& rotation, Vector3& scale) const;
 
+	String toString() const;
+
+	const float* data() const { return (const float*)m; }
+	float* data() { return (float*)m; }
+	float* operator[](size_t row) const { return (float*)m[row]; }
+
 	Vector3 operator*(const Vector3& rhs) const;
 	Vector3 operator*(const Vector4& rhs) const;
 	Matrix4	operator *(const Matrix4& rhs) const;

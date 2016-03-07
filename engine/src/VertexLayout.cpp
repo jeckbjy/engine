@@ -1,4 +1,5 @@
 #include "VertexLayout.h"
+#include "Graphics.h"
 #include "Util.h"
 
 CU_NS_BEGIN
@@ -114,6 +115,14 @@ void VertexLayout::setBuffer(VertexBuffer* vb, int slot /* = 0 */)
 {
 	m_buffers[slot] = vb;
 	m_dirty = true;
+}
+
+size_t VertexLayout::getVertexCount() const
+{
+	if (m_buffers.empty())
+		return 0;
+	VertexBuffer* buffer = m_buffers.begin()->second;
+	return buffer->count();
 }
 
 CU_NS_END

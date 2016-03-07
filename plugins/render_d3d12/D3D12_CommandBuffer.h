@@ -13,13 +13,11 @@ public:
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(size_t stencil);
 	void setRenderTarget(RenderTarget* target);
-	void setTopology(Topology primitive);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
 	void setVertexLayout(VertexLayout* vbs);
 	void setIndexBuffer(IndexBuffer* ib);
-	void draw(size_t vnum, size_t voff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */);
-	void drawIndexed(size_t inum, size_t ioff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */, int vertex_base /* = 0 */);
+	void draw(const DrawParam& params);
 	void dispatch(size_t group_x, size_t group_y, size_t group_z);
 
 	ID3D12GraphicsCommandList* native() { return m_handle; }

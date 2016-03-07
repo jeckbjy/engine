@@ -5,3 +5,4 @@ using namespace cute;
 using namespace std;
 
 void test_buffer();
+void test_xml();

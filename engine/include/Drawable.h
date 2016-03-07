@@ -5,7 +5,9 @@
 
 CU_NS_BEGIN
 
-class Octant;
+/*
+ModelRender,TerrainPatch,DecalSet,BilloardSet,Skybox,Text3D
+*/
 class CU_API Drawable : public Component, public ListNode<Drawable, 2>
 {
 	DECLARE_RTTI(Drawable, Component, "DRAW")
@@ -18,6 +20,8 @@ class CU_API Drawable : public Component, public ListNode<Drawable, 2>
 public:
 	Drawable();
 	~Drawable();
+
+	virtual void draw(View* view){}
 
 	const AABox& getWorldBox() const;
 

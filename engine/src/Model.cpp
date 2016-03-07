@@ -21,18 +21,58 @@ bool Mesh::load(Stream* stream)
 
 void Mesh::save(Stream* stream)
 {
-	size_t count;
-	count = m_parts.size();
-	stream->writeVariant(count);
-	for (size_t i = 0; i < count; ++i)
-	{
-		MeshPart* part = at(i);
-		// 写入Part
-		// index
-		// material? mode??
-	}
+	//size_t count;
+	//count = m_parts.size();
+	//stream->writeVariant(count);
+	//for (size_t i = 0; i < count; ++i)
+	//{
+	//	MeshPart* part = at(i);
+	//	// 写入Part
+	//	// index
+	//	// material? mode??
+	//}
 }
 
+void Mesh::setGeometry(size_t index, size_t lod, Geometry* geo)
+{
+	if (index >= m_geometries.size())
+		m_geometries.resize(index + 1);
+	if (lod >= m_geometries[index].size())
+		m_geometries[index].resize(lod + 1);
+	m_geometries[index][lod] = geo;
+}
+
+void Mesh::setMaterial(size_t index, Material* mat)
+{
+	if (index >= m_materials.size())
+		return;
+	m_materials[index] = mat;
+}
+
+void Mesh::addMaterial(Material* mat)
+{
+	m_materials.push_back(mat);
+}
+
+bool CmpLodDistance(Geometry* geo, float distance)
+{
+	return geo->getLodDistance() <= distance;
+}
+
+Geometry* Mesh::getGeometry(size_t index, float distance)
+{
+	if (m_geometries[index].size() == 1)
+		return m_geometries[index][0];
+	// 需要二分查找
+	auto itor = lower_bound(m_geometries[index].begin(), m_geometries[index].end(), distance, &CmpLodDistance);
+	if (itor != m_geometries[index].end())
+		return *itor;
+	return m_geometries[index][0];
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
 Model::Model()
 {
 

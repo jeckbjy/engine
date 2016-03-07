@@ -54,9 +54,6 @@ protected:
 	size_t m_stride;
 };
 
-typedef GpuBuffer VertexBuffer;
-typedef GpuBuffer IndexBuffer;
-typedef GpuBuffer UniformBuffer;
 typedef SharedPtr<VertexBuffer>		VertexBufferPtr;
 typedef SharedPtr<IndexBuffer>		IndexBufferPtr;
 typedef SharedPtr<UniformBuffer>	UniformBufferPtr;
@@ -87,10 +84,10 @@ class CU_API RenderTarget : public Object
 public:
 	virtual ~RenderTarget(){}
 	virtual void present() = 0;
-	virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::Black, float depth = 1.0f, int32_t stencil = 0) = 0;
+	virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, int32_t stencil = 0) = 0;
 };
 
-class Program : public Object
+class CU_API Program : public Object
 {
 	DECLARE_RTTI(Program, Object, "PROG");
 public:
@@ -121,6 +118,28 @@ public:
 	Program* getProgram() { return m_prog; }
 };
 
+// »æÖÆ²ÎÊý
+struct CU_API DrawParam
+{
+	Topology	type;
+	size_t		vertexStart;
+	size_t		vertexCount;
+	size_t		indexStart;
+	size_t		indexCount;
+	size_t		instanceCount;
+	DrawParam() 
+		: type(PT_TRIANGLE_LIST)
+		, vertexStart(0)
+		, vertexCount(0)
+		, indexStart(0)
+		, indexCount(0)
+		, instanceCount(0)
+	{}
+
+	bool isInstanced() const { return instanceCount > 0; }
+	bool isIndexed() const { return indexCount > 0; }
+};
+
 // execute buffer
 class CU_API CommandBuffer : public Object
 {
@@ -133,12 +152,10 @@ public:
 	virtual void setStencilRef(size_t stencil) = 0;
 	virtual void setRenderTarget(RenderTarget* target) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
-	virtual void setTopology(Topology primitive) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setVertexLayout(VertexLayout* layouts) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer) = 0;
-	virtual void draw(size_t vnum, size_t voff = 0, size_t instance_num = 1, size_t instance_off = 0) = 0;
-	virtual void drawIndexed(size_t inum, size_t ioff = 0, size_t instance_num = 1, size_t instance_off = 0, int vertex_base = 0) = 0;
+	virtual void draw(const DrawParam& desc) = 0;
 	virtual void dispatch(size_t group_x, size_t group_y, size_t group_z) = 0;
 };
 

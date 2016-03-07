@@ -12,7 +12,7 @@ CU_NS_BEGIN
 struct WorkItem : public ListNode<WorkItem>
 {
 	// thread index (0=main thread)
-	typedef void(*func_t)(const WorkItem*, unsigned);
+	typedef void(*func_t)(const WorkItem*);
 public:
 	WorkItem():start(0),end(0),data(0){}
 	void*	start;
@@ -33,6 +33,7 @@ public:
 	void create(int threads = -1);
 	void freeItem(WorkItem* item);
 	void addItem(WorkItem* item, bool urgent);
+	void addItem(WorkItem::func_t func, void* data, void* statItor, void* endItor);
 	WorkItem* newItem();
 
 private:
@@ -56,5 +57,7 @@ private:
 	SpinLock	m_spin;
 	SyncEvent	m_event;
 };
+
+CU_API WorkQueue& gWorkQueue();
 
 CU_NS_END

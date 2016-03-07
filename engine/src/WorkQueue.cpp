@@ -81,6 +81,11 @@ void WorkQueue::addItem(WorkItem* item, bool urgent)
 		m_items.push_back(item);
 }
 
+void WorkQueue::addItem(WorkItem::func_t func, void* data, void* statItor /* = 0 */, void* endItor /* = 0 */)
+{
+
+}
+
 void WorkQueue::process(void* param, uint32_t index)
 {
 	ItemList* items = (ItemList*)param;
@@ -90,7 +95,7 @@ void WorkQueue::process(void* param, uint32_t index)
 		WorkItem* item = items->front();
 		items->pop_front();
 		m_spin.unlock();
-		item->func(item, index);
+		item->func(item);
 		m_spin.lock();
 		m_pool.push_back(item);
 	}
@@ -117,6 +122,11 @@ void WorkQueue::loop(size_t index)
 		--m_working;
 		process(&m_items, index);
 	}
+}
+
+WorkQueue& gWorkQueue()
+{
+	return WorkQueue::Instance();
 }
 
 CU_NS_END

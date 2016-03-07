@@ -8,17 +8,17 @@
 CU_NS_BEGIN
 
 OGLCommandBuffer::OGLCommandBuffer()
-: _target(NULL)
-, _pipeline(NULL)
-, _layout(NULL)
-, _ib(NULL)
-, _descriptors(NULL)
-, _primitive(PT_TRIANGLE_LIST)
-, _verticesNum(0)
-, _verticesOff(0)
-, _instanceNum(0)
-, _instanceOff(0)
-, _vertexBase(0)
+: m_target(NULL)
+, m_pipeline(NULL)
+, m_layout(NULL)
+, m_index(NULL)
+, m_descriptors(NULL)
+, m_primitive(PT_TRIANGLE_LIST)
+, m_vertexCount(0)
+, m_vertexStart(0)
+, m_indexStart(0)
+, m_indexCount(0)
+, m_instanceCount(0)
 {
 }
 
@@ -34,60 +34,47 @@ void OGLCommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 
 void OGLCommandBuffer::setBlendFactor(const float factors[4])
 {
-	memcpy(_factors, factors, sizeof(_factors));
+	memcpy(m_factors, factors, sizeof(m_factors));
 }
 
 void OGLCommandBuffer::setStencilRef(size_t stencil)
 {
-	_stencil_ref = stencil;
+	m_stencil = stencil;
 }
 
 void OGLCommandBuffer::setRenderTarget(RenderTarget* target)
 {
-	_target = target;
+	m_target = target;
 }
 
 void OGLCommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
-	_descriptors = descriptors;
-}
-
-void OGLCommandBuffer::setTopology(Topology primitive)
-{
-	_primitive = primitive;
+	m_descriptors = descriptors;
 }
 
 void OGLCommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	_pipeline = (OGLPipeline*)pipeline;
+	m_pipeline = (OGLPipeline*)pipeline;
 }
 
 void OGLCommandBuffer::setVertexLayout(VertexLayout* layout)
 {
-	_layout = (OGLVertexLayout*)layout;
+	m_layout = (OGLVertexLayout*)layout;
 }
 
 void OGLCommandBuffer::setIndexBuffer(IndexBuffer* ib)
 {
-	_ib = (OGLBuffer*)ib;
+	m_index = (OGLBuffer*)ib;
 }
 
-void OGLCommandBuffer::draw(size_t vnum, size_t voff, size_t instance_num, size_t instance_off)
+void OGLCommandBuffer::draw(const DrawParam& params)
 {
-	_verticesNum = vnum;
-	_verticesOff = voff;
-	_instanceNum = instance_num;
-	_instanceOff = instance_off;
-	_ib = NULL;
-}
-
-void OGLCommandBuffer::drawIndexed(size_t inum, size_t ioff, size_t instance_num, size_t instance_off, int vertex_base)
-{
-	_verticesNum = inum;
-	_verticesOff = ioff;
-	_instanceNum = instance_num;
-	_instanceOff = instance_off;
-	_vertexBase = vertex_base;
+	m_primitive = params.type;
+	m_vertexStart = params.vertexStart;
+	m_vertexCount = params.vertexCount;
+	m_indexStart = params.indexStart;
+	m_indexCount = params.indexCount;
+	m_instanceCount = params.instanceCount;
 }
 
 void OGLCommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
@@ -99,52 +86,52 @@ void OGLCommandBuffer::execute()
 {
 	//Instance渲染  http://www.zwqxin.com/archives/opengl/talk-about-geometry-instancing.html
 	//详细介绍:  http://book.2cto.com/201412/48549.html
-	GLint mode = OGLMapping::getPrimitiveMode(_primitive);
+	GLint mode = OGLMapping::getPrimitiveMode(m_primitive);
 	// 绑定shader
-	OGLProgram* prog = (OGLProgram*)_pipeline->getProgram();
-	prog->bind(_descriptors);
-	_layout->bind(prog);
-	if (_verticesNum == 0)
+	OGLProgram* prog = (OGLProgram*)m_pipeline->getProgram();
+	prog->bind(m_descriptors);
+	m_layout->bind(prog);
+	if (m_vertexCount == 0)
 	{
-		_verticesNum = _ib ? _ib->count() : _layout->vertices();
+		m_vertexCount = m_index ? m_index->count() : m_layout->getVertexCount();
 	}
-	if (_instanceNum <= 1)
+
+	if (m_instanceCount < 1)
 	{
-		if (_ib != NULL)
+		if (m_index != NULL && m_indexCount > 0)
 		{
-			_ib->bind();
-			GLenum gl_type = _ib->isIndex16() ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+			m_index->bind();
+			GLenum gl_type = m_index->isIndex16() ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 			// count指顶点个数
-			glDrawElements(mode, _verticesNum, gl_type, 0);
+			glDrawElements(mode, m_vertexCount, gl_type, 0);
 		}
 		else
 		{
 			// 注：参数count是Vertex顶点个数
-			glDrawArrays(mode, _verticesOff, _verticesNum);
+			glDrawArrays(mode, m_vertexStart, m_vertexCount);
 		}
 	}
-
-	//glDrawElementsBaseVertex();	// 可以带有偏移
-	//glDrawRangeElements();
-	//// 主要是在shader中通过gl_InstanceID控制渲染
-	//glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count  GLsizei primcount);
-	//glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indicies,  GLsizei primcount);
-	//glDrawElementsInstancedBaseVertex();
-	//// 由gpu填充，cpu不知道
-	//// http://www.cnblogs.com/clayman/archive/2011/10/25/2224532.html
-	//glDrawArraysIndirect();
-	//glDrawElementsIndirect();
-	//if (cmd->primitive >= PT_CTRL_PT_PATCH_LIST1)
-	//{
-	//	int n = cmd->primitive - PT_CTRL_PT_PATCH_LIST1;
-	//	glPatchParameteri(GL_PATCH_VERTICES, n);
-	//}
-	//// 绑定
-	//// 执行渲染
-	//if (cmd->ib != NULL)
-	//{
-	//	//glDrawElements();
-	//}
+	else
+	{
+		// DrawInstance
+		GLenum gl_type;
+		size_t index_size;
+		if (m_index->isIndex16())
+		{
+			gl_type = GL_UNSIGNED_SHORT;
+			index_size = sizeof(unsigned short);
+		}
+		else
+		{
+			gl_type = GL_UNSIGNED_INT;
+			index_size = sizeof(unsigned int);
+		}
+		bool gl3Support = false;
+		if (gl3Support)
+			glDrawElementsInstanced(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
+		else
+			glDrawElementsInstancedARB(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
+	}
 }
 
 CU_NS_END

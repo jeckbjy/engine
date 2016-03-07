@@ -106,6 +106,7 @@
     <ClInclude Include="..\engine\include\AssetCache.h" />
     <ClInclude Include="..\engine\include\Atomic.h" />
     <ClInclude Include="..\engine\include\Attribute.h" />
+    <ClInclude Include="..\engine\include\Batch.h" />
     <ClInclude Include="..\engine\include\Bits.h" />
     <ClInclude Include="..\engine\include\Buffer.h" />
     <ClInclude Include="..\engine\include\CMath.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="..\engine\include\Config.h" />
     <ClInclude Include="..\engine\include\Console.h" />
     <ClInclude Include="..\engine\include\Context.h" />
+    <ClInclude Include="..\engine\include\Convert.h" />
     <ClInclude Include="..\engine\include\Delegate.h" />
     <ClInclude Include="..\engine\include\Drawable.h" />
     <ClInclude Include="..\engine\include\DynLib.h" />
@@ -130,6 +132,7 @@
     <ClInclude Include="..\engine\include\Frustum.h" />
     <ClInclude Include="..\engine\include\FuncTraits.h" />
     <ClInclude Include="..\engine\include\Function.h" />
+    <ClInclude Include="..\engine\include\Geometry.h" />
     <ClInclude Include="..\engine\include\Graphics.h" />
     <ClInclude Include="..\engine\include\GraphicsDefs.h" />
     <ClInclude Include="..\engine\include\GraphicsDesc.h" />
@@ -163,6 +166,8 @@
     <ClInclude Include="..\engine\include\Playable.h" />
     <ClInclude Include="..\engine\include\Plugin.h" />
     <ClInclude Include="..\engine\include\Poller.h" />
+    <ClInclude Include="..\engine\include\Predeclare.h" />
+    <ClInclude Include="..\engine\include\Profiler.h" />
     <ClInclude Include="..\engine\include\Protocol.h" />
     <ClInclude Include="..\engine\include\Quaternion.h" />
     <ClInclude Include="..\engine\include\Range.h" />
@@ -170,7 +175,6 @@
     <ClInclude Include="..\engine\include\Rect.h" />
     <ClInclude Include="..\engine\include\Ref.h" />
     <ClInclude Include="..\engine\include\RenderPath.h" />
-    <ClInclude Include="..\engine\include\RenderQueue.h" />
     <ClInclude Include="..\engine\include\Renderer.h" />
     <ClInclude Include="..\engine\include\Rtti.h" />
     <ClInclude Include="..\engine\include\SceneManager.h" />
@@ -201,8 +205,12 @@
     <ClInclude Include="..\engine\include\Vector3.h" />
     <ClInclude Include="..\engine\include\Vector4.h" />
     <ClInclude Include="..\engine\include\VertexLayout.h" />
+    <ClInclude Include="..\engine\include\View.h" />
     <ClInclude Include="..\engine\include\Window.h" />
     <ClInclude Include="..\engine\include\WorkQueue.h" />
+    <ClInclude Include="..\engine\include\XMLFile.h" />
+    <ClInclude Include="..\engine\src\xml\pugiconfig.hpp" />
+    <ClInclude Include="..\engine\src\xml\pugixml.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AABox.cpp" />
@@ -213,6 +221,7 @@
     <ClCompile Include="..\engine\src\Animator.cpp" />
     <ClCompile Include="..\engine\src\Application.cpp" />
     <ClCompile Include="..\engine\src\AssetCache.cpp" />
+    <ClCompile Include="..\engine\src\Batch.cpp" />
     <ClCompile Include="..\engine\src\Buffer.cpp" />
     <ClCompile Include="..\engine\src\CMath.cpp" />
     <ClCompile Include="..\engine\src\CProcess.cpp" />
@@ -225,12 +234,14 @@
     <ClCompile Include="..\engine\src\Config.cpp" />
     <ClCompile Include="..\engine\src\Console.cpp" />
     <ClCompile Include="..\engine\src\Context.cpp" />
+    <ClCompile Include="..\engine\src\Convert.cpp" />
     <ClCompile Include="..\engine\src\Drawable.cpp" />
     <ClCompile Include="..\engine\src\DynLib.cpp" />
     <ClCompile Include="..\engine\src\Engine.cpp" />
     <ClCompile Include="..\engine\src\Entity.cpp" />
     <ClCompile Include="..\engine\src\File.cpp" />
     <ClCompile Include="..\engine\src\Frustum.cpp" />
+    <ClCompile Include="..\engine\src\Geometry.cpp" />
     <ClCompile Include="..\engine\src\Graphics.cpp" />
     <ClCompile Include="..\engine\src\GraphicsDesc.cpp" />
     <ClCompile Include="..\engine\src\HandlerMgr.cpp" />
@@ -258,12 +269,12 @@
     <ClCompile Include="..\engine\src\PlayController.cpp" />
     <ClCompile Include="..\engine\src\Playable.cpp" />
     <ClCompile Include="..\engine\src\Poller.cpp" />
+    <ClCompile Include="..\engine\src\Profiler.cpp" />
     <ClCompile Include="..\engine\src\Protocol.cpp" />
     <ClCompile Include="..\engine\src\Quaternion.cpp" />
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />
     <ClCompile Include="..\engine\src\RenderPath.cpp" />
-    <ClCompile Include="..\engine\src\RenderQueue.cpp" />
     <ClCompile Include="..\engine\src\Renderer.cpp" />
     <ClCompile Include="..\engine\src\Rtti.cpp" />
     <ClCompile Include="..\engine\src\SceneManager.cpp" />
@@ -284,8 +295,11 @@
     <ClCompile Include="..\engine\src\Util.cpp" />
     <ClCompile Include="..\engine\src\Variant.cpp" />
     <ClCompile Include="..\engine\src\VertexLayout.cpp" />
+    <ClCompile Include="..\engine\src\View.cpp" />
     <ClCompile Include="..\engine\src\Window.cpp" />
     <ClCompile Include="..\engine\src\WorkQueue.cpp" />
+    <ClCompile Include="..\engine\src\XMLFile.cpp" />
+    <ClCompile Include="..\engine\src\xml\pugixml.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

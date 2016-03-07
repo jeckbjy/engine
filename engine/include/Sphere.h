@@ -3,10 +3,6 @@
 
 CU_NS_BEGIN
 
-class Matrix4;
-class AABox;
-class Plane;
-class Ray;
 class CU_API Sphere
 {
 public:

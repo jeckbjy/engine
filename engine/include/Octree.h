@@ -2,6 +2,7 @@
 #include "API.h"
 #include "AABox.h"
 #include "Drawable.h"
+#include "OctreeQuery.h"
 
 CU_NS_BEGIN
 
@@ -52,6 +53,8 @@ public:
 	~Octree();
 
 	size_t getMaxLevel() const { return m_levels; }
+
+	void query(OctreeQuery& result);
 
 protected:
 	size_t	m_levels;	// 共有多少层

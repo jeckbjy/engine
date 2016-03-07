@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include "CMath.h"
+#include "Entity.h"
 
 CU_NS_BEGIN
 
@@ -12,6 +14,12 @@ enum
 };
 
 Camera::Camera()
+{
+
+}
+
+Camera::Camera(RenderTarget* target, float left /* = 0.0f */, float top /* = 0.0f */, float width /* = 1.0f */, float height /* = 0.0f */)
+	:m_surface(target), m_viewport(left, top, width, height)
 {
 
 }
@@ -41,14 +49,14 @@ void Camera::setFov(float fov)
 
 void Camera::setOrthoSize(float size, float aspect)
 {
-	m_size = size;
+	m_orthoSize = size;
 	m_aspect = aspect;
 	m_flag.set(DIRTY_PROJ_FRUS);
 }
 
 void Camera::setOrthoSize(const Vector2& size)
 {
-	m_size = size.y;
+	m_orthoSize = size.y;
 	m_aspect = size.x / size.y;
 	m_flag.set(DIRTY_PROJ_FRUS);
 }
@@ -130,7 +138,7 @@ void Camera::getProjection(Matrix4& mat, bool ogl_format) const
 	else
 	{
 		// Disregard near clip, because it does not affect depth precision as with perspective projection
-		float h = (1.0f / (m_size * 0.5f)) * m_zoom;
+		float h = (1.0f / (m_orthoSize * 0.5f)) * m_zoom;
 		float w = h / m_aspect;
 		float q, r;
 		if (ogl_format)
@@ -160,21 +168,42 @@ void Camera::getProjection(Matrix4& mat, bool ogl_format) const
 		mat = flipMatrix * mat;
 }
 
-float Camera::getDistance(const Vector3& pos) const
+float Camera::getDistance(const Vector3& world_pos) const
 {
 	if (isOrthographic())
 	{
+		//return Math::abs((getView() * world_pos).z);
 		return 0;
 	}
 	else
 	{
-		return 0;
+		const Vector3& camera_pos = m_owner->getTransform()->getWorldPosition();
+		return (world_pos - camera_pos).length();
+	}
+}
+
+float Camera::getDistanceSquared(const Vector3& world_pos) const
+{
+	if (isOrthographic())
+	{
+		//float distance = Math::abs(getView() * world_pos).z;
+		float distance = 0;
+		return distance * distance;
+	}
+	else
+	{
+		const Vector3& camera_pos = m_owner->getTransform()->getWorldPosition();
+		return (world_pos - camera_pos).squared();
 	}
 }
 
 float Camera::getLodDistance(float distance, float scale, float bias) const
 {
-	return 0;
+	float d = Math::max(m_lodBias * bias * scale * m_zoom, MATH_EPSILON);
+	if (isOrthographic())
+		return distance / d;
+	else
+		return m_orthoSize / d;
 }
 
 RenderPath* Camera::getRenderPath()

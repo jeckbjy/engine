@@ -52,7 +52,6 @@ public:
 
 	static float sqrt(float val) { return (float)std::sqrt(val); }
 	static float invsqrt(float val);	// 1/sqrt(val);
-	static float squared(float val){ return val * val; }
 
 	static float pow(float base, float exponent){ return (float)std::pow(base, exponent); }
 	static float exp(float val) { return (float)std::exp(val); }
@@ -73,23 +72,23 @@ public:
 	// Not a Num，只对于浮点数出现
 	static bool isNaN(float f) { return f != f; }
 	// 是否近似相等
-	static bool equal(float a, float b, float tolerance = 0.000001f){ return fabs(a - b) <= tolerance; }
+	static bool equals(float a, float b, float tolerance = 0.000001f){ return fabs(a - b) <= tolerance; }
 	static bool isZero(float a, float tolerance = 0.000001f) { return fabs(a) <= tolerance; }
 
 	template<typename T>
-	inline T minimum(T lhs, T rhs) { return lhs < rhs ? lhs : rhs; }
+	static T min(T lhs, T rhs) { return lhs < rhs ? lhs : rhs; }
 
 	template<typename T>
-	inline T maximum(T lhs, T rhs) { return lhs > rhs ? lhs : rhs; }
+	static T max(T lhs, T rhs) { return lhs > rhs ? lhs : rhs; }
 
 	template<typename T>
-	inline T sign(T v) { return v < (T)0 ? (T)-1 : (T)1; }
+	static T sign(T v) { return v < (T)0 ? (T)-1 : (T)1; }
 
 	template<typename T>
-	inline T square(T v) { return v*v; }
+	static T squared(T v) { return v*v; }
 
 	template<typename T>
-	inline T signedSquare(T v) { return v < (T)0 ? -v*v : v*v; }
+	static T signedSquared(T v) { return v < (T)0 ? -v*v : v*v; }
 
 	// Checks is the specified value a power of two. Only works on integer values.
 	template <typename T>

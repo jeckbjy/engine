@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Component.h"
 #include "Transform.h"
+#include "Drawable.h"
 
 CU_NS_BEGIN
 
@@ -23,13 +24,13 @@ private:
 typedef SharedPtr<MeshSkin> MeshSkinPtr;
 
 // äÖÈ¾Ä£ÐÍ 
-class CU_API ModelRender : public Component
+class CU_API ModelRender : public Drawable
 {
 public:
 	ModelRender(Model* model);
 	~ModelRender();
 
-	void draw();
+	void draw(View* view);
 
 	void attach(MeshSkin* skin) { m_skin = skin; }
 	void detach() { m_skin.reset(); }

@@ -18,31 +18,29 @@ public:
 	void setStencilRef(size_t stencil);
 	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
-	void setTopology(Topology primitive);
 	void setPipeline(Pipeline* pipeline);
 	void setVertexLayout(VertexLayout* layout);
 	void setIndexBuffer(IndexBuffer* ib);
 
-	virtual void draw(size_t vnum, size_t voff, size_t instance_num, size_t instance_off);
-	virtual void drawIndexed(size_t inum, size_t ioff, size_t instance_num, size_t instance_off, int vertex_base);
-	virtual void dispatch(size_t group_x, size_t group_y, size_t group_z);
+	void draw(const DrawParam& params);
+	void dispatch(size_t group_x, size_t group_y, size_t group_z);
 
 	void execute();	// 执行
 private:
-	RenderTarget*		_target;
-	OGLPipeline*		_pipeline;
-	OGLVertexLayout*	_layout;
-	OGLBuffer*			_ib;
-	DescriptorSet*		_descriptors;
-	Topology			_primitive;
-	size_t				_verticesNum;	// 顶点数目
-	size_t				_verticesOff;
-	size_t				_instanceNum;
-	size_t				_instanceOff;
-	size_t				_vertexBase;	// index mode
+	RenderTarget*		m_target;
+	OGLPipeline*		m_pipeline;
+	OGLVertexLayout*	m_layout;
+	OGLBuffer*			m_index;
+	DescriptorSet*		m_descriptors;
+	Topology			m_primitive;
+	size_t				m_vertexStart;
+	size_t				m_vertexCount;	// 顶点数目
+	size_t				m_indexStart;
+	size_t				m_indexCount;
+	size_t				m_instanceCount;
 
-	float	_factors[4];
-	size_t  _stencil_ref;
+	float				m_factors[4];
+	size_t				m_stencil;
 };
 
 class CU_OGL_API OGLCommandQueue : public CommandQueue

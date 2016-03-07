@@ -87,6 +87,16 @@ void Matrix3x4::decompose(Vector3& translation, Quaternion& rotation, Vector3& s
 	rotation = Quaternion(toMatrix3().scaled(invScale));
 }
 
+String Matrix3x4::toString() const
+{
+	char buf[256];
+	snprintf(buf, sizeof(buf), "%g %g %g %g %g %g %g %g %g %g %g %g",
+		m00, m01, m02, m03,
+		m10, m11, m12, m13,
+		m20, m21, m22, m23);
+	return String(buf);
+}
+
 Vector3 Matrix3x4::operator *(const Vector3& rhs) const
 {
 	return Vector3(

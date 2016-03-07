@@ -46,19 +46,27 @@ public:
 	TVector4(T v) :x(v), y(v), z(v), w(v){}
 	TVector4(T x, T y, T z, T w) :x(x), y(y), z(z), w(w){}
 
-	inline void set(T x, T y, T z, T w){ this->x = x; this->y = y; this->z = z; this->w = w; }
+	void set(T x, T y, T z, T w){ this->x = x; this->y = y; this->z = z; this->w = w; }
 
-	inline T length() const { return sqrt((float)squared()); }
-	inline T squared() const { return x*x + y*y + z*z + w*w; }
+	T length() const { return sqrt((float)squared()); }
+	T squared() const { return x*x + y*y + z*z + w*w; }
 
-	inline size_t size() const { return sizeof(*this); }
-	inline T* data() { return m; }
-	inline const T* data() const { return m; }
-	inline T operator[](size_t i) const { return m[i]; }
-	inline T& operator[](size_t i) { return m[i]; }
+	size_t size() const { return sizeof(*this); }
+	T* data() { return m; }
+	const T* data() const { return m; }
 
-	inline const TVector4& operator+() const { return *this; }
-	inline TVector4 operator-() const { return TVector4(-x, -y, -z, -w); }
+	String toString() const
+	{
+		std::stringstream ss;
+		ss << x << " " << y << " " << z << " " << w;
+		return ss.str();
+	}
+
+	T operator[](size_t i) const { return m[i]; }
+	T& operator[](size_t i) { return m[i]; }
+
+	const TVector4& operator+() const { return *this; }
+	TVector4 operator-() const { return TVector4(-x, -y, -z, -w); }
 
 	TVector4& operator+=(const TVector4& v){ x += v.x; y += v.y; z += v.z; w += v.w; return *this; }
 	TVector4& operator-=(const TVector4& v){ x -= v.x; y -= v.y; z -= v.z; w -= v.w; return *this; }

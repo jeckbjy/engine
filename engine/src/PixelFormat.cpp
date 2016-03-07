@@ -201,6 +201,23 @@ inline static const PixelInfo& getDesc(PixelFormat fmt)
 	return g_infos[(int)fmt];
 }
 
+uint PixelUtil::getFormat(const String& format)
+{
+	if (format == "a")
+		return PF_A8;
+	else if (format == "l")
+		return PF_L8;
+	else if (format == "la")
+		return PF_A4L4;		// a8l8?
+	else if (format == "rgb")
+		return PF_FLOAT_RGB32;
+	else if (format == "rgba")
+		return PF_FLOAT_RGBA32;
+	else if (format == "d24s8")
+		return PF_D24_UNORM_S8_UINT;
+	return PF_FLOAT_RGB32;
+}
+
 uint PixelUtil::getBytes(PixelFormat fmt)
 {
 	return g_infos[fmt].bytes;
@@ -297,6 +314,11 @@ bool PixelUtil::isDepth(PixelFormat fmt)
 bool PixelUtil::isStencil(PixelFormat fmt)
 {
 	return hasFlags(fmt, PC_S);
+}
+
+bool PixelUtil::isDepthStencil(PixelFormat fmt)
+{
+	return fmt == PF_D32_FLOAT_S8X24_UINT || fmt == PF_D24_UNORM_S8_UINT;
 }
 
 bool PixelUtil::isAlpha(PixelFormat fmt)

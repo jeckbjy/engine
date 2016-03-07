@@ -8,7 +8,6 @@ CU_NS_BEGIN
 // ×ÊÁÏ http://blog.csdn.net/hany3000/article/details/9248081#
 // http://www.cnblogs.com/dragon2012/p/3924929.html
 // http://zh.wikipedia.org/wiki/%E5%9B%9B%E5%85%83%E6%95%B8
-class Matrix3;
 class CU_API Quaternion
 {
 public:
@@ -21,7 +20,7 @@ public:
 
 public:
 	Quaternion();
-	Quaternion(float x, float y, float z, float w);
+	Quaternion(float w, float x, float y, float z);
 	Quaternion(const Matrix3& rot)
 	{
 		fromRotationMatrix(rot);
@@ -71,12 +70,14 @@ public:
 	bool toEulerAngles(float& xAngle, float& yAngle, float& zAngle) const;
 	void toRotationMatrix(Matrix3& mat) const;
 
-public:
-	void set(float x, float y, float z, float w){ this->x = x; this->y = y; this->z = z; this->w = w; }
+	String toString() const;
 
-	float* data() { return &x; }
-	float operator[](const size_t i) const { return *(&x + i); }
-	float& operator[](const size_t i) { return *(&x + i); }
+public:
+	void set(float w, float x, float y, float z){ this->w = w; this->x = x; this->y = y; this->z = z; }
+
+	float* data() { return &w; }
+	float operator[](const size_t i) const { return *(&w + i); }
+	float& operator[](const size_t i) { return *(&w + i); }
 
 	bool operator==(const Quaternion& rhs) const { return memcmp(&x, &rhs.x, sizeof(Quaternion)) == 0; }
 	bool operator!=(const Quaternion& rhs) const { return memcmp(&x, &rhs.x, sizeof(Quaternion)) != 0; }
@@ -94,7 +95,7 @@ public:
 	friend Quaternion operator*(Quaternion lhs, const float& rhs) { return lhs *= rhs; }
 
 public:
-	float x, y, z, w;
+	float w, x, y, z;
 };
 
 CU_NS_END

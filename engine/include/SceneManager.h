@@ -6,8 +6,6 @@
 CU_NS_BEGIN
 
 // 管理器,管理所有Object,只能有一个大场景,多个场景则为其子节点
-class Camera;
-class Drawable;
 typedef List<Camera, 2>		CameraList;
 typedef List<Drawable, 2>	DrawableList;
 class CU_API SceneManager : public Singleton<SceneManager>
@@ -24,6 +22,7 @@ public:
 
 	Transform* getRoot() const { return m_root; }
 	CameraList& getCameras() { return m_cameras; }
+	Octree* getOctree() { return &m_octree; }
 
 protected:
 	Transform*	m_root;

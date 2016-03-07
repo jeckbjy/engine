@@ -1,4 +1,6 @@
 #include "ModelRender.h"
+#include "View.h"
+#include "Camera.h"
 
 CU_NS_BEGIN
 
@@ -63,9 +65,42 @@ ModelRender::~ModelRender()
 
 }
 
-void ModelRender::draw()
+void ModelRender::draw(View* view)
 {
-	// 提交
+	if (!m_model)
+		return;
+	const Vector3 DOT_SCALE(1 / 3.0f, 1 / 3.0f, 1 / 3.0f);
+	Mesh* mesh = m_model->getMesh();
+	const AABox& box = getWorldBox();
+	// 根据摄像机查询Model
+	Camera* camera = view->getCamera();
+	float distance = camera->getDistance(box.getCenter());
+	float scale = box.getSize().dot(DOT_SCALE);
+	float lodDistance = camera->getLodDistance(distance, scale, 1.0f);
+	// 计算Geometry
+	if (!m_skin)
+	{// 静态模型
+		Material* mat;
+		Geometry* geo;
+		size_t geo_index;
+		size_t geo_size = mesh->getGeometrySize();
+		for (size_t i = 0; i < mesh->getMaterialSize(); ++i)
+		{
+			geo_index = i % geo_size;
+			mat = mesh->getMaterial(i);
+			geo = mesh->getGeometry(i, lodDistance);
+			// 创建batch
+			Batch* batch = new Batch();
+			batch->material = mat;
+			batch->geometry = geo;
+			batch->distance = distance;
+			view->addBatch(batch);
+		}
+	}
+	else
+	{// 蒙皮信息
+
+	}
 }
 
 CU_NS_END
