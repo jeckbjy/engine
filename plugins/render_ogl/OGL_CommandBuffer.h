@@ -15,7 +15,7 @@ public:
 
 	void setViewport(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);
-	void setStencilRef(size_t stencil);
+	void setStencilRef(StencilFaceFlags mask, size_t reference);
 	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
@@ -40,7 +40,8 @@ private:
 	size_t				m_instanceCount;
 
 	float				m_factors[4];
-	size_t				m_stencil;
+	StencilFaceFlags	m_stencilMask;
+	size_t				m_stencilRef;
 };
 
 class CU_OGL_API OGLCommandQueue : public CommandQueue

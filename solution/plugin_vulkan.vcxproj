@@ -65,7 +65,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\build\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\build\bin\Debug;D:\Program Files\VulkanSDK1.0.3.1\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Debug\plugin_vulkan.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -86,20 +87,33 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\build\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\build\bin\Release;D:\Program Files\VulkanSDK1.0.3.1\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Release\plugin_vulkan.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\plugins\render_vulkan\VK_API.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Buffer.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_CommandBuffer.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Device.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Graphics.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Mapping.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Pipeline.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h" />
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_vulkan\VK_Buffer.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_CommandBuffer.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_CommandQueue.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Graphics.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Mapping.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

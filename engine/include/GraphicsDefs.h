@@ -125,6 +125,13 @@ enum StencilOp
 	STENCIL_OP_COUNT
 };
 
+enum StencilFaceFlags
+{
+	STENCIL_FACE_FRONT	= 0x01,
+	STENCIL_FACE_BACK	= 0x02,
+	STENCIL_FACE_BOTH	= 0x03,
+};
+
 // 比较函数，Stencil，Depth使用,Comparison
 enum CmpFun
 {
@@ -221,6 +228,12 @@ enum GpuLanguage
 	LANG_HLSL,
 	LANG_GLSL,
 	LANG_CG
+};
+
+enum PipelineType
+{
+	PIPELINE_GRAPHICS = 0,
+	PIPELINE_COMPUTE,
 };
 
 enum TexType

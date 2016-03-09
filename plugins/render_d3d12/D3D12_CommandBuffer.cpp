@@ -23,7 +23,7 @@ void D3D12CommandBuffer::setBlendFactor(const float factors[4])
 
 }
 
-void D3D12CommandBuffer::setStencilRef(size_t stencil)
+void D3D12CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 {
 
 }

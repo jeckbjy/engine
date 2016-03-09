@@ -110,8 +110,8 @@ class CU_API Pipeline : public Object
 {
 	DECLARE_RTTI(Pipeline, Object, "PPLE");
 protected:
+	uint8_t	 m_type;
 	Program* m_prog;
-	Pipeline(const PIPELINE_DESC& desc);
 	virtual ~Pipeline(){}
 
 public:
@@ -148,8 +148,9 @@ public:
 	virtual ~CommandBuffer(){}
 
 	virtual void setViewport(int x, int y, size_t w, size_t h) = 0;
+	virtual void setScissor(int x, int y, size_t w, size_t h) = 0;
 	virtual void setBlendFactor(const float factors[4]) = 0;
-	virtual void setStencilRef(size_t stencil) = 0;
+	virtual void setStencilRef(StencilFaceFlags mask, size_t reference) = 0;
 	virtual void setRenderTarget(RenderTarget* target) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
@@ -185,6 +186,19 @@ public:
 	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
+};
+
+// 用于全局,枚举GPU
+class CU_API Graphics : public Object
+{
+public:
+	virtual ~Graphics(){}
+
+	template<typename T>
+	T* getDevice() { return m_device->cast<T>();; }
+
+protected:
+	Device* m_device;
 };
 
 CU_NS_END

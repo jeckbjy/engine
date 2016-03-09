@@ -27,7 +27,7 @@ void View::addBatch(Batch* batch)
 
 void View::createGBuffer()
 {
-	m_targets.resize(m_path->targets.size());
+	//m_targets.resize(m_path->targets.size());
 	Vector2 size;
 	for (size_t i = 0; i < m_path->targets.size(); ++i)
 	{

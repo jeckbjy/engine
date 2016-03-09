@@ -5,9 +5,10 @@ CU_NS_BEGIN
 
 class CU_VK_API VKDevice : public Device
 {
+	CU_NONCOPYABLE(VKDevice);
 public:
 	VKDevice();
-	~VKDevice();
+	virtual ~VKDevice();
 
 private:
 	VkDevice m_handle;

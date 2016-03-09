@@ -37,9 +37,10 @@ void OGLCommandBuffer::setBlendFactor(const float factors[4])
 	memcpy(m_factors, factors, sizeof(m_factors));
 }
 
-void OGLCommandBuffer::setStencilRef(size_t stencil)
+void OGLCommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 {
-	m_stencil = stencil;
+	m_stencilMask = mask;
+	m_stencilRef = reference;
 }
 
 void OGLCommandBuffer::setRenderTarget(RenderTarget* target)

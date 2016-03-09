@@ -20,3 +20,5 @@
 
 #include "API.h"
 #include "Graphics.h"
+
+#define VK_CHECK(result) assert(!result)

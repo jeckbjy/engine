@@ -1,11 +1,12 @@
 #pragma once
 #include "Types.h"
+#include "Macro.h"
 
 CU_NS_BEGIN
 
 class RefCounted;
 // 弱引用计数器,可以识别指针是否有效,只能由Ref创建
-struct RefCount
+struct CU_API RefCount
 {
 	int  refs_count;
 	int  weak_count;
@@ -20,6 +21,7 @@ private:
 // 侵入式引用计数
 class CU_API RefCounted
 {
+	CU_NONCOPYABLE(RefCounted);
 public:
 	RefCounted();
 	virtual ~RefCounted();
@@ -31,10 +33,7 @@ public:
 
 	RefCount* getRefCount() { return m_ref; }
 
-private:
-	RefCounted(const RefCounted&);
-	RefCounted& operator=(const RefCounted&);
-
+protected:
 	RefCount* m_ref;
 };
 

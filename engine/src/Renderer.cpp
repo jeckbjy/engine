@@ -71,7 +71,7 @@ Texture* Renderer::getGBuffer(size_t width, size_t height, size_t format, bool c
 	desc.height = height;
 	desc.depth = 1;
 	desc.format = (PixelFormat)format;
-	Texture* texture;
+	Texture* texture = NULL;
 	//Texture* texture = m_device->newTexture();
 	// filter?
 	m_gbuffers[key] = texture;

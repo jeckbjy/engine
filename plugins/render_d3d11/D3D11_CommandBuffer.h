@@ -10,7 +10,7 @@ public:
 	~D3D11CommandBuffer();
 
 	void setBlendFactor(const float factors[4]);
-	void setStencilRef(size_t stencil);
+	void setStencilRef(StencilFaceFlags mask, size_t reference);
 	void setRenderTarget(RenderTarget* target);
 	void setTopology(Topology primitive);
 	void setPipeline(Pipeline* pipeline);
@@ -21,9 +21,10 @@ public:
 	void dispatch(size_t group_x, size_t group_y, size_t group_z);
 
 private:
-	ID3D11DeviceContextN* _handle;
-	float _factors[4];
-	size_t _stencilref;
+	ID3D11DeviceContextN* m_handle;
+	float m_factors[4];
+	StencilFaceFlags	m_stencilMask;
+	size_t				m_stencilRef;
 };
 
 CU_NS_END

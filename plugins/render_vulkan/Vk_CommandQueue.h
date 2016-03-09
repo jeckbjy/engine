@@ -9,6 +9,8 @@ public:
 	VKCommandQueue();
 	~VKCommandQueue();
 
+	void submit();
+
 private:
 	VkQueue m_queue;
 };

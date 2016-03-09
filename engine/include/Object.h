@@ -21,6 +21,7 @@ enum ObjectType
 
 class CU_API Object : public RefCounted
 {
+	//CU_NONCOPYABLE(Object);
 	DECLARE_RTTI(Object, RootRtti, TYPE_OBJECT);
 public:
 	virtual ~Object();

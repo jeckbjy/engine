@@ -347,6 +347,8 @@ group "render"
 		defines { "CU_VULKAN_BUILD" }
 		--includedirs { src_dir}
 		includedirs { "D:/Program Files/VulkanSDK1.0.3.1/Include" }
+		libdirs { "D:/Program Files/VulkanSDK1.0.3.1/Bin32" }
+		links { "vulkan-1" }
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }
 		

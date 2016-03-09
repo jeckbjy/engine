@@ -24,11 +24,9 @@ public:
 	Camera* getCamera() { return m_camera; }
 
 protected:
-	typedef Vector<RenderTarget*> SurfaceVec;
 	Renderer*	m_render;
 	Camera*		m_camera;
 	RenderPath*	m_path;
-	SurfaceVec	m_targets;
 	BatchQueue	m_opaques;
 	BatchQueue	m_transparents;
 	Vector2		m_viewSize;

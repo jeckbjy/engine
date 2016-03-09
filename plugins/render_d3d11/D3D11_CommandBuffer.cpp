@@ -6,8 +6,8 @@ CU_NS_BEGIN
 
 D3D11CommandBuffer::D3D11CommandBuffer()
 {
-	memset(_factors, 0, sizeof(_factors));
-	_stencilref = 0;
+	memset(m_factors, 0, sizeof(m_factors));
+	m_stencilRef = 0;
 }
 
 D3D11CommandBuffer::~D3D11CommandBuffer()
@@ -17,28 +17,29 @@ D3D11CommandBuffer::~D3D11CommandBuffer()
 
 void D3D11CommandBuffer::setBlendFactor(const float factors[4])
 {
-	memcpy(_factors, factors, sizeof(_factors));
+	memcpy(m_factors, factors, sizeof(m_factors));
 }
 
-void D3D11CommandBuffer::setStencilRef(size_t stencil)
+void D3D11CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 {
-	_stencilref = stencil;
+	m_stencilMask = mask;
+	m_stencilRef = reference;
 }
 
 void D3D11CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-	((D3D11RenderTarget*)target)->bind(_handle);
+	((D3D11RenderTarget*)target)->bind(m_handle);
 }
 
 void D3D11CommandBuffer::setTopology(Topology primitive)
 {
 	D3D11_PRIMITIVE_TOPOLOGY dx_prim = (D3D11_PRIMITIVE_TOPOLOGY)primitive;
-	_handle->IASetPrimitiveTopology(dx_prim);
+	m_handle->IASetPrimitiveTopology(dx_prim);
 }
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	((D3D11Pipeline*)pipeline)->bind(_handle, _factors, _stencilref);
+	((D3D11Pipeline*)pipeline)->bind(m_handle, m_factors, m_stencilRef);
 }
 
 void D3D11CommandBuffer::setVertexLayout(VertexLayout* vbs)

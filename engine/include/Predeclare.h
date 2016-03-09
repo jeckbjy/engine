@@ -68,6 +68,7 @@ class Pipeline;
 class CommandBuffer;
 class CommandQueue;
 class Device;
+class Graphics;
 
 typedef GpuBuffer VertexBuffer;
 typedef GpuBuffer IndexBuffer;
@@ -111,5 +112,11 @@ class OctreeQuery;
 // ui
 class Window;
 class Application;
+
+// ÄÚ²¿ÀàID
+enum ObjectID
+{
+	OBJ_ID_GRPHICS,
+};
 
 CU_NS_END
