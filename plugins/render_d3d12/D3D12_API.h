@@ -22,4 +22,11 @@
 #include <d3dcompiler.h>
 
 #define D3D12_RELEASE(handle) if(handle != NULL){ handle->Release(); handle = NULL; }
-#define D3D12_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);
+#define D3D12_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info)
+
+// predeclare
+CU_NS_BEGIN
+
+class D3D12Device;
+
+CU_NS_END

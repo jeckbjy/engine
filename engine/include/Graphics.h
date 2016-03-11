@@ -5,21 +5,6 @@
 
 CU_NS_BEGIN
 
-struct Box
-{
-	uint left;
-	uint top;
-	uint front;
-	uint bottom;
-	uint back;
-};
-
-struct Range
-{
-	uint begin;
-	uint end;
-};
-
 class CU_API GpuResource : public Object
 {
 	DECLARE_RTTI(GpuResource, Object, "GRES");
@@ -36,7 +21,7 @@ public:
 	GpuBuffer(const BUFFER_DESC& desc);
 	virtual ~GpuBuffer();
 
-	virtual void* map(MAP_FLAG access, size_t offset, size_t len) = 0;
+	virtual void* map(size_t offset, size_t len, MAP_FLAG access) = 0;
 	virtual void  unmap() = 0;
 
 	size_t bytes() const { return m_bytes; }
@@ -53,10 +38,6 @@ protected:
 	size_t m_count;
 	size_t m_stride;
 };
-
-typedef SharedPtr<VertexBuffer>		VertexBufferPtr;
-typedef SharedPtr<IndexBuffer>		IndexBufferPtr;
-typedef SharedPtr<UniformBuffer>	UniformBufferPtr;
 
 class CU_API Texture : public GpuResource
 {
@@ -92,8 +73,8 @@ class CU_API Program : public Object
 	DECLARE_RTTI(Program, Object, "PROG");
 public:
 	virtual ~Program(){}
-	virtual bool attach(ShaderType type, const String& data, const String& name = "", const String& entry = "", ShaderProfile profile = SP_NONE, bool binary = false) = 0;
-	virtual bool link() = 0;
+	//virtual bool attach(ShaderType type, const String& data, const String& name = "", const String& entry = "", ShaderProfile profile = SP_NONE, bool binary = false) = 0;
+	//virtual bool link() = 0;
 };
 
 // ÃèÊö·û
@@ -182,7 +163,8 @@ public:
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual VertexLayout*	newVertexLayout(VertexDeclaration& desc) = 0;
 	virtual Program*		newProgram() = 0;
-	virtual Pipeline*		newPipeline(const PIPELINE_DESC& desc) = 0;
+	virtual Pipeline*		newPipeline(const COMPUTE_PIPELINE_DESC& desc) = 0;
+	virtual Pipeline*		newPipeline(const GRAPHICS_PIPELINE_DESC& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;

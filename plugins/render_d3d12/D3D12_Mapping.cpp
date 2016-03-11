@@ -1,0 +1,22 @@
+#include "D3D12_Mapping.h"
+
+CU_NS_BEGIN
+
+D3D12_RESOURCE_DIMENSION D3D12Mapping::getTextureType(TexType type)
+{
+	switch (type)
+	{
+	case TEX_1D: return D3D12_RESOURCE_DIMENSION_TEXTURE1D;
+	case TEX_2D: return D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	case TEX_3D: return D3D12_RESOURCE_DIMENSION_TEXTURE3D;
+	}
+
+	return D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+}
+
+DXGI_FORMAT D3D12Mapping::getFormat(PixelFormat format)
+{
+	return DXGI_FORMAT_UNKNOWN;
+}
+
+CU_NS_END

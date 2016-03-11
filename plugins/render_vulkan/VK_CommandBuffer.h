@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_VK_API VKCommandBuffer : public CommandBuffer
+class CU_VK_API VK_CommandBuffer : public CommandBuffer
 {
 public:
-	VKCommandBuffer();
-	~VKCommandBuffer();
+	VK_CommandBuffer();
+	~VK_CommandBuffer();
 
 	void setViewport(int x, int y, size_t w, size_t h);
 	void setScissor(int x, int y, size_t w, size_t h);

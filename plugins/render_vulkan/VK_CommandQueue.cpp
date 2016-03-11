@@ -2,17 +2,17 @@
 
 CU_NS_BEGIN
 
-VKCommandQueue::VKCommandQueue()
+VK_CommandQueue::VK_CommandQueue()
 {
 
 }
 
-VKCommandQueue::~VKCommandQueue()
+VK_CommandQueue::~VK_CommandQueue()
 {
 
 }
 
-void VKCommandQueue::submit()
+void VK_CommandQueue::submit()
 {
 
 }

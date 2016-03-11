@@ -3,18 +3,20 @@
 
 CU_NS_BEGIN
 
-class CU_VK_API VKPipeline : public Pipeline
+class CU_VK_API VK_Pipeline : public Pipeline
 {
 public:
-	VKPipeline();
-	~VKPipeline();
+	VK_Pipeline(VK_Device* device, const GRAPHICS_PIPELINE_DESC& desc);
+	VK_Pipeline(VK_Device* device, const COMPUTE_PIPELINE_DESC& desc);
+	~VK_Pipeline();
 
 	VkPipelineBindPoint getBindPoint() const { return VK_PIPELINE_BIND_POINT_GRAPHICS; }
 
 	VkPipeline native() { return m_handle; }
 
 private:
-	VkPipeline m_handle;
+	VK_Device*	m_device;
+	VkPipeline	m_handle;
 };
 
 CU_NS_END

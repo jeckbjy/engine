@@ -99,7 +99,11 @@ Lib
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Buffer.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_CommandBuffer.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_CommandQueue.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Device.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Graphics.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Mapping.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Plugin.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Texture.h" />
   </ItemGroup>
@@ -107,7 +111,11 @@ Lib
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Buffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_CommandBuffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_CommandQueue.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Device.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Graphics.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Mapping.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Plugin.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Texture.cpp" />
   </ItemGroup>

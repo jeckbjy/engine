@@ -18,7 +18,19 @@
     <ClInclude Include="..\plugins\render_d3d12\D3D12_CommandQueue.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_DescriptorSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Device.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Graphics.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Mapping.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Pipeline.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Plugin.h">
@@ -38,7 +50,19 @@
     <ClCompile Include="..\plugins\render_d3d12\D3D12_CommandQueue.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_DescriptorSet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Device.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Graphics.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Mapping.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Pipeline.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Plugin.cpp">

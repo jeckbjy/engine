@@ -21,10 +21,12 @@ struct CU_API TEXTURE_DESC
 	PixelFormat format;
 	uint32_t	width;
 	uint32_t	height;
-	uint32_t	depth;	// or array size
-	uint32_t	mipmaps;
+	uint32_t	depth;
+	uint32_t	mipLevels;
+	uint32_t	arrayLayers;
 	uint32_t	samples;
 	uint32_t	quality;
+	uint32_t	tiling;
 	void*		data;
 };
 
@@ -100,10 +102,38 @@ struct CU_API BLEND_DESC
 	RENDER_TARGET_BLEND_DESC targets[8];
 };
 
-//
-struct CU_API PIPELINE_DESC
+// 创建shader
+struct CU_API PROGRAM_DESC
 {
+	String code;
+};
 
+// shader描述信息
+struct CU_API SHADER_STAGE_DESC
+{
+	uint32_t flags;
+	uint32_t stage;
+	Program* module;
+	String	 entry;
+};
+
+// 渲染管线
+struct CU_API GRAPHICS_PIPELINE_DESC
+{
+	uint32_t					flags;
+	uint32_t					stageCount;
+	const SHADER_STAGE_DESC*	stages;
+	// 其他状态信息
+	const RASTERIZER_DESC*		rasterizer;
+	const DEPTH_STENCIL_DESC*	depthStencil;
+	const BLEND_DESC*			blend;
+};
+
+// 计算管线
+struct CU_API COMPUTE_PIPELINE_DESC
+{
+	uint32_t			flags;
+	SHADER_STAGE_DESC	stage;
 };
 
 //

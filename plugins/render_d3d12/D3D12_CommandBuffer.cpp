@@ -18,6 +18,11 @@ void D3D12CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 
 }
 
+void D3D12CommandBuffer::setScissor(int x, int y, size_t w, size_t h)
+{
+
+}
+
 void D3D12CommandBuffer::setBlendFactor(const float factors[4])
 {
 

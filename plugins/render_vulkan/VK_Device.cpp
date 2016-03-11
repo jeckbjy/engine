@@ -3,7 +3,8 @@
 
 CU_NS_BEGIN
 
-VKDevice::VKDevice()
+VK_Device::VK_Device(VK_Graphics* graphics)
+	: m_graphics(graphics)
 {
 	VkDeviceQueueCreateInfo queue_info = 
 	{
@@ -26,12 +27,24 @@ VKDevice::VKDevice()
 		0, NULL,
 		NULL
 	};
-	VK_CHECK(vkCreateDevice(VKGraphics::instance().gpu(), &info, NULL, &m_handle));
+
+	VK_CHECK(vkCreateDevice(m_graphics->getPhysicalDevice(), &info, NULL, &m_handle), "vkCreateDevice fail!");
 }
 
-VKDevice::~VKDevice()
+VK_Device::~VK_Device()
 {
 	vkDestroyDevice(m_handle, NULL);
+}
+
+void VK_Device::allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties)
+{
+	VkMemoryAllocateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	info.pNext = NULL;
+	info.allocationSize = bytes;
+	info.memoryTypeIndex = m_graphics->getMemoryType(typeBits, properties);
+
+	VK_CHECK(vkAllocateMemory(m_handle, &info, NULL, &memory), "vkAllocateMemory fail!");
 }
 
 CU_NS_END

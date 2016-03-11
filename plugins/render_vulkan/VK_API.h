@@ -21,4 +21,17 @@
 #include "API.h"
 #include "Graphics.h"
 
-#define VK_CHECK(result) assert(!result)
+#define VK_CHECK(result, info) if(result != VK_SUCCESS) throw std::runtime_error(info)
+
+// predeclare
+CU_NS_BEGIN
+
+class VK_Graphics;
+class VK_Device;
+class VK_CommandQueue;
+class VK_CommandBuffer;
+class VK_Buffer;
+class VK_Texture;
+class VK_Pipeline;
+
+CU_NS_END

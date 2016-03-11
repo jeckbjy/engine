@@ -101,6 +101,7 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_Mapping.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Pipeline.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Program.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h" />
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h" />
   </ItemGroup>
@@ -113,6 +114,7 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

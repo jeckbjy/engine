@@ -29,7 +29,7 @@ OGLTexture::OGLTexture(const TEXTURE_DESC& desc)
 	glGenTextures(1, &m_handle);
 	glBindTexture(m_target, m_handle);
 	// This needs to be set otherwise the texture doesn't get rendered
-	glTexParameteri(m_target, GL_TEXTURE_MAX_LEVEL, desc.mipmaps - 1);
+	glTexParameteri(m_target, GL_TEXTURE_MAX_LEVEL, desc.mipLevels - 1);
 	// Set some misc default parameters so NVidia won't complain, these can of course be changed later
 	glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

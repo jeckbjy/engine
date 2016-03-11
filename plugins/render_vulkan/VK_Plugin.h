@@ -5,10 +5,10 @@ CU_NS_BEGIN
 
 #define VULKAN_NAME "Vulkan"
 // ²å¼þÈë¿Ú
-class VKPlugin : public Plugin
+class VK_Plugin : public Plugin
 {
 public:
-	VKPlugin():Plugin(VULKAN_NAME){}
+	VK_Plugin():Plugin(VULKAN_NAME){}
 
 	void install();
 	void uninstall();

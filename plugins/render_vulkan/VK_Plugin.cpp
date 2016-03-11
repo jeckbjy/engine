@@ -3,14 +3,14 @@
 
 CU_NS_BEGIN
 
-DEF_PLUGIN(CU_VK_API, VKPlugin)
+DEF_PLUGIN(CU_VK_API, VK_Plugin)
 
-void VKPlugin::install()
+void VK_Plugin::install()
 {
 
 }
 
-void VKPlugin::uninstall()
+void VK_Plugin::uninstall()
 {
 
 }

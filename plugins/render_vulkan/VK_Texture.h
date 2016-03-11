@@ -3,13 +3,14 @@
 
 CU_NS_BEGIN
 
-class CU_VK_API VKTexture : public Texture
+class CU_VK_API VK_Texture : public Texture
 {
 public:
-	VKTexture(const TEXTURE_DESC& desc);
-	~VKTexture();
+	VK_Texture(VK_Device* device, const TEXTURE_DESC& desc);
+	~VK_Texture();
 
 private:
+	VK_Device*		m_device;
 	VkImage			m_image;
 	VkDeviceMemory	m_memory;
 	VkImageView		m_view;		//??

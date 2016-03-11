@@ -15,13 +15,16 @@ public:
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	VertexLayout*	newVertexLayout(VertexDeclaration& desc);
 	Program*		newProgram();
-	Pipeline*		newPipeline(const PIPELINE_DESC& desc);
+	Pipeline*		newPipeline(const GRAPHICS_PIPELINE_DESC& desc);
+	Pipeline*		newPipeline(const COMPUTE_PIPELINE_DESC* desc);
 	DescriptorSet*	newDescriptorSet(Program* prog);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 
 	ID3D12Device* getDevice() { return m_device; }
 	ID3D12CommandAllocator* getAlloc() { return m_alloc; }
+
+	operator ID3D12Device*() const { return m_device; }
 
 private:
 	ID3D12Device*			m_device;

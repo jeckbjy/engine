@@ -3,16 +3,18 @@
 
 CU_NS_BEGIN
 
-class CU_VK_API VKCommandQueue : public CommandQueue
+class CU_VK_API VK_CommandQueue : public CommandQueue
 {
 public:
-	VKCommandQueue();
-	~VKCommandQueue();
+	VK_CommandQueue();
+	~VK_CommandQueue();
 
 	void submit();
+	void wait();
 
 private:
-	VkQueue m_queue;
+	VkQueue			m_queue;
+	VkSubmitInfo	m_submit;
 };
 
 CU_NS_END
