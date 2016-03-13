@@ -177,7 +177,9 @@ public:
 	virtual ~Graphics(){}
 
 	template<typename T>
-	T* getDevice() { return m_device->cast<T>();; }
+	T* getDevice() { return m_device->cast<T>(); }
+
+	Device* getDevice() { return m_device; }
 
 protected:
 	Device* m_device;

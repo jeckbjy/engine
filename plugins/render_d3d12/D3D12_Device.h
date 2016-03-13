@@ -22,13 +22,13 @@ public:
 	CommandQueue*	newCommandQueue();
 
 	ID3D12Device* getDevice() { return m_device; }
-	ID3D12CommandAllocator* getAlloc() { return m_alloc; }
+	ID3D12CommandAllocator* getAllocator() { return m_allocator; }
 
 	operator ID3D12Device*() const { return m_device; }
 
 private:
 	ID3D12Device*			m_device;
-	ID3D12CommandAllocator* m_alloc;
+	ID3D12CommandAllocator* m_allocator;
 };
 
 CU_NS_END

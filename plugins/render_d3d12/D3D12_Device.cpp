@@ -9,8 +9,7 @@ CU_NS_BEGIN
 D3D12Device::D3D12Device()
 :m_device(NULL)
 {
-	D3D12_CHECK(D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device)), 
-		"d3d12 create ");
+	D3D12_CHECK(D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device)), "D3D12CreateDevice fail!");
 }
 
 D3D12Device::~D3D12Device()
@@ -38,6 +37,11 @@ RenderTarget* D3D12Device::newRenderTexture(Texture* rtv, Texture* dsv)
 	return NULL;
 }
 
+VertexLayout* D3D12Device::newVertexLayout(VertexDeclaration& desc)
+{
+	return NULL;
+}
+
 Program* D3D12Device::newProgram()
 {
 	return NULL;
@@ -60,7 +64,7 @@ DescriptorSet* D3D12Device::newDescriptorSet(Program* prog)
 
 CommandBuffer* D3D12Device::newCommandBuffer()
 {
-	return new D3D12CommandBuffer(m_device, m_alloc);
+	return new D3D12CommandBuffer(m_device, m_allocator);
 }
 
 CommandQueue* D3D12Device::newCommandQueue()

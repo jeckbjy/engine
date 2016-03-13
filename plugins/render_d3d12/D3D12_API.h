@@ -21,6 +21,10 @@
 #include <d3d12.h>
 #include <d3dcompiler.h>
 
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3d12.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+
 #define D3D12_RELEASE(handle) if(handle != NULL){ handle->Release(); handle = NULL; }
 #define D3D12_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info)
 
