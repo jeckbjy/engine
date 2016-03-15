@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-D3D12Buffer::D3D12Buffer(ID3D12Device* device, const BUFFER_DESC& desc)
+D3D12Buffer::D3D12Buffer(ID3D12Device* device, const BufferDesc& desc)
 	: GpuBuffer(desc)
 	, m_handle(NULL)
 {

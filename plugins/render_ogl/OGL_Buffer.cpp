@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-OGLBuffer::OGLBuffer(const BUFFER_DESC& desc)
+OGLBuffer::OGLBuffer(const BufferDesc& desc)
 :GpuBuffer(desc)
 {
 	GLenum usage = isDynamic()? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;

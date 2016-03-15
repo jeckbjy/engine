@@ -12,14 +12,15 @@ public:
 
 	void allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 
-	VkDevice& handle() { return m_handle; }
+	VkDevice& native() { return m_handle; }
 
-	operator VkDevice() const { return m_handle; }
+	VkDescriptorPool& getDescriptorPool() { return m_descroptorPool; }
 
 private:
 	VkDevice		m_handle;
 	//VkQueue			m_queue;
 	VK_Graphics*		m_graphics;
+	VkDescriptorPool	m_descroptorPool;
 };
 
 CU_NS_END

@@ -88,12 +88,12 @@ bool OGLDevice::init()
 	return true;
 }
 
-GpuBuffer* OGLDevice::newBuffer(const BUFFER_DESC& desc)
+GpuBuffer* OGLDevice::newBuffer(const BufferDesc& desc)
 {
 	return new OGLBuffer(desc);
 }
 
-Texture* OGLDevice::newTexture(const TEXTURE_DESC& desc)
+Texture* OGLDevice::newTexture(const TextureDesc& desc)
 {
 	return new OGLTexture(desc);
 }

@@ -9,14 +9,14 @@ public:
 	D3D12Device();
 	~D3D12Device();
 
-	GpuBuffer*		newBuffer(const BUFFER_DESC& desc);
-	Texture*		newTexture(const TEXTURE_DESC& desc);
+	GpuBuffer*		newBuffer(const BufferDesc& desc);
+	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* hwnd);
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	VertexLayout*	newVertexLayout(VertexDeclaration& desc);
 	Program*		newProgram();
-	Pipeline*		newPipeline(const GRAPHICS_PIPELINE_DESC& desc);
-	Pipeline*		newPipeline(const COMPUTE_PIPELINE_DESC* desc);
+	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
+	Pipeline*		newPipeline(const ComputePipelineDesc* desc);
 	DescriptorSet*	newDescriptorSet(Program* prog);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();

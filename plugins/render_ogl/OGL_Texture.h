@@ -7,7 +7,7 @@ class CU_OGL_API OGLTexture : public Texture
 {
 	static GLenum getGLTarget(TexType type, uint32_t arrays);
 public:
-	OGLTexture(const TEXTURE_DESC& desc);
+	OGLTexture(const TextureDesc& desc);
 	virtual ~OGLTexture();
 
 	void* map(PixelData& data, MAP_FLAG flag, uint level, uint face);

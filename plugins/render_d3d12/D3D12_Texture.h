@@ -6,7 +6,7 @@ CU_NS_BEGIN
 class CU_D3D12_API D3D12Texture : public Texture
 {
 public:
-	D3D12Texture(ID3D12Device* device, const TEXTURE_DESC& desc);
+	D3D12Texture(ID3D12Device* device, const TextureDesc& desc);
 	~D3D12Texture();
 
 	void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0);

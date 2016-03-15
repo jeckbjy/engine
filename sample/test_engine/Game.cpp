@@ -2,13 +2,44 @@
 #include "AssetCache.h"
 #include "Model.h"
 
-bool GameApp::init()
+void BaseApp::draw()
 {
-	// 加载资源
-	Model* model = AssetCache::load<Model>("animation.model");
-	return true;
+
 }
 
+bool TriangleApp::init()
+{
+	struct CustomVertex
+	{
+		Vector3 position;
+		Vector3 color;
+	};
+
+	VertexElement elements[] = {
+		{ VU_POSITION, PF_FLOAT3 },
+		{ VU_COLOR, PF_FLOAT3 },
+	};
+
+	// 数据
+	float vertex_data[] = {
+		-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f
+	};
+	short index_data[] = { 0, 1, 2 };
+
+	m_vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
+	m_ib = m_device->newIndexBuffer(INDEX16, 3, index_data);
+
+	// layout
+	//	m_layout = m_root->createVertexLayout(VertexDeclaration(elements, 2));
+	//	m_layout->setBuffer(m_vb);
+	//	m_command->setVertexLayout(m_layout);
+	//	m_command->setIndexBuffer(m_ib);
+	//	m_command->drawIndexed(0);
+
+	return true;
+}
 
 //#include <iostream>
 //#include <fstream>

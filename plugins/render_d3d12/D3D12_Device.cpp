@@ -17,12 +17,12 @@ D3D12Device::~D3D12Device()
 	D3D12_RELEASE(m_device);
 }
 
-GpuBuffer* D3D12Device::newBuffer(const BUFFER_DESC& desc)
+GpuBuffer* D3D12Device::newBuffer(const BufferDesc& desc)
 {
 	return new D3D12Buffer(m_device, desc);
 }
 
-Texture* D3D12Device::newTexture(const TEXTURE_DESC& desc)
+Texture* D3D12Device::newTexture(const TextureDesc& desc)
 {
 	return new D3D12Texture(m_device, desc);
 }
@@ -47,12 +47,12 @@ Program* D3D12Device::newProgram()
 	return NULL;
 }
 
-Pipeline* D3D12Device::newPipeline(const GRAPHICS_PIPELINE_DESC& desc)
+Pipeline* D3D12Device::newPipeline(const GraphicsPipelineDesc& desc)
 {
 	return NULL;
 }
 
-Pipeline* D3D12Device::newPipeline(const COMPUTE_PIPELINE_DESC* desc)
+Pipeline* D3D12Device::newPipeline(const ComputePipelineDesc* desc)
 {
 	return NULL;
 }

@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const GRAPHICS_PIPELINE_DESC& desc)
+D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const GraphicsPipelineDesc& desc)
 	: m_pipeline(NULL)
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso;
@@ -11,7 +11,7 @@ D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const GRAPHICS_PIPELINE_DESC&
 	D3D12_CHECK(device->CreateGraphicsPipelineState(&pso, IID_PPV_ARGS(&m_pipeline)), "CreateGraphicsPipelineState fail!");
 }
 
-D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const COMPUTE_PIPELINE_DESC& desc)
+D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const ComputePipelineDesc& desc)
 	: m_pipeline(NULL)
 {
 	D3D12_COMPUTE_PIPELINE_STATE_DESC pso;

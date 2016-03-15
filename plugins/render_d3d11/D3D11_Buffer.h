@@ -7,7 +7,7 @@ class D3D11Device;
 class CU_D3D11_API D3D11Buffer : public GpuBuffer
 {
 public:
-	D3D11Buffer(const BUFFER_DESC& desc, D3D11Device* device);
+	D3D11Buffer(const BufferDesc& desc, D3D11Device* device);
 	~D3D11Buffer();
 
 	void* map(MAP_FLAG access, size_t offset, size_t len);

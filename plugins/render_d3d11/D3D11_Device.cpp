@@ -31,7 +31,7 @@ D3D11Device::~D3D11Device()
 	D3D11_RELEASE(m_device);
 }
 
-GpuBuffer* D3D11Device::newBuffer(const BUFFER_DESC& desc)
+GpuBuffer* D3D11Device::newBuffer(const BufferDesc& desc)
 {
 	return new D3D11Buffer(desc, this);
 }

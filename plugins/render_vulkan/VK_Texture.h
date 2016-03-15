@@ -6,7 +6,7 @@ CU_NS_BEGIN
 class CU_VK_API VK_Texture : public Texture
 {
 public:
-	VK_Texture(VK_Device* device, const TEXTURE_DESC& desc);
+	VK_Texture(VK_Device* device, const TextureDesc& desc);
 	~VK_Texture();
 
 private:

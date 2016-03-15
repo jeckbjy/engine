@@ -7,7 +7,7 @@ CU_NS_BEGIN
 class CU_OGL_API OGLBuffer : public GpuBuffer
 {
 public:
-	OGLBuffer(const BUFFER_DESC& desc);
+	OGLBuffer(const BufferDesc& desc);
 	~OGLBuffer();
 
 	void* map(MAP_FLAG access, uint32_t offset, uint32_t len);

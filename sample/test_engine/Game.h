@@ -2,7 +2,25 @@
 #include "Application.h"
 using namespace cute;
 
-class GameApp : public Application
+// ≤‚ ‘ª˘¿‡
+class BaseApp : public Application
+{
+public:
+	BaseApp();
+	virtual void draw();
+
+protected:
+	Graphics*		m_graphics;
+	Device*			m_device;
+	RenderTarget*	m_target;
+	Pipeline*		m_pipeline;
+	Program*		m_vs;
+	Program*		m_ps;
+	VertexBuffer*	m_vb;
+	IndexBuffer*	m_ib;
+};
+
+class TriangleApp : public BaseApp
 {
 public:
 	bool init();

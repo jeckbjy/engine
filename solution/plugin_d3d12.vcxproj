@@ -58,16 +58,14 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;CU_D3D12_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\um;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\build\bin\Debug;D:Program Files (x86)Windows Kits
-Lib
-.0.10069.0umx64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\bin\Debug;D:\Program Files (x86)\Windows Kits\10\Lib\10.0.10069.0\um\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Debug\plugin_d3d12.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -76,7 +74,7 @@ Lib
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;CU_D3D12_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\um;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files (x86)\Windows Kits\10\Include\10.0.10069.0\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -88,9 +86,7 @@ Lib
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\build\bin\Release;D:Program Files (x86)Windows Kits
-Lib
-.0.10069.0umx64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\bin\Release;D:\Program Files (x86)\Windows Kits\10\Lib\10.0.10069.0\um\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Release\plugin_d3d12.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -105,6 +101,7 @@ Lib
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Mapping.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Plugin.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Program.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +114,7 @@ Lib
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Program.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

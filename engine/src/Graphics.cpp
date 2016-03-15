@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-GpuBuffer::GpuBuffer(const BUFFER_DESC& desc)
+GpuBuffer::GpuBuffer(const BufferDesc& desc)
 : m_flags(desc.flags)
 , m_bytes(desc.counts * desc.stride)
 , m_count(desc.counts)

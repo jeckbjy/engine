@@ -96,6 +96,7 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_API.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Buffer.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_CommandBuffer.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Device.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Graphics.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Mapping.h" />
@@ -109,6 +110,7 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_Buffer.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_CommandBuffer.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_CommandQueue.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Graphics.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Mapping.cpp" />

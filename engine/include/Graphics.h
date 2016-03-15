@@ -18,7 +18,7 @@ class CU_API GpuBuffer : public GpuResource
 {
 	DECLARE_RTTI(GpuBuffer, GpuResource, "GBUF");
 public:
-	GpuBuffer(const BUFFER_DESC& desc);
+	GpuBuffer(const BufferDesc& desc);
 	virtual ~GpuBuffer();
 
 	virtual void* map(size_t offset, size_t len, MAP_FLAG access) = 0;
@@ -43,7 +43,7 @@ class CU_API Texture : public GpuResource
 {
 	DECLARE_RTTI(Texture, GpuResource, "GTEX");
 public:
-	Texture(const TEXTURE_DESC& desc){}
+	Texture(const TextureDesc& desc){}
 	virtual ~Texture(){}
 
 	virtual void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0) = 0;
@@ -73,6 +73,8 @@ class CU_API Program : public Object
 	DECLARE_RTTI(Program, Object, "PROG");
 public:
 	virtual ~Program(){}
+
+	virtual bool compile(const ProgramDesc& desc) = 0;
 	//virtual bool attach(ShaderType type, const String& data, const String& name = "", const String& entry = "", ShaderProfile profile = SP_NONE, bool binary = false) = 0;
 	//virtual bool link() = 0;
 };
@@ -157,17 +159,29 @@ class CU_API Device : public Object
 public:
 	virtual ~Device(){}
 
-	virtual GpuBuffer*		newBuffer(const BUFFER_DESC& desc) = 0;
-	virtual Texture*		newTexture(const TEXTURE_DESC& desc) = 0;
+	virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
+	virtual Texture*		newTexture(const TextureDesc& desc) = 0;
 	virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual VertexLayout*	newVertexLayout(VertexDeclaration& desc) = 0;
 	virtual Program*		newProgram() = 0;
-	virtual Pipeline*		newPipeline(const COMPUTE_PIPELINE_DESC& desc) = 0;
-	virtual Pipeline*		newPipeline(const GRAPHICS_PIPELINE_DESC& desc) = 0;
+	virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
+	virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
+
+	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
+	{
+		BufferDesc desc(BU_VERTEX, stride, counts, flags, data);
+		return newBuffer(desc);
+	}
+	GpuBuffer* newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
+	{
+		uint32_t stride = type == INDEX16 ? sizeof(uint16_t) : sizeof(uint32_t);
+		BufferDesc desc(BU_INDEX, stride, counts, flags, data);
+		return newBuffer(desc);
+	}
 };
 
 // 用于全局,枚举GPU

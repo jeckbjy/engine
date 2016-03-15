@@ -12,8 +12,8 @@ public:
 	const String& name() const { return _name; }
 	virtual bool init();
 
-	GpuBuffer*		newBuffer(const BUFFER_DESC& desc);
-	Texture*		newTexture(const TEXTURE_DESC& desc);
+	GpuBuffer*		newBuffer(const BufferDesc& desc);
+	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* wnd);
 	RenderTarget*	newRenderTexture(Texture* color, Texture* depth_stencil);
 	VertexLayout*	newVertexLayout(VertexDeclaration& desc);

@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-D3D12Texture::D3D12Texture(ID3D12Device* device, const TEXTURE_DESC& desc)
+D3D12Texture::D3D12Texture(ID3D12Device* device, const TextureDesc& desc)
 	: Texture(desc)
 	, m_handle(NULL)
 {

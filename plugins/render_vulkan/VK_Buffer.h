@@ -7,7 +7,7 @@ class CU_VK_API VK_Buffer : public GpuBuffer
 {
 	CU_NONCOPYABLE(VK_Buffer);
 public:
-	VK_Buffer(VK_Device* device, const BUFFER_DESC& desc);
+	VK_Buffer(VK_Device* device, const BufferDesc& desc);
 	~VK_Buffer();
 
 	void* map(size_t offset, size_t len, MAP_FLAG flags);

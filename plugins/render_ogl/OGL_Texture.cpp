@@ -21,7 +21,7 @@ GLenum OGLTexture::getGLTarget(TexType type, uint32_t arrays)
 	return GL_TEXTURE_2D;
 }
 // todo:数据初始化
-OGLTexture::OGLTexture(const TEXTURE_DESC& desc)
+OGLTexture::OGLTexture(const TextureDesc& desc)
 :Texture(desc)
 {
 	m_target = getGLTarget(desc.type, desc.depth);

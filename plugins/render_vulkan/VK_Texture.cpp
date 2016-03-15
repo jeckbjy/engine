@@ -1,5 +1,6 @@
 #include "VK_Texture.h"
 #include "VK_Mapping.h"
+#include "VK_Device.h"
 
 CU_NS_BEGIN
 
@@ -14,7 +15,7 @@ inline static VkImageType getImageType(TexType type)
 	return VK_IMAGE_TYPE_2D;
 }
 
-VK_Texture::VK_Texture(VK_Device* device, const TEXTURE_DESC& desc)
+VK_Texture::VK_Texture(VK_Device* device, const TextureDesc& desc)
 	: Texture(desc)
 	, m_device(device)
 {
@@ -30,13 +31,13 @@ VK_Texture::VK_Texture(VK_Device* device, const TEXTURE_DESC& desc)
 	info.flags = 0;
 	info.extent = { desc.width, desc.height, desc.height };
 
-	VK_CHECK(vkCreateImage(*m_device, &info, NULL, &m_image), "vkCreateImage fail!");
+	VK_CHECK(vkCreateImage(m_device->native(), &info, NULL, &m_image), "vkCreateImage fail!");
 
 	// memory
 	VkMemoryRequirements mem_reqs;
-	vkGetImageMemoryRequirements(*m_device, m_image, &mem_reqs);
+	vkGetImageMemoryRequirements(m_device->native(), m_image, &mem_reqs);
 	m_device->allocMemory(m_memory, mem_reqs.size, mem_reqs.memoryTypeBits);
-	VK_CHECK(vkBindImageMemory(*m_device, m_image, m_memory, 0), "vkBindImageMemory fail!");
+	VK_CHECK(vkBindImageMemory(m_device->native(), m_image, m_memory, 0), "vkBindImageMemory fail!");
 
 	// view ??
 }
@@ -44,9 +45,9 @@ VK_Texture::VK_Texture(VK_Device* device, const TEXTURE_DESC& desc)
 VK_Texture::~VK_Texture()
 {
 	if (m_image != VK_NULL_HANDLE)
-		vkDestroyImage(*m_device, m_image, NULL);
+		vkDestroyImage(m_device->native(), m_image, NULL);
 	if (m_memory != VK_NULL_HANDLE)
-		vkFreeMemory(*m_device, m_memory, NULL);
+		vkFreeMemory(m_device->native(), m_memory, NULL);
 }
 
 CU_NS_END

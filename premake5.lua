@@ -369,8 +369,8 @@ group "render"
 		kind("SharedLib")
 		defines { "CU_D3D12_BUILD" }
 		--includedirs { src_dir }
-		includedirs { "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/um", "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/shared"}
-		libdirs { "D:\Program Files (x86)\Windows Kits\10\Lib\10.0.10069.0\um\x64"}
+		includedirs { "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/um"}
+		libdirs { "D:/Program Files (x86)/Windows Kits/10/Lib/10.0.10069.0/um/x64"}
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }
 --[[

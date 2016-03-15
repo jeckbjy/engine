@@ -9,7 +9,7 @@ public:
 	D3D11Device();
 	~D3D11Device();
 
-	GpuBuffer* newBuffer(const BUFFER_DESC& desc);
+	GpuBuffer* newBuffer(const BufferDesc& desc);
 
 	ID3D11DeviceN* getDevice() { return m_device; }
 

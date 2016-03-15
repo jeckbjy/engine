@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-D3D11Buffer::D3D11Buffer(const BUFFER_DESC& desc, D3D11Device* device)
+D3D11Buffer::D3D11Buffer(const BufferDesc& desc, D3D11Device* device)
 :GpuBuffer(desc), m_device(device),m_handle(NULL), m_view(NULL)
 {
 	D3D11_BUFFER_DESC d3d_desc;

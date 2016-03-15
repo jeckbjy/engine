@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-D3D11Texture::D3D11Texture(const TEXTURE_DESC& desc)
+D3D11Texture::D3D11Texture(const TextureDesc& desc)
 :Texture(desc), _handle(NULL)
 {
 

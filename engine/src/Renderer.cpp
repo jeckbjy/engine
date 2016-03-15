@@ -65,8 +65,9 @@ Texture* Renderer::getGBuffer(size_t width, size_t height, size_t format, bool c
 	TextureMap::iterator itor = m_gbuffers.find(key);
 	if (itor != m_gbuffers.end())
 		return itor->second;
-	TEXTURE_DESC desc;
-	desc.type = cubemap ? TEX_CUBE : TEX_2D;
+	TextureDesc desc;
+	//desc.type = cubemap ? TEX_CUBE : TEX_2D;
+	desc.type = TEX_2D;
 	desc.width = width;
 	desc.height = height;
 	desc.depth = 1;
