@@ -11,7 +11,7 @@ public:
 	static VkImageType getImageType(TexType type);
 	static VkImageUsageFlagBits getImageUsage(TextureUsage usage);
 	static VkPrimitiveTopology getTopology(Topology topology);
-	static VkPolygonMode getPolygonMode(PolygonMode mode);
+	static VkPolygonMode getPolygonMode(FillMode mode);
 	static VkCullModeFlags getCullMode(CullMode mode);
 	static VkFrontFace getFrontFace(FrontFace face);
 	static VkCompareOp getCompareOp(CompareOp op);

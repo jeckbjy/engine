@@ -36,7 +36,7 @@ struct CU_API TextureDesc
 
 struct CU_API RasterizerDesc
 {
-	PolygonMode	polygonMode;
+	FillMode	fillMode;
 	CullMode	cullMode;
 	FrontFace	frontFace;
 	bool		discardEnable;

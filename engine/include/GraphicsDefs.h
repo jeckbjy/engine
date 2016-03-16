@@ -5,31 +5,31 @@ CU_NS_BEGIN
 
 #define CU_MAX_MULTIPLE_RENDER_TARGETS 8
 
-// 填充模式,gl:polygon
-enum PolygonMode CU_ENUM(uint8_t)
-{
-	FILL_POINT,		// 点填充
-	FILL_LINE,		// 线框填充
-	FILL_SOLID,		// 实体填充,SOLID
-
-	FILL_MODE_COUNT
-};
-
 // 着色模式,灯光着色模式,默认SHADE_GOURAUD
 enum ShadeMode CU_ENUM(uint8_t)
 {
 	SHADE_FLAT,		// 平面着色模式
-	SHADE_GOURAUD,	// 格劳德着色模式
-	SHADE_PHONG		//
+		SHADE_GOURAUD,	// 格劳德着色模式
+		SHADE_PHONG		//
+};
+
+// 填充模式,gl:polygon
+enum FillMode CU_ENUM(uint8_t)
+{
+	FILL_MODE_SOLID,		// 实体填充,SOLID
+	FILL_MODE_LINE,			// 线框填充
+	FILL_MODE_POINT,		// 点填充
+
+	FILL_MODE_COUNT
 };
 
 // 剔除模式
 enum CullMode CU_ENUM(uint8_t)
 {
-	CULL_NONE	= 0x00,			// 不剔除
-	CULL_FRONT	= 0x01,			// 剔除前边,CLOCKWISE
-	CULL_BACK	= 0x02,			// 剔除背面,COUNTERCLOCKWISE
-	CULL_FRONT_AND_BACK = 0x03,	// 全部剔除
+	CULL_MODE_NONE	= 0x00,		// 不剔除
+	CULL_MODE_FRONT	= 0x01,		// 剔除前边,CLOCKWISE
+	CULL_MODE_BACK	= 0x02,		// 剔除背面,COUNTERCLOCKWISE
+	CULL_MODE_BOTH	= 0x03,		// 全部剔除
 };
 
 // 朝向
@@ -111,23 +111,15 @@ enum LogicOp
 	LOGIC_OP_COUNT
 };
 
-/**
-* Defines the supported stencil operations to perform.
-*
-* Stencil operations determine what should happen to the pixel if the
-* stencil test fails, passes, or passes but fails the depth test.
-*
-* The initial stencil operation is STENCIL_OP_KEEP.
-*/
 enum StencilOp
 {
 	STENCIL_OP_KEEP,
 	STENCIL_OP_ZERO,
 	STENCIL_OP_REPLACE,
-	STENCIL_OP_INVERT,		// 取反,即0xff变为0x00
-	STENCIL_OP_INCR,		// 超过范围后裁剪到最大
-	STENCIL_OP_DECR,
-	STENCIL_OP_INCR_WRAP,	// 超出范围后返回到零
+	STENCIL_OP_INCR_CLAMP,		// INCREMENT_AND_CLAMP:超过范围后裁剪到最大
+	STENCIL_OP_DECR_CLAMP,		// DECREMENT_AND_CLAMP 
+	STENCIL_OP_INVERT,			// 取反,即0xff变为0x00
+	STENCIL_OP_INCR_WRAP,		// 超出范围后返回到零
 	STENCIL_OP_DECR_WRAP,
 	// 个数
 	STENCIL_OP_COUNT
@@ -143,16 +135,16 @@ enum StencilFaceFlags
 // 比较函数，Stencil，Depth使用,Comparison
 enum CompareOp
 {
-	CMP_OP_ALWAYS_FAIL,
-	CMP_OP_ALWAYS_PASS,
+	CMP_OP_NEVER,
 	CMP_OP_LESS,
-	CMP_OP_LESS_EQUAL,
 	CMP_OP_EQUAL,
+	CMP_OP_LESS_EQUAL,
+	CMP_OP_GREATER,
 	CMP_OP_NOT_EQUAL,
 	CMP_OP_GREAER_EQUAL,
-	CMP_OP_GREATER,
+	CMP_OP_ALWAYS,
 
-	COMPARISON_FUN_COUNT
+	CMP_OP_COUNT
 };
 
 // 纹理寻址模式
@@ -275,21 +267,6 @@ enum TextureUsage
 	TU_DEPTH_STENCIL	= 0x0020,
 	TU_TRANSIENT		= 0x0040,
 	TU_INPUT_ATTACHMENT	= 0x0080,
-};
-
-// 绑定标识
-enum BIND_FLAG
-{
-	BIND_VERTEX_BUFFER = 0x01,
-	BIND_INDEX_BUFFER = 0x02,
-	BIND_UNIFORM_BUFFER = 0x04,
-	BIND_SHADER_RESOURCE = 0x08,
-	BIND_STREAM_OUTPUT = 0x10,
-	BIND_RENDER_TARGET = 0x20,
-	BIND_DEPTH_STENCIL = 0x40,
-	BIND_UNORDERED_ACCESS = 0x80,
-	//BIND_DECODER = 0x200L,
-	//BIND_VIDEO_ENCODER = 0x400L,
 };
 
 enum MAP_FLAG

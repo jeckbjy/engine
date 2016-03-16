@@ -57,20 +57,9 @@ VkPrimitiveTopology VK_Mapping::getTopology(Topology topology)
 	}
 }
 
-VkPolygonMode VK_Mapping::getPolygonMode(PolygonMode mode)
+VkPolygonMode VK_Mapping::getPolygonMode(FillMode mode)
 {
 	return (VkPolygonMode)mode;
-	//switch (mode)
-	//{
-	//case POLYGON_FILL:
-	//	return VK_POLYGON_MODE_FILL;
-	//case POLYGON_LINE:
-	//	return VK_POLYGON_MODE_LINE;
-	//case POLYGON_POINT:
-	//	return VK_POLYGON_MODE_POINT;
-	//default:
-	//	return VK_POLYGON_MODE_FILL;
-	//}
 }
 
 VkCullModeFlags VK_Mapping::getCullMode(CullMode mode)
@@ -114,7 +103,7 @@ void VK_Mapping::fillRasterizationState(VkPipelineRasterizationStateCreateInfo& 
 	rast_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 	rast_info.pNext = NULL;
 	rast_info.flags = 0;
-	rast_info.polygonMode = getPolygonMode(rast_desc.polygonMode);
+	rast_info.polygonMode = getPolygonMode(rast_desc.fillMode);
 	rast_info.cullMode = getCullMode(rast_desc.cullMode);
 	rast_info.frontFace = getFrontFace(rast_desc.frontFace);
 	rast_info.rasterizerDiscardEnable = rast_desc.discardEnable;

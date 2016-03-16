@@ -30,10 +30,10 @@ VK_Pipeline::VK_Pipeline(VK_Device* device, const GraphicsPipelineDesc& desc)
 	VkPipelineVertexInputStateCreateInfo vi_info;
 	vi_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	vi_info.pNext = NULL;
-	
+
 	//
 	VkPipelineRasterizationStateCreateInfo rast_info;
-	VkPipelineMultisampleStateCreateInfo mult_sample_info;
+	VkPipelineMultisampleStateCreateInfo multisample_info;
 	VkPipelineDepthStencilStateCreateInfo ds_info;
 	VkPipelineColorBlendStateCreateInfo blend_info;
 	VkPipelineColorBlendAttachmentState blend_targets[8];
@@ -42,7 +42,7 @@ VK_Pipeline::VK_Pipeline(VK_Device* device, const GraphicsPipelineDesc& desc)
 	VkPipelineViewportStateCreateInfo viewport_info;
 
 	VK_Mapping::fillRasterizationState(rast_info, desc.rasterizer);
-	//VK_Mapping::fillMultisampleState(mult_sample_info, desc.m);
+	VK_Mapping::fillMultisampleState(multisample_info, desc.multisample);
 	VK_Mapping::fillDepthStencilState(ds_info, desc.depthStencil);
 	VK_Mapping::fillBlendState(blend_info, blend_targets,desc.blend);
 
@@ -51,9 +51,10 @@ VK_Pipeline::VK_Pipeline(VK_Device* device, const GraphicsPipelineDesc& desc)
 	info.pTessellationState = &tess_info;
 	info.pViewportState = &viewport_info;
 	info.pRasterizationState = &rast_info;
-	info.pMultisampleState = &mult_sample_info;
+	info.pMultisampleState = &multisample_info;
 	info.pDepthStencilState = &ds_info;
 	info.pColorBlendState = &blend_info;
+	info.renderPass = VK_NULL_HANDLE;		// todo:search
 
 	VK_CHECK(vkCreateGraphicsPipelines(m_device->native(), NULL, 1, &info, NULL, &m_handle), "vkCreateGraphicsPipelines fail!");
 }
