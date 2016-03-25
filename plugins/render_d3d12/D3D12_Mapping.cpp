@@ -163,6 +163,11 @@ D3D12_COMPARISON_FUNC D3D12Mapping::getCompareOp(CompareOp op)
 	return (D3D12_COMPARISON_FUNC)op;
 }
 
+D3D12_TEXTURE_ADDRESS_MODE D3D12Mapping::getAddressMode(AddressMode mode)
+{
+	return (D3D12_TEXTURE_ADDRESS_MODE)mode;
+}
+
 void D3D12Mapping::fillShader(D3D12_SHADER_BYTECODE& code, Program* prog)
 {
 
@@ -227,6 +232,40 @@ void D3D12Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const S
 	state.StencilPassOp = getStencilOp(desc.passOp);
 	state.StencilFunc = getCompareOp(desc.compareOp);
 	// ignore others??
+}
+
+void D3D12Mapping::fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& desc)
+{
+	// 目前只支持standard,且filter完全对应
+	D3D12_FILTER_REDUCTION_TYPE reduction = D3D12_FILTER_REDUCTION_TYPE_STANDARD;
+	if (desc.anisotropyEnable)
+		info.Filter = D3D12_ENCODE_ANISOTROPIC_FILTER(reduction);
+	else
+		info.Filter = D3D12_ENCODE_BASIC_FILTER(desc.minFilter, desc.magFilter, desc.mipFilter, reduction);
+	info.AddressU = getAddressMode(desc.addrU);
+	info.AddressV = getAddressMode(desc.addrV);
+	info.AddressW = getAddressMode(desc.addrW);
+	info.MipLODBias = desc.mipLodBias;
+	info.MaxAnisotropy = (UINT)desc.maxAnisotropy;
+	info.ComparisonFunc = getCompareOp(desc.compareOp);
+	info.MinLOD = desc.minLod;
+	info.MaxLOD = desc.maxLod;
+	memcpy(info.BorderColor, desc.borderColor, sizeof(info.BorderColor));
+}
+
+void D3D12Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
+{
+	static const LPCSTR sematic_names[] = { "POSITION", "NORMAL", "COLOR", "TANGENT", "BINORMAL", "BLENDWEIGHTS", "BLENDINDICES" };
+	if (semantic >= SEMANTIC_TEXCOORD0)
+	{
+		name = "TEXCOORD";
+		index = semantic - SEMANTIC_TEXCOORD0;
+	}
+	else
+	{
+		name = sematic_names[semantic];
+		index = 0;
+	}
 }
 
 CU_NS_END

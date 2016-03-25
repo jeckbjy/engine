@@ -3,6 +3,25 @@
 
 CU_NS_BEGIN
 
+// 
+/*
+问题：D3D12_GRAPHICS_PIPELINE_STATE_DESC的初始化
+1:需要InputLayout，而这些数据的获得会延迟得到，与shader无关
+2:D3D12_ROOT_SIGNATURE_DESC初始化：跟shader相关，应该可以通过Shader自动解析得到,类似PipelineLayout
+*/
+class CU_D3D12_API D3D12GraphicsPipeline : public Pipeline
+{
+public:
+
+	//void bind(InputLayout* layout);
+
+private:
+	// 通过VertexLayout查找
+	typedef std::map<uint32_t, ID3D12PipelineState*> PSOMap;
+	// 需要持有多个？？通过Vertex查找
+	//ID3D12PipelineState* m_pso;
+};
+
 class CU_D3D12_API D3D12Pipeline : public Pipeline
 {
 public:

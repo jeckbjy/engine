@@ -204,7 +204,6 @@
     <ClInclude Include="..\engine\include\Vector2.h" />
     <ClInclude Include="..\engine\include\Vector3.h" />
     <ClInclude Include="..\engine\include\Vector4.h" />
-    <ClInclude Include="..\engine\include\VertexLayout.h" />
     <ClInclude Include="..\engine\include\View.h" />
     <ClInclude Include="..\engine\include\Window.h" />
     <ClInclude Include="..\engine\include\WorkQueue.h" />
@@ -294,7 +293,6 @@
     <ClCompile Include="..\engine\src\Types.cpp" />
     <ClCompile Include="..\engine\src\Util.cpp" />
     <ClCompile Include="..\engine\src\Variant.cpp" />
-    <ClCompile Include="..\engine\src\VertexLayout.cpp" />
     <ClCompile Include="..\engine\src\View.cpp" />
     <ClCompile Include="..\engine\src\Window.cpp" />
     <ClCompile Include="..\engine\src\WorkQueue.cpp" />

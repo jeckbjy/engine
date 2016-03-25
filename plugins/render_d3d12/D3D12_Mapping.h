@@ -19,6 +19,7 @@ public:
 	static D3D12_BLEND		getBlendFactor(BlendFactor factor);
 	static D3D12_STENCIL_OP getStencilOp(StencilOp op);
 	static D3D12_COMPARISON_FUNC getCompareOp(CompareOp op);
+	static D3D12_TEXTURE_ADDRESS_MODE getAddressMode(AddressMode mode);
 
 	static void fillShader(D3D12_SHADER_BYTECODE& code, Program* prog);
 	static void fillRasterizerState(D3D12_RASTERIZER_DESC& state, const RasterizerDesc& desc);
@@ -26,6 +27,9 @@ public:
 	static void fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const BlendTargetDesc& desc);
 	static void fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const DepthStencilDesc& desc);
 	static void fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpState& desc);
+	static void fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& desc);
+
+	static void fillSemantic(Semantic semantic, LPCSTR& name, UINT& index);
 };
 
 CU_NS_END

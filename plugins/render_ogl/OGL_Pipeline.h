@@ -7,7 +7,7 @@ class OGLProgram;
 class CU_OGL_API OGLPipeline : public Pipeline
 {
 public:
-	OGLPipeline(const PIPELINE_DESC& desc);
+	OGLPipeline(const GraphicsPipelineDesc& desc);
 	~OGLPipeline();
 
 };

@@ -3,8 +3,7 @@
 
 CU_NS_BEGIN
 
-OGLPipeline::OGLPipeline(const PIPELINE_DESC& desc)
-:Pipeline(desc)
+OGLPipeline::OGLPipeline(const GraphicsPipelineDesc& desc)
 {
 
 }

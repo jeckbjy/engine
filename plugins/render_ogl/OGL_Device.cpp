@@ -5,7 +5,7 @@
 #include "OGL_Buffer.h"
 #include "OGL_RenderWindow.h"
 #include "OGL_RenderTexture.h"
-#include "OGL_VertexLayout.h"
+#include "OGL_InputLayout.h"
 #include "OGL_CommandBuffer.h"
 #include "OGL_Pipeline.h"
 #include "OGL_DescriptorSet.h"
@@ -113,9 +113,9 @@ DescriptorSet* OGLDevice::newDescriptorSet(Program* prog)
 	return new OGLDescriptorSet(prog);
 }
 
-VertexLayout* OGLDevice::newVertexLayout(VertexDeclaration& desc)
+InputLayout* OGLDevice::newInputLayout(const InputElement* elements, size_t count)
 {
-	return new OGLVertexLayout(desc);
+	return new OGLInputLayout(elements, count);
 }
 
 Program* OGLDevice::newProgram()
@@ -123,7 +123,7 @@ Program* OGLDevice::newProgram()
 	return new OGLProgram();
 }
 
-Pipeline* OGLDevice::newPipeline(const PIPELINE_DESC& desc)
+Pipeline* OGLDevice::newPipeline(const GraphicsPipelineDesc& desc)
 {
 	return new OGLPipeline(desc);
 }

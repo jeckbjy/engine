@@ -14,7 +14,7 @@ public:
 	void setRenderTarget(RenderTarget* target);
 	void setTopology(Topology primitive);
 	void setPipeline(Pipeline* pipeline);
-	void setVertexLayout(VertexLayout* vbs);
+	void setInputLayout(InputLayout* layout);
 	void setIndexBuffer(IndexBuffer* ib);
 	void draw(size_t vnum, size_t voff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */);
 	void drawIndexed(size_t inum, size_t ioff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */, int vertex_base /* = 0 */);

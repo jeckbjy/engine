@@ -9,7 +9,7 @@ struct CU_OGL_API OGLMapping
 	static GLenum getGLInternal(PixelFormat fmt, bool gamma = false);
 	static GLenum getGLFormat(PixelFormat fmt);
 	static GLenum getGLType(PixelFormat fmt);
-	static GLenum getBinding(BIND_FLAG type);
+	static GLenum getBufferUsage(BufferUsage type);
 	static GLbitfield getAccess(MAP_FLAG type);
 	static GLint getPrimitiveMode(Topology type);
 };

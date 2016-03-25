@@ -48,7 +48,7 @@ void D3D12CommandBuffer::setPipeline(Pipeline* pipeline)
 
 }
 
-void D3D12CommandBuffer::setVertexLayout(VertexLayout* vbs)
+void D3D12CommandBuffer::setInputLayout(InputLayout* layout)
 {
 
 }

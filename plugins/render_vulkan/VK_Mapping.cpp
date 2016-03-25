@@ -98,6 +98,21 @@ VkBlendFactor VK_Mapping::getBlendFactor(BlendFactor factor)
 	return (VkBlendFactor)factor;
 }
 
+VkFilter VK_Mapping::getFilter(FilterType filter)
+{
+	return (VkFilter)filter;
+}
+
+VkSamplerMipmapMode VK_Mapping::getMipmapMode(FilterType filter)
+{
+	return (VkSamplerMipmapMode)filter;
+}
+
+VkSamplerAddressMode VK_Mapping::getAddressMode(AddressMode mode)
+{
+	return (VkSamplerAddressMode)mode;
+}
+
 void VK_Mapping::fillRasterizationState(VkPipelineRasterizationStateCreateInfo& rast_info, const RasterizerDesc& rast_desc)
 {
 	rast_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -183,6 +198,29 @@ void VK_Mapping::fillBlendTarget(VkPipelineColorBlendAttachmentState& info, cons
 	info.dstAlphaBlendFactor = getBlendFactor(desc.dstAlphaFactor);
 	info.alphaBlendOp = getBlendOp(desc.alphaOp);
 	info.colorWriteMask = (VkColorComponentFlags)desc.colorWriteMask;
+}
+
+void VK_Mapping::fillSamplerDesc(VkSamplerCreateInfo& info, const SamplerDesc& desc)
+{
+	info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.magFilter = getFilter(desc.magFilter);
+	info.minFilter = getFilter(desc.minFilter);
+	info.mipmapMode = getMipmapMode(desc.mipFilter);
+	info.addressModeU = getAddressMode(desc.addrU);
+	info.addressModeV = getAddressMode(desc.addrV);
+	info.addressModeW = getAddressMode(desc.addrW);
+	info.mipLodBias = desc.mipLodBias;
+	info.anisotropyEnable = desc.anisotropyEnable;
+	info.maxAnisotropy = desc.maxAnisotropy;
+	info.compareEnable = (desc.compareOp == CMP_OP_NEVER);
+	info.compareOp = getCompareOp(desc.compareOp);
+	info.minLod = desc.minLod;
+	info.maxLod = desc.maxLod;
+	// todo:convert
+	info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
+	info.unnormalizedCoordinates = desc.unnormalizedCoordinates;
 }
 
 CU_NS_END

@@ -5,7 +5,7 @@ CU_NS_BEGIN
 
 class OGLProgram;
 class OGLPipeline;
-class OGLVertexLayout;
+class OGLInputLayout;
 class OGLBuffer;
 class CU_OGL_API OGLCommandBuffer : public CommandBuffer
 {
@@ -14,12 +14,13 @@ public:
 	~OGLCommandBuffer();
 
 	void setViewport(int x, int y, size_t w, size_t h);
+	void setScissor(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t reference);
 	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
-	void setVertexLayout(VertexLayout* layout);
+	void setInputLayout(InputLayout* layout);
 	void setIndexBuffer(IndexBuffer* ib);
 
 	void draw(const DrawParam& params);
@@ -29,7 +30,7 @@ public:
 private:
 	RenderTarget*		m_target;
 	OGLPipeline*		m_pipeline;
-	OGLVertexLayout*	m_layout;
+	OGLInputLayout*		m_layout;
 	OGLBuffer*			m_index;
 	DescriptorSet*		m_descriptors;
 	Topology			m_primitive;

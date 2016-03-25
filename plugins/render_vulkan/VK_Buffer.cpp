@@ -29,11 +29,11 @@ VK_Buffer::VK_Buffer(VK_Device* device, const BufferDesc& desc)
 
 VK_Buffer::~VK_Buffer()
 {
-	if (m_buffer != VK_NULL_HANDLE)
-		vkDestroyBuffer(m_device->native(), m_buffer, NULL);
-
 	if (m_memory != VK_NULL_HANDLE)
 		vkFreeMemory(m_device->native(), m_memory, NULL);
+
+	if (m_buffer != VK_NULL_HANDLE)
+		vkDestroyBuffer(m_device->native(), m_buffer, NULL);
 }
 
 void* VK_Buffer::map(size_t offset, size_t len, MAP_FLAG flags)

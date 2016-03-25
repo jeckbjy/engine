@@ -15,9 +15,9 @@ bool TriangleApp::init()
 		Vector3 color;
 	};
 
-	VertexElement elements[] = {
-		{ VU_POSITION, PF_FLOAT3 },
-		{ VU_COLOR, PF_FLOAT3 },
+	InputElement elements[] = {
+		{ SEMANTIC_POSITION, PF_FLOAT3 },
+		{ SEMANTIC_COLOR, PF_FLOAT3 },
 	};
 
 	// Êý¾Ý

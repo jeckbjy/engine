@@ -8,6 +8,8 @@ D3D12Pipeline::D3D12Pipeline(ID3D12Device* device, const GraphicsPipelineDesc& d
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso;
 	ZeroMemory(&pso, sizeof(pso));
+
+	D3D12_ROOT_SIGNATURE_DESC sign_desc;
 	//convert
 	pso.PrimitiveTopologyType = D3D12Mapping::getTopologyType(desc.topology);
 	D3D12Mapping::fillRasterizerState(pso.RasterizerState, desc.rasterizer);

@@ -178,13 +178,13 @@ GLenum OGLMapping::getGLType(PixelFormat fmt)
 	return gl_infos[fmt].gtype;
 }
 
-GLenum OGLMapping::getBinding(BIND_FLAG type)
+GLenum OGLMapping::getBufferUsage(BufferUsage type)
 {
 	switch (type)
 	{
-	case BIND_VERTEX_BUFFER:return GL_ARRAY_BUFFER;
-	case BIND_INDEX_BUFFER: return GL_ELEMENT_ARRAY_BUFFER;
-	case BIND_UNIFORM_BUFFER:return GL_UNIFORM_BUFFER;
+	case BU_VERTEX:return GL_ARRAY_BUFFER;
+	case BU_INDEX: return GL_ELEMENT_ARRAY_BUFFER;
+	case BU_UNIFORM:return GL_UNIFORM_BUFFER;
 	default:
 		assert(false);
 		break;

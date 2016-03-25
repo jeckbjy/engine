@@ -25,16 +25,6 @@ D3D11Program::~D3D11Program()
 	D3D11_RELEASE(_cs);
 }
 
-bool D3D11Program::attach(ShaderType type, const String& data, const String& name, const String& entry, ShaderProfile profile, bool binary)
-{
-	return false;
-}
-
-bool D3D11Program::link()
-{
-	return true;
-}
-
 void D3D11Program::bind(ID3D11DeviceContextN* context)
 {
 	if (g_program == this)

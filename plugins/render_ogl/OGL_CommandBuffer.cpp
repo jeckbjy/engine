@@ -2,7 +2,7 @@
 #include "OGL_Mapping.h"
 #include "OGL_Buffer.h"
 #include "OGL_Program.h"
-#include "OGL_VertexLayout.h"
+#include "OGL_InputLayout.h"
 #include "OGL_Pipeline.h"
 
 CU_NS_BEGIN
@@ -32,6 +32,11 @@ void OGLCommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 	glViewport(x, y, w, h);
 }
 
+void OGLCommandBuffer::setScissor(int x, int y, size_t w, size_t h)
+{
+
+}
+
 void OGLCommandBuffer::setBlendFactor(const float factors[4])
 {
 	memcpy(m_factors, factors, sizeof(m_factors));
@@ -58,9 +63,9 @@ void OGLCommandBuffer::setPipeline(Pipeline* pipeline)
 	m_pipeline = (OGLPipeline*)pipeline;
 }
 
-void OGLCommandBuffer::setVertexLayout(VertexLayout* layout)
+void OGLCommandBuffer::setInputLayout(InputLayout* layout)
 {
-	m_layout = (OGLVertexLayout*)layout;
+	m_layout = (OGLInputLayout*)layout;
 }
 
 void OGLCommandBuffer::setIndexBuffer(IndexBuffer* ib)
@@ -85,54 +90,54 @@ void OGLCommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
 
 void OGLCommandBuffer::execute()
 {
-	//Instance渲染  http://www.zwqxin.com/archives/opengl/talk-about-geometry-instancing.html
-	//详细介绍:  http://book.2cto.com/201412/48549.html
-	GLint mode = OGLMapping::getPrimitiveMode(m_primitive);
-	// 绑定shader
-	OGLProgram* prog = (OGLProgram*)m_pipeline->getProgram();
-	prog->bind(m_descriptors);
-	m_layout->bind(prog);
-	if (m_vertexCount == 0)
-	{
-		m_vertexCount = m_index ? m_index->count() : m_layout->getVertexCount();
-	}
+	////Instance渲染  http://www.zwqxin.com/archives/opengl/talk-about-geometry-instancing.html
+	////详细介绍:  http://book.2cto.com/201412/48549.html
+	//GLint mode = OGLMapping::getPrimitiveMode(m_primitive);
+	//// 绑定shader
+	//OGLProgram* prog = (OGLProgram*)m_pipeline->getProgram();
+	//prog->bind(m_descriptors);
+	//m_layout->bind(prog);
+	//if (m_vertexCount == 0)
+	//{
+	//	m_vertexCount = m_index ? m_index->count() : m_layout->getVertexCount();
+	//}
 
-	if (m_instanceCount < 1)
-	{
-		if (m_index != NULL && m_indexCount > 0)
-		{
-			m_index->bind();
-			GLenum gl_type = m_index->isIndex16() ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
-			// count指顶点个数
-			glDrawElements(mode, m_vertexCount, gl_type, 0);
-		}
-		else
-		{
-			// 注：参数count是Vertex顶点个数
-			glDrawArrays(mode, m_vertexStart, m_vertexCount);
-		}
-	}
-	else
-	{
-		// DrawInstance
-		GLenum gl_type;
-		size_t index_size;
-		if (m_index->isIndex16())
-		{
-			gl_type = GL_UNSIGNED_SHORT;
-			index_size = sizeof(unsigned short);
-		}
-		else
-		{
-			gl_type = GL_UNSIGNED_INT;
-			index_size = sizeof(unsigned int);
-		}
-		bool gl3Support = false;
-		if (gl3Support)
-			glDrawElementsInstanced(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
-		else
-			glDrawElementsInstancedARB(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
-	}
+	//if (m_instanceCount < 1)
+	//{
+	//	if (m_index != NULL && m_indexCount > 0)
+	//	{
+	//		m_index->bind();
+	//		GLenum gl_type = m_index->isIndex16() ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+	//		// count指顶点个数
+	//		glDrawElements(mode, m_vertexCount, gl_type, 0);
+	//	}
+	//	else
+	//	{
+	//		// 注：参数count是Vertex顶点个数
+	//		glDrawArrays(mode, m_vertexStart, m_vertexCount);
+	//	}
+	//}
+	//else
+	//{
+	//	// DrawInstance
+	//	GLenum gl_type;
+	//	size_t index_size;
+	//	if (m_index->isIndex16())
+	//	{
+	//		gl_type = GL_UNSIGNED_SHORT;
+	//		index_size = sizeof(unsigned short);
+	//	}
+	//	else
+	//	{
+	//		gl_type = GL_UNSIGNED_INT;
+	//		index_size = sizeof(unsigned int);
+	//	}
+	//	bool gl3Support = false;
+	//	if (gl3Support)
+	//		glDrawElementsInstanced(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
+	//	else
+	//		glDrawElementsInstancedARB(mode, m_indexCount, gl_type, (const GLvoid*)(m_indexStart * index_size), m_instanceCount);
+	//}
 }
 
 CU_NS_END

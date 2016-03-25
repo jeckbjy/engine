@@ -13,7 +13,7 @@ public:
 	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* hwnd);
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
-	VertexLayout*	newVertexLayout(VertexDeclaration& desc);
+	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
 	Program*		newProgram();
 	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
 	Pipeline*		newPipeline(const ComputePipelineDesc* desc);

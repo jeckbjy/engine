@@ -1,6 +1,5 @@
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_Pipeline.h"
-#include "D3D11_VertexLayout.h"
 
 CU_NS_BEGIN
 
@@ -42,7 +41,7 @@ void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
 	((D3D11Pipeline*)pipeline)->bind(m_handle, m_factors, m_stencilRef);
 }
 
-void D3D11CommandBuffer::setVertexLayout(VertexLayout* vbs)
+void D3D11CommandBuffer::setInputLayout(InputLayout* layout)
 {
 	// bind
 	// ≤È’“…Ë÷√£ø£ø

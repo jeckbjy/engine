@@ -16,18 +16,18 @@ public:
 	void draw(CommandBuffer* cmd);
 
 	void setLodDistance(float distance);
-	void setVertexBuffers(VertexLayout* buffers);
+	//void setVertexBuffers(VertexLayout* buffers);
 	void setIndexBuffer(IndexBuffer* buffer);
 	void setDrawParam(Topology type, size_t indexStart, size_t indexCount);
 	void setDrawParam(Topology type, size_t indexStart, size_t indexCount, size_t vertexStart, size_t vertexCount, size_t instCount = 0);
 
-	VertexLayout*	getVertexBuffers() { return m_vertex; }
+	//VertexLayout*	getVertexBuffers() { return m_vertex; }
 	IndexBuffer*	getIndexBuffer() { return m_index; }
 	const DrawParam& getDrawParam() const { return m_params; }
 	float			getLodDistance() const { return m_distance; }
 
 protected:
-	VertexLayout*	m_vertex;
+	InputLayout*	m_vertex;
 	IndexBuffer*	m_index;
 	DrawParam		m_params;
 	float			m_distance;		// lod

@@ -37,7 +37,7 @@ D3D11Buffer::~D3D11Buffer()
 	D3D11_RELEASE(m_view);
 }
 
-void* D3D11Buffer::map(MAP_FLAG access, size_t offset, size_t len)
+void* D3D11Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 {
 	return NULL;
 }

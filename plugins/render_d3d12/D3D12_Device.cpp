@@ -37,7 +37,7 @@ RenderTarget* D3D12Device::newRenderTexture(Texture* rtv, Texture* dsv)
 	return NULL;
 }
 
-VertexLayout* D3D12Device::newVertexLayout(VertexDeclaration& desc)
+InputLayout* D3D12Device::newInputLayout(const InputElement* elements, size_t count)
 {
 	return NULL;
 }

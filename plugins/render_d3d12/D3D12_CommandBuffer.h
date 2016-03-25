@@ -16,7 +16,7 @@ public:
 	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
-	void setVertexLayout(VertexLayout* vbs);
+	void setInputLayout(InputLayout* layout);
 	void setIndexBuffer(IndexBuffer* ib);
 	void draw(const DrawParam& params);
 	void dispatch(size_t group_x, size_t group_y, size_t group_z);

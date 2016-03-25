@@ -10,8 +10,6 @@ public:
 	D3D11Program();
 	~D3D11Program();
 
-	bool attach(ShaderType type, const String& data, const String& name, const String& entry, ShaderProfile profile, bool binary);
-	bool link();
 	void bind(ID3D11DeviceContextN* context);
 	void unbind(ID3D11DeviceContextN* context);
 

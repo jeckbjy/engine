@@ -10,7 +10,7 @@ public:
 	D3D11Buffer(const BufferDesc& desc, D3D11Device* device);
 	~D3D11Buffer();
 
-	void* map(MAP_FLAG access, size_t offset, size_t len);
+	void* map(size_t offset, size_t len, MAP_FLAG access);
 	void  unmap();
 
 	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)m_view; }

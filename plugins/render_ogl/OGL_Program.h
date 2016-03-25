@@ -56,15 +56,17 @@ public:
 	OGLProgram();
 	~OGLProgram();
 
-	bool attach(ShaderType type, const String& data, const String& name /* = "" */, const String& entry /* = "" */, ShaderProfile profile /* = SP_NONE */, bool binary /* = false */);
-	bool link();
+	bool compile(const ProgramDesc& desc) { return true; }
+
+	//bool attach(ShaderType type, const String& data, const String& name /* = "" */, const String& entry /* = "" */, ShaderProfile profile /* = SP_NONE */, bool binary /* = false */);
+	//bool link();
 	void bind(DescriptorSet* descriptors);
 	void unbind();
 
-	GLuint compile(ShaderType type, const String& data);
-	GLuint load(ShaderType type, const String& data);
+	//GLuint compile(ShaderType type, const String& data);
+	//GLuint load(ShaderType type, const String& data);
 
-	bool parse_attrs(GLuint handle);
+	/*bool parse_attrs(GLuint handle);
 	bool parse_uniform(GLuint handle);
 
 	const ParamInfo* getInfo(const String& name) const;
@@ -72,7 +74,7 @@ public:
 	inline GLuint native() const { return m_handle; }
 	inline GLint getAttribute(VertexUsage usage) { return m_attrs[usage]; }
 	inline size_t uniformCount() const { return m_uniforms.size(); }
-	inline Uniform* getUniform(size_t index) { return &m_uniforms[index]; }
+	inline Uniform* getUniform(size_t index) { return &m_uniforms[index]; }*/
 
 private:
 	typedef std::vector<Variable>		VariableVec;
@@ -81,7 +83,7 @@ private:
 	typedef std::map<int, GLuint>		ShaderMap;
 
 	GLuint		m_handle;
-	GLint		m_attrs[VERTEX_USAGE_MAX];	// 所有对应Attr
+	GLint		m_attrs[SEMANTIC_MAX];	// 所有对应Attr
 	ShaderMap	m_shaders;
 	UniformVec	m_uniforms;		// 绑定信息
 	VariableVec	m_variables;	// Uniform变量

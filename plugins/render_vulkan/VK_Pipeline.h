@@ -19,4 +19,25 @@ private:
 	VkPipeline	m_handle;
 };
 
+class VK_InputLayout;
+class CU_VK_API VK_GraphicsPipeline : public Pipeline
+{
+public:
+	VK_GraphicsPipeline(VK_Device* device, const GraphicsPipelineDesc& desc){}
+
+	void bind(VK_InputLayout* layout);
+
+private:
+	typedef std::map<uint32_t, VkPipeline> PSOMap;
+	// Õ®π˝InputLayout≤È’“Pipeline£ø£ø
+	PSOMap m_pipelines;
+	VkGraphicsPipelineCreateInfo m_info;
+};
+
+class CU_VK_API VK_ComputePipeline : public Pipeline
+{
+public:
+	VK_ComputePipeline(VK_Device* device, const ComputePipelineDesc& desc){}
+};
+
 CU_NS_END

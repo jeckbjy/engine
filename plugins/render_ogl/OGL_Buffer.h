@@ -10,7 +10,7 @@ public:
 	OGLBuffer(const BufferDesc& desc);
 	~OGLBuffer();
 
-	void* map(MAP_FLAG access, uint32_t offset, uint32_t len);
+	void* map(size_t offset, size_t len, MAP_FLAG access);
 	void unmap();
 
 	void bind();

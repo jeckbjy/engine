@@ -31,7 +31,29 @@ struct CU_API TextureDesc
 	uint32_t	samples;
 	uint32_t	quality;
 	uint32_t	tiling;
-	void*		data;
+	const void*	data;
+	TextureDesc();
+	TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, TextureUsage usage);
+};
+
+// 采样
+struct CU_API SamplerDesc
+{
+	FilterType	magFilter;
+	FilterType	minFilter;
+	FilterType	mipFilter;
+	AddressMode addrU;
+	AddressMode addrV;
+	AddressMode addrW;
+	bool		anisotropyEnable;
+	float		maxAnisotropy;
+	float		mipLodBias;
+	CompareOp	compareOp;
+	float		minLod;
+	float		maxLod;
+	float		borderColor[4];
+	bool		unnormalizedCoordinates;
+	SamplerDesc();
 };
 
 struct CU_API RasterizerDesc
@@ -46,6 +68,7 @@ struct CU_API RasterizerDesc
 	float		depthBiasClamp;
 	float		depthBiasSlopeFactor;
 	float		lineWidth;
+	RasterizerDesc();
 };
 
 // 多重采样
@@ -58,6 +81,8 @@ struct CU_API MultisampleDesc
 	uint32_t	sampleMask;
 	bool		alphaToCoverageEnable;
 	bool		alphaToOneEnable;
+
+	MultisampleDesc();
 };
 
 // DepthStencilState
@@ -70,6 +95,7 @@ struct CU_API StencilOpState
 	uint32_t	compareMask;
 	uint32_t	writeMask;
 	uint32_t	reference;
+	StencilOpState();
 };
 
 struct CU_API DepthStencilDesc
@@ -83,6 +109,7 @@ struct CU_API DepthStencilDesc
 	StencilOpState	back;
 	float			minDepthBounds;
 	float			maxDepthBounds;
+	DepthStencilDesc();
 };
 
 // BlendState
@@ -96,6 +123,7 @@ struct BlendTargetDesc
 	BlendFactor		dstAlphaFactor;
 	BlendOp			alphaOp;
 	uint8_t			colorWriteMask;
+	BlendTargetDesc();
 };
 
 struct CU_API BlendDesc
@@ -104,6 +132,7 @@ struct CU_API BlendDesc
 	LogicOp			logicOp;
 	BlendTargetDesc	targets[8];
 	float			blendConstants[4];
+	BlendDesc();
 };
 
 // 创建shader
@@ -146,38 +175,49 @@ struct CU_API ComputePipelineDesc
 	ShaderStageDesc		stage;
 };
 
+struct CU_API InputElement
+{
+	Semantic		semantic;	//
+	PixelFormat		format;
+	uint8_t			slot;		// Buffer位置
+	uint8_t			offset;		// 偏移
+	InputRate		rate;
+	InputElement(){ memset(this, 0, sizeof(InputElement)); }
+	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
+};
+
 //
 // Shader反射
-struct CU_API VariableDesc
-{
-	String  name;
-	int8_t  type;
-	int32_t block;	// 对应block索引
-	int32_t size;	// 数据大小
-};
-
-struct CU_API UniformDesc
-{
-	enum Type
-	{
-		T_BUFFER,	// 普通内存 
-		T_BLOCK,	// block buffer
-		T_TEXTURE,
-		T_SAMPLER,
-	};
-	String	name;
-	int8_t	type;
-	int32_t size;
-	int8_t	shareable : 1;
-	UniformDesc() :type(0), size(0), shareable(0){}
-};
-
-struct CU_API ParamDesc
-{
-	typedef std::vector<VariableDesc> VariableDescVec;
-	typedef std::vector<UniformDesc> UniformDescVec;
-	UniformDescVec uniforms;
-	VariableDescVec variables;
-};
+//struct CU_API VariableDesc
+//{
+//	String  name;
+//	int8_t  type;
+//	int32_t block;	// 对应block索引
+//	int32_t size;	// 数据大小
+//};
+//
+//struct CU_API UniformDesc
+//{
+//	enum Type
+//	{
+//		T_BUFFER,	// 普通内存 
+//		T_BLOCK,	// block buffer
+//		T_TEXTURE,
+//		T_SAMPLER,
+//	};
+//	String	name;
+//	int8_t	type;
+//	int32_t size;
+//	int8_t	shareable : 1;
+//	UniformDesc() :type(0), size(0), shareable(0){}
+//};
+//
+//struct CU_API ParamDesc
+//{
+//	typedef std::vector<VariableDesc> VariableDescVec;
+//	typedef std::vector<UniformDesc> UniformDescVec;
+//	UniformDescVec uniforms;
+//	VariableDescVec variables;
+//};
 
 CU_NS_END

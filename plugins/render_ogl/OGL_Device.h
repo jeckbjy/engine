@@ -16,10 +16,10 @@ public:
 	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* wnd);
 	RenderTarget*	newRenderTexture(Texture* color, Texture* depth_stencil);
-	VertexLayout*	newVertexLayout(VertexDeclaration& desc);
+	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
 	Program*		newProgram();
 	DescriptorSet*	newDescriptorSet(Program* prog);
-	Pipeline*		newPipeline(const PIPELINE_DESC& desc);
+	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 

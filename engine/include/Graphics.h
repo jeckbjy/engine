@@ -1,7 +1,6 @@
 #pragma once
 #include "Window.h"
 #include "GraphicsDesc.h"
-#include "VertexLayout.h"
 
 CU_NS_BEGIN
 
@@ -10,8 +9,6 @@ class CU_API GpuResource : public Object
 	DECLARE_RTTI(GpuResource, Object, "GRES");
 public:
 	virtual ~GpuResource() {}
-	//virtual void map(uint subresource, const Range& pReadRange, void** data) = 0;
-	//virtual void unmap() = 0;
 };
 
 class CU_API GpuBuffer : public GpuResource
@@ -57,6 +54,23 @@ protected:
 	size_t		m_height;
 	size_t		m_depth;
 	size_t		m_mipmaps;
+};
+
+// vertex¶¥µã½á¹¹
+class CU_API InputLayout : public Object
+{
+public:
+	uint32_t hash(const InputElement* elements, size_t count);
+
+	InputLayout(const InputElement* elements, size_t count);
+	virtual ~InputLayout(){}
+
+	bool equal(const InputElement* elements, size_t count) const;
+
+protected:
+	typedef std::vector<InputElement> ElementVec;
+	ElementVec	m_elements;
+	uint32_t	m_hash;
 };
 
 class CU_API RenderTarget : public Object
@@ -137,7 +151,7 @@ public:
 	virtual void setRenderTarget(RenderTarget* target) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
-	virtual void setVertexLayout(VertexLayout* layouts) = 0;
+	virtual void setInputLayout(InputLayout* layout) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer) = 0;
 	virtual void draw(const DrawParam& desc) = 0;
 	virtual void dispatch(size_t group_x, size_t group_y, size_t group_z) = 0;
@@ -163,7 +177,7 @@ public:
 	virtual Texture*		newTexture(const TextureDesc& desc) = 0;
 	virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
-	virtual VertexLayout*	newVertexLayout(VertexDeclaration& desc) = 0;
+	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
 	virtual Program*		newProgram() = 0;
 	virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
 	virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;

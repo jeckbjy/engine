@@ -13,6 +13,7 @@ struct CU_API VertexElement
 	uint8_t		slot;	// 槽位
 	uint8_t		offset;	// 偏移
 	uint8_t		stride;	// 跨度,相同slot应该有相同跨度
+	InputRate	rate;	// 输入类型
 
 	bool operator ==(const VertexElement& other) const
 	{
@@ -84,5 +85,18 @@ protected:
 };
 
 typedef SharedPtr<VertexLayout> VertexLayoutPtr;
+
+class CU_API VertexLayout : public Object
+{
+public:
+	static uint32_t hash(const VertexElement* size_t count);
+
+	VertexLayout(const VertexElement* elements, size_t count);
+};
+
+class CU_API VertexArray : public Object
+{
+public:
+};
 
 CU_NS_END
