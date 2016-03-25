@@ -113,20 +113,37 @@ VkSamplerAddressMode VK_Mapping::getAddressMode(AddressMode mode)
 	return (VkSamplerAddressMode)mode;
 }
 
-void VK_Mapping::fillRasterizationState(VkPipelineRasterizationStateCreateInfo& rast_info, const RasterizerDesc& rast_desc)
+void VK_Mapping::fillInputAssemblyState(VkPipelineInputAssemblyStateCreateInfo& info, Topology topology, bool primitiveRestartEnable /* = false */)
 {
-	rast_info.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	rast_info.pNext = NULL;
-	rast_info.flags = 0;
-	rast_info.polygonMode = getPolygonMode(rast_desc.fillMode);
-	rast_info.cullMode = getCullMode(rast_desc.cullMode);
-	rast_info.frontFace = getFrontFace(rast_desc.frontFace);
-	rast_info.rasterizerDiscardEnable = rast_desc.discardEnable;
-	rast_info.depthClampEnable = rast_desc.depthClampEnable;
-	rast_info.depthBiasEnable = rast_desc.depthBiasEnable;
-	rast_info.depthBiasConstantFactor = rast_desc.depthBiasConstantFactor;
-	rast_info.depthBiasClamp = rast_desc.depthBiasSlopeFactor;
-	rast_info.lineWidth = rast_desc.lineWidth;
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.topology = getTopology(topology);
+	info.primitiveRestartEnable = primitiveRestartEnable;
+}
+
+void VK_Mapping::fillTessellationState(VkPipelineTessellationStateCreateInfo& info, Topology topology)
+{
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.patchControlPoints = topology < PT_CTRL_PATCH_LIST1 ? 0 : (uint32_t)(topology - PT_CTRL_PATCH_LIST1);
+}
+
+void VK_Mapping::fillRasterizationState(VkPipelineRasterizationStateCreateInfo& info, const RasterizerDesc& desc)
+{
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.polygonMode = getPolygonMode(desc.fillMode);
+	info.cullMode = getCullMode(desc.cullMode);
+	info.frontFace = getFrontFace(desc.frontFace);
+	info.rasterizerDiscardEnable = desc.discardEnable;
+	info.depthClampEnable = desc.depthClampEnable;
+	info.depthBiasEnable = desc.depthBiasEnable;
+	info.depthBiasConstantFactor = desc.depthBiasConstantFactor;
+	info.depthBiasClamp = desc.depthBiasSlopeFactor;
+	info.lineWidth = desc.lineWidth;
 }
 
 void VK_Mapping::fillMultisampleState(VkPipelineMultisampleStateCreateInfo& info, const MultisampleDesc& desc)
@@ -221,6 +238,26 @@ void VK_Mapping::fillSamplerDesc(VkSamplerCreateInfo& info, const SamplerDesc& d
 	// todo:convert
 	info.borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK;
 	info.unnormalizedCoordinates = desc.unnormalizedCoordinates;
+}
+
+void VK_Mapping::fillViewportState(VkPipelineViewportStateCreateInfo& info, uint32_t viewportCount, uint32_t scissorCount)
+{
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.viewportCount = viewportCount;
+	info.pViewports = NULL;
+	info.scissorCount = scissorCount;
+	info.pScissors = NULL;
+}
+
+void VK_Mapping::fillDynamicState(VkPipelineDynamicStateCreateInfo& info, VkDynamicState* states, uint32_t count)
+{
+	info.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+	info.pNext = NULL;
+	info.flags = 0;
+	info.dynamicStateCount = count;
+	info.pDynamicStates = states;
 }
 
 CU_NS_END

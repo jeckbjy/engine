@@ -38,8 +38,8 @@ void VK_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 
 void VK_CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	VK_Pipeline* ppl = pipeline->cast<VK_Pipeline>();
-	vkCmdBindPipeline(m_handle, ppl->getBindPoint(), ppl->native());
+	//VK_Pipeline* ppl = pipeline->cast<VK_Pipeline>();
+	//vkCmdBindPipeline(m_handle, ppl->getBindPoint(), ppl->native());
 }
 
 void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer)

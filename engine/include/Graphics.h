@@ -107,12 +107,7 @@ class CU_API Pipeline : public Object
 {
 	DECLARE_RTTI(Pipeline, Object, "PPLE");
 protected:
-	uint8_t	 m_type;
-	Program* m_prog;
 	virtual ~Pipeline(){}
-
-public:
-	Program* getProgram() { return m_prog; }
 };
 
 // »æÖÆ²ÎÊý
