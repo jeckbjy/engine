@@ -17,7 +17,7 @@ D3D12Buffer::D3D12Buffer(ID3D12Device* device, const BufferDesc& desc)
 	dx_desc.SampleDesc.Count = 1;
 	dx_desc.SampleDesc.Quality = 0;
 	dx_desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-	dx_desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	dx_desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 
 	D3D12_HEAP_PROPERTIES props;
 	props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -37,9 +37,11 @@ void* D3D12Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 {
 	CU_UNUSED(access);
 	void* data = NULL;
-	m_range.Begin = offset;
-	m_range.End = offset + len;
-	m_handle->Map(0, &m_range, &data);
+	D3D12_RANGE range;
+	range.Begin = offset;
+	range.End = offset + len;
+	m_handle->Map(0, &range, &data);
+	m_range = range;
 	return data;
 }
 
