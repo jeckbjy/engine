@@ -6,14 +6,14 @@ CU_NS_BEGIN
 
 class CU_API GpuResource : public Object
 {
-	DECLARE_RTTI(GpuResource, Object, "GRES");
+	DECLARE_RTTI(GpuResource, Object, OBJ_ID_GPU_RESOURCE);
 public:
 	virtual ~GpuResource() {}
 };
 
 class CU_API GpuBuffer : public GpuResource
 {
-	DECLARE_RTTI(GpuBuffer, GpuResource, "GBUF");
+	DECLARE_RTTI(GpuBuffer, GpuResource, OBJ_ID_GPU_BUFFER);
 public:
 	GpuBuffer(const BufferDesc& desc);
 	virtual ~GpuBuffer();
@@ -38,7 +38,7 @@ protected:
 
 class CU_API Texture : public GpuResource
 {
-	DECLARE_RTTI(Texture, GpuResource, "GTEX");
+	DECLARE_RTTI(Texture, GpuResource, OBJ_ID_TEXTURE);
 public:
 	Texture(const TextureDesc& desc){}
 	virtual ~Texture(){}
@@ -59,6 +59,7 @@ protected:
 // vertex顶点结构
 class CU_API InputLayout : public Object
 {
+	DECLARE_RTTI(InputLayout, Object, OBJ_ID_INPUT_LAYOUT)
 public:
 	uint32_t hash(const InputElement* elements, size_t count);
 
@@ -75,7 +76,7 @@ protected:
 
 class CU_API RenderTarget : public Object
 {
-	DECLARE_RTTI(RenderTarget, Object, "RTAR");
+	DECLARE_RTTI(RenderTarget, Object, OBJ_ID_RENDER_TARGET);
 public:
 	virtual ~RenderTarget(){}
 	virtual void present() = 0;
@@ -84,30 +85,37 @@ public:
 
 class CU_API Program : public Object
 {
-	DECLARE_RTTI(Program, Object, "PROG");
+	DECLARE_RTTI(Program, Object, OBJ_ID_PROTRAM);
 public:
 	virtual ~Program(){}
 
 	virtual bool compile(const ProgramDesc& desc) = 0;
-	//virtual bool attach(ShaderType type, const String& data, const String& name = "", const String& entry = "", ShaderProfile profile = SP_NONE, bool binary = false) = 0;
-	//virtual bool link() = 0;
 };
 
-// 描述符
+// used for material
 class CU_API DescriptorSet : public Object
 {
-	DECLARE_RTTI(DescriptorSet, Object, "DESS");
+	DECLARE_RTTI(DescriptorSet, Object, OBJ_ID_DESCRIPTOR_SET);
 public:
 	virtual ~DescriptorSet(){}
 	virtual void bind(const String& name, GpuResource* res) = 0;
 };
 
+// 
+class CU_API PipelineLayout : public Object
+{
+	DECLARE_RTTI(PipelineLayout, Object, OBJ_ID_PIPELINE_LAYOUT);
+public:
+	virtual ~PipelineLayout(){}
+};
+
 // 渲染管线,计算管线
 class CU_API Pipeline : public Object
 {
-	DECLARE_RTTI(Pipeline, Object, "PPLE");
+	DECLARE_RTTI(Pipeline, Object, OBJ_ID_PIPELINE);
 protected:
 	virtual ~Pipeline(){}
+	//virtual PipelineType type() const = 0;
 };
 
 // 绘制参数
@@ -135,7 +143,7 @@ struct CU_API DrawParam
 // execute buffer
 class CU_API CommandBuffer : public Object
 {
-	DECLARE_RTTI(CommandBuffer, Object, "CMDB");
+	DECLARE_RTTI(CommandBuffer, Object, OBJ_ID_COMMAND_BUFFER);
 public:
 	virtual ~CommandBuffer(){}
 
@@ -155,7 +163,7 @@ public:
 // 队列
 class CU_API CommandQueue : public Object
 {
-	DECLARE_RTTI(CommandQueue, Object, "CMDQ");
+	DECLARE_RTTI(CommandQueue, Object, OBJ_ID_COMMAND_QUEUE);
 public:
 	virtual ~CommandQueue(){}
 	virtual void execute(CommandBuffer* cmds) = 0;
@@ -164,7 +172,7 @@ public:
 // 底层渲染接口,mean Device create objs
 class CU_API Device : public Object
 {
-	DECLARE_RTTI(Device, Object, "GRCS");
+	DECLARE_RTTI(Device, Object, OBJ_ID_DEVICE);
 public:
 	virtual ~Device(){}
 
@@ -196,11 +204,10 @@ public:
 // 用于全局,枚举GPU
 class CU_API Graphics : public Object
 {
+	DECLARE_RTTI(Graphics, Object, OBJ_ID_GRAPHICS);
+
 public:
 	virtual ~Graphics(){}
-
-	template<typename T>
-	T* getDevice() { return m_device->cast<T>(); }
 
 	Device* getDevice() { return m_device; }
 
