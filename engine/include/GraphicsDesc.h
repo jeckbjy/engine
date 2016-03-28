@@ -186,38 +186,38 @@ struct CU_API InputElement
 	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
 };
 
-//
-// Shader反射
-//struct CU_API VariableDesc
-//{
-//	String  name;
-//	int8_t  type;
-//	int32_t block;	// 对应block索引
-//	int32_t size;	// 数据大小
-//};
-//
-//struct CU_API UniformDesc
-//{
-//	enum Type
-//	{
-//		T_BUFFER,	// 普通内存 
-//		T_BLOCK,	// block buffer
-//		T_TEXTURE,
-//		T_SAMPLER,
-//	};
-//	String	name;
-//	int8_t	type;
-//	int32_t size;
-//	int8_t	shareable : 1;
-//	UniformDesc() :type(0), size(0), shareable(0){}
-//};
-//
-//struct CU_API ParamDesc
-//{
-//	typedef std::vector<VariableDesc> VariableDescVec;
-//	typedef std::vector<UniformDesc> UniformDescVec;
-//	UniformDescVec uniforms;
-//	VariableDescVec variables;
-//};
+// 描述一个descriptor类型及个数
+struct CU_API DescriptorRangeDesc
+{
+	uint32_t		slot;
+	DescriptorType	type;
+	uint32_t		count;
+	ShaderStageFlag	stages;
+};
+
+// 描述一个DescriptorSet信息,即含有多少个DescriptorRange
+struct CU_API DescriptorSetLayoutDesc
+{
+	uint32_t					count;
+	const DescriptorRangeDesc*	descriptors;
+};
+
+// 静态数据
+struct CU_API ConstantRangeDesc
+{
+	uint32_t		offset;
+	uint32_t		size;
+	ShaderStageFlag stages;
+};
+
+// 可含有多个DescriptorSet以及Const和Sampler
+struct CU_API PipelineLayoutDesc 
+{
+	uint32_t						layoutCount;
+	const DescriptorSetLayoutDesc*	layouts;
+	uint32_t						counstantRangeCount;
+	const ConstantRangeDesc*		counstantRanges;
+	// samplers, single descriptor??
+};
 
 CU_NS_END

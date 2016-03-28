@@ -352,6 +352,11 @@ enum ShaderStageFlag
 	SHADER_STAGE_ALL_GRAPHICS				= 0x1F,
 };
 
+enum DescriptorType
+{
+	DESCRIPTOR_TYPE_SAMPLER = 0,
+};
+
 //enum ShaderType
 //{
 //	ST_VERTEX,

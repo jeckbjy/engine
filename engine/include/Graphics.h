@@ -101,7 +101,7 @@ public:
 	virtual void bind(const String& name, GpuResource* res) = 0;
 };
 
-// 
+// √Ë ˆDescriptorSet π”√
 class CU_API PipelineLayout : public Object
 {
 	DECLARE_RTTI(PipelineLayout, Object, OBJ_ID_PIPELINE_LAYOUT);
@@ -182,6 +182,7 @@ public:
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
 	virtual Program*		newProgram() = 0;
+	//virtual PipelineLayout*	newPipelineLayout(const PipelineLayoutDesc& desc) = 0;
 	virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
 	virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
