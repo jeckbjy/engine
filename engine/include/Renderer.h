@@ -33,6 +33,7 @@ private:
 	RenderPathMap	m_renderer;
 	ViewList		m_views;
 	TextureMap		m_gbuffers;
+	RenderTarget*	m_target;		// ??
 };
 
 CU_NS_END

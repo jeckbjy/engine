@@ -49,6 +49,8 @@ D3D12_CULL_MODE D3D12Mapping::getCullMode(CullMode mode)
 {
 	switch (mode)
 	{
+	case CULL_MODE_NONE:
+		return D3D12_CULL_MODE_NONE;
 	case CULL_MODE_FRONT:
 		return D3D12_CULL_MODE_FRONT;
 	case CULL_MODE_BACK:
@@ -56,7 +58,7 @@ D3D12_CULL_MODE D3D12Mapping::getCullMode(CullMode mode)
 	case CULL_MODE_BOTH:// dx不支持双面？
 		return D3D12_CULL_MODE_BACK;
 	default:
-		return D3D12_CULL_MODE_FRONT;
+		return D3D12_CULL_MODE_BACK;
 	}
 }
 
@@ -225,7 +227,7 @@ void D3D12Mapping::fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const 
 	fillStencilOpState(state.BackFace, desc.back);
 }
 
-void D3D12Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpState& desc)
+void D3D12Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpDesc& desc)
 {
 	state.StencilFailOp = getStencilOp(desc.failOp);
 	state.StencilDepthFailOp = getStencilOp(desc.depthFailOp);

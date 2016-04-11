@@ -90,6 +90,7 @@ typedef char tchar_t;
 #endif
 
 using std::size_t;
+typedef signed int	ssize_t;
 
 typedef int8_t			sint8;
 typedef int16_t			sint16;
@@ -115,8 +116,8 @@ template<class T>
 class Vector : public std::vector<T>{};
 template<class T>
 class HashSet : public std::unordered_set<T>{};
-template<class U, class V>
-class HashMap : public std::unordered_map<U, V>{};
+template<class U, class V, class _Hasher = std::hash<U>, class _Keyeq = std::equal_to<U>>
+class HashMap : public std::unordered_map<U, V, _Hasher, _Keyeq>{};
 //template<class T>
 //using Vector = std::vector<T>;
 //template<class T>

@@ -2,6 +2,12 @@
 
 CU_NS_BEGIN
 
+#ifdef _WIN32
+#define CU_CLOSE_SOCKET(s)	::closesocket(s)
+#else
+#define CU_CLOSE_SOCKET(s)	::close(s)
+#endif
+
 socket_t Socket::create_socket(int af /* = AF_INET */, int type /* = SOCK_STREAM */, int proto /* = IPPROTO_IP */)
 {
 	socket_t sock;
@@ -16,15 +22,12 @@ socket_t Socket::create_socket(int af /* = AF_INET */, int type /* = SOCK_STREAM
 	return sock;
 }
 
-void Socket::close_socket(socket_t sock)
+void Socket::close_socket(socket_t& sock)
 {
 	if (sock != INVALID_SOCKET)
 	{
-#ifdef _WIN32
-		::closesocket(sock);
-#else
-		::close(sock);
-#endif
+		CU_CLOSE_SOCKET(sock);
+		sock = INVALID_SOCKET;
 	}
 }
 
@@ -63,6 +66,11 @@ void Socket::reset()
 
 void Socket::close()
 {
+	if (m_sock != INVALID_SOCKET)
+	{
+		CU_CLOSE_SOCKET(m_sock);
+		m_sock = INVALID_SOCKET;
+	}
 }
 
 void Socket::shutdown(int how /* = SHUT_RDWR */)

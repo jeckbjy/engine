@@ -25,9 +25,10 @@ class CU_API IOOperation : public Object
 	bool success() const { return code == 0; }
 };
 
+// 同步operation,for unix system
 class CU_API SyncOperation : public IOOperation
 {
-	DECLARE_RTTI(SyncOperation, IOOperation, "IOPS");
+	DECLARE_RTTI(SyncOperation, IOOperation, NULL);
 public:
 	enum
 	{
@@ -47,7 +48,7 @@ public:
 // 同步Socket操作
 class CU_API SocketOperation : public IOOperation
 {
-	DECLARE_RTTI(SocketOperation, IOOperation, "IOPS");
+	DECLARE_RTTI(SocketOperation, IOOperation, NULL);
 public:
 	enum
 	{
@@ -65,7 +66,7 @@ public:
 // 只能是异步，accept，iocp无法实现
 class CU_API AcceptOperation : public IOOperation
 {
-	DECLARE_RTTI(AcceptOperation, IOOperation, "IOPA");
+	DECLARE_RTTI(AcceptOperation, IOOperation, NULL);
 public:
 	enum { ADDR_LEN = sizeof(sockaddr_in6) + 16 };
 	socket_t sock;

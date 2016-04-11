@@ -384,6 +384,15 @@
     <ClInclude Include="..\engine\src\xml\pugixml.hpp">
       <Filter>external</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\include\SortedVector.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\KeyedVector.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\include\ProxyChannel.h">
+      <Filter>net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\src\AABox.cpp">
@@ -643,6 +652,9 @@
     </ClCompile>
     <ClCompile Include="..\engine\src\xml\pugixml.cpp">
       <Filter>external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\engine\src\ProxyChannel.cpp">
+      <Filter>net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ class CU_API Socket
 {
 public:
 	static socket_t create_socket(int af = AF_INET, int type = SOCK_STREAM, int proto = IPPROTO_IP);
-	static void		close_socket(socket_t sock);
+	static void		close_socket(socket_t& sock);
 	
 	Socket(socket_t sock = INVALID_SOCKET);
 	Socket(int af, int type, int proto = IPPROTO_IP);
@@ -81,6 +81,7 @@ public:
 	operator socket_t() const { return m_sock; }
 	bool operator!() const { return m_sock != INVALID_SOCKET; }
 	Socket& operator=(socket_t sock) { set(sock); return *this; }
+
 private:
 	socket_t m_sock;
 };

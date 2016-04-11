@@ -1,5 +1,5 @@
 #pragma once
-#include "Window.h"
+#include "Object.h"
 #include "GraphicsDesc.h"
 
 CU_NS_BEGIN

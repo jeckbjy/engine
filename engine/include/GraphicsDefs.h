@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 
 CU_NS_BEGIN
 
@@ -9,8 +8,8 @@ CU_NS_BEGIN
 enum ShadeMode CU_ENUM(uint8_t)
 {
 	SHADE_FLAT,		// 平面着色模式
-		SHADE_GOURAUD,	// 格劳德着色模式
-		SHADE_PHONG		//
+	SHADE_GOURAUD,	// 格劳德着色模式
+	SHADE_PHONG		//
 };
 
 // 填充模式,gl:polygon

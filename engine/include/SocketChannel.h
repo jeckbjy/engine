@@ -3,7 +3,6 @@
 #include "Buffer.h"
 #include "Socket.h"
 #include "Mutex.h"
-#include "SocketAddress.h"
 #include "Delegate.h"
 
 CU_NS_BEGIN
@@ -11,6 +10,7 @@ CU_NS_BEGIN
 class CU_API SocketChannel : public Channel
 {
 public:
+	// 回调事件枚举
 	enum
 	{
 		EV_ERROR,
@@ -18,14 +18,6 @@ public:
 		EV_READ,
 		EV_WRITE,
 	};
-	
-	enum State
-	{
-		S_DISCONNECT,
-		S_CONNECTING,
-		S_ESTABLISH,
-	};
-
 	typedef Delegate<void(uint8_t)> Callback;
 
 	SocketChannel(Callback fun, IOService* loop, socket_t sock = INVALID_SOCKET);
@@ -52,19 +44,23 @@ public:
 
 	int getState() const { return m_state; }
 	bool isConnecting() const { return m_state == S_CONNECTING; }
-	const SocketAddress& getPeer() const { return m_peer; }
+	const SocketAddress& getPeer() const { return m_addr; }
+
 private:
 	void write();
 	void read();
+	void attach();
+	void detach();
 
 protected:
-	Socket m_sock;
-	State  m_state;
-	Mutex  m_mutex;
-	Buffer m_reader;
-	Buffer m_writer;
-	SocketAddress m_peer;
-	Callback m_fun;
+	Socket	m_sock;
+	State	m_state;
+	Mutex	m_mutex;
+	Buffer	m_reader;
+	Buffer	m_writer;
+	bool	m_attached;
+	Callback		m_fun;
+	SocketAddress	m_addr;
 };
 
 CU_NS_END

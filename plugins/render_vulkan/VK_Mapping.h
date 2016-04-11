@@ -31,7 +31,7 @@ public:
 	static void fillRasterizationState(VkPipelineRasterizationStateCreateInfo& rast_info, const RasterizerDesc& rast_desc);
 	static void fillMultisampleState(VkPipelineMultisampleStateCreateInfo& info, const MultisampleDesc& desc);
 	static void fillDepthStencilState(VkPipelineDepthStencilStateCreateInfo& info, const DepthStencilDesc& desc);
-	static void fillStencilOpState(VkStencilOpState& state, const StencilOpState& desc);
+	static void fillStencilOpState(VkStencilOpState& state, const StencilOpDesc& desc);
 	static void fillBlendState(VkPipelineColorBlendStateCreateInfo& info, VkPipelineColorBlendAttachmentState* attachments, const BlendDesc& desc);
 	static void fillBlendTarget(VkPipelineColorBlendAttachmentState& info, const BlendTargetDesc& desc);
 	static void fillViewportState(VkPipelineViewportStateCreateInfo& info, uint32_t viewportCount = 1, uint32_t scissorCount = 1);

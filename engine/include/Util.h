@@ -49,6 +49,13 @@ public:
 
 	template<typename T> inline static T toInteger(const String& str) { return (T)atoi(str.data()); }
 	template<typename T> inline static T toFloat(const String& str) { return (T)atof(str.data()); }
+
+	template<class T>
+	inline static void hash_combine(std::size_t& seed, const T& v)
+	{
+		std::hash<T> hasher;
+		seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+	}
 };
 
 CU_NS_END

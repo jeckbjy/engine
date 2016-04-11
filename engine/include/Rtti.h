@@ -93,8 +93,8 @@ public:\
 	};\
 	virtual Rtti* getRtti() const { return getStaticRtti(); }
 
-#define DECLARE_RTTI(CLS, BASE, FOUR_CC) __DeclareRTTI(CLS, BASE, FOUR_CC)
-#define DECLARE_BASE_RTTI(CLS, FOUR_CC)  __DeclareRTTI(CLS, RootRtti, FOUR_CC)
+#define DECLARE_RTTI(CLS, BASE, FOUR_CC) __DeclareRTTI(CLS, BASE,		FOUR_CC)
+#define DECLARE_BASE_RTTI(CLS, FOUR_CC)  __DeclareRTTI(CLS, RootRtti,	FOUR_CC)
 #define OBJECT_TYPE(OBJ) OBJ::getStaticRtti()->getType()
 
 CU_NS_END

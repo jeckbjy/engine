@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;CU_D3D11_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -96,6 +96,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_CommandBuffer.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Graphics.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_InputLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Graphics.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Buffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_CommandBuffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_DescriptorSet.cpp" />

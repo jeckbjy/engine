@@ -86,7 +86,7 @@ struct CU_API MultisampleDesc
 };
 
 // DepthStencilState
-struct CU_API StencilOpState
+struct CU_API StencilOpDesc
 {
 	StencilOp	failOp;
 	StencilOp	passOp;
@@ -95,7 +95,7 @@ struct CU_API StencilOpState
 	uint32_t	compareMask;
 	uint32_t	writeMask;
 	uint32_t	reference;
-	StencilOpState();
+	StencilOpDesc();
 };
 
 struct CU_API DepthStencilDesc
@@ -105,8 +105,8 @@ struct CU_API DepthStencilDesc
 	bool			depthBoundsTestEnable;
 	CompareOp		depthCompareOp;
 	bool			stencilTestEnable;
-	StencilOpState	front;
-	StencilOpState	back;
+	StencilOpDesc	front;
+	StencilOpDesc	back;
 	float			minDepthBounds;
 	float			maxDepthBounds;
 	DepthStencilDesc();
@@ -133,6 +133,11 @@ struct CU_API BlendDesc
 	BlendTargetDesc	targets[8];
 	float			blendConstants[4];
 	BlendDesc();
+
+	bool operator == (const BlendDesc other) const
+	{
+		return true;
+	}
 };
 
 // ´´½¨shader

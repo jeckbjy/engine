@@ -358,7 +358,7 @@ group "render"
 		kind("SharedLib")
 		defines { "CU_D3D11_BUILD" }
 		--includedirs { src_dir}
-		includedirs { "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/Include" }
+		--includedirs { "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/Include" }
 		libdirs	{"D:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x64"}
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }

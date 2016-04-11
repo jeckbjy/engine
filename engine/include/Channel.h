@@ -10,6 +10,7 @@ class IOService;
 class CU_API Channel : public Object
 {
 	DECLARE_RTTI(Channel, Object, "CHAN");
+
 public:
 	Channel(IOService* serivce = NULL);
 	virtual ~Channel();
@@ -23,8 +24,16 @@ public:
 	error_t getLastCode() const { return m_code; }
 
 protected:
+	// socket连接状态
+	enum State
+	{
+		S_UNKNOWN,		// 尚未初始化过
+		S_CONNECTING,	// 正在连接服务器中
+		S_DISCONNECT,	// 未连接
+		S_ESTABLISH,	// 已经建立连接
+	};
+
 	IOService*	m_serivce;
-	bool		m_attached;
 	error_t		m_code;
 };
 

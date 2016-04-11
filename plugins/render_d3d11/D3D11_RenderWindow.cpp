@@ -1,5 +1,6 @@
 #include "D3D11_RenderWindow.h"
 #include "D3D11_Texture.h"
+#include "Window.h"
 
 CU_NS_BEGIN
 

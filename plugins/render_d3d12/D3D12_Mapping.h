@@ -26,7 +26,7 @@ public:
 	static void fillBlendState(D3D12_BLEND_DESC& state, const BlendDesc& desc);
 	static void fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const BlendTargetDesc& desc);
 	static void fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const DepthStencilDesc& desc);
-	static void fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpState& desc);
+	static void fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpDesc& desc);
 	static void fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& desc);
 
 	static void fillSemantic(Semantic semantic, LPCSTR& name, UINT& index);

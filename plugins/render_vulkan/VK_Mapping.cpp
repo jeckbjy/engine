@@ -168,7 +168,7 @@ void VK_Mapping::fillDepthStencilState(VkPipelineDepthStencilStateCreateInfo& in
 	fillStencilOpState(info.back, desc.back);
 }
 
-void VK_Mapping::fillStencilOpState(VkStencilOpState& state, const StencilOpState& desc)
+void VK_Mapping::fillStencilOpState(VkStencilOpState& state, const StencilOpDesc& desc)
 {
 	state.failOp = getStencilOp(desc.failOp);
 	state.passOp = getStencilOp(desc.passOp);

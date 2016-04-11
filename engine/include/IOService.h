@@ -7,6 +7,8 @@
 
 CU_NS_BEGIN
 
+class Socket;
+class SocketAddress;
 class IOOperation;
 // iocp or poller
 class CU_API IOService
@@ -23,17 +25,18 @@ public:
 	void wakeup();
 	void run_once(int msec);
 
-	bool attach(Channel* channel);
-	void detach(Channel* channel);
+	bool attach(handle_t handle, Channel* channel);
+	void detach(handle_t handle, Channel* channel);
 	// ¥¶¿Ì
-	void send(Channel* channel);
-	void recv(Channel* channel);
+	void send(socket_t sock, Channel* channel);
+	void recv(socket_t sock, Channel* channel);
+	void connect(const SocketAddress& addr, const Socket& sock, Channel* channel);
 
 #ifdef CU_OS_WIN
 	void post(IOOperation* op);
 	void post(IOOperation* op, DWORD ec, DWORD bytes = 0);
 #else
-	void modify(Channel* channel, int op, int events);
+	void modify(handle_t handle, Channel* channel, int op, int events);
 #endif
 
 private:

@@ -7,11 +7,35 @@ AcceptChannel::AcceptChannel(Callback func, IOService* service)
 : Channel(service)
 , m_sock(INVALID_SOCKET)
 , m_func(func)
+, m_attached(false)
 {
 }
 
 AcceptChannel::~AcceptChannel()
 {
+	detach();
+	m_sock.close();
+}
+
+void AcceptChannel::perform(IOOperation* op)
+{
+	if (op->isKindOf<SyncOperation>())
+	{
+		SyncOperation* sop = (SyncOperation*)op;
+		if (sop->isInput())
+		{
+			socket_t sock = m_sock.accept();
+			error_t ec = last_error();
+			m_func(ec, sock);
+		}
+	}
+	else if (op->isKindOf<AcceptOperation>())
+	{
+		AcceptOperation* aop = op->cast<AcceptOperation>();
+		if (!aop)
+			return;
+		m_func(aop->code, aop->sock);
+	}
 }
 
 void AcceptChannel::accept()
@@ -57,24 +81,20 @@ void AcceptChannel::listen(const SocketAddress& addr, int backlog)
 	accept();
 }
 
-void AcceptChannel::perform(IOOperation* op)
+void AcceptChannel::attach()
 {
-	if (op->isKindOf<SyncOperation>())
+	if (m_attached || !m_serivce)
+		return;
+	if (m_serivce->attach((handle_t)m_sock.native(), this))
+		m_attached = true;
+}
+
+void AcceptChannel::detach()
+{
+	if (m_attached)
 	{
-		SyncOperation* sop = (SyncOperation*)op;
-		if (sop->isInput())
-		{
-			socket_t sock = m_sock.accept();
-			error_t ec = last_error();
-			m_func(ec, sock);
-		}
-	}
-	else if (op->isKindOf<AcceptOperation>())
-	{
-		AcceptOperation* aop = op->cast<AcceptOperation>();
-		if (!aop)
-			return;
-		m_func(aop->code, aop->sock);
+		m_serivce->detach((handle_t)m_sock.native(), this);
+		m_attached = false;
 	}
 }
 

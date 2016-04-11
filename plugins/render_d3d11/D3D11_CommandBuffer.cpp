@@ -38,7 +38,7 @@ void D3D11CommandBuffer::setTopology(Topology primitive)
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	((D3D11Pipeline*)pipeline)->bind(m_handle, m_factors, m_stencilRef);
+	((D3D11GraphicsPipeline*)pipeline)->bind(m_handle, m_factors, m_stencilRef);
 }
 
 void D3D11CommandBuffer::setInputLayout(InputLayout* layout)

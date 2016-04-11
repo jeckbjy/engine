@@ -140,6 +140,7 @@
     <ClInclude Include="..\engine\include\IOOperation.h" />
     <ClInclude Include="..\engine\include\IOService.h" />
     <ClInclude Include="..\engine\include\IOServicePool.h" />
+    <ClInclude Include="..\engine\include\KeyedVector.h" />
     <ClInclude Include="..\engine\include\Light.h" />
     <ClInclude Include="..\engine\include\List.h" />
     <ClInclude Include="..\engine\include\Log.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\engine\include\Predeclare.h" />
     <ClInclude Include="..\engine\include\Profiler.h" />
     <ClInclude Include="..\engine\include\Protocol.h" />
+    <ClInclude Include="..\engine\include\ProxyChannel.h" />
     <ClInclude Include="..\engine\include\Quaternion.h" />
     <ClInclude Include="..\engine\include\Range.h" />
     <ClInclude Include="..\engine\include\Ray.h" />
@@ -186,6 +188,7 @@
     <ClInclude Include="..\engine\include\Socket.h" />
     <ClInclude Include="..\engine\include\SocketAddress.h" />
     <ClInclude Include="..\engine\include\SocketChannel.h" />
+    <ClInclude Include="..\engine\include\SortedVector.h" />
     <ClInclude Include="..\engine\include\Sphere.h" />
     <ClInclude Include="..\engine\include\Stream.h" />
     <ClInclude Include="..\engine\include\StringPiece.h" />
@@ -270,6 +273,7 @@
     <ClCompile Include="..\engine\src\Poller.cpp" />
     <ClCompile Include="..\engine\src\Profiler.cpp" />
     <ClCompile Include="..\engine\src\Protocol.cpp" />
+    <ClCompile Include="..\engine\src\ProxyChannel.cpp" />
     <ClCompile Include="..\engine\src\Quaternion.cpp" />
     <ClCompile Include="..\engine\src\Ray.cpp" />
     <ClCompile Include="..\engine\src\Ref.cpp" />

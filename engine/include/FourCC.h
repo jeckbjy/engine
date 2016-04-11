@@ -8,11 +8,15 @@ class FourCC
 {
 public:
 	FourCC() :m_fourCC(0){}
+	FourCC(int cc) :m_fourCC((uint32_t)cc){}
 	FourCC(uint32_t cc) :m_fourCC(cc){}
 	FourCC(const char* cc){ set(cc); }
 	FourCC(char a, char b, char c, char d){ set(a, b, c, d); }
 
-	void set(const char* s){ set(s[0], s[1], s[2], s[3]); }
+	void set(const char* s)
+	{
+		set(s[0], s[1], s[2], s[3]); 
+	}
 	void set(char a, char b, char c, char d){ m_fourCC = CU_FOURCC(a, b, c, d); }
 
 	String toString() const;

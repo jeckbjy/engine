@@ -7,11 +7,12 @@ SocketChannel::SocketChannel(Callback fun, IOService* loop, socket_t sock)
 : Channel(loop)
 , m_sock(sock)
 , m_state(sock == INVALID_SOCKET ? S_DISCONNECT : S_ESTABLISH)
+, m_attached(false)
 , m_fun(fun)
 {
 	if (!m_sock.invalid())
 	{
-		m_peer = m_sock.peerAddress();
+		m_addr = m_sock.peerAddress();
 		m_sock.setBlocking(false);
 		attach();
 		recv();
@@ -20,6 +21,7 @@ SocketChannel::SocketChannel(Callback fun, IOService* loop, socket_t sock)
 
 SocketChannel::~SocketChannel()
 {
+	detach();
 }
 
 void SocketChannel::reconnect()
@@ -27,46 +29,22 @@ void SocketChannel::reconnect()
 	if (m_state != S_DISCONNECT)
 		return;
 	m_state = S_CONNECTING;
-#ifdef CU_OS_WIN
-	if (FConnectEx == NULL)
-		throw std::runtime_error("cannot find connectex");
-	SocketOperation* op = new SocketOperation(this, SocketOperation::OP_CONNECT);
-	DWORD result, err;
-	result = FConnectEx(m_sock, m_peer.address(), m_peer.length(), 0, 0, 0, &op->data);
-	err = ::WSAGetLastError();
-	if (!result && err != WSA_IO_PENDING)
-		m_serivce->post(op, err);
-#else
-	if (m_sock.connect(m_peer) == 0)
-	{// 链接成功
-		completed(SocketOperation::OP_CONNECT);
-	}
-	else
-	{
-		m_code = last_error();
-		bool blocking = (m_code == EINPROGRESS || m_code == EWOULDBLOCK);
-		if (blocking)
-		{// blocking:wait for triger
-			m_serivce->modify(this, EV_CTL_MOD, EV_IN | EV_OUT);
-		}
-		else
-		{// error:notify 
-			notify(EV_ERROR);
-		}
-	}
-#endif
+	m_serivce->connect(m_addr, m_sock.native(), this);
 }
 
 void SocketChannel::connect(const SocketAddress& addr)
 {
-	if (m_sock == INVALID_SOCKET)
-	{
-		m_sock.create(addr.family());
-		// iocp need bind
-		m_sock.bind(SocketAddress(), true);
-	}
+	detach();
+	m_sock.close();
+
+	m_addr = addr;
+	m_sock.create(addr.family());
+#ifdef _WIN32
+	// because iocp need bind
+	m_sock.bind(SocketAddress(), true);
+#endif
+
 	attach();
-	m_peer = addr;
 	// do connect
 	reconnect();
 }
@@ -80,7 +58,7 @@ void SocketChannel::send(const Buffer & buf)
 
 void SocketChannel::recv()
 {
-	m_serivce->recv(this);
+	m_serivce->recv(m_sock.native(), this);
 }
 
 void SocketChannel::write()
@@ -96,7 +74,7 @@ void SocketChannel::write()
 		{// has error
 			m_code = last_error();
 			if (m_code == ERR_IN_PROGRESS)
-				m_serivce->send(this);
+				m_serivce->send(m_sock.native(), this);
 			else
 				notify(EV_ERROR);
 			break;
@@ -105,7 +83,7 @@ void SocketChannel::write()
 		m_writer.seek(len, SEEK_CUR);
 		if (ret < len)
 		{
-			m_serivce->send(this);
+			m_serivce->send(m_sock.native(), this);
 			break;
 		}
 	}
@@ -128,30 +106,27 @@ void SocketChannel::read()
 		m_reader.expand((size_t)ret);
 		m_reader.seek(ret, SEEK_CUR);
 	}
-	//for (;;)
-	//{
-	//	int len = m_sock.available();
-	//	if (len <= 0)
-	//		return;
-	//	// 先预分配内存
-	//	m_reader.expand((size_t)len);
-	//	int bytes = 0;
-	//	// 读取填充每段buf
-	//	for (;;)
-	//	{
-	//		char*  buf = m_reader.chunk_data();
-	//		size_t len = m_reader.chunk_size();
-	//		int ret = m_sock.recv(buf, len);
-	//		if (ret <= 0)
-	//		{// error
-	//			break;
-	//		}
-	//		// 向前移动
-	//		bytes += ret;
-	//		m_reader.seek(ret, SEEK_CUR);
-	//	}
-	//	assert(bytes == len);
-	//}
+}
+
+void SocketChannel::attach()
+{
+	if (m_sock.invalid())
+		return;
+
+	if (m_attached || !m_serivce)
+		return;
+
+	if (m_serivce->attach((handle_t)m_sock.native(), this))
+		m_attached = true;
+}
+
+void SocketChannel::detach()
+{
+	if (m_attached)
+	{
+		m_serivce->detach((handle_t)m_sock.native(), this);
+		m_attached = false;
+	}
 }
 
 void SocketChannel::perform(IOOperation* op)
@@ -204,7 +179,7 @@ void SocketChannel::completed(uint8_t type)
 		m_state = S_ESTABLISH;
 		notify(EV_CONNECT);
 		if (m_sock != INVALID_SOCKET)
-			m_serivce->recv(this);
+			m_serivce->recv(m_sock.native(), this);
 	}
 	break;
 	case SocketOperation::OP_WRITE:
@@ -219,7 +194,7 @@ void SocketChannel::completed(uint8_t type)
 		notify(EV_READ);
 		// 继续监听读取
 		if (m_sock != INVALID_SOCKET)
-			m_serivce->recv(this);
+			m_serivce->recv(m_sock.native(), this);
 	}
 	break;
 	}

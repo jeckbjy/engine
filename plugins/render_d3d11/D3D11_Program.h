@@ -10,16 +10,16 @@ public:
 	D3D11Program();
 	~D3D11Program();
 
-	void bind(ID3D11DeviceContextN* context);
-	void unbind(ID3D11DeviceContextN* context);
+	bool compile(const ProgramDesc& desc);
 
 private:
-	ID3D11VertexShader*		_vs;
-	ID3D11PixelShader*		_ps;
-	ID3D11GeometryShader*	_gs;
-	ID3D11DomainShader*		_ds;
-	ID3D11HullShader*		_hs;
-	ID3D11ComputeShader*	_cs;
+	//	ID3D11VertexShader*		_vs;
+	//	ID3D11PixelShader*		_ps;
+	//	ID3D11GeometryShader*	_gs;
+	//	ID3D11DomainShader*		_ds;
+	//	ID3D11HullShader*		_hs;
+	//	ID3D11ComputeShader*	_cs;
+	ID3D11DeviceChild* m_shader;
 };
 
 CU_NS_END

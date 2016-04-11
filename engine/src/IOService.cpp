@@ -1,5 +1,6 @@
 #include "IOService.h"
 #include "Channel.h"
+#include "Socket.h"
 
 #ifndef CU_OS_WIN
 #include "Poller.h"
@@ -139,29 +140,29 @@ void IOService::run_once(int msec)
 }
 #endif
 
-bool IOService::attach(Channel* channel)
+bool IOService::attach(handle_t handle, Channel* channel)
 {
 #ifdef CU_OS_WIN
-	return ::CreateIoCompletionPort((HANDLE)channel->handle(), m_handle, 0, 0) != INVALID_HANDLE_VALUE;
+	return ::CreateIoCompletionPort(handle, m_handle, 0, 0) != INVALID_HANDLE_VALUE;
 #else
-	return m_handle.ctrl(channel->handle(), EV_CTL_ADD, EV_IN | EV_OUT, channel) == 0;
+	return m_handle.ctrl(handle, EV_CTL_ADD, EV_IN | EV_OUT, channel) == 0;
 #endif
 }
 
-void IOService::detach(Channel* channel)
+void IOService::detach(handle_t handle, Channel* channel)
 {
 #ifndef CU_OS_WIN
-	m_handle.ctrl(channel->handle(), EV_CTL_DEL, EV_IN | EV_OUT, channel);
+	m_handle.ctrl(handle, EV_CTL_DEL, EV_IN | EV_OUT, channel);
 #endif
 }
 
-void IOService::send(Channel* channel)
+void IOService::send(socket_t sock, Channel* channel)
 {
 #ifdef CU_OS_WIN
 	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_WRITE);
 	WSABUF buf = { 0, 0 };
 	DWORD bytes;
-	int   result = ::WSASend((SOCKET)channel->handle(), &buf, 1, &bytes, 0, &op->data, 0);
+	int   result = ::WSASend(sock, &buf, 1, &bytes, 0, &op->data, 0);
 	DWORD ec = ::WSAGetLastError();
 	if (result != ERROR_SUCCESS)
 	{
@@ -171,17 +172,17 @@ void IOService::send(Channel* channel)
 			post(op, ec, bytes);
 	}
 #else
-	modify(channel, EV_CTL_MOD, EV_OUT);
+	modify(sock, channel, EV_CTL_MOD, EV_OUT);
 #endif
 }
 
-void IOService::recv(Channel* channel)
+void IOService::recv(socket_t sock, Channel* channel)
 {
 #ifdef CU_OS_WIN
 	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_READ);
 	WSABUF buf = { 0, 0 };
 	DWORD bytes = 0, flag = 0;
-	int result = ::WSARecv((SOCKET)channel->handle(), &buf, 1, &bytes, &flag, &op->data, 0);
+	int result = ::WSARecv(sock, &buf, 1, &bytes, &flag, &op->data, 0);
 	if (result != ERROR_SUCCESS)
 	{
 		DWORD ec = ::WSAGetLastError();
@@ -195,7 +196,47 @@ void IOService::recv(Channel* channel)
 		}
 	}
 #else
-	modify(channel, EV_CTL_MOD, EV_IN);
+	modify(sock, channel, EV_CTL_MOD, EV_IN);
+#endif
+}
+
+void IOService::connect(const SocketAddress& addr, const Socket& sock, Channel* channel)
+{
+#ifdef CU_OS_WIN
+	SocketOperation* op = new SocketOperation(channel, SocketOperation::OP_CONNECT);
+	if (FConnectEx != NULL)
+	{
+		DWORD result, err;
+		result = FConnectEx(sock, addr.address(), addr.length(), 0, 0, 0, &op->data);
+		err = ::WSAGetLastError();
+		if (!result && err != WSA_IO_PENDING)
+			post(op, err);
+	}
+	else
+	{
+		post(op, ERR_FAULT);
+	}
+#else
+	if (sock.connect(addr) == 0)
+	{// 连接成功，通知回调
+		SocketOperation op(channel, SocketOperation::OP_CONNECT);
+		channel->perform(&op);
+	}
+	else
+	{
+		error_t code = last_error();
+		bool blocking = (code == EINPROGRESS || code == EWOULDBLOCK);
+		if (blocking)
+		{// 异步等待连接
+			modify(sock.native(), channel, EV_CTL_MOD, EV_IN | EV_OUT);
+		}
+		else
+		{// error
+			SocketOperation op(channel, SocketOperation::OP_ERROR);
+			op.code = code;
+			channel->perform(&op);
+		}
+	}
 #endif
 }
 
@@ -213,9 +254,9 @@ void IOService::post(IOOperation* op, DWORD ec, DWORD bytes /* = 0 */)
 	post(op);
 }
 #else
-void IOService::modify(Channel* channel, int op, int events)
+void IOService::modify(handle_t handle, Channel* channel, int op, int events)
 {
-	m_handle.ctrl(channel->handle(), op, events, channel);
+	m_handle.ctrl(handle, op, events, channel);
 }
 #endif
 

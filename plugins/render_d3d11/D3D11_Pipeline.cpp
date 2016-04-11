@@ -3,23 +3,15 @@
 
 CU_NS_BEGIN
 
-D3D11Pipeline::D3D11Pipeline(const GraphicsPipelineDesc& desc)
-: _depth_stencil(NULL)
-, _blend(NULL)
-, _rasterizer(NULL)
-, _sampler(NULL)
+D3D11GraphicsPipeline::D3D11GraphicsPipeline(const GraphicsPipelineDesc& desc)
 {
-
 }
 
-D3D11Pipeline::~D3D11Pipeline()
+D3D11GraphicsPipeline::~D3D11GraphicsPipeline()
 {
-	D3D11_RELEASE(_depth_stencil);
-	D3D11_RELEASE(_blend);
-	D3D11_RELEASE(_rasterizer);
 }
 
-void D3D11Pipeline::bind(ID3D11DeviceContextN* context, const float factors[4], size_t stencilref)
+void D3D11GraphicsPipeline::bind(ID3D11DeviceContextN* context, const float factors[4], size_t stencilref)
 {
 	//if (m_prog == NULL)
 	//	return;

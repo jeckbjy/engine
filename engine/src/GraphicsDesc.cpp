@@ -27,7 +27,7 @@ MultisampleDesc::MultisampleDesc()
 
 }
 
-StencilOpState::StencilOpState()
+StencilOpDesc::StencilOpDesc()
 {
 
 }
