@@ -2,13 +2,14 @@
 #include "API.h"
 #include "GraphicsDefs.h"
 #include "PixelFormat.h"
+#include "Object.h"
 
 CU_NS_BEGIN
 
 // 顶点信息
 struct CU_API VertexElement
 {
-	VertexUsage	usage;	// Semantic
+	Semantic	usage;	// Semantic
 	PixelFormat type;	// 类型
 	uint8_t		slot;	// 槽位
 	uint8_t		offset;	// 偏移
@@ -23,9 +24,9 @@ struct CU_API VertexElement
 	{
 		return	this->usage != other.usage || this->type != other.type || this->slot != other.slot;
 	}
-	VertexElement() :usage(VU_POSITION), type(PF_FLOAT3), slot(0){}
-	VertexElement(VertexUsage usage) :usage(usage), type(PF_UNKNOWN), slot(0){}
-	VertexElement(VertexUsage usage, PixelFormat type, uint8_t slot = 0) :usage(usage), type(type), slot(slot){}
+	VertexElement() :usage(SEMANTIC_POSITION), type(PF_FLOAT3), slot(0){}
+	VertexElement(Semantic usage) :usage(usage), type(PF_UNKNOWN), slot(0){}
+	VertexElement(Semantic usage, PixelFormat type, uint8_t slot = 0) :usage(usage), type(type), slot(slot){}
 };
 
 class CU_API VertexDeclaration
@@ -39,7 +40,7 @@ public:
 	void build();
 	bool equal(const VertexDeclaration& other) const;
 	void push_back(const VertexElement& ve);
-	void push_back(VertexUsage usage, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0);
+	void push_back(Semantic usage, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0);
 
 	uint32_t hash_code() const { return m_code; }
 	size_t size() const { return m_elements.size(); }
@@ -49,8 +50,8 @@ public:
 
 	const_iterator begin() const { return m_elements.begin(); }
 	const_iterator end() const { return m_elements.end(); }
-	bool hasUsage(VertexUsage usage) const { return (m_flag & (1 << usage)) != 0; }
-	int  getOffset(VertexUsage usage) const;
+	bool hasUsage(Semantic usage) const { return (m_flag & (1 << usage)) != 0; }
+	int  getOffset(Semantic usage) const;
 	uint32_t stride() const { return m_stride; }
 
 	bool operator==(const VertexDeclaration& rhs) const;
@@ -86,17 +87,17 @@ protected:
 
 typedef SharedPtr<VertexLayout> VertexLayoutPtr;
 
-class CU_API VertexLayout : public Object
-{
-public:
-	static uint32_t hash(const VertexElement* size_t count);
-
-	VertexLayout(const VertexElement* elements, size_t count);
-};
-
-class CU_API VertexArray : public Object
-{
-public:
-};
+//class CU_API VertexLayout : public Object
+//{
+//public:
+//	static uint32_t hash(const VertexElement* size_t count);
+//
+//	VertexLayout(const VertexElement* elements, size_t count);
+//};
+//
+//class CU_API VertexArray : public Object
+//{
+//public:
+//};
 
 CU_NS_END

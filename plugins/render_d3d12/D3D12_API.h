@@ -19,6 +19,7 @@
 #include "API.h"
 #include "Graphics.h"
 #include <d3d12.h>
+#include <d3d12shader.h>
 #include <d3dcompiler.h>
 
 #pragma comment(lib, "dxgi.lib")

@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;CU_VULKAN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files\VulkanSDK1.0.3.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files\Vulkan\1.0.11.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -66,7 +66,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\bin\Debug;D:\Program Files\VulkanSDK1.0.3.1\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\bin\Debug;D:\Program Files\Vulkan\1.0.11.0\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Debug\plugin_vulkan.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -75,7 +75,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;CU_VULKAN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files\VulkanSDK1.0.3.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\engine\include;D:\Program Files\Vulkan\1.0.11.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -88,7 +88,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\bin\Release;D:\Program Files\VulkanSDK1.0.3.1\Bin32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\bin\Release;D:\Program Files\Vulkan\1.0.11.0\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\build\bin\Release\plugin_vulkan.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -99,13 +99,13 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Device.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Graphics.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_InputLayout.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Mapping.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Pipeline.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Program.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h" />
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h" />
-    <ClInclude Include="..\plugins\render_vulkan\VK_InputLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\plugins\render_vulkan\VK_Buffer.cpp" />
@@ -114,12 +114,12 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Graphics.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_InputLayout.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp" />
-    <ClCompile Include="..\plugins\render_vulkan\VK_InputLayout.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

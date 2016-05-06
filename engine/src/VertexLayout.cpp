@@ -27,7 +27,7 @@ void VertexDeclaration::build()
 	if (m_builded == TRUE)
 		return;
 	m_builded = TRUE;
-	static const PixelFormat g_types[VERTEX_USAGE_MAX] =
+	static const PixelFormat g_types[SEMANTIC_MAX] =
 	{
 		PF_FLOAT3, PF_FLOAT3, PF_FLOAT3, PF_FLOAT3, PF_FLOAT3,
 		PF_FLOAT4, PF_UINT4,
@@ -78,7 +78,7 @@ void VertexDeclaration::push_back(const VertexElement& ve)
 	m_elements.push_back(ve);
 }
 
-void VertexDeclaration::push_back(VertexUsage usage, PixelFormat format /* = PF_UNKNOWN */, uint8_t slot)
+void VertexDeclaration::push_back(Semantic usage, PixelFormat format /* = PF_UNKNOWN */, uint8_t slot)
 {
 	VertexElement ve;
 	ve.usage = usage;
@@ -87,7 +87,7 @@ void VertexDeclaration::push_back(VertexUsage usage, PixelFormat format /* = PF_
 	push_back(ve);
 }
 
-int VertexDeclaration::getOffset(VertexUsage usage) const
+int VertexDeclaration::getOffset(Semantic usage) const
 {
 	for (const_iterator itor = m_elements.begin(); itor != m_elements.end(); ++itor)
 	{

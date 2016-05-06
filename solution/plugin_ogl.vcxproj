@@ -97,6 +97,7 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Device.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_FrameBuffer.h" />
+    <ClInclude Include="..\plugins\render_ogl\OGL_InputLayout.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Mapping.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Pipeline.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Plugin.h" />
@@ -104,7 +105,6 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_RenderTexture.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_RenderWindow.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Texture.h" />
-    <ClInclude Include="..\plugins\render_ogl\OGL_InputLayout.h" />
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glew.h" />
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glxew.h" />
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\wglew.h" />
@@ -115,6 +115,7 @@
     <ClCompile Include="..\plugins\render_ogl\OGL_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Device.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_FrameBuffer.cpp" />
+    <ClCompile Include="..\plugins\render_ogl\OGL_InputLayout.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Plugin.cpp" />
@@ -122,7 +123,6 @@
     <ClCompile Include="..\plugins\render_ogl\OGL_RenderTexture.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_RenderWindow.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Texture.cpp" />
-    <ClCompile Include="..\plugins\render_ogl\OGL_InputLayout.cpp" />
     <ClCompile Include="..\plugins\render_ogl\glew\src\glew.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

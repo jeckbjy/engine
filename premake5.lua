@@ -342,12 +342,13 @@ group "render"
 				
 	project("plugin_vulkan")
 		src_dir = "plugins/render_vulkan/"
+		sdk_dir = "D:/Program Files/Vulkan/1.0.11.0/"
 		dependson { "engine" }
 		kind("SharedLib")
 		defines { "CU_VULKAN_BUILD" }
 		--includedirs { src_dir}
-		includedirs { "D:/Program Files/VulkanSDK1.0.3.1/Include" }
-		libdirs { "D:/Program Files/VulkanSDK1.0.3.1/Bin32" }
+		includedirs { sdk_dir.."Include" }
+		libdirs { sdk_dir.."Bin" }
 		links { "vulkan-1" }
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }

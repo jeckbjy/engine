@@ -16,12 +16,16 @@ public:
 	bool init();
 	void update();	// 执行一帧
 
+	Graphics* getGraphics(){ return m_graphics; }
+	void setGraphics(Graphics* graphics) { m_graphics = graphics; }
+
 protected:
 	uint64	m_frame;
 	uint64	m_timestamp;
 	Renderer* m_renderer;
+	Graphics* m_graphics;	// 当前使用graphics
 };
 
-extern Engine gEngine;
+extern CU_API Engine gEngine;
 
 CU_NS_END
