@@ -37,6 +37,7 @@
 #include <D3Dcompiler.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "DXGI.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 #define D3D11_RELEASE(x)		if(x != NULL) { x->Release(); x = NULL; }
 #define D3D11_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);
@@ -79,7 +80,7 @@ CU_NS_BEGIN
 #ifdef CU_OS_WINRT
 //////////////////////////////////////////////////////////////////////////
 typedef ID3D11Device1           ID3D11DeviceN;
-typedef ID3D11DeviceContext1    ID3D11DeviceContextN;
+typedef ID3D11DeviceContext1    ID3D11ContextN;
 typedef ID3D11RasterizerState1  ID3D11RasterizerStateN;
 typedef IDXGIFactory2           IDXGIFactoryN;
 typedef IDXGIAdapter1           IDXGIAdapterN;          // we don`t need IDXGIAdapter2 functionality
@@ -90,7 +91,7 @@ typedef DXGI_SWAP_CHAIN_DESC1   DXGI_SWAP_CHAIN_DESC_N;
 #else
 //////////////////////////////////////////////////////////////////////////
 typedef ID3D11Device			ID3D11DeviceN;
-typedef ID3D11DeviceContext		ID3D11DeviceContextN;
+typedef ID3D11DeviceContext		ID3D11ContextN;
 typedef ID3D11RasterizerState	ID3D11RasterizerStateN;
 typedef IDXGIFactory1			IDXGIFactoryN;
 typedef IDXGIAdapter1			IDXGIAdapterN;
@@ -103,7 +104,7 @@ typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
 class CU_D3D11_API D3D11RenderTarget : public RenderTarget
 {
 public:
-	virtual void bind(ID3D11DeviceContextN* context) = 0;
+	virtual void bind(ID3D11ContextN* context) = 0;
 };
 
 CU_NS_END

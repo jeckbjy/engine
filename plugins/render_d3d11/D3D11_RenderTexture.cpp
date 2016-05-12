@@ -12,7 +12,7 @@ D3D11RenderTexture::~D3D11RenderTexture()
 
 }
 
-void D3D11RenderTexture::bind(ID3D11DeviceContextN* context)
+void D3D11RenderTexture::bind(ID3D11ContextN* context)
 {
 	if (_uav.empty())
 	{

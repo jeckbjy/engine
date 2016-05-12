@@ -1,14 +1,16 @@
 #pragma once
 #include "D3D11_API.h"
+#include "D3D11_Device.h"
 
 CU_NS_BEGIN
 
-// È«¾Ö£¿£¿
 class CU_D3D11_API D3D11Graphics : public Graphics
 {
 public:
 	D3D11Graphics();
 	~D3D11Graphics();
+
+	Device* getDevice() { return m_device; }
 
 	ID3D11RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
 	ID3D11BlendState*			getBlendState(const BlendDesc& desc);
@@ -16,7 +18,7 @@ public:
 	ID3D11SamplerState*			getSamplerState(const SamplerDesc& desc);
 
 private:
-	ID3D11DeviceN* m_device;
+	D3D11Device* m_device;
 };
 
 CU_NS_END

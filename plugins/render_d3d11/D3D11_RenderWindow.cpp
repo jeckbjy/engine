@@ -39,7 +39,7 @@ D3D11RenderWindow::~D3D11RenderWindow()
 
 }
 
-void D3D11RenderWindow::bind(ID3D11DeviceContextN* context)
+void D3D11RenderWindow::bind(ID3D11ContextN* context)
 {
 	context->OMSetRenderTargets(1, &m_rtv, m_ds ? m_ds->getDSV() : NULL);
 }

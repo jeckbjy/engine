@@ -39,7 +39,7 @@ int find_usage(const char* name)
 	return -1;
 }
 
-GLuint mapping(ShaderStageFlag type)
+GLuint mapping(ShaderStage type)
 {
 	static GLenum gl_types[] =
 	{

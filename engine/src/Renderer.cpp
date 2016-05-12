@@ -70,7 +70,6 @@ Texture* Renderer::getGBuffer(size_t width, size_t height, size_t format, bool c
 	desc.type = TEX_2D;
 	desc.width = width;
 	desc.height = height;
-	desc.depth = 1;
 	desc.format = (PixelFormat)format;
 	Texture* texture = NULL;
 	//Texture* texture = m_device->newTexture();

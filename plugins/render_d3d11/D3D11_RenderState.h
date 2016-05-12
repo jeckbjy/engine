@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-class CU_API D3D11RasterizerState : public Ref
+class CU_D3D11_API D3D11RasterizerState : public Ref
 {
 public:
 	D3D11RasterizerState(ID3D11DeviceN* device, const RasterizerDesc& desc);
@@ -16,7 +16,7 @@ private:
 	ID3D11RasterizerState*	m_state;
 };
 
-class CU_API D3D11BlendState : public Ref
+class CU_D3D11_API D3D11BlendState : public Ref
 {
 public:
 	D3D11BlendState(const BlendDesc& desc);
@@ -27,7 +27,7 @@ private:
 	ID3D11BlendState*	m_state;
 };
 
-class CU_API D3D11DepthStencilState : public Ref
+class CU_D3D11_API D3D11DepthStencilState : public Ref
 {
 public:
 	D3D11DepthStencilState(const DepthStencilDesc& desc);
@@ -38,7 +38,7 @@ private:
 	ID3D11DepthStencilState* m_state;
 };
 
-class CU_API D3D11SamplerState : public Ref
+class CU_D3D11_API D3D11SamplerState : public Ref
 {
 public:
 	D3D11SamplerState(const SamplerDesc& desc);

@@ -6,13 +6,23 @@ CU_NS_BEGIN
 class CU_D3D11_API D3D11Texture : public Texture
 {
 public:
-	D3D11Texture(const TextureDesc& desc);
+	D3D11Texture(const TextureDesc& desc, ID3D11DeviceN* device);
 	~D3D11Texture();
 
-	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)_view; }
+	void* map(PixelData& data, MAP_FLAG flag, uint mipLevel = 0, uint face = 0);
+	void unmap();
+
+	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)m_view; }
+
 private:
-	ID3D11Resource* _handle;
-	ID3D11View*		_view;
+	void create1D(ID3D11DeviceN* device, const TextureDesc& desc);
+	void create2D(ID3D11DeviceN* device, const TextureDesc& desc);
+	void create3D(ID3D11DeviceN* device, const TextureDesc& desc);
+
+private:
+	ID3D11Resource* m_handle;
+	ID3D11View*		m_view;
+	UINT			m_lockedSubresourceIdx;
 };
 
 CU_NS_END

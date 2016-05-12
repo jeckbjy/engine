@@ -4,12 +4,12 @@ CU_NS_BEGIN
 
 D3D11Graphics::D3D11Graphics()
 {
-
+	m_device = new D3D11Device();
 }
 
 D3D11Graphics::~D3D11Graphics()
 {
-
+	delete m_device;
 }
 
 ID3D11RasterizerState* D3D11Graphics::getRasterizerState(const RasterizerDesc& desc)

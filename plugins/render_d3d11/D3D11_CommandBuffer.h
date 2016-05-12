@@ -21,7 +21,7 @@ public:
 	void dispatch(size_t group_x, size_t group_y, size_t group_z);
 
 private:
-	ID3D11DeviceContextN* m_handle;
+	ID3D11ContextN* m_handle;
 	float m_factors[4];
 	StencilFaceFlags	m_stencilMask;
 	size_t				m_stencilRef;

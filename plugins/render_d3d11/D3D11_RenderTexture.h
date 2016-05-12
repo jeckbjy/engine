@@ -10,7 +10,7 @@ public:
 	D3D11RenderTexture();
 	~D3D11RenderTexture();
 
-	void bind(ID3D11DeviceContextN* context);
+	void bind(ID3D11ContextN* context);
 
 protected:
 	typedef std::vector<ID3D11RenderTargetView*>	RenderTargetViewVec;

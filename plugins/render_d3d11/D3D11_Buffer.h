@@ -7,7 +7,7 @@ class D3D11Device;
 class CU_D3D11_API D3D11Buffer : public GpuBuffer
 {
 public:
-	D3D11Buffer(const BufferDesc& desc, D3D11Device* device);
+	D3D11Buffer(const BufferDesc& desc, ID3D11DeviceN* device);
 	~D3D11Buffer();
 
 	void* map(size_t offset, size_t len, MAP_FLAG access);
@@ -16,7 +16,6 @@ public:
 	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)m_view; }
 
 protected:
-	D3D11Device*	m_device;
 	ID3D11Buffer*	m_handle;
 	ID3D11View*		m_view;
 };

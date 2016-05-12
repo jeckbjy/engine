@@ -25,9 +25,8 @@ struct CU_API TextureDesc
 	PixelFormat format;
 	uint32_t	width;
 	uint32_t	height;
-	uint32_t	depth;
+	uint32_t	depthOrArraySize;
 	uint32_t	mipLevels;
-	uint32_t	arrayLayers;
 	uint32_t	samples;
 	uint32_t	quality;
 	uint32_t	tiling;
@@ -143,12 +142,15 @@ struct CU_API BlendDesc
 // 创建shader
 struct CU_API ProgramDesc
 {
-	String code;
-	String file;		// 所在文件
-	String entry;		// 入口点
-	String macros;
-	String profile;
-	uint32_t flags;
+	ShaderStage stage;
+	String		code;
+	String		file;		// 所在文件
+	String		entry;		// 入口点
+	String		macros;
+	String		profile;
+	uint32_t	flags;
+	bool		rowMajor;	// 行主序
+	bool		debug;
 };
 
 // shader描述信息
@@ -197,7 +199,7 @@ struct CU_API DescriptorRangeDesc
 	uint32_t		slot;
 	DescriptorType	type;
 	uint32_t		count;
-	ShaderStageFlag	stages;
+	ShaderStage	stages;
 };
 
 // 描述一个DescriptorSet信息,即含有多少个DescriptorRange
@@ -212,7 +214,7 @@ struct CU_API ConstantRangeDesc
 {
 	uint32_t		offset;
 	uint32_t		size;
-	ShaderStageFlag stages;
+	ShaderStage stages;
 };
 
 // 可含有多个DescriptorSet以及Const和Sampler

@@ -10,7 +10,7 @@ public:
 	D3D11GraphicsPipeline(const GraphicsPipelineDesc& desc);
 	~D3D11GraphicsPipeline();
 
-	void bind(ID3D11DeviceContextN* context, const float factors[4], size_t stencilref);
+	void bind(ID3D11ContextN* context, const float factors[4], size_t stencilref);
 
 private:
 	ID3D11RasterizerState*	 m_rasterizer;

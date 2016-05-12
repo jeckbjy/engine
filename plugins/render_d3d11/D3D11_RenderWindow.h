@@ -10,7 +10,7 @@ public:
 	D3D11RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device);
 	~D3D11RenderWindow();
 
-	void bind(ID3D11DeviceContextN* context);
+	void bind(ID3D11ContextN* context);
 
 	void create(ID3D11DeviceN* device);
 	void resize(uint32_t width, uint32_t height);

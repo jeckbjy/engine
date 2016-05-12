@@ -44,7 +44,7 @@ public:
 	virtual ~Texture(){}
 
 	virtual void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0) = 0;
-	virtual void unmap() = 0;
+	virtual void  unmap() = 0;
 
 protected:
 	PixelFormat m_format;
@@ -210,30 +210,10 @@ class CU_API Graphics : public Object
 public:
 	virtual ~Graphics(){}
 
-	//virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
-	//virtual Texture*		newTexture(const TextureDesc& desc) = 0;
-	//virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
-	//virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
-	//virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
-	//virtual Program*		newProgram() = 0;
-	////virtual PipelineLayout*	newPipelineLayout(const PipelineLayoutDesc& desc) = 0;
-	//virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
-	//virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
-	//virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
-	//virtual CommandBuffer*	newCommandBuffer() = 0;
-	//virtual CommandQueue*	newCommandQueue() = 0;
-
-	//GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
-	//{
-	//	BufferDesc desc(BU_VERTEX, stride, counts, flags, data);
-	//	return newBuffer(desc);
-	//}
-	//GpuBuffer* newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
-	//{
-	//	uint32_t stride = type == INDEX16 ? sizeof(uint16_t) : sizeof(uint32_t);
-	//	BufferDesc desc(BU_INDEX, stride, counts, flags, data);
-	//	return newBuffer(desc);
-	//}
+	// 必须提供一个
+	virtual Device* getDevice() = 0;
+	// 创建
+	//virtual void newDevice() = 0;
 };
 
 CU_NS_END

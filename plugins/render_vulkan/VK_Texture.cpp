@@ -19,6 +19,18 @@ VK_Texture::VK_Texture(VK_Device* device, const TextureDesc& desc)
 	: Texture(desc)
 	, m_device(device)
 {
+	uint32_t arrayLayers, depth;
+	if (desc.type == TEX_3D)
+	{
+		arrayLayers = 1;
+		depth = desc.depthOrArraySize;
+	}
+	else
+	{
+		arrayLayers = desc.depthOrArraySize;
+		depth = 1;
+	}
+
 	VkImageCreateInfo info;
 	info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	info.pNext = NULL;
@@ -26,10 +38,10 @@ VK_Texture::VK_Texture(VK_Device* device, const TextureDesc& desc)
 	info.format = VK_Mapping::getFormat(desc.format);
 	info.usage = VK_Mapping::getImageUsage(desc.usage);
 	info.mipLevels = desc.mipLevels;
-	info.arrayLayers = desc.arrayLayers;
+	info.arrayLayers = arrayLayers;
 	info.tiling = (VkImageTiling)desc.tiling;
 	info.flags = 0;
-	info.extent = { desc.width, desc.height, desc.height };
+	info.extent = { desc.width, desc.height, depth };
 
 	VK_CHECK(vkCreateImage(m_device->native(), &info, NULL, &m_image), "vkCreateImage fail!");
 

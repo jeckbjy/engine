@@ -16,8 +16,9 @@ public:
 	bool init();
 	void update();	// Ö´ÐÐÒ»Ö¡
 
-	Graphics* getGraphics(){ return m_graphics; }
-	void setGraphics(Graphics* graphics) { m_graphics = graphics; }
+	Device*		getDevice() { return m_graphics->getDevice(); }
+	Graphics*	getGraphics(){ return m_graphics; }
+	void		setGraphics(Graphics* graphics) { m_graphics = graphics; }
 
 protected:
 	uint64	m_frame;
