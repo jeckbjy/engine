@@ -61,7 +61,7 @@ class CU_API InputLayout : public Object
 {
 	DECLARE_RTTI(InputLayout, Object, OBJ_ID_INPUT_LAYOUT)
 public:
-	uint32_t hash(const InputElement* elements, size_t count);
+	static uint32_t hash(const InputElement* elements, size_t count);
 
 	InputLayout(const InputElement* elements, size_t count);
 	virtual ~InputLayout(){}
@@ -90,6 +90,11 @@ public:
 	virtual ~Program(){}
 
 	virtual bool compile(const ProgramDesc& desc) = 0;
+
+	uint getID() { return m_id; }
+
+private:
+	uint m_id;
 };
 
 // used for material

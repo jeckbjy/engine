@@ -15,6 +15,8 @@ public:
 
 	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)m_view; }
 
+	ID3D11Buffer* native() { return m_handle; }
+
 protected:
 	ID3D11Buffer*	m_handle;
 	ID3D11View*		m_view;

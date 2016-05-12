@@ -4,18 +4,19 @@ CU_NS_BEGIN
 
 D3D11Program::D3D11Program()
 	: m_shader(NULL)
+	, m_code(NULL)
 {
 }
 
 D3D11Program::~D3D11Program()
 {
+	D3D11_RELEASE(m_code);
 	D3D11_RELEASE(m_shader);
 }
 
 bool D3D11Program::compile(const ProgramDesc& desc)
 {
-	ID3D10Blob* blob = nullptr;
-	ID3D10Blob* errors = nullptr;
+	ID3DBlob* errors = NULL;
 	UINT flags = 0;
 	flags |= desc.rowMajor ? D3DCOMPILE_PACK_MATRIX_ROW_MAJOR : D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR;
 	flags |= D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY;
@@ -34,18 +35,23 @@ bool D3D11Program::compile(const ProgramDesc& desc)
 		desc.profile.c_str(),
 		flags,
 		0,
-		&blob,
+		&m_code,
 		&errors);
 
 	if (SUCCEEDED(hr))
 	{
-		DWORD* code = (DWORD*)blob->GetBufferPointer();
-		SIZE_T size = blob->GetBufferSize();
-		
+		DWORD* code = (DWORD*)m_code->GetBufferPointer();
+		SIZE_T size = m_code->GetBufferSize();
+		create(desc.stage, code, size);
 	}
 
 	// ½âÎöreflect
-	D3D11_RELEASE(blob);
+
+	if (desc.stage != SHADER_STAGE_VERTEX)
+	{
+		D3D11_RELEASE(m_code);
+	}
+
 	D3D11_RELEASE(errors);
 
 	return SUCCEEDED(hr);

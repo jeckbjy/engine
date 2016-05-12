@@ -40,7 +40,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 
 #define D3D11_RELEASE(x)		if(x != NULL) { x->Release(); x = NULL; }
-#define D3D11_CHECK(hr, info) if(FAILED(hr)) throw std::runtime_error(info);
+#define D3D11_CHECK(hr, info)	if(FAILED(hr)) throw std::runtime_error(info);
 
 #if (D3D11_VERSION == D3D11_VERSION_0)
 // 在d3d11.1中才有logic_op

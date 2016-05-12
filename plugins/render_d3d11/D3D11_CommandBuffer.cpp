@@ -27,29 +27,30 @@ void D3D11CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 
 void D3D11CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-	((D3D11RenderTarget*)target)->bind(m_handle);
+	((D3D11RenderTarget*)target)->bind(m_context);
 }
 
 void D3D11CommandBuffer::setTopology(Topology primitive)
 {
 	D3D11_PRIMITIVE_TOPOLOGY dx_prim = (D3D11_PRIMITIVE_TOPOLOGY)primitive;
-	m_handle->IASetPrimitiveTopology(dx_prim);
+	m_context->IASetPrimitiveTopology(dx_prim);
 }
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	((D3D11GraphicsPipeline*)pipeline)->bind(m_handle, m_factors, m_stencilRef);
+	//((D3D11GraphicsPipeline*)pipeline)->bind(m_context, m_factors, m_stencilRef);
 }
 
 void D3D11CommandBuffer::setInputLayout(InputLayout* layout)
 {
-	// bind
-	// ²éÕÒÉèÖÃ£¿£¿
+	m_layout = layout;
 }
 
 void D3D11CommandBuffer::setIndexBuffer(IndexBuffer* ib)
 {
-
+	D3D11Buffer* buffer = (D3D11Buffer*)ib;
+	DXGI_FORMAT format = buffer->isIndex16() ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+	m_context->IASetIndexBuffer(buffer->native(), format, 0);
 }
 
 void D3D11CommandBuffer::draw(size_t vnum, size_t voff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */)

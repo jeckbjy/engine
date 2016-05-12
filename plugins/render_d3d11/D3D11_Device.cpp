@@ -16,6 +16,7 @@ D3D11Device::D3D11Device()
 {
 	D3D_FEATURE_LEVEL featureLevels[6] = 
 	{
+		//D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0,
@@ -24,21 +25,17 @@ D3D11Device::D3D11Device()
 		D3D_FEATURE_LEVEL_9_1 
 	};
 
-	D3D_FEATURE_LEVEL cur_level;
-	D3D11_CHECK(
-		D3D11CreateDevice(NULL,
-		D3D_DRIVER_TYPE_HARDWARE, 0, 0,
-		featureLevels, 6, D3D11_SDK_VERSION,
-		&m_device, &cur_level, &m_context),
-		"D3D11CreateDevice fail!");
+	HRESULT hr;
+	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, featureLevels, 6, D3D11_SDK_VERSION, &m_device, NULL, &m_context);
+	D3D11_CHECK( hr, "D3D11CreateDevice fail!");
 
-	D3D11_CHECK(
-		CreateDXGIFactory(__uuidof(IDXGIFactoryN), (void**)&m_factory),
-		"CreateDXGIFactory fail!");
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactoryN), (void**)&m_factory);
+	D3D11_CHECK( hr, "CreateDXGIFactory fail!");
 
 	if (m_device->GetFeatureLevel() == D3D_FEATURE_LEVEL_11_0)
 	{
-
+		hr = m_device->CreateClassLinkage(&m_linkage);
+		D3D11_CHECK(hr, "CreateClassLinkage fail!");
 	}
 }
 
@@ -107,7 +104,16 @@ D3D11Device*	gD3D11Device()
 	return gEngine.getDevice()->cast<D3D11Device>();
 }
 
-ID3D11ContextN* gD3D11Context()
+ID3D11DeviceN*	gD3D11NativeDevice()
+{
+	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
+	if (device)
+		return device->getDevice();
+
+	return NULL;
+}
+
+ID3D11ContextN* gD3D11NativeContext()
 {
 	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
 	if (device)

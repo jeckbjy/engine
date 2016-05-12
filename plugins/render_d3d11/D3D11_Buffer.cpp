@@ -52,7 +52,7 @@ D3D11Buffer::~D3D11Buffer()
 
 void* D3D11Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 {
-	ID3D11ContextN* context = gD3D11Context();
+	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)
 	{
 		D3D11_MAP type = D3D11_MAP_WRITE;
@@ -65,7 +65,7 @@ void* D3D11Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 
 void D3D11Buffer::unmap()
 {
-	ID3D11ContextN* context = gD3D11Context();
+	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)
 		context->Unmap(m_handle, 0);
 }

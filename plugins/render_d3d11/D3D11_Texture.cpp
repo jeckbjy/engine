@@ -100,7 +100,7 @@ void D3D11Texture::create3D(ID3D11DeviceN* device, const TextureDesc& desc)
 
 void* D3D11Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */, uint face /* = 0 */)
 {
-	ID3D11ContextN* context = gD3D11Context();
+	ID3D11ContextN* context = gD3D11NativeContext();
 	if (!context)
 		return NULL;
 
@@ -113,7 +113,7 @@ void* D3D11Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */,
 
 void D3D11Texture::unmap()
 {
-	ID3D11ContextN* context = gD3D11Context();
+	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)
 		context->Unmap(m_handle, m_lockedSubresourceIdx);
 }
