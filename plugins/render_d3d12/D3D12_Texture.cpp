@@ -12,7 +12,7 @@ D3D12Texture::D3D12Texture(ID3D12Device* device, const TextureDesc& desc)
 	dx_desc.Alignment = 0;
 	dx_desc.Width = desc.width;
 	dx_desc.Height = desc.height;
-	dx_desc.DepthOrArraySize = desc.depth;
+	dx_desc.DepthOrArraySize = desc.depthOrArraySize;
 	dx_desc.MipLevels = desc.mipLevels;
 	dx_desc.Format = D3D12Mapping::getFormat(desc.format);
 	dx_desc.SampleDesc.Count = desc.samples;

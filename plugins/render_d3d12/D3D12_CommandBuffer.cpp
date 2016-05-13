@@ -15,7 +15,7 @@ D3D12CommandBuffer::~D3D12CommandBuffer()
 
 void D3D12CommandBuffer::reset()
 {
-
+	m_handle->Reset(NULL, NULL);
 }
 
 void D3D12CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
@@ -58,17 +58,27 @@ void D3D12CommandBuffer::setInputLayout(InputLayout* layout)
 
 }
 
-void D3D12CommandBuffer::setIndexBuffer(IndexBuffer* ib)
+void D3D12CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
 
 }
 
-void D3D12CommandBuffer::draw(const DrawParam& params)
+void D3D12CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 {
 
 }
 
-void D3D12CommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
+void D3D12CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
+{
+
+}
+
+void D3D12CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
+{
+
+}
+
+void D3D12CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 {
 
 }

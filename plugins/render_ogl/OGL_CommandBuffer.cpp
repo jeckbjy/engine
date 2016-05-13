@@ -27,6 +27,11 @@ OGLCommandBuffer::~OGLCommandBuffer()
 
 }
 
+void OGLCommandBuffer::reset()
+{
+
+}
+
 void OGLCommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
 	glViewport(x, y, w, h);
@@ -68,25 +73,50 @@ void OGLCommandBuffer::setInputLayout(InputLayout* layout)
 	m_layout = (OGLInputLayout*)layout;
 }
 
-void OGLCommandBuffer::setIndexBuffer(IndexBuffer* ib)
-{
-	m_index = (OGLBuffer*)ib;
-}
-
-void OGLCommandBuffer::draw(const DrawParam& params)
-{
-	m_primitive = params.type;
-	m_vertexStart = params.vertexStart;
-	m_vertexCount = params.vertexCount;
-	m_indexStart = params.indexStart;
-	m_indexCount = params.indexCount;
-	m_instanceCount = params.instanceCount;
-}
-
-void OGLCommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
+void OGLCommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
 
 }
+
+void OGLCommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
+{
+
+}
+
+void OGLCommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
+{
+
+}
+
+void OGLCommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
+{
+
+}
+
+void OGLCommandBuffer::dispatch(size_t x, size_t y, size_t z)
+{
+
+}
+
+//void OGLCommandBuffer::setIndexBuffer(IndexBuffer* ib)
+//{
+//	m_index = (OGLBuffer*)ib;
+//}
+//
+//void OGLCommandBuffer::draw(const DrawParam& params)
+//{
+//	m_primitive = params.type;
+//	m_vertexStart = params.vertexStart;
+//	m_vertexCount = params.vertexCount;
+//	m_indexStart = params.indexStart;
+//	m_indexCount = params.indexCount;
+//	m_instanceCount = params.instanceCount;
+//}
+//
+//void OGLCommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
+//{
+//
+//}
 
 void OGLCommandBuffer::execute()
 {

@@ -24,7 +24,7 @@ GLenum OGLTexture::getGLTarget(TexType type, uint32_t arrays)
 OGLTexture::OGLTexture(const TextureDesc& desc)
 :Texture(desc)
 {
-	m_target = getGLTarget(desc.type, desc.depth);
+	m_target = getGLTarget(desc.type, desc.depthOrArraySize);
 	// ´´½¨
 	glGenTextures(1, &m_handle);
 	glBindTexture(m_target, m_handle);
