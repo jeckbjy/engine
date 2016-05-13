@@ -9,16 +9,20 @@ public:
 	D3D11CommandBuffer();
 	~D3D11CommandBuffer();
 
+	void reset();
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t reference);
 	void setRenderTarget(RenderTarget* target);
 	void setTopology(Topology primitive);
 	void setPipeline(Pipeline* pipeline);
 	void setInputLayout(InputLayout* layout);
-	void setIndexBuffer(IndexBuffer* ib);
-	void draw(size_t vnum, size_t voff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */);
-	void drawIndexed(size_t inum, size_t ioff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */, int vertex_base /* = 0 */);
-	void dispatch(size_t group_x, size_t group_y, size_t group_z);
+
+	void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets);
+	void setIndexBuffer(IndexBuffer* buffer, size_t offset);
+
+	void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset);
+	void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset);
+	void dispatch(size_t x, size_t y, size_t z);
 
 private:
 	ID3D11ContextN*		m_context;

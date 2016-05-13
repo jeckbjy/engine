@@ -9,6 +9,7 @@ public:
 	D3D12CommandBuffer(ID3D12Device* device, ID3D12CommandAllocator* alloc);
 	~D3D12CommandBuffer();
 
+	void reset();
 	void setViewport(int x, int y, size_t w, size_t h);
 	void setScissor(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);

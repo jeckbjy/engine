@@ -1,4 +1,5 @@
 #include "D3D11_Program.h"
+#include "D3D11_Device.h"
 
 CU_NS_BEGIN
 
@@ -59,7 +60,7 @@ bool D3D11Program::compile(const ProgramDesc& desc)
 
 void D3D11Program::create(ShaderStage stage, DWORD* code, SIZE_T size)
 {
-	ID3D11Device* device = gD3D11Device()->getDevice();
+	ID3D11DeviceN* device = gD3D11NativeDevice();
 	ID3D11ClassLinkage* linkage = NULL;
 
 	HRESULT hr;

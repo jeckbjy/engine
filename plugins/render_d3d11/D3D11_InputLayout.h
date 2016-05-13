@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+class D3D11Program;
 class CU_D3D11_API D3D11InputLayout : public InputLayout
 {
 public:
@@ -17,6 +18,7 @@ private:
 	typedef std::map<uint, ID3D11InputLayout*>	LayoutMap;
 	D3D11_INPUT_ELEMENT_DESC* m_desc;
 	UINT		m_count;
+	bool		m_instanced;	// ÊÇ·ñº¬ÓÐinstance
 	LayoutMap	m_layouts;
 };
 

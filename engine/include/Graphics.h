@@ -152,6 +152,7 @@ class CU_API CommandBuffer : public Object
 public:
 	virtual ~CommandBuffer(){}
 
+	virtual void reset() = 0;
 	virtual void setViewport(int x, int y, size_t w, size_t h) = 0;
 	virtual void setScissor(int x, int y, size_t w, size_t h) = 0;
 	virtual void setBlendFactor(const float factors[4]) = 0;
@@ -160,9 +161,11 @@ public:
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setInputLayout(InputLayout* layout) = 0;
-	virtual void setIndexBuffer(IndexBuffer* buffer) = 0;
-	virtual void draw(const DrawParam& desc) = 0;
-	virtual void dispatch(size_t group_x, size_t group_y, size_t group_z) = 0;
+	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets) = 0;
+	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset) = 0;
+	virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset) = 0;
+	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset) = 0;
+	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
 };
 
 // ╤сап

@@ -32,7 +32,7 @@ private:
 	ID3D11ClassLinkage* m_linkage;
 };
 
-extern CU_D3D11_API D3D11Device		gD3D11Device();
+extern CU_D3D11_API D3D11Device*	gD3D11Device();
 extern CU_D3D11_API ID3D11DeviceN*	gD3D11NativeDevice();
 extern CU_D3D11_API ID3D11ContextN* gD3D11NativeContext();
 

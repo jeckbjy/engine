@@ -1,5 +1,6 @@
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_Pipeline.h"
+#include "D3D11_Buffer.h"
 
 CU_NS_BEGIN
 
@@ -10,6 +11,11 @@ D3D11CommandBuffer::D3D11CommandBuffer()
 }
 
 D3D11CommandBuffer::~D3D11CommandBuffer()
+{
+
+}
+
+void D3D11CommandBuffer::reset()
 {
 
 }
@@ -46,26 +52,57 @@ void D3D11CommandBuffer::setInputLayout(InputLayout* layout)
 	m_layout = layout;
 }
 
-void D3D11CommandBuffer::setIndexBuffer(IndexBuffer* ib)
+void D3D11CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
-	D3D11Buffer* buffer = (D3D11Buffer*)ib;
+	ID3D11Buffer* dx_buffers[CU_MAX_BOUND_VERTEX_BUFFERS];
+	UINT32 dx_strides[CU_MAX_BOUND_VERTEX_BUFFERS];
+	UINT32 dx_offsets[CU_MAX_BOUND_VERTEX_BUFFERS];
+	D3D11Buffer* buffer;
+	for (size_t i = 0; i < counts; ++i)
+	{
+		buffer = buffers[i]->cast<D3D11Buffer>();
+		dx_buffers[i] = buffer->native();
+		dx_strides[i] = buffer->stride();
+		dx_offsets[i] = offsets ? offsets[i] : 0;
+	}
+
+	m_context->IASetVertexBuffers(startSlot, counts, dx_buffers, dx_strides, dx_offsets);
+}
+
+void D3D11CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
+{
+	D3D11Buffer* dx_buffer = (D3D11Buffer*)buffer;
 	DXGI_FORMAT format = buffer->isIndex16() ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
-	m_context->IASetIndexBuffer(buffer->native(), format, 0);
+	m_context->IASetIndexBuffer(dx_buffer->native(), format, offset);
 }
 
-void D3D11CommandBuffer::draw(size_t vnum, size_t voff /* = 0 */, size_t instance_num /* = 1 */, size_t instance_off /* = 0 */)
+void D3D11CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
 {
-
+	if (instanceCount == 0)
+	{
+		m_context->Draw(vertexCount, vertexOffset);
+	}
+	else
+	{
+		m_context->DrawInstanced(vertexCount, instanceCount, vertexOffset, instanceOffset);
+	}
 }
 
-void D3D11CommandBuffer::drawIndexed(size_t inum, size_t ioff, size_t instance_num, size_t instance_off, int vertex_base)
+void D3D11CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
 {
-
+	if (instanceCount == 0)
+	{
+		m_context->DrawIndexed(indexCount, indexOffset, vertexOffset);
+	}
+	else
+	{
+		m_context->DrawIndexedInstanced(indexCount, instanceCount, indexOffset, vertexOffset, instanceOffset);
+	}
 }
 
-void D3D11CommandBuffer::dispatch(size_t group_x, size_t group_y, size_t group_z)
+void D3D11CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 {
-
+	m_context->Dispatch(x, y, z);
 }
 
 CU_NS_END

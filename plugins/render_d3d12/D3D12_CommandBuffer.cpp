@@ -13,6 +13,11 @@ D3D12CommandBuffer::~D3D12CommandBuffer()
 	D3D12_RELEASE(m_handle);
 }
 
+void D3D12CommandBuffer::reset()
+{
+
+}
+
 void D3D12CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
 

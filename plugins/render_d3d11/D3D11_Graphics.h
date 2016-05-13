@@ -18,6 +18,7 @@ public:
 	ID3D11SamplerState*			getSamplerState(const SamplerDesc& desc);
 
 private:
+	// 如何做hash查找??
 	D3D11Device* m_device;
 };
 

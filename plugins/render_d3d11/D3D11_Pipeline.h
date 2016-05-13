@@ -13,6 +13,7 @@ public:
 	void bind(ID3D11ContextN* context, const float factors[4], size_t stencilref);
 
 private:
+	// ≥÷”–??
 	ID3D11RasterizerState*	 m_rasterizer;
 	ID3D11BlendState*		 m_blend;
 	ID3D11DepthStencilState* m_depthstencil;

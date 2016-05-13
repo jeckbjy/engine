@@ -2,7 +2,9 @@
 
 CU_NS_BEGIN
 
-#define CU_MAX_MULTIPLE_RENDER_TARGETS 8
+#define CU_MAX_MULTIPLE_RENDER_TARGETS	8
+#define CU_MAX_BOUND_VERTEX_BUFFERS		32
+
 
 // 着色模式,灯光着色模式,默认SHADE_GOURAUD
 enum ShadeMode CU_ENUM(uint8_t)
