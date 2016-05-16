@@ -42,10 +42,40 @@ void VK_CommandBuffer::setPipeline(Pipeline* pipeline)
 	//vkCmdBindPipeline(m_handle, ppl->getBindPoint(), ppl->native());
 }
 
+void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
+{
+	VkBuffer vk_buffers[CU_MAX_BOUND_VERTEX_BUFFERS];
+	VkDeviceSize vk_offsets[CU_MAX_BOUND_VERTEX_BUFFERS];
+
+	for (size_t i = 0; i < counts; ++i)
+	{
+		VK_Buffer* tmp = (VK_Buffer*)buffers[i];
+		vk_buffers[i] = tmp->native();
+		vk_offsets[i] = offsets ? offsets[i] : 0;
+	}
+
+	vkCmdBindVertexBuffers(m_handle, startSlot, counts, vk_buffers ,vk_offsets);
+}
+
 void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer)
 {
 	VK_Buffer* vk_buffer = buffer->cast<VK_Buffer>();
 	vkCmdBindIndexBuffer(m_handle, vk_buffer->native(), 0, vk_buffer->getIndexType());
+}
+
+void VK_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
+{
+	vkCmdDraw(m_handle, vertexCount, instanceCount, vertexOffset, instanceOffset);
+}
+
+void VK_CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
+{
+	vkCmdDrawIndexed(m_handle, indexCount, instanceCount, indexOffset, vertexOffset, instanceOffset);
+}
+
+void VK_CommandBuffer::dispatch(size_t x, size_t y, size_t z)
+{
+	vkCmdDispatch(m_handle, x, y, z);
 }
 
 CU_NS_END

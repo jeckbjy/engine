@@ -12,6 +12,8 @@ public:
 	void* map(size_t offset, size_t len, MAP_FLAG access);
 	void unmap();
 
+	D3D12_GPU_VIRTUAL_ADDRESS getGPUVirtualAddress() { return m_handle->GetGPUVirtualAddress();  }
+
 private:
 	ID3D12Resource* m_handle;
 	D3D12_RANGE		m_range;
