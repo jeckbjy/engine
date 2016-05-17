@@ -9,7 +9,8 @@ public:
 	D3D12CommondQueue(ID3D12Device* device);
 	~D3D12CommondQueue();
 
-	void execute(CommandBuffer* cmds);
+	void submit(CommandBuffer* cmds, Fence* fence);
+	void waitIdle();
 
 private:
 	ID3D12CommandQueue* m_queue;

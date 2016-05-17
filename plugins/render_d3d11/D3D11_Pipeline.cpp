@@ -11,14 +11,51 @@ D3D11GraphicsPipeline::~D3D11GraphicsPipeline()
 {
 }
 
-void D3D11GraphicsPipeline::bind(ID3D11ContextN* context, const float factors[4], size_t stencilref)
+void D3D11GraphicsPipeline::bind(D3D11CommandBuffer* cmdBuffer)
 {
-	//if (m_prog == NULL)
-	//	return;
-	//context->OMSetDepthStencilState(_depth_stencil, stencilref);
-	//context->OMSetBlendState(_blend, factors, _mask);
-	//context->RSSetState(_rasterizer);
-	//gD3D11Context->VSSetSamplers();	// 采样,每个阶段都有
+	ID3D11ContextN* context = cmdBuffer->getContext();
+
+	context->OMSetDepthStencilState(m_depthStencil, cmdBuffer->getStencilRef());
+	context->OMSetBlendState(m_blend, cmdBuffer->getFactors(), cmdBuffer->getSampleMask());
+	context->RSSetState(m_rasterizer);
+
+	// context->VSSetSamplers();
+	// set shader
+	if (m_vs)
+		context->VSSetShader(m_vs->getShader<ID3D11VertexShader>(), NULL, 0);
+	
+	if (m_hs)
+		context->HSSetShader(m_hs->getShader<ID3D11HullShader>(), NULL, 0);
+
+	if (m_ds)
+		context->DSSetShader(m_ds->getShader<ID3D11DomainShader>(), NULL, 0);
+
+	if (m_gs)
+		context->GSSetShader(m_gs->getShader<ID3D11GeometryShader>(), NULL, 0);
+
+	if (m_ps)
+		context->PSSetShader(m_ps->getShader<ID3D11PixelShader>(), NULL, 0);
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+D3D11ComputePipeline::D3D11ComputePipeline(const ComputePipelineDesc& desc)
+{
+
+}
+
+D3D11ComputePipeline::~D3D11ComputePipeline()
+{
+
+}
+
+void D3D11ComputePipeline::bind(D3D11CommandBuffer* cmdBuffer)
+{
+	ID3D11ContextN* context = cmdBuffer->getContext();
+	if (m_cs)
+		context->CSSetShader(m_cs->getShader<ID3D11ComputeShader>(), NULL, 0);
 }
 
 CU_NS_END

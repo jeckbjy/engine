@@ -13,7 +13,7 @@ public:
 	void setViewport(int x, int y, size_t w, size_t h);
 	void setScissor(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);
-	void setStencilRef(StencilFaceFlags mask, size_t reference);
+	void setStencilRef(StencilFaceFlags mask, size_t stencilRef);
 	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
@@ -28,6 +28,7 @@ public:
 
 private:
 	ID3D12GraphicsCommandList* m_handle;
+	InputLayout* m_layout;
 };
 
 CU_NS_END

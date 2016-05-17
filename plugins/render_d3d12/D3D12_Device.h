@@ -31,4 +31,7 @@ private:
 	ID3D12CommandAllocator* m_allocator;
 };
 
+extern CU_D3D12_API D3D12Device*	gD3D12Device();
+extern CU_D3D12_API ID3D12Device*	gD3D12NativeDevice();
+
 CU_NS_END

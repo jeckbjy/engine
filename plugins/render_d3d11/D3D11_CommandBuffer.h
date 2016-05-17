@@ -24,10 +24,17 @@ public:
 	void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset);
 	void dispatch(size_t x, size_t y, size_t z);
 
+	ID3D11ContextN* getContext() { return m_context; }
+	InputLayout*	getLayout() { return m_layout; }
+	const float*	getFactors() const { return m_factors; }
+	size_t			getStencilRef() const { return m_stencilRef; }
+	UINT			getSampleMask() const{ return m_sampleMask; }
+
 private:
 	ID3D11ContextN*		m_context;
 	InputLayout*		m_layout;
 	float				m_factors[4];
+	UINT				m_sampleMask;
 	StencilFaceFlags	m_stencilMask;
 	size_t				m_stencilRef;
 };

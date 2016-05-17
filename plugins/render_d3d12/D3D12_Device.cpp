@@ -3,6 +3,7 @@
 #include "D3D12_Texture.h"
 #include "D3D12_CommandBuffer.h"
 #include "D3D12_CommandQueue.h"
+#include "Engine.h"
 
 CU_NS_BEGIN
 
@@ -70,6 +71,20 @@ CommandBuffer* D3D12Device::newCommandBuffer()
 CommandQueue* D3D12Device::newCommandQueue()
 {
 	return new D3D12CommondQueue(m_device);
+}
+
+D3D12Device*	gD3D12Device()
+{
+	return gEngine.getDevice()->cast<D3D12Device>();
+}
+
+ID3D12Device*	gD3D11NativeDevice()
+{
+	D3D12Device* device = gEngine.getDevice()->cast<D3D12Device>();
+	if (device)
+		return device->getDevice();
+
+	return NULL;
 }
 
 CU_NS_END

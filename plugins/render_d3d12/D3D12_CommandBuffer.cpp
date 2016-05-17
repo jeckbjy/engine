@@ -35,9 +35,9 @@ void D3D12CommandBuffer::setBlendFactor(const float factors[4])
 	m_handle->OMSetBlendFactor(factors);
 }
 
-void D3D12CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
+void D3D12CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t stencilRef)
 {
-	m_handle->OMSetStencilRef(ref);
+	m_handle->OMSetStencilRef(stencilRef);
 }
 
 void D3D12CommandBuffer::setRenderTarget(RenderTarget* target)

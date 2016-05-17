@@ -123,26 +123,10 @@ protected:
 	//virtual PipelineType type() const = 0;
 };
 
-// 绘制参数
-struct CU_API DrawParam
+class CU_API RenderPass : public Object
 {
-	Topology	type;
-	size_t		vertexStart;
-	size_t		vertexCount;
-	size_t		indexStart;
-	size_t		indexCount;
-	size_t		instanceCount;
-	DrawParam() 
-		: type(PT_TRIANGLE_LIST)
-		, vertexStart(0)
-		, vertexCount(0)
-		, indexStart(0)
-		, indexCount(0)
-		, instanceCount(0)
-	{}
-
-	bool isInstanced() const { return instanceCount > 0; }
-	bool isIndexed() const { return indexCount > 0; }
+protected:
+	virtual ~RenderPass(){}
 };
 
 // execute buffer
@@ -168,13 +152,21 @@ public:
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
 };
 
+class CU_API Fence
+{
+public:
+	virtual void wait() = 0;
+	virtual void wait(uint64_t timeout) = 0;
+};
+
 // 队列
 class CU_API CommandQueue : public Object
 {
 	DECLARE_RTTI(CommandQueue, Object, OBJ_ID_COMMAND_QUEUE);
 public:
 	virtual ~CommandQueue(){}
-	virtual void execute(CommandBuffer* cmds) = 0;
+	virtual void submit(CommandBuffer* cmds, Fence* fence) = 0;
+	virtual void waitIdle() = 0;
 };
 
 // 底层渲染接口,mean Device create objs

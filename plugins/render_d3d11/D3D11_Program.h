@@ -15,6 +15,10 @@ public:
 	//void save();
 
 	ID3DBlob* getCode() { return m_code; }
+
+	template<typename T>
+	T* getShader() { return (T*)m_shader; }
+
 private:
 	void create(ShaderStage stage, DWORD* code, SIZE_T size);
 

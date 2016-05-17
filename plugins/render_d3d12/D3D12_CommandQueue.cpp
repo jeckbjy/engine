@@ -16,11 +16,18 @@ D3D12CommondQueue::~D3D12CommondQueue()
 	D3D12_RELEASE(m_queue);
 }
 
-void D3D12CommondQueue::execute(CommandBuffer* cmds)
+void D3D12CommondQueue::submit(CommandBuffer* cmds, Fence* fence)
 {
-	D3D12CommandBuffer* dx_cmds = cmds->cast<D3D12CommandBuffer>();
-	ID3D12CommandList* cmdList = dx_cmds->native();
-	m_queue->ExecuteCommandLists(1, &cmdList);
+	D3D12CommandBuffer* dx_cmds = (D3D12CommandBuffer*)cmds;
+	ID3D12CommandList* cmd_list[] = { dx_cmds->native() };
+	m_queue->ExecuteCommandLists(1, cmd_list);
+
+	//if (fence)
+}
+
+void D3D12CommondQueue::waitIdle()
+{
+
 }
 
 CU_NS_END

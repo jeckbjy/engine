@@ -4,6 +4,28 @@
 
 CU_NS_BEGIN
 
+// »æÖÆ²ÎÊý
+struct CU_API DrawParam
+{
+	Topology	type;
+	size_t		vertexStart;
+	size_t		vertexCount;
+	size_t		indexStart;
+	size_t		indexCount;
+	size_t		instanceCount;
+	DrawParam()
+		: type(PT_TRIANGLE_LIST)
+		, vertexStart(0)
+		, vertexCount(0)
+		, indexStart(0)
+		, indexCount(0)
+		, instanceCount(0)
+	{}
+
+	bool isInstanced() const { return instanceCount > 0; }
+	bool isIndexed() const { return indexCount > 0; }
+};
+
 class VertexLayout;
 class CommandBuffer;
 /// Defines one or more vertex buffers, an index buffer and a draw range.
