@@ -35,6 +35,9 @@ D3D11InputLayout::~D3D11InputLayout()
 
 ID3D11InputLayout* D3D11InputLayout::getLayout(D3D11Program* prog)
 {
+	if (!prog)
+		return NULL;
+
 	ID3D11DeviceN* device = gD3D11NativeDevice();
 	if (!device)
 		return NULL;

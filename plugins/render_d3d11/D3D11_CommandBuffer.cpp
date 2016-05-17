@@ -1,5 +1,6 @@
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_Pipeline.h"
+#include "D3D11_InputLayout.h"
 #include "D3D11_Buffer.h"
 
 CU_NS_BEGIN
@@ -44,12 +45,12 @@ void D3D11CommandBuffer::setTopology(Topology primitive)
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-
+	m_pipeline = pipeline->cast<D3D11Pipeline>();
 }
 
 void D3D11CommandBuffer::setInputLayout(InputLayout* layout)
 {
-	m_layout = layout;
+	m_layout = layout->cast<D3D11InputLayout>();
 }
 
 void D3D11CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
@@ -78,6 +79,7 @@ void D3D11CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 
 void D3D11CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
 {
+	prepare();
 	if (instanceCount == 0)
 	{
 		m_context->Draw(vertexCount, vertexOffset);
@@ -90,6 +92,7 @@ void D3D11CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint
 
 void D3D11CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
 {
+	prepare();
 	if (instanceCount == 0)
 	{
 		m_context->DrawIndexed(indexCount, indexOffset, vertexOffset);
@@ -103,6 +106,12 @@ void D3D11CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount
 void D3D11CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 {
 	m_context->Dispatch(x, y, z);
+}
+
+void D3D11CommandBuffer::prepare()
+{
+	if (m_pipeline)
+		m_pipeline->bind(this);
 }
 
 CU_NS_END

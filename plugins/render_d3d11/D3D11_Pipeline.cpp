@@ -1,5 +1,7 @@
 #include "D3D11_Pipeline.h"
 #include "D3D11_Program.h"
+#include "D3D11_InputLayout.h"
+#include "D3D11_CommandBuffer.h"
 
 CU_NS_BEGIN
 
@@ -14,6 +16,14 @@ D3D11GraphicsPipeline::~D3D11GraphicsPipeline()
 void D3D11GraphicsPipeline::bind(D3D11CommandBuffer* cmdBuffer)
 {
 	ID3D11ContextN* context = cmdBuffer->getContext();
+
+	D3D11InputLayout* layout = cmdBuffer->getLayout();
+	if (layout)
+	{
+		ID3D11InputLayout* dx_layout = layout->getLayout(m_vs);
+		if (dx_layout)
+			context->IASetInputLayout(dx_layout);
+	}
 
 	context->OMSetDepthStencilState(m_depthStencil, cmdBuffer->getStencilRef());
 	context->OMSetBlendState(m_blend, cmdBuffer->getFactors(), cmdBuffer->getSampleMask());

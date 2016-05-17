@@ -1,4 +1,6 @@
 #include "D3D12_CommandBuffer.h"
+#include "D3D12_InputLayout.h"
+#include "D3D12_Pipeline.h"
 #include "D3D12_Buffer.h"
 
 CU_NS_BEGIN
@@ -52,12 +54,12 @@ void D3D12CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 
 void D3D12CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-
+	m_pipeline = (D3D12Pipeline*)pipeline;
 }
 
 void D3D12CommandBuffer::setInputLayout(InputLayout* layout)
 {
-
+	m_layout = (D3D12InputLayout*)layout;
 }
 
 void D3D12CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
@@ -85,17 +87,25 @@ void D3D12CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 
 void D3D12CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
 {
+	prepare();
 	m_handle->DrawInstanced(vertexCount, instanceCount, vertexOffset, instanceOffset);
 }
 
 void D3D12CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
 {
+	prepare();
 	m_handle->DrawIndexedInstanced(indexCount, instanceCount, indexOffset, vertexOffset, instanceCount);
 }
 
 void D3D12CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 {
 	m_handle->Dispatch(x, y, z);
+}
+
+void D3D12CommandBuffer::prepare()
+{
+	if (m_pipeline)
+		m_pipeline->bind(this);
 }
 
 CU_NS_END

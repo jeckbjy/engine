@@ -3,6 +3,8 @@
 
 CU_NS_BEGIN
 
+class D3D12Pipeline;
+class D3D12InputLayout;
 class CU_D3D12_API D3D12CommandBuffer : public CommandBuffer
 {
 public:
@@ -27,8 +29,12 @@ public:
 	ID3D12GraphicsCommandList* native() { return m_handle; }
 
 private:
-	ID3D12GraphicsCommandList* m_handle;
-	InputLayout* m_layout;
+	void prepare();
+
+private:
+	ID3D12GraphicsCommandList*	m_handle;
+	D3D12InputLayout*			m_layout;
+	D3D12Pipeline*				m_pipeline;
 };
 
 CU_NS_END
