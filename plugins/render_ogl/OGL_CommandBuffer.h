@@ -52,7 +52,9 @@ private:
 class CU_OGL_API OGLCommandQueue : public CommandQueue
 {
 public:
-	void execute(CommandBuffer* cmd){ ((OGLCommandBuffer*)cmd)->execute();  }
+	void submit(CommandBuffer* cmds, Fence* fence){}
+	void waitIdle(){}
+	//void execute(CommandBuffer* cmd){ ((OGLCommandBuffer*)cmd)->execute();  }
 };
 
 CU_NS_END

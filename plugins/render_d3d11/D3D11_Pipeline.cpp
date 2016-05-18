@@ -7,6 +7,7 @@ CU_NS_BEGIN
 
 D3D11GraphicsPipeline::D3D11GraphicsPipeline(const GraphicsPipelineDesc& desc)
 {
+
 }
 
 D3D11GraphicsPipeline::~D3D11GraphicsPipeline()

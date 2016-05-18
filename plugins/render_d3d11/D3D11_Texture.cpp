@@ -104,7 +104,7 @@ void* D3D11Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */,
 	if (!context)
 		return NULL;
 
-	D3D11_MAP type;
+	D3D11_MAP type = D3D11_MAP_READ;
 	D3D11_MAPPED_SUBRESOURCE res;
 	m_lockedSubresourceIdx = D3D11CalcSubresource(mipLevel, face, m_mipmaps);
 	context->Map(m_handle, m_lockedSubresourceIdx, type, 0, &res);

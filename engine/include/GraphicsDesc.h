@@ -44,15 +44,17 @@ struct CU_API SamplerDesc
 	AddressMode addrU;
 	AddressMode addrV;
 	AddressMode addrW;
-	bool		anisotropyEnable;
-	float		maxAnisotropy;
+	bool		anisotropyEnable;	// for check filter
+	float		maxAnisotropy;		// uint?
 	float		mipLodBias;
 	CompareOp	compareOp;
 	float		minLod;
 	float		maxLod;
 	float		borderColor[4];
 	bool		unnormalizedCoordinates;
+
 	SamplerDesc();
+	bool operator==(const SamplerDesc& other) const;
 };
 
 struct CU_API RasterizerDesc
@@ -67,7 +69,9 @@ struct CU_API RasterizerDesc
 	float		depthBiasClamp;
 	float		depthBiasSlopeFactor;
 	float		lineWidth;
+
 	RasterizerDesc();
+	bool operator==(const RasterizerDesc& other) const;
 };
 
 // 多重采样
@@ -82,6 +86,7 @@ struct CU_API MultisampleDesc
 	bool		alphaToOneEnable;
 
 	MultisampleDesc();
+	bool operator==(const MultisampleDesc& other) const;
 };
 
 // DepthStencilState
@@ -94,7 +99,10 @@ struct CU_API StencilOpDesc
 	uint32_t	compareMask;
 	uint32_t	writeMask;
 	uint32_t	reference;
+	
 	StencilOpDesc();
+
+	bool operator==(const StencilOpDesc& other) const;
 };
 
 struct CU_API DepthStencilDesc
@@ -108,7 +116,9 @@ struct CU_API DepthStencilDesc
 	StencilOpDesc	back;
 	float			minDepthBounds;
 	float			maxDepthBounds;
+
 	DepthStencilDesc();
+	bool operator==(const DepthStencilDesc& other) const;
 };
 
 // BlendState
@@ -123,20 +133,22 @@ struct BlendTargetDesc
 	BlendOp			alphaOp;
 	uint8_t			colorWriteMask;
 	BlendTargetDesc();
+
+	bool operator == (const BlendTargetDesc& other) const;
+	bool operator != (const BlendTargetDesc& other) const { return !(*this == other); }
 };
+
+#define MAX_BLEND_TARGET 8
 
 struct CU_API BlendDesc
 {
 	bool			logicOpEnable;
 	LogicOp			logicOp;
-	BlendTargetDesc	targets[8];
+	BlendTargetDesc	targets[MAX_BLEND_TARGET];
 	float			blendConstants[4];
 	BlendDesc();
 
-	bool operator == (const BlendDesc other) const
-	{
-		return true;
-	}
+	bool operator == (const BlendDesc& other) const;
 };
 
 // 创建shader
