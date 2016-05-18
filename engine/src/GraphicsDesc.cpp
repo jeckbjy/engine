@@ -52,6 +52,14 @@ bool SamplerDesc::operator ==(const SamplerDesc& other) const
 		memcmp(this->borderColor, other.borderColor, sizeof(this->borderColor)) == 0;
 }
 
+uint32_t SamplerDesc::getHashCode() const
+{
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
 RasterizerDesc::RasterizerDesc()
 	: fillMode(FILL_MODE_SOLID)
 	, cullMode(CULL_MODE_BACK)
@@ -66,6 +74,7 @@ RasterizerDesc::RasterizerDesc()
 {
 
 }
+
 
 bool RasterizerDesc::operator ==(const RasterizerDesc& other) const
 {
@@ -82,6 +91,14 @@ bool RasterizerDesc::operator ==(const RasterizerDesc& other) const
 		this->lineWidth == other.lineWidth;
 }
 
+uint32_t RasterizerDesc::getHashCode() const
+{
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
 MultisampleDesc::MultisampleDesc()
 {
 
@@ -147,6 +164,14 @@ bool DepthStencilDesc::operator ==(const DepthStencilDesc& other) const
 		maxDepthBounds == other.maxDepthBounds;
 }
 
+uint32_t DepthStencilDesc::getHashCode() const
+{
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
 BlendTargetDesc::BlendTargetDesc()
 	: blendEnable(false)
 	, srcColorFactor(BLEND_FACTOR_ONE)
@@ -198,6 +223,11 @@ bool BlendDesc::operator ==(const BlendDesc& other) const
 			return false;
 	}
 	return true;
+}
+
+uint32_t BlendDesc::getHashCode() const
+{
+	return 0;
 }
 
 InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)

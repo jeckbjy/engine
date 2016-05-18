@@ -3,10 +3,36 @@
 #include "D3D11_Buffer.h"
 #include "D3D11_Texture.h"
 #include "D3D11_Program.h"
+#include "D3D11_Pipeline.h"
+#include "D3D11_RenderState.h"
+#include "D3D11_CommandBuffer.h"
 
 #include "Engine.h"
 
 CU_NS_BEGIN
+
+D3D11Device*	gD3D11Device()
+{
+	return gEngine.getDevice()->cast<D3D11Device>();
+}
+
+ID3D11DeviceN*	gD3D11NativeDevice()
+{
+	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
+	if (device)
+		return device->getDevice();
+
+	return NULL;
+}
+
+ID3D11ContextN* gD3D11NativeContext()
+{
+	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
+	if (device)
+		return device->getContext();
+
+	return NULL;
+}
 
 D3D11Device::D3D11Device()
 	: m_device(NULL)
@@ -76,12 +102,12 @@ Program* D3D11Device::newProgram()
 
 Pipeline* D3D11Device::newPipeline(const GraphicsPipelineDesc& desc)
 {
-	return NULL;
+	return new D3D11GraphicsPipeline(desc);
 }
 
 Pipeline* D3D11Device::newPipeline(const ComputePipelineDesc& desc)
 {
-	return NULL;
+	return new D3D11ComputePipeline(desc);
 }
 
 DescriptorSet* D3D11Device::newDescriptorSet(Program* prog)
@@ -91,7 +117,7 @@ DescriptorSet* D3D11Device::newDescriptorSet(Program* prog)
 
 CommandBuffer* D3D11Device::newCommandBuffer()
 {
-	return NULL;
+	return new D3D11CommandBuffer();
 }
 
 CommandQueue* D3D11Device::newCommandQueue()
@@ -99,27 +125,9 @@ CommandQueue* D3D11Device::newCommandQueue()
 	return NULL;
 }
 
-D3D11Device*	gD3D11Device()
+D3D11BlendState* D3D11Device::getBlendState(const BlendDesc& desc)
 {
-	return gEngine.getDevice()->cast<D3D11Device>();
-}
-
-ID3D11DeviceN*	gD3D11NativeDevice()
-{
-	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
-	if (device)
-		return device->getDevice();
-
-	return NULL;
-}
-
-ID3D11ContextN* gD3D11NativeContext()
-{
-	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
-	if (device)
-		return device->getContext();
-
-	return NULL;
+	return m_blends.obtain(m_device, desc);
 }
 
 CU_NS_END

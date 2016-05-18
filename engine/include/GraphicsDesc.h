@@ -5,36 +5,6 @@
 
 CU_NS_BEGIN
 
-struct CU_API BufferDesc
-{
-	BufferUsage	usage;	// 用途
-	uint32_t	stride;	// 顶点跨度
-	uint32_t	counts;	// 顶点个数
-	RES_FLAG	flags;	// 标识信息
-	const void*	data;	// 数据
-	BufferDesc(BufferUsage usage, uint32_t stride, uint32_t counts, RES_FLAG flags, const void* data)
-		:usage(usage), stride(stride), counts(counts), flags(flags), data(data)
-	{
-	}
-};
-
-struct CU_API TextureDesc
-{
-	TexType		type;
-	TextureUsage usage;
-	PixelFormat format;
-	uint32_t	width;
-	uint32_t	height;
-	uint32_t	depthOrArraySize;
-	uint32_t	mipLevels;
-	uint32_t	samples;
-	uint32_t	quality;
-	uint32_t	tiling;
-	const void*	data;
-	TextureDesc();
-	TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, TextureUsage usage);
-};
-
 // 采样
 struct CU_API SamplerDesc
 {
@@ -55,6 +25,7 @@ struct CU_API SamplerDesc
 
 	SamplerDesc();
 	bool operator==(const SamplerDesc& other) const;
+	uint32_t getHashCode() const;
 };
 
 struct CU_API RasterizerDesc
@@ -72,6 +43,7 @@ struct CU_API RasterizerDesc
 
 	RasterizerDesc();
 	bool operator==(const RasterizerDesc& other) const;
+	uint32_t getHashCode() const;
 };
 
 // 多重采样
@@ -119,6 +91,7 @@ struct CU_API DepthStencilDesc
 
 	DepthStencilDesc();
 	bool operator==(const DepthStencilDesc& other) const;
+	uint32_t getHashCode() const;
 };
 
 // BlendState
@@ -149,6 +122,40 @@ struct CU_API BlendDesc
 	BlendDesc();
 
 	bool operator == (const BlendDesc& other) const;
+	uint32_t getHashCode() const;
+};
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+struct CU_API BufferDesc
+{
+	BufferUsage	usage;	// 用途
+	uint32_t	stride;	// 顶点跨度
+	uint32_t	counts;	// 顶点个数
+	RES_FLAG	flags;	// 标识信息
+	const void*	data;	// 数据
+	BufferDesc(BufferUsage usage, uint32_t stride, uint32_t counts, RES_FLAG flags, const void* data)
+		:usage(usage), stride(stride), counts(counts), flags(flags), data(data)
+	{
+	}
+};
+
+struct CU_API TextureDesc
+{
+	TexType		type;
+	TextureUsage usage;
+	PixelFormat format;
+	uint32_t	width;
+	uint32_t	height;
+	uint32_t	depthOrArraySize;
+	uint32_t	mipLevels;
+	uint32_t	samples;
+	uint32_t	quality;
+	uint32_t	tiling;
+	const void*	data;
+	TextureDesc();
+	TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, TextureUsage usage);
 };
 
 // 创建shader

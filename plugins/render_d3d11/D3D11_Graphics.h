@@ -12,11 +12,6 @@ public:
 
 	Device* getDevice() { return m_device; }
 
-	ID3D11RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
-	ID3D11BlendState*			getBlendState(const BlendDesc& desc);
-	ID3D11DepthStencilState*	getDepthStencilState(const DepthStencilDesc& desc);
-	ID3D11SamplerState*			getSamplerState(const SamplerDesc& desc);
-
 private:
 	// 如何做hash查找??
 	D3D11Device* m_device;

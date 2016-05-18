@@ -21,6 +21,16 @@ void D3D11CommandBuffer::reset()
 
 }
 
+void D3D11CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
+{
+
+}
+
+void D3D11CommandBuffer::setScissor(int x, int y, size_t w, size_t h)
+{
+
+}
+
 void D3D11CommandBuffer::setBlendFactor(const float factors[4])
 {
 	memcpy(m_factors, factors, sizeof(m_factors));
@@ -41,6 +51,11 @@ void D3D11CommandBuffer::setTopology(Topology primitive)
 {
 	D3D11_PRIMITIVE_TOPOLOGY dx_prim = (D3D11_PRIMITIVE_TOPOLOGY)primitive;
 	m_context->IASetPrimitiveTopology(dx_prim);
+}
+
+void D3D11CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
+{
+
 }
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)
