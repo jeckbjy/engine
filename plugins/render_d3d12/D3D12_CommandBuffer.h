@@ -28,6 +28,8 @@ public:
 
 	ID3D12GraphicsCommandList* native() { return m_handle; }
 
+	D3D12InputLayout* getLayout() { return m_layout; }
+
 private:
 	void prepare();
 

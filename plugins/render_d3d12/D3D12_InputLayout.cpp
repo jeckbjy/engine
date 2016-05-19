@@ -5,6 +5,7 @@ CU_NS_BEGIN
 
 D3D12InputLayout::D3D12InputLayout(const InputElement* elements, size_t count)
 	: InputLayout(elements, count)
+	, m_id(0)
 {
 	m_desc = new D3D12_INPUT_ELEMENT_DESC[count];
 	for (size_t i = 0; i < count; ++i)

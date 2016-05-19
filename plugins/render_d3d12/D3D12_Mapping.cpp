@@ -1,4 +1,5 @@
 #include "D3D12_Mapping.h"
+#include "D3D12_Program.h"
 
 CU_NS_BEGIN
 
@@ -172,7 +173,18 @@ D3D12_TEXTURE_ADDRESS_MODE D3D12Mapping::getAddressMode(AddressMode mode)
 
 void D3D12Mapping::fillShader(D3D12_SHADER_BYTECODE& code, Program* prog)
 {
-
+	D3D12Program* shader = (D3D12Program*)prog;
+	if (shader)
+	{
+		ID3DBlob* blob = shader->getCode();
+		code.pShaderBytecode = blob->GetBufferPointer();
+		code.BytecodeLength = blob->GetBufferSize();
+	}
+	else
+	{
+		code.pShaderBytecode = NULL;
+		code.BytecodeLength = 0;
+	}
 }
 
 void D3D12Mapping::fillRasterizerState(D3D12_RASTERIZER_DESC& state, const RasterizerDesc& desc)

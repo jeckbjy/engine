@@ -11,8 +11,11 @@ public:
 
 	void fillLayout(D3D12_INPUT_LAYOUT_DESC& desc);
 
+	uint32_t getID() const { return m_id; }
+
 private:
 	D3D12_INPUT_ELEMENT_DESC* m_desc;
+	uint32_t m_id;
 };
 
 CU_NS_END

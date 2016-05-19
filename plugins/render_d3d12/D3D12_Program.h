@@ -11,10 +11,10 @@ public:
 
 	bool compile(const ProgramDesc& desc);
 
-	void release();
+	ID3DBlob* getCode() { return m_blob; }
+
 private:
 	ID3DBlob* m_blob;
-	ID3DBlob* m_error;
 };
 
 CU_NS_END

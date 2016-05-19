@@ -12,7 +12,6 @@ public:
 	virtual void bind(D3D12CommandBuffer* cmdBuffer) = 0;
 };
 
-// InputLayout和RenderPass如何处理呢？？
 class CU_D3D12_API D3D12GraphicsPipeline : public Pipeline
 {
 public:
@@ -25,7 +24,6 @@ private:
 	typedef std::map<uint32_t, ID3D12PipelineState*> PipelineMap;
 	PipelineMap m_pipelines;
 
-	//GraphicsPipelineDesc m_desc;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC m_desc;
 
 	ID3D12RootSignature* m_rootSignature;

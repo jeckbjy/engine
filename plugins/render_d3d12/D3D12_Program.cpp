@@ -4,29 +4,26 @@ CU_NS_BEGIN
 
 D3D12Program::D3D12Program()
 	: m_blob(NULL)
-	, m_error(NULL)
 {
 }
 
 D3D12Program::~D3D12Program()
 {
-	release();
-}
-
-void D3D12Program::release()
-{
 	D3D12_RELEASE(m_blob);
-	D3D12_RELEASE(m_error);
 }
 
 bool D3D12Program::compile(const ProgramDesc& desc)
 {
+	D3D12_RELEASE(m_blob);
+	
+	ID3D10Blob* error = NULL;
+
 	std::vector<D3D_SHADER_MACRO> macros;
-	release();
 	LPCSTR file = desc.file.empty() ? NULL : desc.file.c_str();
 	if (!desc.macros.empty())
 	{// split macros
 	}
+
 	macros.push_back({ NULL, NULL });
 	UINT flags = 0;
 	// todo:process includes ID3DInclude
@@ -43,7 +40,7 @@ bool D3D12Program::compile(const ProgramDesc& desc)
 		flags,
 		0,
 		&m_blob,
-		&m_error);
+		&error);
 	// 是否需要解析？？
 	return SUCCEEDED(hr);
 }
