@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-D3D11Program::D3D11Program()
+D3D11Program::D3D11Program(uint32_t id)
 	: m_shader(NULL)
 	, m_code(NULL)
 {

@@ -90,11 +90,6 @@ public:
 	virtual ~Program(){}
 
 	virtual bool compile(const ProgramDesc& desc) = 0;
-
-	uint getID() { return m_id; }
-
-private:
-	uint m_id;
 };
 
 // used for material
@@ -182,7 +177,6 @@ public:
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
 	virtual Program*		newProgram() = 0;
-	//virtual PipelineLayout*	newPipelineLayout(const PipelineLayoutDesc& desc) = 0;
 	virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
 	virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;

@@ -4,6 +4,7 @@
 #include "D3D11_Texture.h"
 #include "D3D11_Program.h"
 #include "D3D11_Pipeline.h"
+#include "D3D11_InputLayout.h"
 #include "D3D11_RenderState.h"
 #include "D3D11_CommandBuffer.h"
 
@@ -39,6 +40,9 @@ D3D11Device::D3D11Device()
 	, m_factory(NULL)
 	, m_context(NULL)
 	, m_linkage(NULL)
+	, m_layoutMax(0)
+	, m_programID(0)
+	, m_layoutID(0)
 {
 	D3D_FEATURE_LEVEL featureLevels[6] = 
 	{
@@ -92,17 +96,23 @@ RenderTarget* D3D11Device::newRenderTexture(Texture* rtv, Texture* dsv)
 
 InputLayout* D3D11Device::newInputLayout(const InputElement* elements, size_t count)
 {
-	return NULL;
+	++m_layoutID;
+	if (m_layoutID == 0)
+		m_layoutID = 1;
+	return new D3D11InputLayout(m_layoutID, elements, count);
 }
 
 Program* D3D11Device::newProgram()
 {
-	return new D3D11Program();
+	++m_programID;
+	if (m_programID == 0)
+		m_programID = 1;
+	return new D3D11Program(m_programID);
 }
 
 Pipeline* D3D11Device::newPipeline(const GraphicsPipelineDesc& desc)
 {
-	return new D3D11GraphicsPipeline(desc);
+	return new D3D11GraphicsPipeline(this, desc);
 }
 
 Pipeline* D3D11Device::newPipeline(const ComputePipelineDesc& desc)
@@ -128,6 +138,66 @@ CommandQueue* D3D11Device::newCommandQueue()
 D3D11BlendState* D3D11Device::getBlendState(const BlendDesc& desc)
 {
 	return m_blends.obtain(m_device, desc);
+}
+
+D3D11SamplerState* D3D11Device::getSamplerState(const SamplerDesc& desc)
+{
+	return m_samplers.obtain(m_device, desc);
+}
+
+D3D11RasterizerState* D3D11Device::getRasterizerState(const RasterizerDesc& desc)
+{
+	return m_rasterizers.obtain(m_device, desc);
+}
+
+D3D11DepthStencilState* D3D11Device::getDepthStencilState(const DepthStencilDesc& desc)
+{
+	return m_depthStencils.obtain(m_device, desc);
+}
+
+ID3D11InputLayout* D3D11Device::getInputLayout(D3D11Program* vs, D3D11InputLayout* layout)
+{
+	if (vs == NULL || layout == NULL)
+		return NULL;
+
+	uint64_t uid = vs->getID();
+	uid = (uid << 32) + layout->getID();
+	LayoutMap::iterator itor = m_layouts.find(uid);
+	if (itor != m_layouts.end())
+	{
+		return itor->second;
+	}
+
+	// 先清理不再使用的
+	if (m_layoutMax > 0 && m_layouts.size() > m_layoutMax)
+	{
+		ID3D11InputLayout* tmp_layout;
+		ULONG tmp_count;
+		for (LayoutMap::iterator itor = m_layouts.begin(); itor != m_layouts.end();)
+		{
+			tmp_layout = itor->second;
+			tmp_count = tmp_layout->AddRef();
+			tmp_layout->Release();
+			if (tmp_count == 2)
+			{// 已经没有用了
+				tmp_layout->Release();
+				itor = m_layouts.erase(itor);
+			}
+			else
+			{
+				++itor;
+			}
+		}
+	}
+
+	// 创建
+	ID3D11InputLayout* dx_layout = layout->createLayout(m_device, vs->getCode());
+	if (!dx_layout)
+		return NULL;
+
+	m_layouts[uid] = dx_layout;
+
+	return dx_layout;
 }
 
 CU_NS_END

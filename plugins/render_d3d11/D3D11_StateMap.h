@@ -7,6 +7,13 @@ template<typename TState, typename TDesc>
 class StateMap
 {
 public:
+	~StateMap()
+	{
+		for (size_t i = 0; i < m_datas.size(); ++i)
+			m_datas[i]->release();
+		m_datas.clear();
+	}
+
 	TState* obtain(ID3D11DeviceN* device, const TDesc& desc)
 	{
 		uint32_t hashCode = desc.getHashCode();
@@ -25,6 +32,36 @@ public:
 
 		state->retain();
 		return state;
+	}
+
+	void clear(int threshold)
+	{
+		if (m_datas.size() < threshold)
+			return;
+
+		int lastIndex = -1;
+		int len = (int)m_datas.size();
+		for (int i = 0; i < len; ++i)
+		{
+			TState* state = m_datas[i];
+			if (state->refs() > 1)
+			{
+				++lastIndex;
+				if (lastIndex != i)
+					m_datas[lastIndex] = i;
+			}
+			else
+			{
+				state->release();
+				m_datas[i] = 0;
+			}
+		}
+
+		int count = len - lastIndex;
+		for (int i = 0; i < count; ++i)
+		{
+			m_datas.pop_back();
+		}
 	}
 
 private:

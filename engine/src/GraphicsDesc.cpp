@@ -2,16 +2,6 @@
 
 CU_NS_BEGIN
 
-TextureDesc::TextureDesc()
-{
-
-}
-
-TextureDesc::TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, TextureUsage usage)
-{
-
-}
-
 SamplerDesc::SamplerDesc()
 	: magFilter(FILTER_TYPE_LINEAR)
 	, minFilter(FILTER_TYPE_LINEAR)
@@ -228,6 +218,35 @@ bool BlendDesc::operator ==(const BlendDesc& other) const
 uint32_t BlendDesc::getHashCode() const
 {
 	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+TextureDesc::TextureDesc()
+{
+
+}
+
+TextureDesc::TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, TextureUsage usage)
+{
+
+}
+
+GraphicsPipelineDesc::GraphicsPipelineDesc()
+	: vs(NULL)
+	, hs(NULL)
+	, ds(NULL)
+	, gs(NULL)
+	, ps(NULL)
+{
+
+}
+
+ComputePipelineDesc::ComputePipelineDesc()
+	: cs(NULL)
+{
+
 }
 
 InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)

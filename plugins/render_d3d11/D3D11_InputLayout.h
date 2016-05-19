@@ -3,23 +3,21 @@
 
 CU_NS_BEGIN
 
-class D3D11Program;
 class CU_D3D11_API D3D11InputLayout : public InputLayout
 {
 public:
-	D3D11InputLayout(const InputElement* elements, size_t count);
+	D3D11InputLayout(uint32_t id, const InputElement* elements, size_t count);
 	~D3D11InputLayout();
 
-	ID3D11InputLayout* getLayout(D3D11Program* prog);
+	ID3D11InputLayout* createLayout(ID3D11DeviceN* device, ID3DBlob* code);
+
+	uint32_t getID() const { return m_id; }
 
 private:
-	// program不能释放再创建，否则会导致Layout无限增加
-	// 需要不需要LayoutManager中同一管理呢？？
-	typedef std::map<uint, ID3D11InputLayout*>	LayoutMap;
 	D3D11_INPUT_ELEMENT_DESC* m_desc;
 	UINT		m_count;
 	bool		m_instanced;	// 是否含有instance
-	LayoutMap	m_layouts;
+	uint32_t	m_id;
 };
 
 CU_NS_END

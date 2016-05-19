@@ -10,7 +10,9 @@ public:
 	~D3D11RasterizerState();
 
 	bool equal(const RasterizerDesc& desc) const;
+
 	uint32_t getHashCode() const { return m_hash; }
+	ID3D11RasterizerState* getState() { return m_state; }
 
 private:
 	uint32_t				m_hash;
@@ -25,7 +27,9 @@ public:
 	~D3D11BlendState();
 
 	bool equal(const BlendDesc& desc) const;
+
 	uint32_t getHashCode() const { return m_hash; }
+	ID3D11BlendState* getState() { return m_state; }
 
 private:
 	uint32_t			m_hash;
@@ -40,7 +44,9 @@ public:
 	~D3D11DepthStencilState();
 
 	bool equal(const DepthStencilDesc& desc) const;
+
 	uint32_t getHashCode() const { return m_hash; }
+	ID3D11DepthStencilState* getState() { return m_state; }
 
 private:
 	uint32_t				 m_hash;

@@ -4,6 +4,9 @@
 
 CU_NS_BEGIN
 
+class D3D11Program;
+class D3D11InputLayout;
+
 class D3D11BlendState;
 class D3D11SamplerState;
 class D3D11RasterizerState;
@@ -27,16 +30,20 @@ public:
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 
-	ID3D11DeviceN*	getDevice() { return m_device; }
-	ID3D11ContextN*	getContext() { return m_context; }
-	ID3D11ClassLinkage*	getLinkage() { return m_linkage; }
+	ID3D11DeviceN*				getDevice() { return m_device; }
+	ID3D11ContextN*				getContext() { return m_context; }
+	ID3D11ClassLinkage*			getLinkage() { return m_linkage; }
 
 	D3D11BlendState*			getBlendState(const BlendDesc& desc);
 	D3D11SamplerState*			getSamplerState(const SamplerDesc& desc);
 	D3D11RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
 	D3D11DepthStencilState*		getDepthStencilState(const DepthStencilDesc& desc);
 
+	ID3D11InputLayout*			getInputLayout(D3D11Program* vs, D3D11InputLayout* layout);
+
 private:
+	typedef std::map<uint64_t, ID3D11InputLayout*>				LayoutMap;
+
 	typedef StateMap<D3D11BlendState, BlendDesc>				BlendMap;
 	typedef StateMap<D3D11SamplerState, SamplerDesc>			SamplerMap;
 	typedef StateMap<D3D11RasterizerState, RasterizerDesc>		RasterizerMap;
@@ -51,6 +58,12 @@ private:
 	SamplerMap			m_samplers;
 	RasterizerMap		m_rasterizers;
 	DepthStencilMap		m_depthStencils;
+
+	LayoutMap			m_layouts;
+	uint32_t			m_layoutMax;
+
+	uint32_t			m_programID;
+	uint32_t			m_layoutID;
 };
 
 extern CU_D3D11_API D3D11Device*	gD3D11Device();

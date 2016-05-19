@@ -172,33 +172,30 @@ struct CU_API ProgramDesc
 	bool		debug;
 };
 
-// shader描述信息
-struct CU_API ShaderStageDesc
-{
-	uint32_t flags;
-	Program* prog;
-	String	 entry;
-};
-
 // 渲染管线
 struct CU_API GraphicsPipelineDesc
 {
-	uint32_t					flags;
-	uint32_t					stageCount;
-	const ShaderStageDesc*		stages;
+	Program*			vs;
+	Program*			hs;
+	Program*			ds;
+	Program*			gs;
+	Program*			ps;
+
 	// 其他状态信息
-	RasterizerDesc				rasterizer;
-	DepthStencilDesc			depthStencil;
-	BlendDesc					blend;
-	MultisampleDesc				multisample;
-	Topology					topology;
+	RasterizerDesc		rasterizer;
+	DepthStencilDesc	depthStencil;
+	BlendDesc			blend;
+	MultisampleDesc		multisample;
+	Topology			topology;
+
+	GraphicsPipelineDesc();
 };
 
 // 计算管线
 struct CU_API ComputePipelineDesc
 {
-	uint32_t			flags;
-	ShaderStageDesc		stage;
+	Program*			cs;
+	ComputePipelineDesc();
 };
 
 struct CU_API InputElement

@@ -2,33 +2,50 @@
 #include "D3D11_Program.h"
 #include "D3D11_InputLayout.h"
 #include "D3D11_CommandBuffer.h"
+#include "D3D11_RenderState.h"
+#include "D3D11_Device.h"
 
 CU_NS_BEGIN
 
-D3D11GraphicsPipeline::D3D11GraphicsPipeline(const GraphicsPipelineDesc& desc)
+D3D11GraphicsPipeline::D3D11GraphicsPipeline(D3D11Device* device, const GraphicsPipelineDesc& desc)
 {
+	m_blend = device->getBlendState(desc.blend);
+	m_rasterizer = device->getRasterizerState(desc.rasterizer);
+	m_depthStencil = device->getDepthStencilState(desc.depthStencil);
 
+	m_vs = (D3D11Program*)desc.vs;
+	m_hs = (D3D11Program*)desc.hs;
+	m_ds = (D3D11Program*)desc.ds;
+	m_gs = (D3D11Program*)desc.gs;
+	m_ps = (D3D11Program*)desc.ps;
+
+	m_curLayout = NULL;
 }
 
 D3D11GraphicsPipeline::~D3D11GraphicsPipeline()
 {
+	m_blend->release();
+	m_rasterizer->release();
+	m_depthStencil->release();
 }
 
 void D3D11GraphicsPipeline::bind(D3D11CommandBuffer* cmdBuffer)
 {
+	D3D11Device* device = gD3D11Device();
+	if (!device)
+		return;
+
 	ID3D11ContextN* context = cmdBuffer->getContext();
 
 	D3D11InputLayout* layout = cmdBuffer->getLayout();
-	if (layout)
-	{
-		ID3D11InputLayout* dx_layout = layout->getLayout(m_vs);
-		if (dx_layout)
-			context->IASetInputLayout(dx_layout);
-	}
+	if (m_curLayout != layout)
+		m_d3dLayout = device->getInputLayout(m_vs, layout);
+	if (m_d3dLayout)
+		context->IASetInputLayout(m_d3dLayout.get());
 
-	context->OMSetDepthStencilState(m_depthStencil, cmdBuffer->getStencilRef());
-	context->OMSetBlendState(m_blend, cmdBuffer->getFactors(), cmdBuffer->getSampleMask());
-	context->RSSetState(m_rasterizer);
+	context->RSSetState(m_rasterizer->getState());
+	context->OMSetDepthStencilState(m_depthStencil->getState(), cmdBuffer->getStencilRef());
+	context->OMSetBlendState(m_blend->getState(), cmdBuffer->getFactors(), cmdBuffer->getSampleMask());
 
 	// context->VSSetSamplers();
 	// set shader
@@ -46,7 +63,6 @@ void D3D11GraphicsPipeline::bind(D3D11CommandBuffer* cmdBuffer)
 
 	if (m_ps)
 		context->PSSetShader(m_ps->getShader<ID3D11PixelShader>(), NULL, 0);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,12 +70,11 @@ void D3D11GraphicsPipeline::bind(D3D11CommandBuffer* cmdBuffer)
 //////////////////////////////////////////////////////////////////////////
 D3D11ComputePipeline::D3D11ComputePipeline(const ComputePipelineDesc& desc)
 {
-
+	m_cs = (D3D11Program*)desc.cs;
 }
 
 D3D11ComputePipeline::~D3D11ComputePipeline()
 {
-
 }
 
 void D3D11ComputePipeline::bind(D3D11CommandBuffer* cmdBuffer)
