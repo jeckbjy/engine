@@ -4,6 +4,7 @@
 CU_NS_BEGIN
 
 // ²ÎÊý
+class VK_Device;
 class CU_VK_API VK_DescriptroSet : public DescriptorSet
 {
 public:

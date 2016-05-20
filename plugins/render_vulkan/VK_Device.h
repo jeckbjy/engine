@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+class VK_Graphics;
 class CU_VK_API VK_Device : public Device
 {
 	CU_NONCOPYABLE(VK_Device);
@@ -17,7 +18,7 @@ public:
 	VkDescriptorPool& getDescriptorPool() { return m_descroptorPool; }
 
 private:
-	VkDevice		m_handle;
+	VkDevice			m_handle;
 	//VkQueue			m_queue;
 	VK_Graphics*		m_graphics;
 	VkDescriptorPool	m_descroptorPool;

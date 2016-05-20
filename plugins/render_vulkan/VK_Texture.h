@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+class VK_Device;
 class CU_VK_API VK_Texture : public Texture
 {
 public:

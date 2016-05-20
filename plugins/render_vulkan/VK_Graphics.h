@@ -24,7 +24,6 @@ private:
 	VkPhysicalDevice m_gpu;			// 当前使用的
 	size_t			m_queueCount;	// 当前队列
 	VkPhysicalDeviceMemoryProperties m_memProps;
-
 };
 
 CU_NS_END

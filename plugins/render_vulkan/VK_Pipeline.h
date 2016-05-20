@@ -3,20 +3,30 @@
 
 CU_NS_BEGIN
 
+class VK_Device;
+class VK_CommandBuffer;
+class CU_VK_API VK_Pipeline : public Pipeline
+{
+public:
+	virtual void bind(VK_CommandBuffer* cmdBuffer) = 0;
+};
+
 // 三个问题：1:VertexInputState初始化,2:RenderPass的初始化,3:Layout的初始化
 class CU_VK_API VK_GraphicsPipeline : public Pipeline
 {
 public:
-	VK_GraphicsPipeline(VK_Device* device, const GraphicsPipelineDesc& desc);
+	VK_GraphicsPipeline(VkDevice device, const GraphicsPipelineDesc& desc);
 	~VK_GraphicsPipeline();
 
+	void bind(VK_CommandBuffer* cmdBuffer);
 	//VkPipeline getPipeline(InputLayout* layout);
 
 private:
 	// todo:是否还需要 加入RenderPass
 	typedef std::map<uint32_t, VkPipeline> PipelineMap;
-	PipelineMap m_handles;
-	VK_Device*	m_device;
+	PipelineMap								m_handles;
+	VkDevice								m_device;
+
 	VkGraphicsPipelineCreateInfo			m_info;
 	VkPipelineInputAssemblyStateCreateInfo	m_inputAssemblyState;
 	VkPipelineTessellationStateCreateInfo	m_tessellationState;
@@ -33,11 +43,13 @@ private:
 class CU_VK_API VK_ComputePipeline : public Pipeline
 {
 public:
-	VK_ComputePipeline(VK_Device* device, const ComputePipelineDesc& desc);
+	VK_ComputePipeline(VkDevice device, const ComputePipelineDesc& desc);
 	~VK_ComputePipeline();
 
+	void bind(VK_CommandBuffer* cmdBuffer);
+
 private:
-	VK_Device*	m_device;
+	VkDevice	m_device;
 	VkPipeline	m_handle;
 };
 

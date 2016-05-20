@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+class VK_Device;
 class CU_VK_API VK_Buffer : public GpuBuffer
 {
 	CU_NONCOPYABLE(VK_Buffer);

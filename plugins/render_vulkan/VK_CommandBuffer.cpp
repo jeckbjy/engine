@@ -1,6 +1,7 @@
 #include "VK_CommandBuffer.h"
-#include "VK_Pipeline.h"
 #include "VK_Buffer.h"
+#include "VK_Pipeline.h"
+#include "VK_InputLayout.h"
 
 CU_NS_BEGIN
 
@@ -38,8 +39,12 @@ void VK_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 
 void VK_CommandBuffer::setPipeline(Pipeline* pipeline)
 {
-	//VK_Pipeline* ppl = pipeline->cast<VK_Pipeline>();
-	//vkCmdBindPipeline(m_handle, ppl->getBindPoint(), ppl->native());
+	m_pipeline = pipeline->cast<VK_Pipeline>();
+}
+
+void VK_CommandBuffer::setInputLayout(InputLayout* layout)
+{
+	m_layout = layout->cast<VK_InputLayout>();
 }
 
 void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
@@ -65,17 +70,25 @@ void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer)
 
 void VK_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
 {
+	prepare();
 	vkCmdDraw(m_handle, vertexCount, instanceCount, vertexOffset, instanceOffset);
 }
 
 void VK_CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset)
 {
+	prepare();
 	vkCmdDrawIndexed(m_handle, indexCount, instanceCount, indexOffset, vertexOffset, instanceOffset);
 }
 
 void VK_CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 {
 	vkCmdDispatch(m_handle, x, y, z);
+}
+
+void VK_CommandBuffer::prepare()
+{
+	if (m_pipeline)
+		m_pipeline->bind(this);
 }
 
 CU_NS_END

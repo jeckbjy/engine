@@ -9,6 +9,8 @@ public:
 	VK_InputLayout(const InputElement* elements, size_t count);
 	~VK_InputLayout();
 
+	VkPipelineVertexInputStateCreateInfo* getInfo() { return &m_info; }
+
 private:
 	VkPipelineVertexInputStateCreateInfo m_info;
 	VkVertexInputBindingDescription*	m_bindings;

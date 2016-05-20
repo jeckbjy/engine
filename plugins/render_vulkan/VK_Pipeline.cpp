@@ -1,10 +1,12 @@
 #include "VK_Pipeline.h"
-#include "VK_Mapping.h"
 #include "VK_Device.h"
+#include "VK_Mapping.h"
+#include "VK_InputLayout.h"
+#include "VK_CommandBuffer.h"
 
 CU_NS_BEGIN
 
-VK_GraphicsPipeline::VK_GraphicsPipeline(VK_Device* device, const GraphicsPipelineDesc& desc)
+VK_GraphicsPipeline::VK_GraphicsPipeline(VkDevice device, const GraphicsPipelineDesc& desc)
 	: m_device(device)
 {
 	VK_Mapping::fillInputAssemblyState(m_inputAssemblyState, desc.topology);
@@ -19,7 +21,7 @@ VK_GraphicsPipeline::VK_GraphicsPipeline(VK_Device* device, const GraphicsPipeli
 	m_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 	m_info.pNext = NULL;
 	m_info.flags = 0;
-	// todo:
+	// todo: fill shader info
 	m_info.stageCount = 0;
 	m_info.pStages = NULL;
 
@@ -38,9 +40,6 @@ VK_GraphicsPipeline::VK_GraphicsPipeline(VK_Device* device, const GraphicsPipeli
 	m_info.subpass = 0;
 	m_info.basePipelineHandle = 0;
 	m_info.basePipelineIndex = 0;
-
-	//	VK_CHECK(vkCreateGraphicsPipelines(m_device->native(), NULL, 1, &info, NULL, &m_handle), "vkCreateGraphicsPipelines fail!");
-
 }
 
 VK_GraphicsPipeline::~VK_GraphicsPipeline()
@@ -48,14 +47,30 @@ VK_GraphicsPipeline::~VK_GraphicsPipeline()
 	// 依次释放
 	for (PipelineMap::iterator itor = m_handles.begin(); itor != m_handles.end(); ++itor)
 	{
-		vkDestroyPipeline(m_device->native(), itor->second, NULL);
+		vkDestroyPipeline(m_device, itor->second, NULL);
 	}
+}
+
+void VK_GraphicsPipeline::bind(VK_CommandBuffer* cmdBuffer)
+{
+	VK_InputLayout* layout = cmdBuffer->getLayout();
+	if (!layout)
+		return;
+
+	// 先查找,render pass?
+
+	m_info.pVertexInputState = layout->getInfo();
+	VkPipeline handle = NULL;
+	VK_CHECK(vkCreateGraphicsPipelines(m_device, NULL, 1, &m_info, NULL, &handle), "vkCreateGraphicsPipelines fail!");
+
+	// 绑定
+	vkCmdBindPipeline(cmdBuffer->getNative(), VK_PIPELINE_BIND_POINT_GRAPHICS, handle);
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-VK_ComputePipeline::VK_ComputePipeline(VK_Device* device, const ComputePipelineDesc& desc)
+VK_ComputePipeline::VK_ComputePipeline(VkDevice device, const ComputePipelineDesc& desc)
 	: m_device(device)
 	, m_handle(VK_NULL_HANDLE)
 {
@@ -68,16 +83,21 @@ VK_ComputePipeline::VK_ComputePipeline(VK_Device* device, const ComputePipelineD
 	info.basePipelineHandle = VK_NULL_HANDLE;
 	info.basePipelineIndex = 0;
 
-	VK_CHECK(vkCreateComputePipelines(m_device->native(), NULL, 1, &info, NULL, &m_handle), "vkCreateComputePipelines fail!");
+	VK_CHECK(vkCreateComputePipelines(m_device, NULL, 1, &info, NULL, &m_handle), "vkCreateComputePipelines fail!");
 }
 
 VK_ComputePipeline::~VK_ComputePipeline()
 {
 	if (m_handle)
 	{
-		vkDestroyPipeline(m_device->native(), m_handle, NULL);
+		vkDestroyPipeline(m_device, m_handle, NULL);
 		m_handle = NULL;
 	}
+}
+
+void VK_ComputePipeline::bind(VK_CommandBuffer* cmdBuffer)
+{
+	vkCmdBindPipeline(cmdBuffer->getNative(), VK_PIPELINE_BIND_POINT_COMPUTE, m_handle);
 }
 
 CU_NS_END
