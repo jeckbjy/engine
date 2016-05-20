@@ -23,12 +23,14 @@ void D3D11CommandBuffer::reset()
 
 void D3D11CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
-
+	D3D11_VIEWPORT viewport = { x, y, w, h, 0.0f, 1.0f };
+	m_context->RSSetViewports(1, &viewport);
 }
 
 void D3D11CommandBuffer::setScissor(int x, int y, size_t w, size_t h)
 {
-
+	D3D11_RECT rect = { x, y, (int)x + w, (int)y + h};
+	m_context->RSSetScissorRects(1, &rect);
 }
 
 void D3D11CommandBuffer::setBlendFactor(const float factors[4])

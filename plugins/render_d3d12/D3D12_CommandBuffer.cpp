@@ -23,13 +23,14 @@ void D3D12CommandBuffer::reset()
 
 void D3D12CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
-	// 支持多个?
-	//m_handle->RSSetViewports();
+	D3D12_VIEWPORT viewport = { x, y, w, h, 0.0f, 1.0f };
+	m_handle->RSSetViewports(1, &viewport);
 }
 
 void D3D12CommandBuffer::setScissor(int x, int y, size_t w, size_t h)
 {
-	//m_handle->RSSetScissorRects()
+	D3D12_RECT rect = { x, y, (int)x + w, (int)y + h };
+	m_handle->RSSetScissorRects(1, &rect);
 }
 
 void D3D12CommandBuffer::setBlendFactor(const float factors[4])

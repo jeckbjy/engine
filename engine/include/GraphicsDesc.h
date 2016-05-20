@@ -209,38 +209,4 @@ struct CU_API InputElement
 	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
 };
 
-// 描述一个descriptor类型及个数
-struct CU_API DescriptorRangeDesc
-{
-	uint32_t		slot;
-	DescriptorType	type;
-	uint32_t		count;
-	ShaderStage	stages;
-};
-
-// 描述一个DescriptorSet信息,即含有多少个DescriptorRange
-struct CU_API DescriptorSetLayoutDesc
-{
-	uint32_t					count;
-	const DescriptorRangeDesc*	descriptors;
-};
-
-// 静态数据
-struct CU_API ConstantRangeDesc
-{
-	uint32_t		offset;
-	uint32_t		size;
-	ShaderStage stages;
-};
-
-// 可含有多个DescriptorSet以及Const和Sampler
-struct CU_API PipelineLayoutDesc 
-{
-	uint32_t						layoutCount;
-	const DescriptorSetLayoutDesc*	layouts;
-	uint32_t						counstantRangeCount;
-	const ConstantRangeDesc*		counstantRanges;
-	// samplers, single descriptor??
-};
-
 CU_NS_END
