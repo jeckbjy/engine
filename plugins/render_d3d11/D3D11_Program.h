@@ -27,6 +27,7 @@ private:
 	ID3D11DeviceChild*	m_shader;
 	ID3DBlob*			m_code;		// vs需要
 	uint32_t			m_id;		// 唯一ID
+	// 解析
 };
 
 CU_NS_END

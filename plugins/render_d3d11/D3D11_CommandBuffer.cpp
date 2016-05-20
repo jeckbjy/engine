@@ -1,7 +1,8 @@
 #include "D3D11_CommandBuffer.h"
+#include "D3D11_Buffer.h"
 #include "D3D11_Pipeline.h"
 #include "D3D11_InputLayout.h"
-#include "D3D11_Buffer.h"
+#include "D3D11_DescriptorSet.h"
 
 CU_NS_BEGIN
 
@@ -57,7 +58,7 @@ void D3D11CommandBuffer::setTopology(Topology primitive)
 
 void D3D11CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
-
+	m_descriptors = descriptors->cast<D3D11DescriptorSet>();
 }
 
 void D3D11CommandBuffer::setPipeline(Pipeline* pipeline)

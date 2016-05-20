@@ -5,6 +5,8 @@ CU_NS_BEGIN
 
 class D3D11Pipeline;
 class D3D11InputLayout;
+class D3D11DescriptorSet;
+
 class D3D11CommandBuffer : public CommandBuffer
 {
 public:
@@ -43,6 +45,7 @@ private:
 	ID3D11ContextN*		m_context;
 	D3D11Pipeline*		m_pipeline;
 	D3D11InputLayout*	m_layout;
+	D3D11DescriptorSet*	m_descriptors;
 	float				m_factors[4];
 	UINT				m_sampleMask;
 	StencilFaceFlags	m_stencilMask;
