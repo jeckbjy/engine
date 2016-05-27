@@ -1,90 +1,90 @@
 #include "D3D11_Program.h"
-#include "D3D11_Device.h"
 
 CU_NS_BEGIN
 
-D3D11Program::D3D11Program(uint32_t id)
-	: m_shader(NULL)
-	, m_code(NULL)
+D3D11_Program::D3D11_Program()
 {
+	for (size_t i = 0; i < SHADER_COUNT; ++i)
+	{
+		m_shaders[i] = NULL;
+	}
 }
 
-D3D11Program::~D3D11Program()
+D3D11_Program::~D3D11_Program()
 {
-	D3D11_RELEASE(m_code);
-	D3D11_RELEASE(m_shader);
+	for (size_t i = 0; i < SHADER_COUNT; ++i)
+	{
+		CU_SAFE_RELEASE(m_shaders[i]);
+	}
 }
 
-bool D3D11Program::compile(const ProgramDesc& desc)
+void D3D11_Program::attach(ShaderStage* shader)
 {
-	ID3DBlob* errors = NULL;
-	UINT flags = 0;
-	flags |= desc.rowMajor ? D3DCOMPILE_PACK_MATRIX_ROW_MAJOR : D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR;
-	flags |= D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY;
-
-	if (desc.debug)
+	ShaderType type = shader->getShaderType();
+	if (type < SHADER_COUNT)
 	{
-		flags |= D3DCOMPILE_DEBUG;
-		flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+		CU_SAFE_RELEASE(m_shaders[type]);
+		m_shaders[type] = (D3D11_Shader*)shader;
 	}
-
-	HRESULT hr = D3DCompile(
-		desc.code.c_str(),
-		desc.code.size(),
-		NULL, NULL, NULL,
-		desc.entry.c_str(),
-		desc.profile.c_str(),
-		flags,
-		0,
-		&m_code,
-		&errors);
-
-	if (SUCCEEDED(hr))
-	{
-		DWORD* code = (DWORD*)m_code->GetBufferPointer();
-		SIZE_T size = m_code->GetBufferSize();
-		create(desc.stage, code, size);
-	}
-
-	// 解析reflect
-
-	if (desc.stage != SHADER_STAGE_VERTEX)
-	{
-		D3D11_RELEASE(m_code);
-	}
-
-	D3D11_RELEASE(errors);
-
-	return SUCCEEDED(hr);
 }
 
-void D3D11Program::create(ShaderStage stage, DWORD* code, SIZE_T size)
+void D3D11_Program::link()
 {
-	ID3D11DeviceN* device = gD3D11NativeDevice();
-	ID3D11ClassLinkage* linkage = NULL;
+	//// 要求同名必须有相同结构
+	//typedef std::map<String, size_t> UniformIndexMap;
+	//UniformIndexMap indexMap;
+	//// 合并参数
+	//for (ProgramMap::iterator itor = m_shaders.begin(); itor != m_shaders.end(); ++itor)
+	//{
+	//	D3D11Program* shader = itor->second;
+	//	UniformMap& inputs = shader->getInput();
+	//	for (UniformMap::iterator uniformItor = inputs.begin(); uniformItor != inputs.end(); ++uniformItor)
+	//	{
+	//		UniformDesc& desc = uniformItor->second;
+	//		UniformIndexMap::iterator indexItor = indexMap.find(desc.name);
+	//		if (indexItor != indexMap.end())
+	//		{
+	//			// 校验是否一致
+	//			DescriptorInfo& info = m_descriptorVec[indexItor->second];
+	//			UniformDesc& dstDesc = info.desc;
+	//			if (dstDesc.type != desc.type)
+	//				continue;
+	//			info.slots[shader->getShaderType()] = desc.slot;
+	//		}
+	//		else
+	//		{
+	//			DescriptorInfo info;
+	//			info.desc = desc;
+	//			info.slots[shader->getShaderType()] = desc.slot;
+	//		}
+	//	}
 
-	HRESULT hr;
-	switch (stage)
-	{
-	case SHADER_STAGE_VERTEX:
-		hr = device->CreateVertexShader(code, size, linkage, (ID3D11VertexShader**)&m_shader);
-		break;
-	case SHADER_STAGE_HULL:
-		hr = device->CreateHullShader(code, size, linkage, (ID3D11HullShader**)&m_shader);
-		break;
-	case SHADER_STAGE_DOMAIN:
-		hr = device->CreateDomainShader(code, size, linkage, (ID3D11DomainShader**)&m_shader);
-		break;
-	case SHADER_STAGE_GEOMETRY:
-		hr = device->CreateGeometryShader(code, size, linkage, (ID3D11GeometryShader**)&m_shader);
-		break;
-	case SHADER_STAGE_PIXEL:
-		hr = device->CreatePixelShader(code, size, linkage, (ID3D11PixelShader**)&m_shader);
-		break;
-	case SHADER_STAGE_COMPUTE:
-		hr = device->CreateComputeShader(code, size, linkage, (ID3D11ComputeShader**)&m_shader);
-		break;
-	}
+	//	UniformMap& variable = shader->getVariable();
+
+	//}
+}
+
+void D3D11_Program::bind(ID3D11ContextN* context)
+{
+	ID3D11DeviceChild* shader;
+
+	shader = m_shaders[SHADER_VERTEX] ? m_shaders[SHADER_VERTEX]->getHandle() : NULL;
+	context->VSSetShader((ID3D11VertexShader*)shader, NULL, 0);
+
+	shader = m_shaders[SHADER_PIXEL] ? m_shaders[SHADER_PIXEL]->getHandle() : NULL;
+	context->PSSetShader((ID3D11PixelShader*)shader, NULL, 0);
+
+	shader = m_shaders[SHADER_GEOMETRY] ? m_shaders[SHADER_GEOMETRY]->getHandle() : NULL;
+	context->GSSetShader((ID3D11GeometryShader*)shader, NULL, 0);
+
+	shader = m_shaders[SHADER_HULL] ? m_shaders[SHADER_HULL]->getHandle() : NULL;
+	context->HSSetShader((ID3D11HullShader*)shader, NULL, 0);
+
+	shader = m_shaders[SHADER_DOMAIN] ? m_shaders[SHADER_DOMAIN]->getHandle() : NULL;
+	context->DSSetShader((ID3D11DomainShader*)shader, NULL, 0);
+
+	shader = m_shaders[SHADER_COMPUTE] ? m_shaders[SHADER_COMPUTE]->getHandle() : NULL;
+	context->CSSetShader((ID3D11ComputeShader*)shader, NULL, 0);
 }
 
 CU_NS_END

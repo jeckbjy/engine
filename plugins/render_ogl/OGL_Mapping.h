@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-struct CU_OGL_API OGLMapping
+struct CU_OGL_API OGL_Mapping
 {
 	static void getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glformat, GLenum& gltype);
 	static GLenum getGLInternal(PixelFormat fmt, bool gamma = false);

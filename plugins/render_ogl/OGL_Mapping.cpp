@@ -155,7 +155,7 @@ CU_C_CTOR(pixel_init_fun)
 
 //struct init_helper { init_helper(){ pixel_init_fun(); } } g_helper;
 
-void OGLMapping::getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glformat, GLenum& gltype)
+void OGL_Mapping::getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glformat, GLenum& gltype)
 {
 	const GLPixelInfo& info = gl_infos[fmt];
 	glinternal = info.ginternal;
@@ -163,22 +163,22 @@ void OGLMapping::getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glfo
 	gltype = info.gtype;
 }
 
-GLenum OGLMapping::getGLInternal(PixelFormat fmt, bool gamma /* = false */)
+GLenum OGL_Mapping::getGLInternal(PixelFormat fmt, bool gamma /* = false */)
 {
 	return gl_infos[fmt].ginternal;
 }
 
-GLenum OGLMapping::getGLFormat(PixelFormat fmt)
+GLenum OGL_Mapping::getGLFormat(PixelFormat fmt)
 {
 	return gl_infos[fmt].gformat;
 }
 
-GLenum OGLMapping::getGLType(PixelFormat fmt)
+GLenum OGL_Mapping::getGLType(PixelFormat fmt)
 {
 	return gl_infos[fmt].gtype;
 }
 
-GLenum OGLMapping::getBufferUsage(BufferUsage type)
+GLenum OGL_Mapping::getBufferUsage(BufferUsage type)
 {
 	switch (type)
 	{
@@ -192,7 +192,7 @@ GLenum OGLMapping::getBufferUsage(BufferUsage type)
 	return 0;
 }
 
-GLbitfield OGLMapping::getAccess(MAP_FLAG type)
+GLbitfield OGL_Mapping::getAccess(MAP_FLAG type)
 {
 	if (type == MAP_READ_ONLY)
 		return GL_MAP_READ_BIT;
@@ -209,7 +209,7 @@ GLbitfield OGLMapping::getAccess(MAP_FLAG type)
 	return access;
 }
 
-GLint OGLMapping::getPrimitiveMode(Topology type)
+GLint OGL_Mapping::getPrimitiveMode(Topology type)
 {
 	static const GLint gl_topology[] = { 
 		0, GL_POINTS, 

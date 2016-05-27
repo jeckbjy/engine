@@ -2,8 +2,8 @@
 
 CU_NS_BEGIN
 
-OGLRenderWindow::OGLRenderWindow(Window* wnd)
-:OGLFrameBuffer(false)
+OGL_RenderWindow::OGL_RenderWindow(Window* wnd)
+:OGL_FrameBuffer(false)
 {
 #ifdef CU_OS_WIN
 	_wnd = (HWND)wnd->handle();
@@ -22,7 +22,7 @@ OGLRenderWindow::OGLRenderWindow(Window* wnd)
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-OGLRenderWindow::~OGLRenderWindow()
+OGL_RenderWindow::~OGL_RenderWindow()
 {
 #ifdef CU_OS_WIN
 	if (_hrc)
@@ -39,7 +39,7 @@ OGLRenderWindow::~OGLRenderWindow()
 #endif
 }
 
-void OGLRenderWindow::present()
+void OGL_RenderWindow::present()
 {
 #if defined(CU_OS_WIN)
 	::SwapBuffers(_hdc);
@@ -48,7 +48,7 @@ void OGLRenderWindow::present()
 #endif
 }
 
-void OGLRenderWindow::bind()
+void OGL_RenderWindow::bind()
 {
 	if (bindFBO(0))
 	{
@@ -58,12 +58,12 @@ void OGLRenderWindow::bind()
 	}
 }
 
-void OGLRenderWindow::attach(uint32_t, Texture*)
+void OGL_RenderWindow::attach(uint32_t, Texture*)
 {
 	throw std::runtime_error("RenderWindow cannot use attach");
 }
 
-void OGLRenderWindow::detach(uint32_t)
+void OGL_RenderWindow::detach(uint32_t)
 {
 	throw std::runtime_error("RenderWindow cannot use detach");
 }

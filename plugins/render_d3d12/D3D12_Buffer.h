@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12Buffer : public GpuBuffer
+class CU_D3D12_API D3D12_Buffer : public GpuBuffer
 {
 public:
-	D3D12Buffer(ID3D12Device* device, const BufferDesc& desc);
-	~D3D12Buffer();
+	D3D12_Buffer(ID3D12Device* device, const BufferDesc& desc);
+	~D3D12_Buffer();
 
 	void* map(size_t offset, size_t len, MAP_FLAG access);
 	void unmap();

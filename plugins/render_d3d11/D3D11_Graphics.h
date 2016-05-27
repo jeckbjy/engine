@@ -13,8 +13,7 @@ public:
 	Device* getDevice() { return m_device; }
 
 private:
-	// 如何做hash查找??
-	D3D11Device* m_device;
+	D3D11_Device* m_device;
 };
 
 CU_NS_END

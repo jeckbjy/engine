@@ -83,13 +83,26 @@ public:
 	virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, int32_t stencil = 0) = 0;
 };
 
-class CU_API Program : public Object
+class CU_API ShaderStage : public Object
 {
-	DECLARE_RTTI(Program, Object, OBJ_ID_PROTRAM);
+	DECLARE_RTTI(ShaderStage, Object, OBJ_ID_PROTRAM);
 public:
-	virtual ~Program(){}
+	ShaderStage(){}
+	virtual ~ShaderStage(){}
 
 	virtual bool compile(const ProgramDesc& desc) = 0;
+	ShaderType getShaderType() const { return m_type; }
+
+private:
+	ShaderType m_type;
+};
+
+class CU_API ShaderProgram : public Object
+{
+public:
+	virtual ~ShaderProgram(){}
+	virtual void attach(ShaderStage* shader) = 0;
+	virtual void link() = 0;
 };
 
 // used for material
@@ -98,15 +111,9 @@ class CU_API DescriptorSet : public Object
 	DECLARE_RTTI(DescriptorSet, Object, OBJ_ID_DESCRIPTOR_SET);
 public:
 	virtual ~DescriptorSet(){}
-	virtual void bind(const String& name, GpuResource* res) = 0;
-};
-
-// 描述DescriptorSet使用
-class CU_API PipelineLayout : public Object
-{
-	DECLARE_RTTI(PipelineLayout, Object, OBJ_ID_PIPELINE_LAYOUT);
-public:
-	virtual ~PipelineLayout(){}
+	//virtual void setValue(const String& name, GpuBuffer* value, size_t index) = 0;
+	virtual void setValue(const String& name, Texture* texture, size_t index) = 0;
+	virtual void setValue(const String& name, void* data, size_t size, size_t offset) = 0;
 };
 
 // 渲染管线,计算管线
@@ -176,10 +183,11 @@ public:
 	virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
-	virtual Program*		newProgram() = 0;
-	virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
-	virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
-	virtual DescriptorSet*	newDescriptorSet(Program* prog) = 0;
+	virtual ShaderStage*		newProgram() = 0;
+	virtual Pipeline*		newPipeline(const PipelineDesc& desc) = 0;
+	//virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
+	//virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
+	virtual DescriptorSet*	newDescriptorSet(Pipeline* pipeline) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
 
@@ -204,10 +212,19 @@ class CU_API Graphics : public Object
 public:
 	virtual ~Graphics(){}
 
-	// 必须提供一个
-	virtual Device* getDevice() = 0;
-	// 创建
-	//virtual void newDevice() = 0;
+	ShaderStage* newProgram(const ProgramDesc& desc);
+
+	Device* getDevice() { return NULL; }
+
+private:
+	Device* m_device;
+	typedef std::vector<ShaderStage*>			ProgramVec;
+	typedef std::vector<ShaderProgram*>	ProgramPipelineVec;
+	ProgramVec			m_programs;
+	ProgramPipelineVec	m_progPipelines;
 };
+
+// 全局接口
+extern CU_API Graphics gGraphics;
 
 CU_NS_END

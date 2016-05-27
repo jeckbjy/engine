@@ -37,7 +37,8 @@
 #include <D3Dcompiler.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "DXGI.lib")
-#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 #define D3D11_RELEASE(x)		if(x != NULL) { x->Release(); x = NULL; }
 #define D3D11_CHECK(hr, info)	if(FAILED(hr)) throw std::runtime_error(info);

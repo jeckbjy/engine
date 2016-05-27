@@ -63,18 +63,17 @@ private:
 };
 #endif
 
-OGLDevice::OGLDevice()
-:_name("OGLDevice")
+OGL_Device::OGL_Device()
 {
 
 }
 
-OGLDevice::~OGLDevice()
+OGL_Device::~OGL_Device()
 {
 
 }
 
-bool OGLDevice::init()
+bool OGL_Device::init()
 {
 #ifdef CU_USE_GLEW
 #ifdef WIN32
@@ -88,59 +87,59 @@ bool OGLDevice::init()
 	return true;
 }
 
-GpuBuffer* OGLDevice::newBuffer(const BufferDesc& desc)
+GpuBuffer* OGL_Device::newBuffer(const BufferDesc& desc)
 {
-	return new OGLBuffer(desc);
+	return new OGL_Buffer(desc);
 }
 
-Texture* OGLDevice::newTexture(const TextureDesc& desc)
+Texture* OGL_Device::newTexture(const TextureDesc& desc)
 {
-	return new OGLTexture(desc);
+	return new OGL_Texture(desc);
 }
 
-RenderTarget* OGLDevice::newRenderWindow(Window* wnd)
+RenderTarget* OGL_Device::newRenderWindow(Window* wnd)
 {
-	return new OGLRenderWindow(wnd);
+	return new OGL_RenderWindow(wnd);
 }
 
-RenderTarget* OGLDevice::newRenderTexture(Texture* color, Texture* depth_stencil)
+RenderTarget* OGL_Device::newRenderTexture(Texture* color, Texture* depth_stencil)
 {
-	return new OGLRenderTexture(color, depth_stencil);
+	return new OGL_RenderTexture(color, depth_stencil);
 }
 
-DescriptorSet* OGLDevice::newDescriptorSet(Program* prog)
+DescriptorSet* OGL_Device::newDescriptorSet(Pipeline* pipeline)
 {
-	return new OGLDescriptorSet(prog);
+	return new OGL_DescriptorSet(pipeline);
 }
 
-InputLayout* OGLDevice::newInputLayout(const InputElement* elements, size_t count)
+InputLayout* OGL_Device::newInputLayout(const InputElement* elements, size_t count)
 {
-	return new OGLInputLayout(elements, count);
+	return new OGL_InputLayout(elements, count);
 }
 
-Program* OGLDevice::newProgram()
+ShaderStage* OGL_Device::newProgram()
 {
-	return new OGLProgram();
+	return new OGL_Shader();
 }
 
-Pipeline* OGLDevice::newPipeline(const GraphicsPipelineDesc& desc)
+Pipeline* OGL_Device::newPipeline(const PipelineDesc& desc)
 {
-	return new OGLPipeline(desc);
+	return new OGL_Pipeline(desc);
 }
 
-CommandBuffer* OGLDevice::newCommandBuffer()
+CommandBuffer* OGL_Device::newCommandBuffer()
 {
-	return new OGLCommandBuffer();
+	return new OGL_CommandBuffer();
 }
 
-CommandQueue* OGLDevice::newCommandQueue()
+CommandQueue* OGL_Device::newCommandQueue()
 {
 	return new OGLCommandQueue();
 }
 
-void OGLDevice::execute(CommandBuffer* cmd)
+OGL_Program* OGL_Device::getProgramPipeline()
 {
-	((OGLCommandBuffer*)cmd)->execute();
+	return NULL;
 }
 
 CU_NS_END

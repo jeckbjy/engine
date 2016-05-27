@@ -11,7 +11,7 @@ UINT getBindFlags(TextureUsage usage)
 	return 0;
 }
 
-D3D11Texture::D3D11Texture(const TextureDesc& desc, ID3D11DeviceN* device)
+D3D11_Texture::D3D11_Texture(const TextureDesc& desc, ID3D11DeviceN* device)
 	: Texture(desc)
 	, m_handle(NULL)
 	, m_view(NULL)
@@ -33,19 +33,19 @@ D3D11Texture::D3D11Texture(const TextureDesc& desc, ID3D11DeviceN* device)
 	}
 }
 
-D3D11Texture::~D3D11Texture()
+D3D11_Texture::~D3D11_Texture()
 {
 	D3D11_RELEASE(m_view);
 	D3D11_RELEASE(m_handle);
 }
 
-void D3D11Texture::create1D(ID3D11DeviceN* device, const TextureDesc& desc)
+void D3D11_Texture::create1D(ID3D11DeviceN* device, const TextureDesc& desc)
 {
 	D3D11_TEXTURE1D_DESC dx_desc;
 	dx_desc.Width = desc.width;
 	dx_desc.MipLevels = desc.mipLevels;
 	dx_desc.ArraySize = desc.depthOrArraySize;
-	dx_desc.Format = D3D11Mapping::getFormat(desc.format);
+	dx_desc.Format = D3D11_Mapping::getFormat(desc.format);
 
 	dx_desc.Usage = D3D11_USAGE_DEFAULT;
 	dx_desc.BindFlags = getBindFlags(desc.usage);
@@ -55,13 +55,13 @@ void D3D11Texture::create1D(ID3D11DeviceN* device, const TextureDesc& desc)
 	device->CreateTexture1D(&dx_desc, NULL,(ID3D11Texture1D**)&m_handle);
 }
 
-void D3D11Texture::create2D(ID3D11DeviceN* device, const TextureDesc& desc)
+void D3D11_Texture::create2D(ID3D11DeviceN* device, const TextureDesc& desc)
 {
 	D3D11_TEXTURE2D_DESC dx_desc;
 	dx_desc.Width = desc.width;
 	dx_desc.Height = desc.height;
 	dx_desc.MipLevels = desc.mipLevels;
-	dx_desc.Format = D3D11Mapping::getFormat(desc.format);
+	dx_desc.Format = D3D11_Mapping::getFormat(desc.format);
 
 	dx_desc.Usage = D3D11_USAGE_DEFAULT;
 	dx_desc.BindFlags = getBindFlags(desc.usage);
@@ -81,14 +81,14 @@ void D3D11Texture::create2D(ID3D11DeviceN* device, const TextureDesc& desc)
 	device->CreateTexture2D(&dx_desc, NULL, (ID3D11Texture2D**)&m_handle);
 }
 
-void D3D11Texture::create3D(ID3D11DeviceN* device, const TextureDesc& desc)
+void D3D11_Texture::create3D(ID3D11DeviceN* device, const TextureDesc& desc)
 {
 	D3D11_TEXTURE3D_DESC dx_desc;
 	dx_desc.Width = desc.width;
 	dx_desc.Height = desc.height;
 	dx_desc.Depth = desc.depthOrArraySize;
 	dx_desc.MiscFlags = desc.mipLevels;
-	dx_desc.Format = D3D11Mapping::getFormat(desc.format);
+	dx_desc.Format = D3D11_Mapping::getFormat(desc.format);
 
 	dx_desc.Usage = D3D11_USAGE_DEFAULT;
 	dx_desc.BindFlags = getBindFlags(desc.usage);
@@ -98,7 +98,7 @@ void D3D11Texture::create3D(ID3D11DeviceN* device, const TextureDesc& desc)
 	device->CreateTexture3D(&dx_desc, NULL, (ID3D11Texture3D**)&m_handle);
 }
 
-void* D3D11Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */, uint face /* = 0 */)
+void* D3D11_Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */, uint face /* = 0 */)
 {
 	ID3D11ContextN* context = gD3D11NativeContext();
 	if (!context)
@@ -111,7 +111,7 @@ void* D3D11Texture::map(PixelData& data, MAP_FLAG flag, uint mipLevel /* = 0 */,
 	return (char*)res.pData;
 }
 
-void D3D11Texture::unmap()
+void D3D11_Texture::unmap()
 {
 	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)

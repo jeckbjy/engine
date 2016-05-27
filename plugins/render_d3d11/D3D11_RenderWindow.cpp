@@ -4,7 +4,7 @@
 
 CU_NS_BEGIN
 
-D3D11RenderWindow::D3D11RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device)
+D3D11_RenderWindow::D3D11_RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device)
 :m_wnd(wnd), m_chain(NULL)
 {
 	DXGI_SWAP_CHAIN_DESC desc;
@@ -34,17 +34,17 @@ D3D11RenderWindow::D3D11RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11
 	create(device);
 }
 
-D3D11RenderWindow::~D3D11RenderWindow()
+D3D11_RenderWindow::~D3D11_RenderWindow()
 {
 
 }
 
-void D3D11RenderWindow::bind(ID3D11ContextN* context)
+void D3D11_RenderWindow::bind(ID3D11ContextN* context)
 {
 	context->OMSetRenderTargets(1, &m_rtv, m_ds ? m_ds->getDSV() : NULL);
 }
 
-void D3D11RenderWindow::create(ID3D11DeviceN* device)
+void D3D11_RenderWindow::create(ID3D11DeviceN* device)
 {
 	D3D11_RELEASE(m_buffer);
 	HRESULT hr = m_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&m_buffer);
@@ -65,7 +65,7 @@ void D3D11RenderWindow::create(ID3D11DeviceN* device)
 	
 }
 
-void D3D11RenderWindow::resize(uint32_t width, uint32_t height)
+void D3D11_RenderWindow::resize(uint32_t width, uint32_t height)
 {
 	DXGI_SWAP_CHAIN_DESC desc;
 	m_chain->GetDesc(&desc);

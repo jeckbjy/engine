@@ -4,7 +4,7 @@ CU_NS_BEGIN
 
 D3D11Graphics::D3D11Graphics()
 {
-	m_device = new D3D11Device();
+	m_device = new D3D11_Device();
 }
 
 D3D11Graphics::~D3D11Graphics()

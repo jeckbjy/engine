@@ -125,6 +125,15 @@ struct CU_API BlendDesc
 	uint32_t getHashCode() const;
 };
 
+struct CU_API RenderStateDesc
+{
+	RasterizerDesc		rasterizer;
+	DepthStencilDesc	depthStencil;
+	BlendDesc			blend;
+	MultisampleDesc		multisample;
+	Topology			topology;
+};
+
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
@@ -161,41 +170,30 @@ struct CU_API TextureDesc
 // 创建shader
 struct CU_API ProgramDesc
 {
-	ShaderStage stage;
+	ShaderType	stage;
 	String		code;
 	String		file;		// 所在文件
 	String		entry;		// 入口点
 	String		macros;
 	String		profile;
-	uint32_t	flags;
-	bool		rowMajor;	// 行主序
-	bool		debug;
 };
 
-// 渲染管线
-struct CU_API GraphicsPipelineDesc
+struct CU_API ProgramPipelineDesc
 {
-	Program*			vs;
-	Program*			hs;
-	Program*			ds;
-	Program*			gs;
-	Program*			ps;
-
-	// 其他状态信息
-	RasterizerDesc		rasterizer;
-	DepthStencilDesc	depthStencil;
-	BlendDesc			blend;
-	MultisampleDesc		multisample;
-	Topology			topology;
-
-	GraphicsPipelineDesc();
+	ShaderStage* vs;
+	ShaderStage* hs;
+	ShaderStage* ds;
+	ShaderStage* gs;
+	ShaderStage* ps;
 };
 
-// 计算管线
-struct CU_API ComputePipelineDesc
+// 管线
+class ShaderProgram;
+struct CU_API PipelineDesc
 {
-	Program*			cs;
-	ComputePipelineDesc();
+	ShaderProgram*		program;
+	const RenderStateDesc*	states;
+	PipelineDesc() :program(NULL), states(NULL){}
 };
 
 struct CU_API InputElement
@@ -208,5 +206,20 @@ struct CU_API InputElement
 	InputElement(){ memset(this, 0, sizeof(InputElement)); }
 	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
 };
+
+// shader reflection
+struct UniformDesc
+{
+	UniformType	type;
+	String		name;
+	uint32_t	index;
+	uint32_t	slot;
+	uint32_t	blocks;
+	uint32_t	arraySize;
+	uint32_t	offset;
+	uint32_t	bytes;
+};
+
+typedef std::map<String, UniformDesc> UniformMap;
 
 CU_NS_END

@@ -15,7 +15,7 @@ public:
 class CU_VK_API VK_GraphicsPipeline : public Pipeline
 {
 public:
-	VK_GraphicsPipeline(VkDevice device, const GraphicsPipelineDesc& desc);
+	VK_GraphicsPipeline(VkDevice device, const PipelineDesc& desc);
 	~VK_GraphicsPipeline();
 
 	void bind(VK_CommandBuffer* cmdBuffer);
@@ -43,7 +43,7 @@ private:
 class CU_VK_API VK_ComputePipeline : public Pipeline
 {
 public:
-	VK_ComputePipeline(VkDevice device, const ComputePipelineDesc& desc);
+	VK_ComputePipeline(VkDevice device, const PipelineDesc& desc);
 	~VK_ComputePipeline();
 
 	void bind(VK_CommandBuffer* cmdBuffer);

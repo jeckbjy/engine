@@ -4,13 +4,13 @@
 
 CU_NS_BEGIN
 
-class OGLTexture;
-class CU_OGL_API OGLRenderTexture : public OGLFrameBuffer
+class OGL_Texture;
+class CU_OGL_API OGL_RenderTexture : public OGL_FrameBuffer
 {
-	typedef std::vector<OGLTexture*> TextureVec;
+	typedef std::vector<OGL_Texture*> TextureVec;
 public:
-	OGLRenderTexture(Texture* color, Texture* depth_stencil);
-	~OGLRenderTexture();
+	OGL_RenderTexture(Texture* color, Texture* depth_stencil);
+	~OGL_RenderTexture();
 	
 	void present();
 
@@ -19,7 +19,7 @@ public:
 	void detach(uint32_t att);
 
 protected:
-	OGLTexture*	m_tex_ds;	// depth stencil
+	OGL_Texture*	m_tex_ds;	// depth stencil
 	TextureVec	m_colors;
 	uint8_t		m_dirty;
 };

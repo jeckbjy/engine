@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12Texture : public Texture
+class CU_D3D12_API D3D12_Texture : public Texture
 {
 public:
-	D3D12Texture(ID3D12Device* device, const TextureDesc& desc);
-	~D3D12Texture();
+	D3D12_Texture(ID3D12Device* device, const TextureDesc& desc);
+	~D3D12_Texture();
 
 	void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0);
 	void unmap();

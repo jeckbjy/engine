@@ -7,84 +7,79 @@
 
 CU_NS_BEGIN
 
-D3D12Device::D3D12Device()
+D3D12_Device*	gD3D12Device()
+{
+	return gGraphics.getDevice()->cast<D3D12_Device>();
+}
+
+ID3D12Device*	gD3D11NativeDevice()
+{
+	D3D12_Device* device = gGraphics.getDevice()->cast<D3D12_Device>();
+	if (device)
+		return device->getDevice();
+
+	return NULL;
+}
+
+D3D12_Device::D3D12_Device()
 :m_device(NULL)
 {
 	D3D12_CHECK(D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device)), "D3D12CreateDevice fail!");
 }
 
-D3D12Device::~D3D12Device()
+D3D12_Device::~D3D12_Device()
 {
 	D3D12_RELEASE(m_device);
 }
 
-GpuBuffer* D3D12Device::newBuffer(const BufferDesc& desc)
+GpuBuffer* D3D12_Device::newBuffer(const BufferDesc& desc)
 {
-	return new D3D12Buffer(m_device, desc);
+	return new D3D12_Buffer(m_device, desc);
 }
 
-Texture* D3D12Device::newTexture(const TextureDesc& desc)
+Texture* D3D12_Device::newTexture(const TextureDesc& desc)
 {
-	return new D3D12Texture(m_device, desc);
+	return new D3D12_Texture(m_device, desc);
 }
 
-RenderTarget* D3D12Device::newRenderWindow(Window* hwnd)
+RenderTarget* D3D12_Device::newRenderWindow(Window* hwnd)
 {
 	return NULL;
 }
 
-RenderTarget* D3D12Device::newRenderTexture(Texture* rtv, Texture* dsv)
+RenderTarget* D3D12_Device::newRenderTexture(Texture* rtv, Texture* dsv)
 {
 	return NULL;
 }
 
-InputLayout* D3D12Device::newInputLayout(const InputElement* elements, size_t count)
+InputLayout* D3D12_Device::newInputLayout(const InputElement* elements, size_t count)
 {
 	return NULL;
 }
 
-Program* D3D12Device::newProgram()
+ShaderStage* D3D12_Device::newProgram()
 {
 	return NULL;
 }
 
-Pipeline* D3D12Device::newPipeline(const GraphicsPipelineDesc& desc)
+Pipeline* D3D12_Device::newPipeline(const PipelineDesc& desc)
 {
 	return NULL;
 }
 
-Pipeline* D3D12Device::newPipeline(const ComputePipelineDesc* desc)
+DescriptorSet* D3D12_Device::newDescriptorSet(ShaderStage* prog)
 {
 	return NULL;
 }
 
-DescriptorSet* D3D12Device::newDescriptorSet(Program* prog)
+CommandBuffer* D3D12_Device::newCommandBuffer()
 {
-	return NULL;
+	return new D3D12_CommandBuffer(m_device, m_allocator);
 }
 
-CommandBuffer* D3D12Device::newCommandBuffer()
+CommandQueue* D3D12_Device::newCommandQueue()
 {
-	return new D3D12CommandBuffer(m_device, m_allocator);
-}
-
-CommandQueue* D3D12Device::newCommandQueue()
-{
-	return new D3D12CommondQueue(m_device);
-}
-
-D3D12Device*	gD3D12Device()
-{
-	return gEngine.getDevice()->cast<D3D12Device>();
-}
-
-ID3D12Device*	gD3D11NativeDevice()
-{
-	D3D12Device* device = gEngine.getDevice()->cast<D3D12Device>();
-	if (device)
-		return device->getDevice();
-
-	return NULL;
+	return new D3D12_CommondQueue(m_device);
 }
 
 CU_NS_END

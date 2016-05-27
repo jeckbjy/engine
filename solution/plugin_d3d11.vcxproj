@@ -101,6 +101,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Shader.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderState.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderTexture.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Plugin.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Shader.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderState.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderTexture.cpp" />

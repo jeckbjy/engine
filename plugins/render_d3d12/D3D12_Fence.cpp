@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-D3D12Fence::D3D12Fence(ID3D12Device* device)
+D3D12_Fence::D3D12_Fence(ID3D12Device* device)
 	: m_fence(NULL)
 	, m_event(INVALID_HANDLE_VALUE)
 	, m_value(1)
@@ -14,18 +14,18 @@ D3D12Fence::D3D12Fence(ID3D12Device* device)
 	D3D12_CHECK(hr, "CreateFence failed!");
 }
 
-D3D12Fence::~D3D12Fence()
+D3D12_Fence::~D3D12_Fence()
 {
 	D3D12_RELEASE(m_fence);
 }
 
-void D3D12Fence::signal(ID3D12CommandQueue* queue)
+void D3D12_Fence::signal(ID3D12CommandQueue* queue)
 {
 	queue->Signal(m_fence, m_value);
 	++m_value;
 }
 
-void D3D12Fence::wait()
+void D3D12_Fence::wait()
 {
 	UINT64 fenceToWaitFor = m_value - 1;
 	if (m_fence->GetCompletedValue() < fenceToWaitFor) {
@@ -38,7 +38,7 @@ void D3D12Fence::wait()
 	}
 }
 
-void D3D12Fence::wait(uint64_t timeout)
+void D3D12_Fence::wait(uint64_t timeout)
 {
 	UINT64 fenceToWaitFor = m_value - 1;
 	if (m_fence->GetCompletedValue() < fenceToWaitFor) {

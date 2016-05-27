@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine.h"
 #include "D3D11_Device.h"
 #include "D3D11_Buffer.h"
 #include "D3D11_Texture.h"
@@ -7,19 +8,18 @@
 #include "D3D11_InputLayout.h"
 #include "D3D11_RenderState.h"
 #include "D3D11_CommandBuffer.h"
-
-#include "Engine.h"
+#include "D3D11_DescriptorSet.h"
 
 CU_NS_BEGIN
 
-D3D11Device*	gD3D11Device()
+D3D11_Device*	gD3D11Device()
 {
-	return gEngine.getDevice()->cast<D3D11Device>();
+	return gGraphics.getDevice()->cast<D3D11_Device>();
 }
 
 ID3D11DeviceN*	gD3D11NativeDevice()
 {
-	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
+	D3D11_Device* device = gGraphics.getDevice()->cast<D3D11_Device>();
 	if (device)
 		return device->getDevice();
 
@@ -28,14 +28,14 @@ ID3D11DeviceN*	gD3D11NativeDevice()
 
 ID3D11ContextN* gD3D11NativeContext()
 {
-	D3D11Device* device = gEngine.getDevice()->cast<D3D11Device>();
+	D3D11_Device* device = gGraphics.getDevice()->cast<D3D11_Device>();
 	if (device)
 		return device->getContext();
 
 	return NULL;
 }
 
-D3D11Device::D3D11Device()
+D3D11_Device::D3D11_Device()
 	: m_device(NULL)
 	, m_factory(NULL)
 	, m_context(NULL)
@@ -69,93 +69,90 @@ D3D11Device::D3D11Device()
 	}
 }
 
-D3D11Device::~D3D11Device()
+D3D11_Device::~D3D11_Device()
 {
 	D3D11_RELEASE(m_device);
 }
 
-GpuBuffer* D3D11Device::newBuffer(const BufferDesc& desc)
+GpuBuffer* D3D11_Device::newBuffer(const BufferDesc& desc)
 {
-	return new D3D11Buffer(desc, m_device);
+	return new D3D11_Buffer(desc, m_device);
 }
 
-Texture* D3D11Device::newTexture(const TextureDesc& desc)
+Texture* D3D11_Device::newTexture(const TextureDesc& desc)
 {
-	return new D3D11Texture(desc, m_device);
+	return new D3D11_Texture(desc, m_device);
 }
 
-RenderTarget* D3D11Device::newRenderWindow(Window* hwnd)
-{
-	return NULL;
-}
-
-RenderTarget* D3D11Device::newRenderTexture(Texture* rtv, Texture* dsv)
+RenderTarget* D3D11_Device::newRenderWindow(Window* hwnd)
 {
 	return NULL;
 }
 
-InputLayout* D3D11Device::newInputLayout(const InputElement* elements, size_t count)
+RenderTarget* D3D11_Device::newRenderTexture(Texture* rtv, Texture* dsv)
+{
+	return NULL;
+}
+
+InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t count)
 {
 	++m_layoutID;
 	if (m_layoutID == 0)
 		m_layoutID = 1;
-	return new D3D11InputLayout(m_layoutID, elements, count);
+	return new D3D11_InputLayout(m_layoutID, elements, count);
 }
 
-Program* D3D11Device::newProgram()
+ShaderStage* D3D11_Device::newProgram()
 {
 	++m_programID;
 	if (m_programID == 0)
 		m_programID = 1;
-	return new D3D11Program(m_programID);
+	return new D3D11_Shader(m_programID);
 }
 
-Pipeline* D3D11Device::newPipeline(const GraphicsPipelineDesc& desc)
+Pipeline* D3D11_Device::newPipeline(const PipelineDesc& desc)
 {
-	return new D3D11GraphicsPipeline(this, desc);
+	if (desc.program == NULL)
+		return NULL;
+	return new D3D11_Pipeline(this, desc);
 }
 
-Pipeline* D3D11Device::newPipeline(const ComputePipelineDesc& desc)
+DescriptorSet* D3D11_Device::newDescriptorSet(Pipeline* pipeline)
 {
-	return new D3D11ComputePipeline(desc);
+	return new D3D11_DescriptorSet(((D3D11_Pipeline*)pipeline)->getProgram());
 }
 
-DescriptorSet* D3D11Device::newDescriptorSet(Program* prog)
+CommandBuffer* D3D11_Device::newCommandBuffer()
 {
-	return NULL;
+	return new D3D11_CommandBuffer();
 }
 
-CommandBuffer* D3D11Device::newCommandBuffer()
-{
-	return new D3D11CommandBuffer();
-}
-
-CommandQueue* D3D11Device::newCommandQueue()
+CommandQueue* D3D11_Device::newCommandQueue()
 {
 	return NULL;
 }
 
-D3D11BlendState* D3D11Device::getBlendState(const BlendDesc& desc)
+D3D11_BlendState* D3D11_Device::getBlendState(const BlendDesc& desc)
 {
 	return m_blends.obtain(m_device, desc);
 }
 
-D3D11SamplerState* D3D11Device::getSamplerState(const SamplerDesc& desc)
+D3D11_SamplerState* D3D11_Device::getSamplerState(const SamplerDesc& desc)
 {
 	return m_samplers.obtain(m_device, desc);
 }
 
-D3D11RasterizerState* D3D11Device::getRasterizerState(const RasterizerDesc& desc)
+D3D11_RasterizerState* D3D11_Device::getRasterizerState(const RasterizerDesc& desc)
 {
 	return m_rasterizers.obtain(m_device, desc);
 }
 
-D3D11DepthStencilState* D3D11Device::getDepthStencilState(const DepthStencilDesc& desc)
+D3D11_DepthStencilState* D3D11_Device::getDepthStencilState(const DepthStencilDesc& desc)
 {
 	return m_depthStencils.obtain(m_device, desc);
 }
 
-ID3D11InputLayout* D3D11Device::getInputLayout(D3D11Program* vs, D3D11InputLayout* layout)
+ID3D11InputLayout* D3D11_Device::getInputLayout(D3D11_Shader* vs, D3D11_InputLayout* layout)
 {
 	if (vs == NULL || layout == NULL)
 		return NULL;

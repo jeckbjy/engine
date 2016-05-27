@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D11_API D3D11RasterizerState : public Ref
+class CU_D3D11_API D3D11_RasterizerState : public Ref
 {
 public:
-	D3D11RasterizerState(ID3D11DeviceN* device, const RasterizerDesc& desc, uint32_t hash);
-	~D3D11RasterizerState();
+	D3D11_RasterizerState(ID3D11DeviceN* device, const RasterizerDesc& desc, uint32_t hash);
+	~D3D11_RasterizerState();
 
 	bool equal(const RasterizerDesc& desc) const;
 
@@ -20,11 +20,11 @@ private:
 	ID3D11RasterizerState*	m_state;
 };
 
-class CU_D3D11_API D3D11BlendState : public Ref
+class CU_D3D11_API D3D11_BlendState : public Ref
 {
 public:
-	D3D11BlendState(ID3D11DeviceN* device, const BlendDesc& desc, uint32_t hash);
-	~D3D11BlendState();
+	D3D11_BlendState(ID3D11DeviceN* device, const BlendDesc& desc, uint32_t hash);
+	~D3D11_BlendState();
 
 	bool equal(const BlendDesc& desc) const;
 
@@ -37,11 +37,11 @@ private:
 	ID3D11BlendState*	m_state;
 };
 
-class CU_D3D11_API D3D11DepthStencilState : public Ref
+class CU_D3D11_API D3D11_DepthStencilState : public Ref
 {
 public:
-	D3D11DepthStencilState(ID3D11DeviceN* device, const DepthStencilDesc& desc, uint32_t hash);
-	~D3D11DepthStencilState();
+	D3D11_DepthStencilState(ID3D11DeviceN* device, const DepthStencilDesc& desc, uint32_t hash);
+	~D3D11_DepthStencilState();
 
 	bool equal(const DepthStencilDesc& desc) const;
 
@@ -54,11 +54,11 @@ private:
 	ID3D11DepthStencilState* m_state;
 };
 
-class CU_D3D11_API D3D11SamplerState : public Ref
+class CU_D3D11_API D3D11_SamplerState : public Ref
 {
 public:
-	D3D11SamplerState(ID3D11DeviceN* device, const SamplerDesc& desc, uint32_t hash);
-	~D3D11SamplerState();
+	D3D11_SamplerState(ID3D11DeviceN* device, const SamplerDesc& desc, uint32_t hash);
+	~D3D11_SamplerState();
 
 	bool equal(const SamplerDesc& desc) const;
 	uint32_t getHashCode() const { return m_hash; }

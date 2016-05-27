@@ -9,7 +9,7 @@ static const char TEX_ARRAYS = 1;
 static const char TEX_COMPRESS = 2;
 static const char TEX_COMPRESS_ARRAY = 3;
 
-GLenum OGLTexture::getGLTarget(TexType type, uint32_t arrays)
+GLenum OGL_Texture::getGLTarget(TexType type, uint32_t arrays)
 {
 	switch (type)
 	{
@@ -21,7 +21,7 @@ GLenum OGLTexture::getGLTarget(TexType type, uint32_t arrays)
 	return GL_TEXTURE_2D;
 }
 // todo:数据初始化
-OGLTexture::OGLTexture(const TextureDesc& desc)
+OGL_Texture::OGL_Texture(const TextureDesc& desc)
 :Texture(desc)
 {
 	m_target = getGLTarget(desc.type, desc.depthOrArraySize);
@@ -40,7 +40,7 @@ OGLTexture::OGLTexture(const TextureDesc& desc)
 	GLint glinternal;
 	GLenum glformat;
 	GLenum gltype;
-	OGLMapping::getPixelFormat(desc.format, glinternal, glformat, gltype);
+	OGL_Mapping::getPixelFormat(desc.format, glinternal, glformat, gltype);
 
 	// 分配空间
 	bool compressed = PixelUtil::isCompressed(m_format);
@@ -79,28 +79,28 @@ OGLTexture::OGLTexture(const TextureDesc& desc)
 	}
 }
 
-OGLTexture::~OGLTexture()
+OGL_Texture::~OGL_Texture()
 {
 	glDeleteTextures(1, &m_handle);
 }
 
-void OGLTexture::active(GLint index)
+void OGL_Texture::active(GLint index)
 {
 	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(m_target, m_handle);
 }
 
-void* OGLTexture::map(PixelData& data, MAP_FLAG flag, uint level, uint face)
+void* OGL_Texture::map(PixelData& data, MAP_FLAG flag, uint level, uint face)
 {
 	return 0;
 }
 
-void OGLTexture::unmap()
+void OGL_Texture::unmap()
 {
 
 }
 
-void OGLTexture::read(PixelData& data, uint level, uint face)
+void OGL_Texture::read(PixelData& data, uint level, uint face)
 {
 	// 传入参数不用这么复杂？？
 	glBindTexture(m_target, m_handle);
@@ -111,18 +111,18 @@ void OGLTexture::read(PixelData& data, uint level, uint face)
 	}
 	else
 	{
-		glGetTexImage(target, level, OGLMapping::getGLFormat(m_format), OGLMapping::getGLType(m_format), data.data);
+		glGetTexImage(target, level, OGL_Mapping::getGLFormat(m_format), OGL_Mapping::getGLType(m_format), data.data);
 	}
 }
 
-void OGLTexture::write(const PixelData& data, uint level, uint face, bool discard)
+void OGL_Texture::write(const PixelData& data, uint level, uint face, bool discard)
 {
 	// 还能再简化么？
 	glBindTexture(m_target, m_handle);
 	GLint glinternal;
 	GLenum glformat;
 	GLenum gltype;
-	OGLMapping::getPixelFormat(m_format, glinternal, glformat, gltype);
+	OGL_Mapping::getPixelFormat(m_format, glinternal, glformat, gltype);
 
 	uint image_size = 0;
 	bool compressed = PixelUtil::isCompressed(m_format);
@@ -155,7 +155,7 @@ void OGLTexture::write(const PixelData& data, uint level, uint face, bool discar
 	}
 }
 
-void OGLTexture::create1D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
+void OGL_Texture::create1D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
 {
 	size_t block_size = PixelUtil::getBytes(m_format);
 
@@ -194,7 +194,7 @@ void OGLTexture::create1D(GLint glinternal, GLenum glformat, GLenum gltype, bool
 	}
 }
 
-void OGLTexture::create2D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
+void OGL_Texture::create2D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
 {
 	size_t block_size = PixelUtil::getBytes(m_format);
 
@@ -236,7 +236,7 @@ void OGLTexture::create2D(GLint glinternal, GLenum glformat, GLenum gltype, bool
 	}
 }
 
-void OGLTexture::create3D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
+void OGL_Texture::create3D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
 {
 	size_t block_size = PixelUtil::getBytes(m_format);
 
@@ -267,7 +267,7 @@ void OGLTexture::create3D(GLint glinternal, GLenum glformat, GLenum gltype, bool
 	}
 }
 
-void OGLTexture::createCube(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
+void OGL_Texture::createCube(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
 {
 	size_t block_size = PixelUtil::getBytes(m_format);
 	size_t width, height, image_size;

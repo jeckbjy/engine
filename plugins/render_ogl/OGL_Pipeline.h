@@ -3,12 +3,19 @@
 
 CU_NS_BEGIN
 
-class OGLProgram;
-class CU_OGL_API OGLPipeline : public Pipeline
+class OGL_Shader;
+class OGL_Program;
+class CU_OGL_API OGL_Pipeline : public Pipeline
 {
 public:
-	OGLPipeline(const GraphicsPipelineDesc& desc);
-	~OGLPipeline();
+	OGL_Pipeline(const PipelineDesc& desc);
+	~OGL_Pipeline();
+
+	void bind();
+
+private:
+	RenderStateDesc*	m_states;
+	OGL_Program*	m_program;
 };
 
 CU_NS_END

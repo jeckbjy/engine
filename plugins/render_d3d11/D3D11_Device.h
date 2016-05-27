@@ -4,29 +4,28 @@
 
 CU_NS_BEGIN
 
-class D3D11Program;
-class D3D11InputLayout;
+class D3D11_Shader;
+class D3D11_InputLayout;
 
-class D3D11BlendState;
-class D3D11SamplerState;
-class D3D11RasterizerState;
-class D3D11DepthStencilState;
+class D3D11_BlendState;
+class D3D11_SamplerState;
+class D3D11_RasterizerState;
+class D3D11_DepthStencilState;
 
-class CU_D3D11_API D3D11Device : public Device
+class CU_D3D11_API D3D11_Device : public Device
 {
 public:
-	D3D11Device();
-	~D3D11Device();
+	D3D11_Device();
+	~D3D11_Device();
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* hwnd);
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	Program*		newProgram();
-	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
-	Pipeline*		newPipeline(const ComputePipelineDesc& desc);
-	DescriptorSet*	newDescriptorSet(Program* prog);
+	ShaderStage*		newProgram();
+	Pipeline*		newPipeline(const PipelineDesc& desc);
+	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 
@@ -34,20 +33,20 @@ public:
 	ID3D11ContextN*				getContext() { return m_context; }
 	ID3D11ClassLinkage*			getLinkage() { return m_linkage; }
 
-	D3D11BlendState*			getBlendState(const BlendDesc& desc);
-	D3D11SamplerState*			getSamplerState(const SamplerDesc& desc);
-	D3D11RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
-	D3D11DepthStencilState*		getDepthStencilState(const DepthStencilDesc& desc);
+	D3D11_BlendState*			getBlendState(const BlendDesc& desc);
+	D3D11_SamplerState*			getSamplerState(const SamplerDesc& desc);
+	D3D11_RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
+	D3D11_DepthStencilState*		getDepthStencilState(const DepthStencilDesc& desc);
 
-	ID3D11InputLayout*			getInputLayout(D3D11Program* vs, D3D11InputLayout* layout);
+	ID3D11InputLayout*			getInputLayout(D3D11_Shader* vs, D3D11_InputLayout* layout);
 
 private:
-	typedef std::map<uint64_t, ID3D11InputLayout*>				LayoutMap;
+	typedef std::map<uint64_t, ID3D11InputLayout*>						LayoutMap;
 
-	typedef StateMap<D3D11BlendState, BlendDesc>				BlendMap;
-	typedef StateMap<D3D11SamplerState, SamplerDesc>			SamplerMap;
-	typedef StateMap<D3D11RasterizerState, RasterizerDesc>		RasterizerMap;
-	typedef StateMap<D3D11DepthStencilState, DepthStencilDesc>	DepthStencilMap;
+	typedef D3D11_StateMap<D3D11_BlendState, BlendDesc>					BlendMap;
+	typedef D3D11_StateMap<D3D11_SamplerState, SamplerDesc>				SamplerMap;
+	typedef D3D11_StateMap<D3D11_RasterizerState, RasterizerDesc>		RasterizerMap;
+	typedef D3D11_StateMap<D3D11_DepthStencilState, DepthStencilDesc>	DepthStencilMap;
 
 	ID3D11DeviceN*		m_device;
 	IDXGIFactoryN*		m_factory;
@@ -66,7 +65,7 @@ private:
 	uint32_t			m_layoutID;
 };
 
-extern CU_D3D11_API D3D11Device*	gD3D11Device();
+extern CU_D3D11_API D3D11_Device*	gD3D11Device();
 extern CU_D3D11_API ID3D11DeviceN*	gD3D11NativeDevice();
 extern CU_D3D11_API ID3D11ContextN* gD3D11NativeContext();
 

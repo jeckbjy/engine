@@ -3,22 +3,22 @@
 
 CU_NS_BEGIN
 
-class D3D12CommandBuffer;
-class CU_D3D12_API D3D12Pipeline : Pipeline
+class D3D12_CommandBuffer;
+class CU_D3D12_API D3D12_Pipeline : Pipeline
 {
 public:
-	virtual ~D3D12Pipeline(){}
+	virtual ~D3D12_Pipeline(){}
 
-	virtual void bind(D3D12CommandBuffer* cmdBuffer) = 0;
+	virtual void bind(D3D12_CommandBuffer* cmdBuffer) = 0;
 };
 
-class CU_D3D12_API D3D12GraphicsPipeline : public Pipeline
+class CU_D3D12_API D3D12_GraphicsPipeline : public Pipeline
 {
 public:
-	D3D12GraphicsPipeline(ID3D12Device* device, const GraphicsPipelineDesc& desc);
-	~D3D12GraphicsPipeline();
+	D3D12_GraphicsPipeline(ID3D12Device* device, const PipelineDesc& desc);
+	~D3D12_GraphicsPipeline();
 
-	void bind(D3D12CommandBuffer* cmdBuffer);
+	void bind(D3D12_CommandBuffer* cmdBuffer);
 
 private:
 	typedef std::map<uint32_t, ID3D12PipelineState*> PipelineMap;
@@ -29,13 +29,13 @@ private:
 	ID3D12RootSignature* m_rootSignature;
 };
 
-class CU_D3D12_API D3D12ComputePipeline : public Pipeline
+class CU_D3D12_API D3D12_ComputePipeline : public Pipeline
 {
 public:
-	D3D12ComputePipeline(ID3D12Device* device, const ComputePipelineDesc& desc);
-	~D3D12ComputePipeline();
+	D3D12_ComputePipeline(ID3D12Device* device, const PipelineDesc& desc);
+	~D3D12_ComputePipeline();
 
-	void bind(D3D12CommandBuffer* cmdBuffer);
+	void bind(D3D12_CommandBuffer* cmdBuffer);
 
 private:
 	ID3D12PipelineState* m_pipeline;

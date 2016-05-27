@@ -19,7 +19,7 @@ UINT getBindFlags(BufferUsage usage)
 	}
 }
 
-D3D11Buffer::D3D11Buffer(const BufferDesc& desc, ID3D11DeviceN* device)
+D3D11_Buffer::D3D11_Buffer(const BufferDesc& desc, ID3D11DeviceN* device)
 	: GpuBuffer(desc)
 	, m_handle(NULL)
 	, m_view(NULL)
@@ -44,13 +44,13 @@ D3D11Buffer::D3D11Buffer(const BufferDesc& desc, ID3D11DeviceN* device)
 		);
 }
 
-D3D11Buffer::~D3D11Buffer()
+D3D11_Buffer::~D3D11_Buffer()
 {
 	D3D11_RELEASE(m_handle);
 	D3D11_RELEASE(m_view);
 }
 
-void* D3D11Buffer::map(size_t offset, size_t len, MAP_FLAG access)
+void* D3D11_Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 {
 	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)
@@ -63,7 +63,7 @@ void* D3D11Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 	return NULL;
 }
 
-void D3D11Buffer::unmap()
+void D3D11_Buffer::unmap()
 {
 	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)

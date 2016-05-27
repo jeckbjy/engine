@@ -36,9 +36,6 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -52,6 +49,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_StateMap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,9 +86,6 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Plugin.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderState.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -96,6 +96,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

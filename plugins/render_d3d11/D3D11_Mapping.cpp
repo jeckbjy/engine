@@ -2,17 +2,17 @@
 
 CU_NS_BEGIN
 
-DXGI_FORMAT D3D11Mapping::getFormat(PixelFormat format)
+DXGI_FORMAT D3D11_Mapping::getFormat(PixelFormat format)
 {
 	return DXGI_FORMAT_UNKNOWN;
 }
 
-D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::getTopoloty(Topology topology)
+D3D11_PRIMITIVE_TOPOLOGY D3D11_Mapping::getTopoloty(Topology topology)
 {
 	return D3D11_PRIMITIVE_TOPOLOGY(topology);
 }
 
-D3D11_FILL_MODE D3D11Mapping::getFillMode(FillMode mode)
+D3D11_FILL_MODE D3D11_Mapping::getFillMode(FillMode mode)
 {
 	switch (mode)
 	{
@@ -26,7 +26,7 @@ D3D11_FILL_MODE D3D11Mapping::getFillMode(FillMode mode)
 	}
 }
 
-D3D11_CULL_MODE D3D11Mapping::getCullMode(CullMode mode)
+D3D11_CULL_MODE D3D11_Mapping::getCullMode(CullMode mode)
 {
 	switch (mode)
 	{
@@ -43,7 +43,7 @@ D3D11_CULL_MODE D3D11Mapping::getCullMode(CullMode mode)
 	}
 }
 
-D3D11_BLEND D3D11Mapping::getBlendFactor(BlendFactor factor)
+D3D11_BLEND D3D11_Mapping::getBlendFactor(BlendFactor factor)
 {
 	switch (factor)
 	{
@@ -90,12 +90,12 @@ D3D11_BLEND D3D11Mapping::getBlendFactor(BlendFactor factor)
 	}
 }
 
-D3D11_BLEND_OP D3D11Mapping::getBlendOp(BlendOp op)
+D3D11_BLEND_OP D3D11_Mapping::getBlendOp(BlendOp op)
 {
 	return (D3D11_BLEND_OP)op;
 }
 
-D3D11_LOGIC_OP D3D11Mapping::getLogicOp(LogicOp op)
+D3D11_LOGIC_OP D3D11_Mapping::getLogicOp(LogicOp op)
 {
 	switch (op)
 	{
@@ -136,22 +136,22 @@ D3D11_LOGIC_OP D3D11Mapping::getLogicOp(LogicOp op)
 	}
 }
 
-D3D11_STENCIL_OP D3D11Mapping::getStencilOp(StencilOp op)
+D3D11_STENCIL_OP D3D11_Mapping::getStencilOp(StencilOp op)
 {
 	return (D3D11_STENCIL_OP)op;
 }
 
-D3D11_COMPARISON_FUNC D3D11Mapping::getCompareOp(CompareOp op)
+D3D11_COMPARISON_FUNC D3D11_Mapping::getCompareOp(CompareOp op)
 {
 	return (D3D11_COMPARISON_FUNC)op;
 }
 
-D3D11_TEXTURE_ADDRESS_MODE D3D11Mapping::getAddressMode(AddressMode mode)
+D3D11_TEXTURE_ADDRESS_MODE D3D11_Mapping::getAddressMode(AddressMode mode)
 {
 	return (D3D11_TEXTURE_ADDRESS_MODE)mode;
 }
 
-void D3D11Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
+void D3D11_Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
 {
 	static const LPCSTR sematic_names[] = { "POSITION", "NORMAL", "COLOR", "TANGENT", "BINORMAL", "BLENDWEIGHTS", "BLENDINDICES" };
 	if (semantic >= SEMANTIC_TEXCOORD0)
@@ -166,7 +166,7 @@ void D3D11Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
 	}
 }
 
-void D3D11Mapping::fillSampler(D3D11_SAMPLER_DESC& info, const SamplerDesc& desc)
+void D3D11_Mapping::fillSampler(D3D11_SAMPLER_DESC& info, const SamplerDesc& desc)
 {
 	// 目前只支持standard,且filter完全对应
 	D3D11_FILTER_REDUCTION_TYPE reduction = D3D11_FILTER_REDUCTION_TYPE_STANDARD;
@@ -188,7 +188,7 @@ void D3D11Mapping::fillSampler(D3D11_SAMPLER_DESC& info, const SamplerDesc& desc
 	memcpy(info.BorderColor, desc.borderColor, sizeof(info.BorderColor));
 }
 
-void D3D11Mapping::fillRasterizer(D3D11_RASTERIZER_DESC& info, const RasterizerDesc& desc)
+void D3D11_Mapping::fillRasterizer(D3D11_RASTERIZER_DESC& info, const RasterizerDesc& desc)
 {
 	info.FillMode = getFillMode(desc.fillMode);
 	info.CullMode = getCullMode(desc.cullMode);
@@ -202,7 +202,7 @@ void D3D11Mapping::fillRasterizer(D3D11_RASTERIZER_DESC& info, const RasterizerD
 	info.ScissorEnable = FALSE;
 }
 
-void D3D11Mapping::fillBlend(D3D11_BLEND_DESC& info, const BlendDesc& desc)
+void D3D11_Mapping::fillBlend(D3D11_BLEND_DESC& info, const BlendDesc& desc)
 {
 	//BOOL logicOpEnable = desc.logicOpEnable;
 	//D3D11_LOGIC_OP logicOp = getLogicOp(desc.logicOp);
@@ -214,7 +214,7 @@ void D3D11Mapping::fillBlend(D3D11_BLEND_DESC& info, const BlendDesc& desc)
 	}
 }
 
-void D3D11Mapping::fillBlendTarget(D3D11_RENDER_TARGET_BLEND_DESC& info, const BlendTargetDesc& desc)
+void D3D11_Mapping::fillBlendTarget(D3D11_RENDER_TARGET_BLEND_DESC& info, const BlendTargetDesc& desc)
 {
 	info.SrcBlend = getBlendFactor(desc.srcColorFactor);
 	info.DestBlend = getBlendFactor(desc.dstColorFactor);
@@ -225,7 +225,7 @@ void D3D11Mapping::fillBlendTarget(D3D11_RENDER_TARGET_BLEND_DESC& info, const B
 	info.RenderTargetWriteMask = (UINT8)desc.colorWriteMask;
 }
 
-void D3D11Mapping::fillDepthStencil(D3D11_DEPTH_STENCIL_DESC& info, const DepthStencilDesc& desc)
+void D3D11_Mapping::fillDepthStencil(D3D11_DEPTH_STENCIL_DESC& info, const DepthStencilDesc& desc)
 {
 	info.DepthEnable = desc.depthTestEnable;
 	info.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
@@ -237,7 +237,7 @@ void D3D11Mapping::fillDepthStencil(D3D11_DEPTH_STENCIL_DESC& info, const DepthS
 	fillDepthStencilOp(info.BackFace, desc.back);
 }
 
-void D3D11Mapping::fillDepthStencilOp(D3D11_DEPTH_STENCILOP_DESC& info, const StencilOpDesc& desc)
+void D3D11_Mapping::fillDepthStencilOp(D3D11_DEPTH_STENCILOP_DESC& info, const StencilOpDesc& desc)
 {
 	info.StencilFailOp = getStencilOp(desc.failOp);
 	info.StencilDepthFailOp = getStencilOp(desc.depthFailOp);

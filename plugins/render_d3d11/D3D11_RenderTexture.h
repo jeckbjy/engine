@@ -4,11 +4,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D11_API D3D11RenderTexture : public D3D11RenderTarget
+class CU_D3D11_API D3D11_RenderTexture : public D3D11RenderTarget
 {
 public:
-	D3D11RenderTexture();
-	~D3D11RenderTexture();
+	D3D11_RenderTexture();
+	~D3D11_RenderTexture();
 
 	void bind(ID3D11ContextN* context);
 

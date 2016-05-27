@@ -6,15 +6,17 @@
 
 CU_NS_BEGIN
 
-VK_GraphicsPipeline::VK_GraphicsPipeline(VkDevice device, const GraphicsPipelineDesc& desc)
+VK_GraphicsPipeline::VK_GraphicsPipeline(VkDevice device, const PipelineDesc& desc)
 	: m_device(device)
 {
-	VK_Mapping::fillInputAssemblyState(m_inputAssemblyState, desc.topology);
-	VK_Mapping::fillTessellationState(m_tessellationState, desc.topology);
-	VK_Mapping::fillRasterizationState(m_rasterizationState, desc.rasterizer);
-	VK_Mapping::fillMultisampleState(m_multisampleState, desc.multisample);
-	VK_Mapping::fillDepthStencilState(m_depthStencilState, desc.depthStencil);
-	VK_Mapping::fillBlendState(m_blendState, m_blendTarget, desc.blend);
+	const RenderStateDesc* stateDesc = desc.states;
+
+	VK_Mapping::fillInputAssemblyState(m_inputAssemblyState, stateDesc->topology);
+	VK_Mapping::fillTessellationState(m_tessellationState, stateDesc->topology);
+	VK_Mapping::fillRasterizationState(m_rasterizationState, stateDesc->rasterizer);
+	VK_Mapping::fillMultisampleState(m_multisampleState, stateDesc->multisample);
+	VK_Mapping::fillDepthStencilState(m_depthStencilState, stateDesc->depthStencil);
+	VK_Mapping::fillBlendState(m_blendState, m_blendTarget, stateDesc->blend);
 	VK_Mapping::fillViewportState(m_viewportState);
 
 	//
@@ -70,7 +72,7 @@ void VK_GraphicsPipeline::bind(VK_CommandBuffer* cmdBuffer)
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-VK_ComputePipeline::VK_ComputePipeline(VkDevice device, const ComputePipelineDesc& desc)
+VK_ComputePipeline::VK_ComputePipeline(VkDevice device, const PipelineDesc& desc)
 	: m_device(device)
 	, m_handle(VK_NULL_HANDLE)
 {

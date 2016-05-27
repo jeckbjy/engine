@@ -62,7 +62,7 @@ class Color;
 class GpuBuffer;
 class Texture;
 class RenderTarget;
-class Program;
+class ShaderStage;
 class DescriptorSet;
 class Pipeline;
 class CommandBuffer;

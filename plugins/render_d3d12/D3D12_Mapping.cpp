@@ -3,12 +3,12 @@
 
 CU_NS_BEGIN
 
-DXGI_FORMAT D3D12Mapping::getFormat(PixelFormat format)
+DXGI_FORMAT D3D12_Mapping::getFormat(PixelFormat format)
 {
 	return DXGI_FORMAT_UNKNOWN;
 }
 
-D3D12_RESOURCE_DIMENSION D3D12Mapping::getTextureType(TexType type)
+D3D12_RESOURCE_DIMENSION D3D12_Mapping::getTextureType(TexType type)
 {
 	switch (type)
 	{
@@ -20,18 +20,18 @@ D3D12_RESOURCE_DIMENSION D3D12Mapping::getTextureType(TexType type)
 	return D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 }
 
-D3D12_PRIMITIVE_TOPOLOGY D3D12Mapping::getTopology(Topology topology)
+D3D12_PRIMITIVE_TOPOLOGY D3D12_Mapping::getTopology(Topology topology)
 {
 	return D3D12_PRIMITIVE_TOPOLOGY(topology);
 }
 
-D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12Mapping::getTopologyType(Topology topology)
+D3D12_PRIMITIVE_TOPOLOGY_TYPE D3D12_Mapping::getTopologyType(Topology topology)
 {
 	// todo:convert?
 	return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 }
 
-D3D12_FILL_MODE D3D12Mapping::getFillMode(FillMode mode)
+D3D12_FILL_MODE D3D12_Mapping::getFillMode(FillMode mode)
 {
 	switch (mode)
 	{
@@ -46,7 +46,7 @@ D3D12_FILL_MODE D3D12Mapping::getFillMode(FillMode mode)
 	}
 }
 
-D3D12_CULL_MODE D3D12Mapping::getCullMode(CullMode mode)
+D3D12_CULL_MODE D3D12_Mapping::getCullMode(CullMode mode)
 {
 	switch (mode)
 	{
@@ -63,7 +63,7 @@ D3D12_CULL_MODE D3D12Mapping::getCullMode(CullMode mode)
 	}
 }
 
-D3D12_LOGIC_OP D3D12Mapping::getLogicOp(LogicOp op)
+D3D12_LOGIC_OP D3D12_Mapping::getLogicOp(LogicOp op)
 {
 	switch (op)
 	{
@@ -104,12 +104,12 @@ D3D12_LOGIC_OP D3D12Mapping::getLogicOp(LogicOp op)
 	}
 }
 
-D3D12_BLEND_OP D3D12Mapping::getBlendOp(BlendOp op)
+D3D12_BLEND_OP D3D12_Mapping::getBlendOp(BlendOp op)
 {
 	return (D3D12_BLEND_OP)op;
 }
 
-D3D12_BLEND D3D12Mapping::getBlendFactor(BlendFactor factor)
+D3D12_BLEND D3D12_Mapping::getBlendFactor(BlendFactor factor)
 {
 	switch (factor)
 	{
@@ -156,24 +156,24 @@ D3D12_BLEND D3D12Mapping::getBlendFactor(BlendFactor factor)
 	}
 }
 
-D3D12_STENCIL_OP D3D12Mapping::getStencilOp(StencilOp op)
+D3D12_STENCIL_OP D3D12_Mapping::getStencilOp(StencilOp op)
 {
 	return (D3D12_STENCIL_OP)op;
 }
 
-D3D12_COMPARISON_FUNC D3D12Mapping::getCompareOp(CompareOp op)
+D3D12_COMPARISON_FUNC D3D12_Mapping::getCompareOp(CompareOp op)
 {
 	return (D3D12_COMPARISON_FUNC)op;
 }
 
-D3D12_TEXTURE_ADDRESS_MODE D3D12Mapping::getAddressMode(AddressMode mode)
+D3D12_TEXTURE_ADDRESS_MODE D3D12_Mapping::getAddressMode(AddressMode mode)
 {
 	return (D3D12_TEXTURE_ADDRESS_MODE)mode;
 }
 
-void D3D12Mapping::fillShader(D3D12_SHADER_BYTECODE& code, Program* prog)
+void D3D12_Mapping::fillShader(D3D12_SHADER_BYTECODE& code, ShaderStage* prog)
 {
-	D3D12Program* shader = (D3D12Program*)prog;
+	D3D12_Shader* shader = (D3D12_Shader*)prog;
 	if (shader)
 	{
 		ID3DBlob* blob = shader->getCode();
@@ -187,7 +187,7 @@ void D3D12Mapping::fillShader(D3D12_SHADER_BYTECODE& code, Program* prog)
 	}
 }
 
-void D3D12Mapping::fillRasterizerState(D3D12_RASTERIZER_DESC& state, const RasterizerDesc& desc)
+void D3D12_Mapping::fillRasterizerState(D3D12_RASTERIZER_DESC& state, const RasterizerDesc& desc)
 {
 	state.FillMode = getFillMode(desc.fillMode);
 	state.CullMode = getCullMode(desc.cullMode);
@@ -202,7 +202,7 @@ void D3D12Mapping::fillRasterizerState(D3D12_RASTERIZER_DESC& state, const Raste
 	state.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 }
 
-void D3D12Mapping::fillBlendState(D3D12_BLEND_DESC& state, const BlendDesc& desc)
+void D3D12_Mapping::fillBlendState(D3D12_BLEND_DESC& state, const BlendDesc& desc)
 {
 	BOOL logicOpEnable = desc.logicOpEnable;
 	D3D12_LOGIC_OP logicOp = getLogicOp(desc.logicOp);
@@ -216,7 +216,7 @@ void D3D12Mapping::fillBlendState(D3D12_BLEND_DESC& state, const BlendDesc& desc
 	}
 }
 
-void D3D12Mapping::fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const BlendTargetDesc& desc)
+void D3D12_Mapping::fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const BlendTargetDesc& desc)
 {
 	state.SrcBlend = getBlendFactor(desc.srcColorFactor);
 	state.DestBlend = getBlendFactor(desc.dstColorFactor);
@@ -227,7 +227,7 @@ void D3D12Mapping::fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const 
 	state.RenderTargetWriteMask = (UINT8)desc.colorWriteMask;
 }
 
-void D3D12Mapping::fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const DepthStencilDesc& desc)
+void D3D12_Mapping::fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const DepthStencilDesc& desc)
 {
 	state.DepthEnable = desc.depthTestEnable;
 	state.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
@@ -239,7 +239,7 @@ void D3D12Mapping::fillDepthStencilState(D3D12_DEPTH_STENCIL_DESC& state, const 
 	fillStencilOpState(state.BackFace, desc.back);
 }
 
-void D3D12Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpDesc& desc)
+void D3D12_Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const StencilOpDesc& desc)
 {
 	state.StencilFailOp = getStencilOp(desc.failOp);
 	state.StencilDepthFailOp = getStencilOp(desc.depthFailOp);
@@ -248,7 +248,7 @@ void D3D12Mapping::fillStencilOpState(D3D12_DEPTH_STENCILOP_DESC& state, const S
 	// ignore others??
 }
 
-void D3D12Mapping::fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& desc)
+void D3D12_Mapping::fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& desc)
 {
 	// 目前只支持standard,且filter完全对应
 	D3D12_FILTER_REDUCTION_TYPE reduction = D3D12_FILTER_REDUCTION_TYPE_STANDARD;
@@ -267,7 +267,7 @@ void D3D12Mapping::fillSamplerDesc(D3D12_SAMPLER_DESC& info, const SamplerDesc& 
 	memcpy(info.BorderColor, desc.borderColor, sizeof(info.BorderColor));
 }
 
-void D3D12Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
+void D3D12_Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
 {
 	static const LPCSTR sematic_names[] = { "POSITION", "NORMAL", "COLOR", "TANGENT", "BINORMAL", "BLENDWEIGHTS", "BLENDINDICES" };
 	if (semantic >= SEMANTIC_TEXCOORD0)

@@ -16,7 +16,6 @@ public:
 	bool init();
 	void update();	// Ö´ÐÐÒ»Ö¡
 
-	Device*		getDevice() { return m_graphics->getDevice(); }
 	Graphics*	getGraphics(){ return m_graphics; }
 	void		setGraphics(Graphics* graphics) { m_graphics = graphics; }
 

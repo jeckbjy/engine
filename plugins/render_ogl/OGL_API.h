@@ -77,7 +77,7 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 
 // http://www.luluathena.com/?p=1739
 // http://www.cnblogs.com/vertexshader/articles/3022981.html
-//#	define CU_USE_SPO	// Separate Program Object
+#	define CU_USE_SPO	// Separate Program Object
 #	define CU_USE_PBO	// Pixel Buffer Object
 #	define CU_USE_TEXTURE_ARRAY
 #	define CU_USE_DRAW_INDEX_BASE

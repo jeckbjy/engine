@@ -4,11 +4,11 @@
 CU_NS_BEGIN
 
 // todo：uniform buf需要延迟创建,用时更新,因为上层不一定使用
-class CU_OGL_API OGLBuffer : public GpuBuffer
+class CU_OGL_API OGL_Buffer : public GpuBuffer
 {
 public:
-	OGLBuffer(const BufferDesc& desc);
-	~OGLBuffer();
+	OGL_Buffer(const BufferDesc& desc);
+	~OGL_Buffer();
 
 	void* map(size_t offset, size_t len, MAP_FLAG access);
 	void unmap();

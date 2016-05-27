@@ -4,10 +4,10 @@
 CU_NS_BEGIN
 
 template<typename TState, typename TDesc>
-class StateMap
+class D3D11_StateMap
 {
 public:
-	~StateMap()
+	~D3D11_StateMap()
 	{
 		for (size_t i = 0; i < m_datas.size(); ++i)
 			m_datas[i]->release();

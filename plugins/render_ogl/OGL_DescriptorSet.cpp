@@ -1,34 +1,26 @@
 #include "OGL_DescriptorSet.h"
 #include "OGL_Program.h"
+#include "OGL_Pipeline.h"
 
 CU_NS_BEGIN
 
-OGLDescriptorSet::OGLDescriptorSet(Program* prog)
-:m_prog((OGLProgram*)prog)
+OGL_DescriptorSet::OGL_DescriptorSet(Pipeline* pipeline)
+	: m_pipeline((OGL_Pipeline*)pipeline)
 {
-	//size_t count = m_prog->uniformCount();
-	//if (count > 0)
-	//	m_descriptors.resize(count);
 }
 
-OGLDescriptorSet::~OGLDescriptorSet()
+OGL_DescriptorSet::~OGL_DescriptorSet()
 {
-	m_descriptors.clear();
 }
 
-void OGLDescriptorSet::bind(const String& name, GpuResource* res)
+void OGL_DescriptorSet::setValue(const String& name, Texture* texture, size_t index)
 {
-	//const ParamInfo* info = m_prog->getInfo(name);
-	//if (!info)
-	//	return;
-	//m_descriptors[info->index] = res;
+
 }
 
-Descriptor* OGLDescriptorSet::getDescriptor(size_t index)
+void OGL_DescriptorSet::setValue(const String& name, void* data, size_t size, size_t offset)
 {
-	if (index >= m_descriptors.size())
-		return NULL;
-	return m_descriptors[index];
+
 }
 
 CU_NS_END

@@ -3,15 +3,15 @@
 
 CU_NS_BEGIN
 
-class D3D11Pipeline;
-class D3D11InputLayout;
-class D3D11DescriptorSet;
+class D3D11_Pipeline;
+class D3D11_InputLayout;
+class D3D11_DescriptorSet;
 
-class D3D11CommandBuffer : public CommandBuffer
+class D3D11_CommandBuffer : public CommandBuffer
 {
 public:
-	D3D11CommandBuffer();
-	~D3D11CommandBuffer();
+	D3D11_CommandBuffer();
+	~D3D11_CommandBuffer();
 
 	void reset();
 	void setViewport(int x, int y, size_t w, size_t h);
@@ -33,7 +33,7 @@ public:
 	void dispatch(size_t x, size_t y, size_t z);
 
 	ID3D11ContextN*		getContext() { return m_context; }
-	D3D11InputLayout*	getLayout() { return m_layout; }
+	D3D11_InputLayout*	getLayout() { return m_layout; }
 	const float*		getFactors() const { return m_factors; }
 	size_t				getStencilRef() const { return m_stencilRef; }
 	UINT				getSampleMask() const{ return m_sampleMask; }
@@ -43,9 +43,9 @@ private:
 
 private:
 	ID3D11ContextN*		m_context;
-	D3D11Pipeline*		m_pipeline;
-	D3D11InputLayout*	m_layout;
-	D3D11DescriptorSet*	m_descriptors;
+	D3D11_Pipeline*		m_pipeline;
+	D3D11_InputLayout*	m_layout;
+	D3D11_DescriptorSet*	m_descriptors;
 	float				m_factors[4];
 	UINT				m_sampleMask;
 	StencilFaceFlags	m_stencilMask;

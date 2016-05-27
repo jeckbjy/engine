@@ -3,27 +3,27 @@
 
 CU_NS_BEGIN
 
-OGLRenderTexture::OGLRenderTexture(Texture* color, Texture* depth_stencil)
-:OGLFrameBuffer(true)
+OGL_RenderTexture::OGL_RenderTexture(Texture* color, Texture* depth_stencil)
+:OGL_FrameBuffer(true)
 , m_dirty(TRUE)
 {
 	if (color != NULL)
-		m_colors.push_back((OGLTexture*)color);
-	m_tex_ds = (OGLTexture*)depth_stencil;
+		m_colors.push_back((OGL_Texture*)color);
+	m_tex_ds = (OGL_Texture*)depth_stencil;
 }
 
-OGLRenderTexture::~OGLRenderTexture()
+OGL_RenderTexture::~OGL_RenderTexture()
 {
 	// 释放需要释放 texture ？？
 }
 
-void OGLRenderTexture::present()
+void OGL_RenderTexture::present()
 {
 	throw std::runtime_error("RenderTexture cannot use swapBuffers");
 }
 
 
-void OGLRenderTexture::bind()
+void OGL_RenderTexture::bind()
 {
 	if (bindFBO(m_fbo) || m_dirty)
 	{
@@ -38,9 +38,9 @@ void OGLRenderTexture::bind()
 	}
 }
 
-void OGLRenderTexture::attach(uint32_t att, Texture* tex)
+void OGL_RenderTexture::attach(uint32_t att, Texture* tex)
 {
-	OGLTexture* ogl_tex = (OGLTexture*)tex;
+	OGL_Texture* ogl_tex = (OGL_Texture*)tex;
 	if (att == ATT_DepthStencil)
 	{
 		m_tex_ds = ogl_tex;
@@ -56,7 +56,7 @@ void OGLRenderTexture::attach(uint32_t att, Texture* tex)
 	}
 }
 
-void OGLRenderTexture::detach(uint32_t att)
+void OGL_RenderTexture::detach(uint32_t att)
 {
 	if (att == ATT_DepthStencil)
 	{

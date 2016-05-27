@@ -14,8 +14,8 @@ protected:
 	Device*			m_device;
 	RenderTarget*	m_target;
 	Pipeline*		m_pipeline;
-	Program*		m_vs;
-	Program*		m_ps;
+	ShaderStage*		m_vs;
+	ShaderStage*		m_ps;
 	VertexBuffer*	m_vb;
 	IndexBuffer*	m_ib;
 };

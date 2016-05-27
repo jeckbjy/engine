@@ -32,6 +32,6 @@
 // predeclare
 CU_NS_BEGIN
 
-class D3D12Device;
+class D3D12_Device;
 
 CU_NS_END

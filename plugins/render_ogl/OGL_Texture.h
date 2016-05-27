@@ -3,12 +3,12 @@
 
 CU_NS_BEGIN
 
-class CU_OGL_API OGLTexture : public Texture
+class CU_OGL_API OGL_Texture : public Texture
 {
 	static GLenum getGLTarget(TexType type, uint32_t arrays);
 public:
-	OGLTexture(const TextureDesc& desc);
-	virtual ~OGLTexture();
+	OGL_Texture(const TextureDesc& desc);
+	virtual ~OGL_Texture();
 
 	void* map(PixelData& data, MAP_FLAG flag, uint level, uint face);
 	void unmap();

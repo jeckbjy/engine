@@ -3,12 +3,12 @@
 
 CU_NS_BEGIN
 
-OGLInputLayout::OGLInputLayout(const InputElement* elements, size_t count)
+OGL_InputLayout::OGL_InputLayout(const InputElement* elements, size_t count)
 	: InputLayout(elements, count)
 {
 }
 
-OGLInputLayout::~OGLInputLayout()
+OGL_InputLayout::~OGL_InputLayout()
 {
 	//release();
 }

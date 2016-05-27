@@ -3,14 +3,14 @@
 
 CU_NS_BEGIN
 
-DEF_PLUGIN(CU_D3D11_API, D3D11Plugin)
+DEF_PLUGIN(CU_D3D11_API, D3D11_Plugin)
 
-void D3D11Plugin::install()
+void D3D11_Plugin::install()
 {
 
 }
 
-void D3D11Plugin::uninstall()
+void D3D11_Plugin::uninstall()
 {
 
 }

@@ -2,9 +2,9 @@
 
 CU_NS_BEGIN
 
-GLuint OGLFrameBuffer::s_cur_fbo = 0;
+GLuint OGL_FrameBuffer::s_cur_fbo = 0;
 
-bool OGLFrameBuffer::bindFBO(GLuint fbo)
+bool OGL_FrameBuffer::bindFBO(GLuint fbo)
 {
 	if (fbo != s_cur_fbo)
 	{
@@ -15,7 +15,7 @@ bool OGLFrameBuffer::bindFBO(GLuint fbo)
 	return false;
 }
 
-OGLFrameBuffer::OGLFrameBuffer(bool off_screen)
+OGL_FrameBuffer::OGL_FrameBuffer(bool off_screen)
 :m_fbo(0)
 {
 	// 离线渲染
@@ -23,7 +23,7 @@ OGLFrameBuffer::OGLFrameBuffer(bool off_screen)
 		glGenFramebuffers(1, &m_fbo);
 }
 
-OGLFrameBuffer::~OGLFrameBuffer()
+OGL_FrameBuffer::~OGL_FrameBuffer()
 {
 	if (m_fbo != 0)
 	{
@@ -32,7 +32,7 @@ OGLFrameBuffer::~OGLFrameBuffer()
 	}
 }
 
-void OGLFrameBuffer::clear(uint32_t flags, const Color& color, float depth, int32_t stencil)
+void OGL_FrameBuffer::clear(uint32_t flags, const Color& color, float depth, int32_t stencil)
 {
 	bindFBO(m_fbo);
 	// 需要根据当前的BlendState和DepthStencilState设置
@@ -55,12 +55,12 @@ void OGLFrameBuffer::clear(uint32_t flags, const Color& color, float depth, int3
 	}
 }
 
-void OGLFrameBuffer::discard(uint32_t flags)
+void OGL_FrameBuffer::discard(uint32_t flags)
 {
 
 }
 
-void OGLFrameBuffer::resize(uint32_t width, uint32_t height)
+void OGL_FrameBuffer::resize(uint32_t width, uint32_t height)
 {
 
 }

@@ -2,7 +2,7 @@
 
 CU_NS_BEGIN
 
-D3D12Buffer::D3D12Buffer(ID3D12Device* device, const BufferDesc& desc)
+D3D12_Buffer::D3D12_Buffer(ID3D12Device* device, const BufferDesc& desc)
 	: GpuBuffer(desc)
 	, m_handle(NULL)
 {
@@ -28,12 +28,12 @@ D3D12Buffer::D3D12Buffer(ID3D12Device* device, const BufferDesc& desc)
 	device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &dx_desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&m_handle));
 }
 
-D3D12Buffer::~D3D12Buffer()
+D3D12_Buffer::~D3D12_Buffer()
 {
 	D3D12_RELEASE(m_handle);
 }
 
-void* D3D12Buffer::map(size_t offset, size_t len, MAP_FLAG access)
+void* D3D12_Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 {
 	CU_UNUSED(access);
 	void* data = NULL;
@@ -45,7 +45,7 @@ void* D3D12Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 	return data;
 }
 
-void D3D12Buffer::unmap()
+void D3D12_Buffer::unmap()
 {
 	m_handle->Unmap(0, &m_range);
 }

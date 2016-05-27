@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12Fence : public Fence
+class CU_D3D12_API D3D12_Fence : public Fence
 {
 public:
-	D3D12Fence(ID3D12Device* device);
-	~D3D12Fence();
+	D3D12_Fence(ID3D12Device* device);
+	~D3D12_Fence();
 
 	void signal(ID3D12CommandQueue* queue);
 

@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12Mapping
+class CU_D3D12_API D3D12_Mapping
 {
 public:
 	static DXGI_FORMAT getFormat(PixelFormat format);
@@ -21,7 +21,7 @@ public:
 	static D3D12_COMPARISON_FUNC getCompareOp(CompareOp op);
 	static D3D12_TEXTURE_ADDRESS_MODE getAddressMode(AddressMode mode);
 
-	static void fillShader(D3D12_SHADER_BYTECODE& code, Program* prog);
+	static void fillShader(D3D12_SHADER_BYTECODE& code, ShaderStage* prog);
 	static void fillRasterizerState(D3D12_RASTERIZER_DESC& state, const RasterizerDesc& desc);
 	static void fillBlendState(D3D12_BLEND_DESC& state, const BlendDesc& desc);
 	static void fillBlendTarget(D3D12_RENDER_TARGET_BLEND_DESC& state, const BlendTargetDesc& desc);

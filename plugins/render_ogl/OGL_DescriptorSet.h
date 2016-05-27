@@ -4,26 +4,18 @@
 
 CU_NS_BEGIN
 
-typedef GpuResource Descriptor;
-// ÃèÊö·û
-class OGLProgram;
-class CU_OGL_API OGLDescriptorSet : public DescriptorSet
+class OGL_Pipeline;
+class CU_OGL_API OGL_DescriptorSet : public DescriptorSet
 {
-	typedef std::vector<Descriptor*> DescriptorVec;
 public:
-	OGLDescriptorSet(Program* prog);
-	~OGLDescriptorSet();
+	OGL_DescriptorSet(Pipeline* pipeline);
+	~OGL_DescriptorSet();
 
-	void bind(const String& name, GpuResource* res);
-
-	Descriptor* getDescriptor(size_t index);
-
-	inline size_t size() const { return m_descriptors.size(); }
-	inline Descriptor* at(size_t idx) { return m_descriptors[idx]; }
+	void setValue(const String& name, Texture* texture, size_t index);
+	void setValue(const String& name, void* data, size_t size, size_t offset);
 
 protected:
-	OGLProgram*		m_prog;
-	DescriptorVec	m_descriptors;
+	OGL_Pipeline* m_pipeline;
 };
 
 CU_NS_END

@@ -3,7 +3,7 @@
 
 CU_NS_BEGIN
 
-class CU_D3D11_API D3D11Mapping
+class CU_D3D11_API D3D11_Mapping
 {
 public:
 	static DXGI_FORMAT					getFormat(PixelFormat format);

@@ -6,11 +6,11 @@
 CU_NS_BEGIN
 
 // vao:需要三方面东西：layout,vbo,prog
-class CU_OGL_API OGLInputLayout : public InputLayout
+class CU_OGL_API OGL_InputLayout : public InputLayout
 {
 public:
-	OGLInputLayout(const InputElement* elements, size_t count);
-	~OGLInputLayout();
+	OGL_InputLayout(const InputElement* elements, size_t count);
+	~OGL_InputLayout();
 	//void release();
 
 //	void bind(OGLProgram* prog);

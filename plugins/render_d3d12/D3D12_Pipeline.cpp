@@ -7,9 +7,10 @@
 
 CU_NS_BEGIN
 
-D3D12GraphicsPipeline::D3D12GraphicsPipeline(ID3D12Device* device, const GraphicsPipelineDesc& desc)
+D3D12_GraphicsPipeline::D3D12_GraphicsPipeline(ID3D12Device* device, const PipelineDesc& desc)
 	: m_rootSignature(NULL)
 {
+	const RenderStateDesc* states = desc.states;
 	// 根据shader创建
 	ID3D10Blob *sig, *err;
 	D3D12_ROOT_SIGNATURE_DESC sigDesc;
@@ -21,30 +22,30 @@ D3D12GraphicsPipeline::D3D12GraphicsPipeline(ID3D12Device* device, const Graphic
 	//D3D12_RELEASE(err);
 
 	// 填充固定的
-	m_desc.PrimitiveTopologyType = D3D12Mapping::getTopologyType(desc.topology);
+	m_desc.PrimitiveTopologyType = D3D12_Mapping::getTopologyType(states->topology);
 	m_desc.pRootSignature = m_rootSignature;
 	
-	D3D12Mapping::fillShader(m_desc.VS, desc.vs);
-	D3D12Mapping::fillShader(m_desc.HS, desc.hs);
-	D3D12Mapping::fillShader(m_desc.DS, desc.ds);
-	D3D12Mapping::fillShader(m_desc.GS, desc.gs);
-	D3D12Mapping::fillShader(m_desc.PS, desc.ps);
+	//D3D12Mapping::fillShader(m_desc.VS, desc.vs);
+	//D3D12Mapping::fillShader(m_desc.HS, desc.hs);
+	//D3D12Mapping::fillShader(m_desc.DS, desc.ds);
+	//D3D12Mapping::fillShader(m_desc.GS, desc.gs);
+	//D3D12Mapping::fillShader(m_desc.PS, desc.ps);
 
-	D3D12Mapping::fillRasterizerState(m_desc.RasterizerState, desc.rasterizer);
-	D3D12Mapping::fillDepthStencilState(m_desc.DepthStencilState, desc.depthStencil);
-	D3D12Mapping::fillBlendState(m_desc.BlendState, desc.blend);
+	D3D12_Mapping::fillRasterizerState(m_desc.RasterizerState, states->rasterizer);
+	D3D12_Mapping::fillDepthStencilState(m_desc.DepthStencilState, states->depthStencil);
+	D3D12_Mapping::fillBlendState(m_desc.BlendState, states->blend);
 }
 
-D3D12GraphicsPipeline::~D3D12GraphicsPipeline()
+D3D12_GraphicsPipeline::~D3D12_GraphicsPipeline()
 {
 	D3D12_RELEASE(m_rootSignature);
 }
 
-void D3D12GraphicsPipeline::bind(D3D12CommandBuffer* cmdBuffer)
+void D3D12_GraphicsPipeline::bind(D3D12_CommandBuffer* cmdBuffer)
 {
-	D3D12Device* device = gD3D12Device();
+	D3D12_Device* device = gD3D12Device();
 	// 查找
-	D3D12InputLayout* layout = cmdBuffer->getLayout();
+	D3D12_InputLayout* layout = cmdBuffer->getLayout();
 	if (!layout)
 		return;
 
@@ -71,22 +72,22 @@ void D3D12GraphicsPipeline::bind(D3D12CommandBuffer* cmdBuffer)
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-D3D12ComputePipeline::D3D12ComputePipeline(ID3D12Device* device, const ComputePipelineDesc& desc)
+D3D12_ComputePipeline::D3D12_ComputePipeline(ID3D12Device* device, const PipelineDesc& desc)
 {
 	D3D12_COMPUTE_PIPELINE_STATE_DESC pso = {};
 	pso.pRootSignature = NULL;
 
-	D3D12Mapping::fillShader(pso.CS, desc.cs);
+	//D3D12Mapping::fillShader(pso.CS, desc.cs);
 
 	device->CreateComputePipelineState(&pso, IID_PPV_ARGS(&m_pipeline));
 }
 
-D3D12ComputePipeline::~D3D12ComputePipeline()
+D3D12_ComputePipeline::~D3D12_ComputePipeline()
 {
 	D3D12_RELEASE(m_pipeline);
 }
 
-void D3D12ComputePipeline::bind(D3D12CommandBuffer* cmdBuffer)
+void D3D12_ComputePipeline::bind(D3D12_CommandBuffer* cmdBuffer)
 {
 	if (!m_pipeline)
 		return;

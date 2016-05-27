@@ -233,22 +233,6 @@ TextureDesc::TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, Textu
 
 }
 
-GraphicsPipelineDesc::GraphicsPipelineDesc()
-	: vs(NULL)
-	, hs(NULL)
-	, ds(NULL)
-	, gs(NULL)
-	, ps(NULL)
-{
-
-}
-
-ComputePipelineDesc::ComputePipelineDesc()
-	: cs(NULL)
-{
-
-}
-
 InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)
 	:semantic(sem), format(format), slot(slot), offset(0), rate(rate)
 {

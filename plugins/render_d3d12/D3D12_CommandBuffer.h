@@ -3,13 +3,13 @@
 
 CU_NS_BEGIN
 
-class D3D12Pipeline;
-class D3D12InputLayout;
-class CU_D3D12_API D3D12CommandBuffer : public CommandBuffer
+class D3D12_Pipeline;
+class D3D12_InputLayout;
+class CU_D3D12_API D3D12_CommandBuffer : public CommandBuffer
 {
 public:
-	D3D12CommandBuffer(ID3D12Device* device, ID3D12CommandAllocator* alloc);
-	~D3D12CommandBuffer();
+	D3D12_CommandBuffer(ID3D12Device* device, ID3D12CommandAllocator* alloc);
+	~D3D12_CommandBuffer();
 
 	void reset();
 	void setViewport(int x, int y, size_t w, size_t h);
@@ -28,15 +28,15 @@ public:
 
 	ID3D12GraphicsCommandList* native() { return m_handle; }
 
-	D3D12InputLayout* getLayout() { return m_layout; }
+	D3D12_InputLayout* getLayout() { return m_layout; }
 
 private:
 	void prepare();
 
 private:
 	ID3D12GraphicsCommandList*	m_handle;
-	D3D12InputLayout*			m_layout;
-	D3D12Pipeline*				m_pipeline;
+	D3D12_InputLayout*			m_layout;
+	D3D12_Pipeline*				m_pipeline;
 };
 
 CU_NS_END

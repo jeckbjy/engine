@@ -3,15 +3,15 @@
 
 CU_NS_BEGIN
 
-class OGLProgram;
-class OGLPipeline;
-class OGLInputLayout;
-class OGLBuffer;
-class CU_OGL_API OGLCommandBuffer : public CommandBuffer
+class OGL_Shader;
+class OGL_Pipeline;
+class OGL_InputLayout;
+class OGL_Buffer;
+class CU_OGL_API OGL_CommandBuffer : public CommandBuffer
 {
 public:
-	OGLCommandBuffer();
-	~OGLCommandBuffer();
+	OGL_CommandBuffer();
+	~OGL_CommandBuffer();
 
 	void reset();
 	void setViewport(int x, int y, size_t w, size_t h);
@@ -30,12 +30,14 @@ public:
 	void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset);
 	void dispatch(size_t x, size_t y, size_t z);
 
-	void execute();	// Ö´ÐÐ
+private:
+	void prepare();
+
 private:
 	RenderTarget*		m_target;
-	OGLPipeline*		m_pipeline;
-	OGLInputLayout*		m_layout;
-	OGLBuffer*			m_index;
+	OGL_Pipeline*		m_pipeline;
+	OGL_InputLayout*		m_layout;
+	OGL_Buffer*			m_index;
 	DescriptorSet*		m_descriptors;
 	Topology			m_primitive;
 	size_t				m_vertexStart;

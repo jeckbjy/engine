@@ -3,12 +3,12 @@
 
 CU_NS_BEGIN
 
-class D3D11Texture;
-class CU_D3D11_API D3D11RenderWindow : public D3D11RenderTarget
+class D3D11_Texture;
+class CU_D3D11_API D3D11_RenderWindow : public D3D11RenderTarget
 {
 public:
-	D3D11RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device);
-	~D3D11RenderWindow();
+	D3D11_RenderWindow(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device);
+	~D3D11_RenderWindow();
 
 	void bind(ID3D11ContextN* context);
 
@@ -20,7 +20,7 @@ protected:
 	IDXGISwapChainN*		m_chain;
 	ID3D11Texture2D*		m_buffer;
 	ID3D11RenderTargetView* m_rtv;
-	D3D11Texture*			m_ds;
+	D3D11_Texture*			m_ds;
 };
 
 CU_NS_END

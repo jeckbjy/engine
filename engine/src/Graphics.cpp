@@ -2,6 +2,8 @@
 
 CU_NS_BEGIN
 
+Graphics gGraphics;
+
 GpuBuffer::GpuBuffer(const BufferDesc& desc)
 : m_flags(desc.flags)
 , m_bytes(desc.counts * desc.stride)

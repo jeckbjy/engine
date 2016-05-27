@@ -3,13 +3,13 @@
 
 CU_NS_BEGIN
 
-class CU_OGL_API OGLDevice : public Device
+class OGL_Program;
+class CU_OGL_API OGL_Device : public Device
 {
 public:
-	OGLDevice();
-	~OGLDevice();
+	OGL_Device();
+	~OGL_Device();
 
-	const String& name() const { return _name; }
 	virtual bool init();
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
@@ -17,15 +17,15 @@ public:
 	RenderTarget*	newRenderWindow(Window* wnd);
 	RenderTarget*	newRenderTexture(Texture* color, Texture* depth_stencil);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	Program*		newProgram();
-	DescriptorSet*	newDescriptorSet(Program* prog);
-	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
+	ShaderStage*		newProgram();
+	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
+	Pipeline*		newPipeline(const PipelineDesc& desc);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 
-	void execute(CommandBuffer* cmd);
-protected:
-	String _name;
+	OGL_Program* getProgramPipeline();
+private:
+
 };
 
 CU_NS_END

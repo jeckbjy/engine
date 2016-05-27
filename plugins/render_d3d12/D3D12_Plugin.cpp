@@ -4,14 +4,14 @@
 CU_NS_BEGIN
 //
 
-DEF_PLUGIN(CU_D3D12_API, D3D12Plugin)
+DEF_PLUGIN(CU_D3D12_API, D3D12_Plugin)
 
-void D3D12Plugin::install()
+void D3D12_Plugin::install()
 {
 
 }
 
-void D3D12Plugin::uninstall()
+void D3D12_Plugin::uninstall()
 {
 
 }

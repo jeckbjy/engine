@@ -6,18 +6,18 @@
 
 CU_NS_BEGIN
 
-DEF_PLUGIN(CU_OGL_API, OGLPlugin)
+DEF_PLUGIN(CU_OGL_API, OGL_Plugin)
 
 //OGLDevice* g_ogl_render = NULL;
 
-void OGLPlugin::install()
+void OGL_Plugin::install()
 {
 	//g_ogl_render = new OGLDevice();
 	//g_ogl_render->init();
 	//Root::Instance().addDevice(g_ogl_render);
 }
 
-void OGLPlugin::uninstall()
+void OGL_Plugin::uninstall()
 {
 	//Root::Instance().delDevice(g_ogl_render);
 	//if (g_ogl_render != NULL)

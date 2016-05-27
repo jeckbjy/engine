@@ -4,7 +4,7 @@
 CU_NS_BEGIN
 
 class VK_Device;
-class CU_VK_API VK_Program : public Program
+class CU_VK_API VK_Program : public ShaderStage
 {
 public:
 	VK_Program(VK_Device* device);

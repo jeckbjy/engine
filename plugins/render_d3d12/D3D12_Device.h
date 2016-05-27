@@ -3,21 +3,20 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12Device : public Device
+class CU_D3D12_API D3D12_Device : public Device
 {
 public:
-	D3D12Device();
-	~D3D12Device();
+	D3D12_Device();
+	~D3D12_Device();
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
 	RenderTarget*	newRenderWindow(Window* hwnd);
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	Program*		newProgram();
-	Pipeline*		newPipeline(const GraphicsPipelineDesc& desc);
-	Pipeline*		newPipeline(const ComputePipelineDesc* desc);
-	DescriptorSet*	newDescriptorSet(Program* prog);
+	ShaderStage*		newProgram();
+	Pipeline*		newPipeline(const PipelineDesc& desc);
+	DescriptorSet*	newDescriptorSet(ShaderStage* prog);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 
@@ -31,7 +30,7 @@ private:
 	ID3D12CommandAllocator* m_allocator;
 };
 
-extern CU_D3D12_API D3D12Device*	gD3D12Device();
+extern CU_D3D12_API D3D12_Device*	gD3D12Device();
 extern CU_D3D12_API ID3D12Device*	gD3D12NativeDevice();
 
 CU_NS_END
