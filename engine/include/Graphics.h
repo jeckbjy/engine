@@ -93,7 +93,7 @@ public:
 	virtual bool compile(const ProgramDesc& desc) = 0;
 	ShaderType getShaderType() const { return m_type; }
 
-private:
+protected:
 	ShaderType m_type;
 };
 

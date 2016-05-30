@@ -26,12 +26,12 @@ public:
 
 private:
 	typedef ComPtr<ID3D11InputLayout> ComInputLayout;
-	D3D11_Program*	m_program;
-	D3D11_BlendState*		m_blend;
-	D3D11_RasterizerState*	m_rasterizer;
+	D3D11_Program*				m_program;
+	D3D11_BlendState*			m_blend;
+	D3D11_RasterizerState*		m_rasterizer;
 	D3D11_DepthStencilState*	m_depthStencil;
-	D3D11_InputLayout*		m_curlayout;
-	ComInputLayout			m_d3dLayout;
+	D3D11_InputLayout*			m_curlayout;
+	ComInputLayout				m_d3dLayout;
 };
 
 CU_NS_END

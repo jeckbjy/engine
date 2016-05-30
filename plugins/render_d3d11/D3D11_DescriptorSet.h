@@ -16,10 +16,10 @@ public:
 	void bind(ID3D11ContextN* context);
 
 private:
-	typedef Object Descirptor;
-	typedef std::vector<Descirptor*> DescriptorVec;
-	DescriptorVec			m_descriptor;
-	D3D11_Program*	m_pipeline;
+	// texture可能有多个
+	typedef std::vector<void*> DescriptorVec;
+	DescriptorVec	m_descriptor;
+	D3D11_Program*	m_program;
 };
 
 CU_NS_END

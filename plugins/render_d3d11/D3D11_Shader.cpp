@@ -11,36 +11,15 @@ D3D11_Shader::D3D11_Shader(uint32_t id)
 
 D3D11_Shader::~D3D11_Shader()
 {
+	for (size_t i = 0; i < m_uniforms.size(); ++i)
+	{
+		delete m_uniforms[i];
+	}
+	m_uniforms.clear();
+
 	D3D11_RELEASE(m_code);
 	D3D11_RELEASE(m_shader);
 }
-
-//void D3D11Program::bind(ID3D11ContextN* context)
-//{
-//	switch (m_type)
-//	{
-//	case SHADER_VERTEX:
-//		context->VSSetShader((ID3D11VertexShader*)m_shader, NULL, 0);
-//		break;
-//	case SHADER_PIXEL:
-//		context->PSSetShader((ID3D11PixelShader*)m_shader, NULL, 0);
-//		break;
-//	case SHADER_GEOMETRY:
-//		context->GSSetShader((ID3D11GeometryShader*)m_shader, NULL, 0);
-//		break;
-//	case SHADER_HULL:
-//		context->HSSetShader((ID3D11HullShader*)m_shader, NULL, 0);
-//		break;
-//	case SHADER_DOMAIN:
-//		context->DSSetShader((ID3D11DomainShader*)m_shader, NULL, 0);
-//		break;
-//	case SHADER_COMPUTE:
-//		context->CSSetShader((ID3D11ComputeShader*)m_shader, NULL, 0);
-//		break;
-//	default:
-//		break;
-//	}
-//}
 
 bool D3D11_Shader::compile(const ProgramDesc& desc)
 {
@@ -117,6 +96,11 @@ bool D3D11_Shader::create(ShaderType stage, DWORD* code, SIZE_T size)
 
 void D3D11_Shader::parse()
 {
+	static const char* SHADER_NAME[SHADER_COUNT] = 
+	{
+		"VS", "HS", "DS", "GS", "PS", "CS"
+	};
+
 	HRESULT hr;
 	ID3D11ShaderReflection* reflection;
 	D3D11_SHADER_DESC shader_desc;
@@ -127,69 +111,79 @@ void D3D11_Shader::parse()
 	if (FAILED(hr))
 		return;
 
+	typedef std::map<String, size_t> IndexMap;
+	IndexMap indexMap;
+
+	UniformType type;
+	D3D11_SHADER_INPUT_BIND_DESC bindDesc;
 	for (UINT i = 0; i < shader_desc.BoundResources; ++i)
 	{
-		D3D11_SHADER_INPUT_BIND_DESC bind_desc;
-		hr = reflection->GetResourceBindingDesc(i, &bind_desc);
+		hr = reflection->GetResourceBindingDesc(i, &bindDesc);
 		D3D11_CHECK(hr, "GetResourceBindingDesc fail!");
 		// 
-		for (UINT j = 0; j < bind_desc.BindCount; ++j)
-		{
-			UniformDesc input;
-			input.name = bind_desc.Name;
-			input.slot = bind_desc.BindPoint + j;
-			input.bytes = 0;
-			input.type = getInputType(bind_desc.Type, bind_desc.Dimension);
-			if (input.type != UT_UNKNOWN)
-				m_inputs[input.name] = input;
-		}
+		type = getInputType(bindDesc.Type, bindDesc.Dimension);
+		if (type == UT_UNKNOWN)
+			continue;
+
+		UniformDesc* uniform = new UniformDesc();
+		uniform->name = bindDesc.Name;
+		uniform->slot = bindDesc.BindPoint;
+		uniform->arrays = bindDesc.BindCount;	// like texture2d array
+		uniform->type = type;
+
+		// 每个CB都有独立的名字，不同的Stage不能重复
+		if (uniform->type == UT_CBUFFER)
+			uniform->name += SHADER_NAME[m_type];
+
+		m_uniforms.push_back(uniform);
+		indexMap[bindDesc.Name] = m_uniforms.size() - 1;
 	}
 
 	ID3D11ShaderReflectionConstantBuffer* constant;
 	ID3D11ShaderReflectionVariable*	variable;
+
+	D3D11_SHADER_BUFFER_DESC bufDesc;
+	D3D11_SHADER_VARIABLE_DESC varDesc;
+	D3D11_SHADER_TYPE_DESC typeDesc;
+	size_t blockIndex;
+	UniformDesc* block;
 	for (UINT i = 0; i < shader_desc.ConstantBuffers; ++i)
 	{
 		constant = reflection->GetConstantBufferByIndex(i);
-		D3D11_SHADER_BUFFER_DESC buf_desc;
-		hr = constant->GetDesc(&buf_desc);
+		hr = constant->GetDesc(&bufDesc);
 		if (FAILED(hr))
 			continue;
+		IndexMap::const_iterator itor = indexMap.find(bufDesc.Name);
+		if (itor == indexMap.end())
+			continue;
 
-		UniformDesc& block = m_inputs[buf_desc.Name];
-		block.bytes = buf_desc.Size;
+		blockIndex = itor->second;
+		block = m_uniforms[blockIndex];
+		block->bytes = bufDesc.Size;
 
-		for (UINT j = 0; j < buf_desc.Variables; ++j)
+		for (UINT j = 0; j < bufDesc.Variables; ++j)
 		{
 			variable = constant->GetVariableByIndex(j);
-			parseVariable(variable);
+			hr = variable->GetDesc(&varDesc);
+			if (FAILED(hr))
+				continue;
+			hr = variable->GetType()->GetDesc(&typeDesc);
+			if (FAILED(hr))
+				continue;
+			type = getVariableType(typeDesc);
+			if (type == UT_UNKNOWN)
+				continue;
+			UniformDesc* uniform = new UniformDesc();
+			uniform->name = varDesc.Name;
+			uniform->index = blockIndex;
+			uniform->arrays = typeDesc.Elements == 0 ? 1 : typeDesc.Elements;
+			uniform->offset = varDesc.StartOffset;
+			uniform->type = type;
+			m_uniforms.push_back(uniform);
 		}
 	}
 
 	D3D11_RELEASE(reflection);
-}
-
-void D3D11_Shader::parseVariable(ID3D11ShaderReflectionVariable* variable)
-{
-	D3D11_SHADER_VARIABLE_DESC varDesc;
-	D3D11_SHADER_TYPE_DESC typeDesc;
-	HRESULT hr;
-
-	hr = variable->GetDesc(&varDesc);
-	if (FAILED(hr))
-		return;
-	hr = variable->GetType()->GetDesc(&typeDesc);
-	if (FAILED(hr))
-		return;
-
-	UniformDesc varInfo;
-	varInfo.name = varDesc.Name;
-	varInfo.index = 0;
-	varInfo.arraySize = typeDesc.Elements == 0 ? 1 : typeDesc.Elements;
-	varInfo.offset = varDesc.StartOffset;
-	varInfo.type = getVariableType(typeDesc);
-
-	// 添加
-	m_variables[varInfo.name] = varInfo;
 }
 
 UniformType D3D11_Shader::getInputType(D3D_SHADER_INPUT_TYPE type, D3D_SRV_DIMENSION dimension)

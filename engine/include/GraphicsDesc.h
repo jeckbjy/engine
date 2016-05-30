@@ -212,14 +212,21 @@ struct UniformDesc
 {
 	UniformType	type;
 	String		name;
-	uint32_t	index;
 	uint32_t	slot;
-	uint32_t	blocks;
-	uint32_t	arraySize;
-	uint32_t	offset;
+	uint32_t	arrays;
 	uint32_t	bytes;
-};
+	uint32_t	offset;
+	uint32_t	index;
+	UniformDesc()
+		: type(UT_UNKNOWN)
+		, slot(UINT32_MAX)
+		, arrays(1)
+		, bytes(0)
+		, offset(0)
+		, index(UINT32_MAX)
+	{}
 
-typedef std::map<String, UniformDesc> UniformMap;
+	bool isVariable() const { return slot == UINT32_MAX; }
+};
 
 CU_NS_END
