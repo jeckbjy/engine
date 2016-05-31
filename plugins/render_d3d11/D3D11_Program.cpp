@@ -54,12 +54,13 @@ void D3D11_Program::bind(ID3D11ContextN* context)
 void D3D11_Program::link()
 {
 	typedef std::map<String, size_t> IndexMap;
-	IndexMap indexs;
+	IndexMap indexMap;
+	uint64_t stageInfo;
+	uint64_t index;
 
 	D3D11_Shader* shader;
 	UniformDesc* srcDesc;
 	UniformDesc* dstDesc;
-	UniformDesc* tmpDesc;
 	for (uint8_t i = 0; i < SHADER_COUNT; ++i)
 	{
 		shader = m_shaders[i];
@@ -69,50 +70,55 @@ void D3D11_Program::link()
 		for (size_t j = 0; j < uniforms.size(); ++j)
 		{
 			srcDesc = uniforms[j];
+			// 先求出索引
+			if(srcDesc->isVariable())
+			{
+				dstDesc = uniforms[srcDesc->index];
+				index = indexMap[dstDesc->name];
+				stageInfo = (index << 32) + srcDesc->offset;
+			}
+			else
+			{
+				index = indexMap[srcDesc->name];
+				stageInfo = srcDesc->slot;
+			}
+
 			UniformMap::iterator itor = m_uniformMap.find(srcDesc->name);
 			// 相同名字的必须有相同的类型和数组个数
 			if (itor != m_uniformMap.end())
 			{
-				tmpDesc = itor->second[0];
-				if (tmpDesc->type != srcDesc->type || tmpDesc->arrays != tmpDesc->arrays)
+				dstDesc = itor->second;
+				if (dstDesc->type != srcDesc->type ||
+					dstDesc->arrays != srcDesc->arrays ||
+					dstDesc->bytes != srcDesc->bytes)
 					continue;
-			}
 
-			dstDesc = new UniformDesc();
-			*dstDesc = *srcDesc;
-			// 设置索引
-			if (srcDesc->isVariable())
-			{
-				// find owner, must exist!
-				tmpDesc = uniforms[srcDesc->index];
-				dstDesc->index = indexs[tmpDesc->name];
+				dstDesc->stages[i] = stageInfo;
 			}
 			else
 			{
-				dstDesc->index = indexs[srcDesc->name];
-			}
+				dstDesc = new UniformDesc();
+				*dstDesc = *srcDesc;
+				dstDesc->stages[i] = stageInfo;
 
-			// 插入
-			if (itor == m_uniformMap.end())
-			{
-				// 不存在，新建
+				m_uniformMap[dstDesc->name] = dstDesc;
+				// 创建Descriptor
 				if (!srcDesc->isVariable())
 				{
 					m_uniformVec.push_back(dstDesc);
-					indexs[dstDesc->name] = m_uniformVec.size() - 1;
+					indexMap[dstDesc->name] = m_uniformVec.size() - 1;
 				}
 			}
-			m_uniformMap[srcDesc->name].push_back(dstDesc);
 		}
 	}
 }
 
-UniformVec* D3D11_Program::getUniformVecByName(const String& name)
+UniformDesc* D3D11_Program::getUniformByName(const String& name)
 {
 	UniformMap::iterator itor = m_uniformMap.find(name);
 	if (itor == m_uniformMap.end())
 		return NULL;
-	return &(itor->second);
+	return itor->second;
 }
 
 CU_NS_END

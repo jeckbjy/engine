@@ -119,7 +119,7 @@ Pipeline* D3D11_Device::newPipeline(const PipelineDesc& desc)
 
 DescriptorSet* D3D11_Device::newDescriptorSet(Pipeline* pipeline)
 {
-	return new D3D11_DescriptorSet(((D3D11_Pipeline*)pipeline)->getProgram());
+	return new D3D11_DescriptorSet(((D3D11_Pipeline*)pipeline)->getProgram(), this);
 }
 
 CommandBuffer* D3D11_Device::newCommandBuffer()

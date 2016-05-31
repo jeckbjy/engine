@@ -112,7 +112,7 @@ class CU_API DescriptorSet : public Object
 public:
 	virtual ~DescriptorSet(){}
 	//virtual void setValue(const String& name, GpuBuffer* value, size_t index) = 0;
-	virtual void setValue(const String& name, Texture* texture, size_t index) = 0;
+	virtual void setValue(const String& name, Texture* texture, size_t index = 0) = 0;
 	virtual void setValue(const String& name, void* data, size_t size, size_t offset) = 0;
 };
 
@@ -183,10 +183,8 @@ public:
 	virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
 	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
-	virtual ShaderStage*		newProgram() = 0;
+	virtual ShaderStage*	newProgram() = 0;
 	virtual Pipeline*		newPipeline(const PipelineDesc& desc) = 0;
-	//virtual Pipeline*		newPipeline(const ComputePipelineDesc& desc) = 0;
-	//virtual Pipeline*		newPipeline(const GraphicsPipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Pipeline* pipeline) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;

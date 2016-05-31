@@ -208,6 +208,8 @@ struct CU_API InputElement
 };
 
 // shader reflection
+// StageInfoMap:两个地方可能用到,1:desicroptor:slot,2:variable:index+offset
+typedef std::map<uint8_t, uint64_t> StageInfoMap;
 struct UniformDesc
 {
 	UniformType	type;
@@ -217,6 +219,7 @@ struct UniformDesc
 	uint32_t	bytes;
 	uint32_t	offset;
 	uint32_t	index;
+	StageInfoMap stages;
 	UniformDesc()
 		: type(UT_UNKNOWN)
 		, slot(UINT32_MAX)

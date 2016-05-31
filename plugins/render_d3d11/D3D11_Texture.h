@@ -12,7 +12,8 @@ public:
 	void* map(PixelData& data, MAP_FLAG flag, uint mipLevel = 0, uint face = 0);
 	void unmap();
 
-	ID3D11DepthStencilView* getDSV() { return (ID3D11DepthStencilView*)m_view; }
+	ID3D11DepthStencilView*		getDSV() { return (ID3D11DepthStencilView*)m_view; }
+	ID3D11ShaderResourceView*	getSRV() { return (ID3D11ShaderResourceView*)m_view; }
 
 private:
 	void create1D(ID3D11DeviceN* device, const TextureDesc& desc);

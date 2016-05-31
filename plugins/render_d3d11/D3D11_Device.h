@@ -23,7 +23,7 @@ public:
 	RenderTarget*	newRenderWindow(Window* hwnd);
 	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	ShaderStage*		newProgram();
+	ShaderStage*	newProgram();
 	Pipeline*		newPipeline(const PipelineDesc& desc);
 	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
 	CommandBuffer*	newCommandBuffer();

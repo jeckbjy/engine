@@ -4,7 +4,7 @@
 CU_NS_BEGIN
 
 class D3D11_Shader;
-typedef std::map<String, UniformVec> UniformMap;
+typedef std::map<String, UniformDesc*> UniformMap;
 class CU_D3D11_API D3D11_Program : public ShaderProgram
 {
 public:
@@ -18,7 +18,8 @@ public:
 	D3D11_Shader* getVS() { return m_shaders[SHADER_VERTEX]; }
 
 	UniformVec& getUniformVec() { return m_uniformVec; }
-	UniformVec* getUniformVecByName(const String& name);
+	UniformDesc* getUniformByName(const String& name);
+	UniformDesc* getUniformByIndex(size_t index) { return m_uniformVec[index]; }
 
 private:
 	D3D11_Shader*	m_shaders[SHADER_COUNT];
