@@ -14,7 +14,7 @@ public:
 	~D3D11_DescriptorSet();
 
 	void setValue(const String& name, Texture* texture, size_t index);
-	void setValue(const String& name, void* data, size_t size, size_t offset);
+	void setValue(const String& name, const void* data, size_t size, size_t offset);
 
 	void bind(ID3D11ContextN* context);
 

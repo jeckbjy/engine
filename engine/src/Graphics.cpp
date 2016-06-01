@@ -17,6 +17,33 @@ GpuBuffer::~GpuBuffer()
 
 }
 
+void GpuBuffer::write(const void* data, size_t len, size_t offset /* = 0 */)
+{
+	if (offset >= m_bytes)
+		return;
+
+	size_t end = offset + len;
+	if (end > m_bytes)
+		len = m_bytes - offset;
+	char* ptr = (char*)map(offset, len, MAP_WRITE_ONLY);
+	memcpy(ptr, data, len);
+	unmap();
+}
+
+void GpuBuffer::read(void* data, size_t len, size_t offset /* = 0 */)
+{
+	if (offset >= m_bytes)
+		return;
+
+	size_t end = offset + len;
+	if (end > m_bytes)
+		len = m_bytes - offset;
+
+	char* ptr = (char*)map(offset, len, MAP_READ_ONLY);
+	memcpy(data, ptr, len);
+	unmap();
+}
+
 uint32_t InputLayout::hash(const InputElement* elements, size_t count)
 {
 	return 0;

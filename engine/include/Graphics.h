@@ -21,6 +21,9 @@ public:
 	virtual void* map(size_t offset, size_t len, MAP_FLAG access) = 0;
 	virtual void  unmap() = 0;
 
+	virtual void write(const void* data, size_t len, size_t offset = 0);
+	virtual void read(void* data, size_t len, size_t offset = 0);
+
 	size_t bytes() const { return m_bytes; }
 	size_t count() const { return m_count; }
 	size_t stride() const { return m_stride; }
@@ -113,7 +116,7 @@ public:
 	virtual ~DescriptorSet(){}
 	//virtual void setValue(const String& name, GpuBuffer* value, size_t index) = 0;
 	virtual void setValue(const String& name, Texture* texture, size_t index = 0) = 0;
-	virtual void setValue(const String& name, void* data, size_t size, size_t offset) = 0;
+	virtual void setValue(const String& name, const void* data, size_t size, size_t offset) = 0;
 };
 
 // 渲染管线,计算管线

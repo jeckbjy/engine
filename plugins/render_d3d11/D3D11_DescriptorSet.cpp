@@ -63,7 +63,7 @@ void D3D11_DescriptorSet::setValue(const String& name, Texture* texture, size_t 
 	descriptor.textures[index] = (D3D11_Texture*)texture;
 }
 
-void D3D11_DescriptorSet::setValue(const String& name, void* data, size_t size, size_t offset)
+void D3D11_DescriptorSet::setValue(const String& name, const void* data, size_t size, size_t offset)
 {
 	UniformDesc* desc = m_program->getUniformByName(name);
 	if (!desc || !desc->isVariable())
@@ -87,6 +87,7 @@ void D3D11_DescriptorSet::setValue(const String& name, void* data, size_t size, 
 			continue;
 		D3D11_Buffer* buffer = descriptor->buffer;
 		// ¿½±´Êý¾Ý
+		buffer->write(data, size, desc->offset + offset);
 	}
 }
 
