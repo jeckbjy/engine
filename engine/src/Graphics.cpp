@@ -91,4 +91,23 @@ bool InputLayout::equal(const InputElement* elements, size_t count) const
 	return true;
 }
 
+void FrameBuffer::attach(size_t att, Texture* attachment)
+{
+	if (att >= ATTACHMENT_MAX)
+		return;
+	if (att >= m_attachments.size())
+		m_attachments.resize(att + 1);
+	m_attachments[att] = attachment;
+	m_dirty = true;
+}
+
+void FrameBuffer::detach(size_t att)
+{
+	if (att < m_attachments.size())
+	{
+		m_attachments[att] = NULL;
+		m_dirty = true;
+	}
+}
+
 CU_NS_END

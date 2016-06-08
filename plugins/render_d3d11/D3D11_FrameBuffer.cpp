@@ -5,6 +5,8 @@
 CU_NS_BEGIN
 
 D3D11_FrameBuffer::D3D11_FrameBuffer()
+	: FrameBuffer()
+	, m_dsv(NULL)
 {
 
 }
@@ -16,22 +18,11 @@ D3D11_FrameBuffer::~D3D11_FrameBuffer()
 
 void D3D11_FrameBuffer::bind(D3D11_CommandBuffer* cmds)
 {
+	ID3D11ContextN* context = cmds->getContext();
 
-}
-
-void D3D11_FrameBuffer::attach(size_t att, Texture* attachment)
-{
-	if (att >= ATT_COLOR7)
+	if (m_rtv.empty())
 		return;
-	if (att > m_attachments.size())
-		m_attachments.resize(att);
-	m_attachments[att] = attachment;
-}
-
-void D3D11_FrameBuffer::detach(size_t att)
-{
-	if (att < m_attachments.size())
-		m_attachments[att] = NULL;
+	context->OMSetRenderTargets(m_rtv.size(), &m_rtv[0], m_dsv);
 }
 
 void D3D11_FrameBuffer::update()
@@ -49,7 +40,7 @@ void D3D11_FrameBuffer::update()
 		m_dsv = tex->getDSV();
 	}
 
-	m_rtv.resize(m_attachments.size());
+	m_rtv.resize(m_attachments.size() - 1);
 	for (size_t i = 1; i < m_attachments.size(); ++i)
 	{
 		D3D11_Texture* tex = (D3D11_Texture*)m_attachments[i].get();

@@ -39,9 +39,6 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderState.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderWindow.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderWindow.cpp">

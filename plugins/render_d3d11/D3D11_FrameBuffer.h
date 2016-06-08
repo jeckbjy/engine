@@ -11,21 +11,13 @@ public:
 	D3D11_FrameBuffer();
 	~D3D11_FrameBuffer();
 
-	void attach(size_t att, Texture* attachment);
-	void detach(size_t att);
-
 	void bind(D3D11_CommandBuffer* cmds);
 
 private:
 	void update();
 
 private:
-	typedef std::vector<ID3D11RenderTargetView*> RenderTargetViewVec;
-
-	typedef SharedPtr<Texture>		TexturePtr;
-	typedef std::vector<TexturePtr> TextureVec;
-	TextureVec m_attachments;
-	bool m_dirty;
+	typedef Vector<ID3D11RenderTargetView*> RenderTargetViewVec;
 
 	ID3D11DepthStencilView* m_dsv;
 	RenderTargetViewVec		m_rtv;

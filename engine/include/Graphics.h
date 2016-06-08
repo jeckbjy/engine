@@ -82,27 +82,31 @@ class CU_API RenderTarget : public Object
 	DECLARE_RTTI(RenderTarget, Object, OBJ_ID_RENDER_TARGET);
 public:
 	virtual ~RenderTarget(){}
-	//virtual void present() = 0;
-	//virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, int32_t stencil = 0) = 0;
 };
 
 class CU_API FrameBuffer : public RenderTarget
 {
+	DECLARE_RTTI(FrameBuffer, RenderTarget, OBJ_ID_FRAMEBUFFER);
 public:
+	FrameBuffer() :m_dirty(false){}
 	virtual ~FrameBuffer(){}
-	virtual void attach(size_t att, Texture* attachment) = 0;
-	virtual void detach(size_t att) = 0;
+
+	virtual void attach(size_t att, Texture* attachment);
+	virtual void detach(size_t att);
 
 protected:
-
+	typedef SharedPtr<Texture>	TexturePtr;
+	typedef Vector<TexturePtr>	TextureVec;
+	TextureVec	m_attachments;
+	bool		m_dirty;
 };
 
 class CU_API SwapChain : public RenderTarget
 {
+	DECLARE_RTTI(SwapChain, RenderTarget, OBJ_ID_SWAPCHAIN);
 public:
 	virtual ~SwapChain(){}
 	virtual void present() = 0;
-	virtual FrameBuffer* getFrameBuffer() = 0;
 };
 
 

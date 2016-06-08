@@ -298,6 +298,8 @@ enum AttachmentType
 	ATT_COLOR5,
 	ATT_COLOR6,
 	ATT_COLOR7,
+
+	ATTACHMENT_MAX,
 };
 
 // PrimitiveTopology 拓扑结构,详细说明：http://shiba.hpe.sh.cn/jiaoyanzu/wuli/ShowArticle.aspx?articleId=1518&classId=4
