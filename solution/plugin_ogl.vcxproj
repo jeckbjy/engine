@@ -105,6 +105,7 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_Program.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_RenderTexture.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_RenderWindow.h" />
+    <ClInclude Include="..\plugins\render_ogl\OGL_SwapChain.h" />
     <ClInclude Include="..\plugins\render_ogl\OGL_Texture.h" />
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glew.h" />
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glxew.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="..\plugins\render_ogl\OGL_Program.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_RenderTexture.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_RenderWindow.cpp" />
+    <ClCompile Include="..\plugins\render_ogl\OGL_SwapChain.cpp" />
     <ClCompile Include="..\plugins\render_ogl\OGL_Texture.cpp" />
     <ClCompile Include="..\plugins\render_ogl\glew\src\glew.c" />
   </ItemGroup>

@@ -20,8 +20,9 @@ public:
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
-	RenderTarget*	newRenderWindow(Window* hwnd);
-	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
+	//RenderTarget*	newRenderWindow(Window* hwnd);
+	//RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
+	FrameBuffer*	newFrameBuffer();
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
 	ShaderStage*	newProgram();
 	Pipeline*		newPipeline(const PipelineDesc& desc);

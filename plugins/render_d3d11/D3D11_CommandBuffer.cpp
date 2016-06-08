@@ -3,6 +3,7 @@
 #include "D3D11_Pipeline.h"
 #include "D3D11_InputLayout.h"
 #include "D3D11_DescriptorSet.h"
+#include "D3D11_FrameBuffer.h"
 
 CU_NS_BEGIN
 
@@ -45,10 +46,10 @@ void D3D11_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	m_stencilRef = reference;
 }
 
-void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
-{
-	((D3D11RenderTarget*)target)->bind(m_context);
-}
+//void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
+//{
+//	((D3D11RenderTarget*)target)->bind(m_context);
+//}
 
 void D3D11_CommandBuffer::setTopology(Topology primitive)
 {
@@ -93,6 +94,11 @@ void D3D11_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 	D3D11_Buffer* dx_buffer = (D3D11_Buffer*)buffer;
 	DXGI_FORMAT format = buffer->isIndex16() ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 	m_context->IASetIndexBuffer(dx_buffer->native(), format, offset);
+}
+
+void D3D11_CommandBuffer::setFrameBuffer(FrameBuffer* frames)
+{
+	((D3D11_FrameBuffer*)frames)->bind(this);
 }
 
 void D3D11_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)

@@ -82,9 +82,29 @@ class CU_API RenderTarget : public Object
 	DECLARE_RTTI(RenderTarget, Object, OBJ_ID_RENDER_TARGET);
 public:
 	virtual ~RenderTarget(){}
-	virtual void present() = 0;
-	virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, int32_t stencil = 0) = 0;
+	//virtual void present() = 0;
+	//virtual void clear(uint32_t flags = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, int32_t stencil = 0) = 0;
 };
+
+class CU_API FrameBuffer : public RenderTarget
+{
+public:
+	virtual ~FrameBuffer(){}
+	virtual void attach(size_t att, Texture* attachment) = 0;
+	virtual void detach(size_t att) = 0;
+
+protected:
+
+};
+
+class CU_API SwapChain : public RenderTarget
+{
+public:
+	virtual ~SwapChain(){}
+	virtual void present() = 0;
+	virtual FrameBuffer* getFrameBuffer() = 0;
+};
+
 
 class CU_API ShaderStage : public Object
 {
@@ -146,12 +166,12 @@ public:
 	virtual void setScissor(int x, int y, size_t w, size_t h) = 0;
 	virtual void setBlendFactor(const float factors[4]) = 0;
 	virtual void setStencilRef(StencilFaceFlags mask, size_t reference) = 0;
-	virtual void setRenderTarget(RenderTarget* target) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setInputLayout(InputLayout* layout) = 0;
 	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset) = 0;
+	virtual void setFrameBuffer(FrameBuffer* frames) = 0;
 	virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset) = 0;
 	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset) = 0;
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
@@ -183,14 +203,15 @@ public:
 
 	virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
 	virtual Texture*		newTexture(const TextureDesc& desc) = 0;
-	virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
-	virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
+	//virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
+	//virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
 	virtual ShaderStage*	newProgram() = 0;
 	virtual Pipeline*		newPipeline(const PipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Pipeline* pipeline) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
+	virtual FrameBuffer*	newFrameBuffer() = 0;
 
 	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
 	{

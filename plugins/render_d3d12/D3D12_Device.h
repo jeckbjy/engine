@@ -11,14 +11,16 @@ public:
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
-	RenderTarget*	newRenderWindow(Window* hwnd);
-	RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
+	//RenderTarget*	newRenderWindow(Window* hwnd);
+	//RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	ShaderStage*		newProgram();
+	ShaderStage*	newProgram();
 	Pipeline*		newPipeline(const PipelineDesc& desc);
 	DescriptorSet*	newDescriptorSet(ShaderStage* prog);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
+	FrameBuffer*	newFrameBuffer();
+	SwapChain*		newSwapChain();
 
 	ID3D12Device* getDevice() { return m_device; }
 	ID3D12CommandAllocator* getAllocator() { return m_allocator; }

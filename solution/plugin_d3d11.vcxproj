@@ -96,6 +96,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_CommandBuffer.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_FrameBuffer.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Graphics.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_InputLayout.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderTexture.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderWindow.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_StateMap.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_SwapChain.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +116,7 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_CommandBuffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Device.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_FrameBuffer.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Graphics.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_InputLayout.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Mapping.cpp" />
@@ -124,6 +127,7 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderState.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderTexture.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderWindow.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_SwapChain.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -197,12 +197,6 @@ enum ClearMask
 	CLEAR_ALL = 0x07
 };
 
-enum AttachmentType
-{
-	ATT_DepthStencil,
-	ATT_Color,
-};
-
 // 编程语言
 enum GpuLanguage
 {
@@ -291,6 +285,19 @@ enum IndexType
 {
 	INDEX16,
 	INDEX32,
+};
+
+enum AttachmentType
+{
+	ATT_DEPTH_STENCIL,
+	ATT_COLOR0,
+	ATT_COLOR1,
+	ATT_COLOR2,
+	ATT_COLOR3,
+	ATT_COLOR4,
+	ATT_COLOR5,
+	ATT_COLOR6,
+	ATT_COLOR7,
 };
 
 // PrimitiveTopology 拓扑结构,详细说明：http://shiba.hpe.sh.cn/jiaoyanzu/wuli/ShowArticle.aspx?articleId=1518&classId=4

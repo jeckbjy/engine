@@ -57,6 +57,12 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Program.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_SwapChain.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Buffer.cpp">
@@ -102,6 +108,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Program.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_SwapChain.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

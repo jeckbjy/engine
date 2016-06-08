@@ -7,11 +7,13 @@
 #	include <agile.h>
 #elif defined(CU_OS_ANDROID)
 #	include <android/native_window.h>
-#elif defined(CU_HAS_X11)
+#elif defined(CU_USE_X11)
 #	include <X11/X.h>
 #	include <X11/Xlib.h>
 #	include <X11/Xutil.h>
 #	include <X11/keysym.h>
+#elif defined(CU_USE_XCB)
+#	include <xcb/xcb.h>
 #endif
 
 CU_NS_BEGIN
@@ -22,10 +24,13 @@ typedef HWND window_t;
 #elif defined(CU_OS_WINRT)
 typedef Platform::Agile<Windows::UI::Core::CoreWindow> window_t;
 #elif defined(CU_OS_ANDROID)
-typedef ::ANativeWindow* window_t;
-#elif defined(CU_HAS_X11)
-typedef ::Window	window_t;
-typedef ::Display	display_t;
+typedef ::ANativeWindow*	window_t;
+#elif defined(CU_USE_X11)
+typedef ::Window			window_t;
+typedef ::Display			display_t;
+#elif defined(CU_USE_XCB)
+typedef ::xcb_window_t		window_t;
+typedef ::xcb_connection_t* connection_t;
 #endif
 
 enum WindowBorder

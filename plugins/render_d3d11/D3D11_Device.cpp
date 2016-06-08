@@ -5,6 +5,7 @@
 #include "D3D11_Texture.h"
 #include "D3D11_Program.h"
 #include "D3D11_Pipeline.h"
+#include "D3D11_FrameBuffer.h"
 #include "D3D11_InputLayout.h"
 #include "D3D11_RenderState.h"
 #include "D3D11_CommandBuffer.h"
@@ -84,14 +85,19 @@ Texture* D3D11_Device::newTexture(const TextureDesc& desc)
 	return new D3D11_Texture(desc, m_device);
 }
 
-RenderTarget* D3D11_Device::newRenderWindow(Window* hwnd)
-{
-	return NULL;
-}
+//RenderTarget* D3D11_Device::newRenderWindow(Window* hwnd)
+//{
+//	return NULL;
+//}
+//
+//RenderTarget* D3D11_Device::newRenderTexture(Texture* rtv, Texture* dsv)
+//{
+//	return NULL;
+//}
 
-RenderTarget* D3D11_Device::newRenderTexture(Texture* rtv, Texture* dsv)
+FrameBuffer* D3D11_Device::newFrameBuffer()
 {
-	return NULL;
+	return new D3D11_FrameBuffer();
 }
 
 InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t count)

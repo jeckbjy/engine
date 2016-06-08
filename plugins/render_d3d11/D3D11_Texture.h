@@ -14,6 +14,7 @@ public:
 
 	ID3D11DepthStencilView*		getDSV() { return (ID3D11DepthStencilView*)m_view; }
 	ID3D11ShaderResourceView*	getSRV() { return (ID3D11ShaderResourceView*)m_view; }
+	ID3D11RenderTargetView*		getRTV() { return (ID3D11RenderTargetView*)m_view; }
 
 private:
 	void create1D(ID3D11DeviceN* device, const TextureDesc& desc);

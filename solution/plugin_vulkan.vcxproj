@@ -98,12 +98,14 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_CommandBuffer.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Device.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_FrameBuffer.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Graphics.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_InputLayout.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Mapping.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Pipeline.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Program.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_SwapChain.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h" />
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h" />
   </ItemGroup>
@@ -113,12 +115,14 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_CommandQueue.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_FrameBuffer.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Graphics.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_InputLayout.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_SwapChain.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

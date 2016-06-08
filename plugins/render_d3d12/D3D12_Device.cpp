@@ -3,6 +3,8 @@
 #include "D3D12_Texture.h"
 #include "D3D12_CommandBuffer.h"
 #include "D3D12_CommandQueue.h"
+#include "D3D12_SwapChain.h"
+#include "D3D12_FrameBuffer.h"
 #include "Engine.h"
 
 CU_NS_BEGIN
@@ -42,15 +44,15 @@ Texture* D3D12_Device::newTexture(const TextureDesc& desc)
 	return new D3D12_Texture(m_device, desc);
 }
 
-RenderTarget* D3D12_Device::newRenderWindow(Window* hwnd)
-{
-	return NULL;
-}
-
-RenderTarget* D3D12_Device::newRenderTexture(Texture* rtv, Texture* dsv)
-{
-	return NULL;
-}
+//RenderTarget* D3D12_Device::newRenderWindow(Window* hwnd)
+//{
+//	return NULL;
+//}
+//
+//RenderTarget* D3D12_Device::newRenderTexture(Texture* rtv, Texture* dsv)
+//{
+//	return NULL;
+//}
 
 InputLayout* D3D12_Device::newInputLayout(const InputElement* elements, size_t count)
 {
@@ -80,6 +82,16 @@ CommandBuffer* D3D12_Device::newCommandBuffer()
 CommandQueue* D3D12_Device::newCommandQueue()
 {
 	return new D3D12_CommondQueue(m_device);
+}
+
+FrameBuffer* D3D12_Device::newFrameBuffer()
+{
+	return new D3D12_FrameBuffer();
+}
+
+SwapChain* D3D12_Device::newSwapChain()
+{
+	return new D3D12_SwapChain();
 }
 
 CU_NS_END

@@ -1,5 +1,13 @@
 #pragma once
 
+#ifdef _WIN32
+#define VK_USE_PLATFORM_WIN32_KHR
+#elif defined(__ANDROID__)
+#define VK_USE_PLATFORM_ANDROID_KHR
+#else
+#define VK_USE_PLATFORM_XCB_KHR
+#endif
+
 #ifndef CU_VULKAN_LIB
 #define CU_VULKAN_DLL
 #endif
@@ -16,9 +24,8 @@
 #pragma comment(lib, "plugin_vulkan.lib")
 #endif
 
-#include <vulkan/vulkan.h>
-
 #include "API.h"
 #include "Graphics.h"
+#include <vulkan/vulkan.h>
 
 #define VK_CHECK(result, info) if(result != VK_SUCCESS) throw std::runtime_error(info)

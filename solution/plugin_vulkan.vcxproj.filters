@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
@@ -45,6 +45,12 @@
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\VK_FrameBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\VK_SwapChain.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\plugins\render_vulkan\VK_Buffer.cpp">
@@ -81,6 +87,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_vulkan\VK_FrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_vulkan\VK_SwapChain.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
