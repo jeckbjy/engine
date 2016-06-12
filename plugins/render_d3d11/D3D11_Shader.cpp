@@ -21,7 +21,7 @@ D3D11_Shader::~D3D11_Shader()
 	D3D11_RELEASE(m_shader);
 }
 
-bool D3D11_Shader::compile(const ProgramDesc& desc)
+bool D3D11_Shader::compile(const ShaderDesc& desc)
 {
 	ID3DBlob* errors = NULL;
 	UINT flags = 0;

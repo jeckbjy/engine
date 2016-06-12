@@ -3,12 +3,12 @@
 #include "OGL_Program.h"
 #include "OGL_Texture.h"
 #include "OGL_Buffer.h"
-#include "OGL_RenderWindow.h"
-#include "OGL_RenderTexture.h"
 #include "OGL_InputLayout.h"
 #include "OGL_CommandBuffer.h"
 #include "OGL_Pipeline.h"
 #include "OGL_DescriptorSet.h"
+#include "OGL_FrameBuffer.h"
+#include "OGL_SwapChain.h"
 #include "Window.h"
 
 CU_NS_BEGIN
@@ -97,16 +97,6 @@ Texture* OGL_Device::newTexture(const TextureDesc& desc)
 	return new OGL_Texture(desc);
 }
 
-RenderTarget* OGL_Device::newRenderWindow(Window* wnd)
-{
-	return new OGL_RenderWindow(wnd);
-}
-
-RenderTarget* OGL_Device::newRenderTexture(Texture* color, Texture* depth_stencil)
-{
-	return new OGL_RenderTexture(color, depth_stencil);
-}
-
 DescriptorSet* OGL_Device::newDescriptorSet(Pipeline* pipeline)
 {
 	return new OGL_DescriptorSet(pipeline);
@@ -117,9 +107,14 @@ InputLayout* OGL_Device::newInputLayout(const InputElement* elements, size_t cou
 	return new OGL_InputLayout(elements, count);
 }
 
-ShaderStage* OGL_Device::newProgram()
+ShaderStage* OGL_Device::newShader()
 {
 	return new OGL_Shader();
+}
+
+ShaderProgram* OGL_Device::newProgram()
+{
+	return new OGL_Program();
 }
 
 Pipeline* OGL_Device::newPipeline(const PipelineDesc& desc)
@@ -137,9 +132,14 @@ CommandQueue* OGL_Device::newCommandQueue()
 	return new OGLCommandQueue();
 }
 
-OGL_Program* OGL_Device::getProgramPipeline()
+FrameBuffer* OGL_Device::newFrameBuffer()
 {
-	return NULL;
+	return new OGL_FrameBuffer();
+}
+
+SwapChain* OGL_Device::newSwapChain(Window* wnd)
+{
+	return new OGL_SwapChain(wnd);
 }
 
 CU_NS_END

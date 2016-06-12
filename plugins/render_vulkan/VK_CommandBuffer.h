@@ -15,12 +15,15 @@ public:
 	void setScissor(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t reference);
+	void setDescriptorSet(DescriptorSet* descriptors);
 
 	void setPipeline(Pipeline* pipeline);
 	void setInputLayout(InputLayout* layout);
 
 	void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets);
-	void setIndexBuffer(IndexBuffer* buffer);
+	void setIndexBuffer(IndexBuffer* buffer, size_t offset);
+
+	void setRenderTarget(RenderTarget* target);
 
 	void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset);
 	void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset);

@@ -10,6 +10,9 @@ public:
 	VK_Texture(VK_Device* device, const TextureDesc& desc);
 	~VK_Texture();
 
+	void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0);
+	void  unmap();
+
 private:
 	VK_Device*		m_device;
 	VkImage			m_image;

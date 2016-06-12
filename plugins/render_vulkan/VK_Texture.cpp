@@ -62,4 +62,14 @@ VK_Texture::~VK_Texture()
 		vkFreeMemory(m_device->native(), m_memory, NULL);
 }
 
+void* VK_Texture::map(PixelData& data, MAP_FLAG flag, uint level /* = 0 */, uint face /* = 0 */)
+{
+	return NULL;
+}
+
+void VK_Texture::unmap()
+{
+
+}
+
 CU_NS_END

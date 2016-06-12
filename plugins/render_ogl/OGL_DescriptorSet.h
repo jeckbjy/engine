@@ -12,7 +12,7 @@ public:
 	~OGL_DescriptorSet();
 
 	void setValue(const String& name, Texture* texture, size_t index);
-	void setValue(const String& name, void* data, size_t size, size_t offset);
+	void setValue(const String& name, const void* data, size_t size, size_t offset);
 
 protected:
 	OGL_Pipeline* m_pipeline;

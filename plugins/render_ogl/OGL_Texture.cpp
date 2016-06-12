@@ -90,6 +90,27 @@ void OGL_Texture::active(GLint index)
 	glBindTexture(m_target, m_handle);
 }
 
+void OGL_Texture::bindToFrameBuffer(GLenum attachment)
+{
+	switch (m_target)
+	{
+	case GL_TEXTURE_1D:
+		glFramebufferTexture1D(GL_FRAMEBUFFER, attachment, 0, m_handle, 0);
+		break;
+	case GL_TEXTURE_2D:
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, 0, m_handle, 0);
+		break;
+	case GL_TEXTURE_2D_MULTISAMPLE:
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, 0, m_handle, 0);
+		break;
+	case GL_TEXTURE_CUBE_MAP:
+	case GL_TEXTURE_3D:
+	default:
+		glFramebufferTexture(GL_FRAMEBUFFER, attachment, m_handle, 0);
+		break;
+	}
+}
+
 void* OGL_Texture::map(PixelData& data, MAP_FLAG flag, uint level, uint face)
 {
 	return 0;

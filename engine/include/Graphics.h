@@ -97,7 +97,8 @@ public:
 protected:
 	typedef SharedPtr<Texture>	TexturePtr;
 	typedef Vector<TexturePtr>	TextureVec;
-	TextureVec	m_attachments;
+	TexturePtr	m_depthStencil;
+	TextureVec	m_colors;
 	bool		m_dirty;
 };
 
@@ -117,7 +118,7 @@ public:
 	ShaderStage(){}
 	virtual ~ShaderStage(){}
 
-	virtual bool compile(const ProgramDesc& desc) = 0;
+	virtual bool compile(const ShaderDesc& desc) = 0;
 	ShaderType getShaderType() const { return m_type; }
 
 protected:
@@ -165,7 +166,6 @@ class CU_API CommandBuffer : public Object
 public:
 	virtual ~CommandBuffer(){}
 
-	virtual void reset() = 0;
 	virtual void setViewport(int x, int y, size_t w, size_t h) = 0;
 	virtual void setScissor(int x, int y, size_t w, size_t h) = 0;
 	virtual void setBlendFactor(const float factors[4]) = 0;
@@ -175,7 +175,7 @@ public:
 	virtual void setInputLayout(InputLayout* layout) = 0;
 	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset) = 0;
-	virtual void setFrameBuffer(FrameBuffer* frames) = 0;
+	virtual void setRenderTarget(RenderTarget* target) = 0;
 	virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset) = 0;
 	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset) = 0;
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
@@ -195,7 +195,7 @@ class CU_API CommandQueue : public Object
 public:
 	virtual ~CommandQueue(){}
 	virtual void submit(CommandBuffer* cmds, Fence* fence) = 0;
-	virtual void waitIdle() = 0;
+	//virtual void waitIdle() = 0;
 };
 
 // µ×²ãäÖÈ¾½Ó¿Ú,mean Device create objs
@@ -207,15 +207,15 @@ public:
 
 	virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
 	virtual Texture*		newTexture(const TextureDesc& desc) = 0;
-	//virtual RenderTarget*	newRenderWindow(Window* hwnd) = 0;
-	//virtual RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv = NULL) = 0;
 	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
-	virtual ShaderStage*	newProgram() = 0;
+	virtual ShaderStage*	newShader() = 0;
+	virtual ShaderProgram*	newProgram() = 0;
 	virtual Pipeline*		newPipeline(const PipelineDesc& desc) = 0;
 	virtual DescriptorSet*	newDescriptorSet(Pipeline* pipeline) = 0;
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
 	virtual FrameBuffer*	newFrameBuffer() = 0;
+	virtual SwapChain*		newSwapChain(Window* wnd) = 0;
 
 	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
 	{
@@ -237,8 +237,6 @@ class CU_API Graphics : public Object
 
 public:
 	virtual ~Graphics(){}
-
-	ShaderStage* newProgram(const ProgramDesc& desc);
 
 	Device* getDevice() { return NULL; }
 

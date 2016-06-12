@@ -12,7 +12,7 @@ VK_CommandQueue::~VK_CommandQueue()
 
 }
 
-void VK_CommandQueue::submit()
+void VK_CommandQueue::submit(CommandBuffer* cmds, Fence* fence)
 {
 
 }

@@ -17,7 +17,7 @@ public:
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t stencilRef);
 	void setFrameBuffer(FrameBuffer* frames);
-	//void setRenderTarget(RenderTarget* target);
+	void setRenderTarget(RenderTarget* target);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
 	void setInputLayout(InputLayout* layout);

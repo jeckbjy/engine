@@ -1,4 +1,14 @@
 #include "VK_Device.h"
+#include "VK_Buffer.h"
+#include "VK_Texture.h"
+#include "VK_Program.h"
+#include "VK_Pipeline.h"
+#include "VK_InputLayout.h"
+#include "VK_FrameBuffer.h"
+#include "VK_SwapChain.h"
+#include "VK_DescriptorSet.h"
+#include "VK_CommandBuffer.h"
+#include "Vk_CommandQueue.h"
 
 CU_NS_BEGIN
 
@@ -143,6 +153,68 @@ void VK_Device::allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typ
 	info.memoryTypeIndex = memoryTypeIndex;
 
 	VK_CHECK(vkAllocateMemory(m_device, &info, NULL, &memory), "vkAllocateMemory fail!");
+}
+
+GpuBuffer* VK_Device::newBuffer(const BufferDesc& desc)
+{
+	return new VK_Buffer(this, desc);
+}
+
+Texture* VK_Device::newTexture(const TextureDesc& desc)
+{
+	return new VK_Texture(this, desc);
+}
+
+InputLayout* VK_Device::newInputLayout(const InputElement* elements, size_t count)
+{
+	return new VK_InputLayout(elements, count);
+}
+
+ShaderStage* VK_Device::newShader()
+{
+	return new VK_Shader(this);
+}
+
+ShaderProgram* VK_Device::newProgram()
+{
+	return new VK_Program();
+}
+
+Pipeline* VK_Device::newPipeline(const PipelineDesc& desc)
+{
+	VK_Program* prog = (VK_Program*)desc.program;
+	if (!prog)
+		return NULL;
+
+	if (prog->isCompute())
+		return new VK_ComputePipeline(m_device, desc);
+	else
+		return new VK_GraphicsPipeline(m_device, desc);
+}
+
+DescriptorSet* VK_Device::newDescriptorSet(Pipeline* pipeline)
+{
+	return NULL;
+}
+
+CommandBuffer* VK_Device::newCommandBuffer()
+{
+	return new VK_CommandBuffer();
+}
+
+CommandQueue* VK_Device::newCommandQueue()
+{
+	return new VK_CommandQueue();
+}
+
+FrameBuffer* VK_Device::newFrameBuffer()
+{
+	return new VK_FrameBuffer();
+}
+
+SwapChain* VK_Device::newSwapChain(Window* wnd)
+{
+	return new VK_SwapChain(wnd);
 }
 
 CU_NS_END

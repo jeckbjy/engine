@@ -9,7 +9,7 @@ public:
 	VK_CommandQueue();
 	~VK_CommandQueue();
 
-	void submit();
+	void submit(CommandBuffer* cmds, Fence* fence);
 	void wait();
 
 private:

@@ -37,6 +37,11 @@ void VK_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	vkCmdSetStencilReference(m_handle, (VkStencilFaceFlags)mask, (uint32_t)reference);
 }
 
+void VK_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
+{
+
+}
+
 void VK_CommandBuffer::setPipeline(Pipeline* pipeline)
 {
 	m_pipeline = pipeline->cast<VK_Pipeline>();
@@ -62,10 +67,15 @@ void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuff
 	vkCmdBindVertexBuffers(m_handle, startSlot, counts, vk_buffers ,vk_offsets);
 }
 
-void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer)
+void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 {
 	VK_Buffer* vk_buffer = buffer->cast<VK_Buffer>();
 	vkCmdBindIndexBuffer(m_handle, vk_buffer->native(), 0, vk_buffer->getIndexType());
+}
+
+void VK_CommandBuffer::setRenderTarget(RenderTarget* target)
+{
+
 }
 
 void VK_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)

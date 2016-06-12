@@ -58,7 +58,7 @@ void OGL_Shader::destroy()
 	}
 }
 
-bool OGL_Shader::compile(const ProgramDesc& desc)
+bool OGL_Shader::compile(const ShaderDesc& desc)
 {
 	destroy();
 

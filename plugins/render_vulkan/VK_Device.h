@@ -11,6 +11,18 @@ public:
 	VK_Device();
 	virtual ~VK_Device();
 
+	GpuBuffer*			newBuffer(const BufferDesc& desc);
+	Texture*			newTexture(const TextureDesc& desc);
+	InputLayout*		newInputLayout(const InputElement* elements, size_t count);
+	ShaderStage*		newShader();
+	ShaderProgram*		newProgram();
+	Pipeline*			newPipeline(const PipelineDesc& desc);
+	DescriptorSet*		newDescriptorSet(Pipeline* pipeline);
+	CommandBuffer*		newCommandBuffer();
+	CommandQueue*		newCommandQueue();
+	FrameBuffer*		newFrameBuffer();
+	SwapChain*			newSwapChain(Window* wnd);
+
 	void allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 
 	VkDevice& native() { return m_device; }

@@ -1,26 +1,12 @@
 #include "OGL_FrameBuffer.h"
+#include "OGL_Texture.h"
 
 CU_NS_BEGIN
 
-GLuint OGL_FrameBuffer::s_cur_fbo = 0;
-
-bool OGL_FrameBuffer::bindFBO(GLuint fbo)
+OGL_FrameBuffer::OGL_FrameBuffer()
+	: m_fbo(0)
 {
-	if (fbo != s_cur_fbo)
-	{
-		s_cur_fbo = fbo;
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		return true;
-	}
-	return false;
-}
-
-OGL_FrameBuffer::OGL_FrameBuffer(bool off_screen)
-:m_fbo(0)
-{
-	// 离线渲染
-	if (off_screen)
-		glGenFramebuffers(1, &m_fbo);
+	glGenFramebuffers(1, &m_fbo);
 }
 
 OGL_FrameBuffer::~OGL_FrameBuffer()
@@ -32,37 +18,44 @@ OGL_FrameBuffer::~OGL_FrameBuffer()
 	}
 }
 
-void OGL_FrameBuffer::clear(uint32_t flags, const Color& color, float depth, int32_t stencil)
+void OGL_FrameBuffer::bind()
 {
-	bindFBO(m_fbo);
-	// 需要根据当前的BlendState和DepthStencilState设置
-	if (flags & CLEAR_COLOR)
-	{// 更新颜色
-		glColorMask(true, true, true, true);
-		glClearColor(color.r, color.g, color.b, color.a);
-	}
-
-	if (flags & CLEAR_DEPTH)
-	{
-		glDepthMask(GL_TRUE);
-		glClearDepth(depth);
-	}
-
-	if (flags & CLEAR_STENCIL)
-	{
-		glStencilMask(0xFFFFFFFF);
-		glClearStencil(stencil);
-	}
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	if (m_dirty)
+		update();
 }
 
-void OGL_FrameBuffer::discard(uint32_t flags)
+void OGL_FrameBuffer::update()
 {
+	m_dirty = false;
+	if (m_colors.empty())
+		return;
 
-}
+	OGL_Texture* ds = (OGL_Texture*)(m_depthStencil.get());
+	if (ds)
+	{
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, ds->handle());
+	}
 
-void OGL_FrameBuffer::resize(uint32_t width, uint32_t height)
-{
-
+	OGL_Texture* tex;
+	GLenum attachments[8];
+	GLsizei maxSize = 0;
+	for (size_t i = 0; i < m_colors.size(); ++i)
+	{
+		tex = (OGL_Texture*)(m_colors[i].get());
+		if (tex)
+		{
+			tex->bindToFrameBuffer(GL_COLOR_ATTACHMENT0 + i);
+			attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+			maxSize = i + 1;
+		}
+		else
+		{
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, 0, 0);
+			attachments[i] = GL_NONE;
+		}
+	}
+	glDrawBuffers(maxSize, attachments);
 }
 
 CU_NS_END

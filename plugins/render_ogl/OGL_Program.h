@@ -3,14 +3,14 @@
 
 CU_NS_BEGIN
 
-class CU_OGL_API OGL_Program
+class CU_OGL_API OGL_Program : public ShaderProgram
 {
 public:
 	OGL_Program();
 	~OGL_Program();
 
-	void attach(OGL_Shader* shader);
-	bool link();
+	void attach(ShaderStage* stage);
+	void link();
 
 	void bind();
 
@@ -24,8 +24,6 @@ private:
 	ShaderMap	m_shaders;
 	// ½âÎö
 	GLint		m_attrs[SEMANTIC_MAX];
-
-
 };
 
 CU_NS_END

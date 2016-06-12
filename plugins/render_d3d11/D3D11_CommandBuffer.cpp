@@ -96,9 +96,9 @@ void D3D11_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 	m_context->IASetIndexBuffer(dx_buffer->native(), format, offset);
 }
 
-void D3D11_CommandBuffer::setFrameBuffer(FrameBuffer* frames)
+void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-	((D3D11_FrameBuffer*)frames)->bind(this);
+	m_target = target;
 }
 
 void D3D11_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)

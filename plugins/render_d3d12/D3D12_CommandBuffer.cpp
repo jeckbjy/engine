@@ -48,10 +48,10 @@ void D3D12_CommandBuffer::setFrameBuffer(FrameBuffer* frames)
 
 }
 
-//void D3D12_CommandBuffer::setRenderTarget(RenderTarget* target)
-//{
-//
-//}
+void D3D12_CommandBuffer::setRenderTarget(RenderTarget* target)
+{
+
+}
 
 void D3D12_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {

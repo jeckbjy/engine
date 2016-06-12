@@ -57,8 +57,9 @@ OGL_Program::~OGL_Program()
 	}
 }
 
-void OGL_Program::attach(OGL_Shader* shader)
+void OGL_Program::attach(ShaderStage* stage)
 {
+	OGL_Shader* shader = (OGL_Shader*)stage;
 	ShaderType type = shader->getShaderType();
 #ifdef CU_USE_SPO
 	glUseProgramStages(m_handle, mapping_bit(type), shader->native());
@@ -68,7 +69,7 @@ void OGL_Program::attach(OGL_Shader* shader)
 	m_shaders[type] = shader;
 }
 
-bool OGL_Program::link()
+void OGL_Program::link()
 {
 	bool successed = true;
 #ifdef CU_USE_SPO
@@ -88,7 +89,7 @@ bool OGL_Program::link()
 	//if (!parse_uniform(m_handle))
 	//	successed = false;
 #endif
-	return successed;
+	//return successed;
 }
 
 void OGL_Program::bind()

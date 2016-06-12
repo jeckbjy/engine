@@ -33,9 +33,6 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_vulkan\VK_Program.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -46,6 +43,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_vulkan\VK_SwapChain.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\VK_Shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_vulkan\VK_Program.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,9 +80,6 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -87,6 +87,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_SwapChain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_vulkan\VK_Shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

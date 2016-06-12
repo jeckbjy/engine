@@ -5,6 +5,7 @@
 #include "D3D11_Texture.h"
 #include "D3D11_Program.h"
 #include "D3D11_Pipeline.h"
+#include "D3D11_SwapChain.h"
 #include "D3D11_FrameBuffer.h"
 #include "D3D11_InputLayout.h"
 #include "D3D11_RenderState.h"
@@ -42,7 +43,7 @@ D3D11_Device::D3D11_Device()
 	, m_context(NULL)
 	, m_linkage(NULL)
 	, m_layoutMax(0)
-	, m_programID(0)
+	, m_shaderID(0)
 	, m_layoutID(0)
 {
 	D3D_FEATURE_LEVEL featureLevels[6] = 
@@ -85,19 +86,14 @@ Texture* D3D11_Device::newTexture(const TextureDesc& desc)
 	return new D3D11_Texture(desc, m_device);
 }
 
-//RenderTarget* D3D11_Device::newRenderWindow(Window* hwnd)
-//{
-//	return NULL;
-//}
-//
-//RenderTarget* D3D11_Device::newRenderTexture(Texture* rtv, Texture* dsv)
-//{
-//	return NULL;
-//}
-
 FrameBuffer* D3D11_Device::newFrameBuffer()
 {
 	return new D3D11_FrameBuffer();
+}
+
+SwapChain* D3D11_Device::newSwapChain(Window* wnd)
+{
+	return new D3D11_SwapChain(wnd, m_factory, m_device);
 }
 
 InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t count)
@@ -108,12 +104,17 @@ InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t c
 	return new D3D11_InputLayout(m_layoutID, elements, count);
 }
 
-ShaderStage* D3D11_Device::newProgram()
+ShaderStage* D3D11_Device::newShader()
 {
-	++m_programID;
-	if (m_programID == 0)
-		m_programID = 1;
-	return new D3D11_Shader(m_programID);
+	++m_shaderID;
+	if (m_shaderID == 0)
+		m_shaderID = 1;
+	return new D3D11_Shader(m_shaderID);
+}
+
+ShaderProgram* D3D11_Device::newProgram()
+{
+	return new D3D11_Program();
 }
 
 Pipeline* D3D11_Device::newPipeline(const PipelineDesc& desc)

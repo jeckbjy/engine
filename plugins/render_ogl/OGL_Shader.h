@@ -27,7 +27,7 @@ public:
 	OGL_Shader();
 	~OGL_Shader();
 
-	bool compile(const ProgramDesc& desc);
+	bool compile(const ShaderDesc& desc);
 
 	GLuint native() { return m_handle; }
 private:

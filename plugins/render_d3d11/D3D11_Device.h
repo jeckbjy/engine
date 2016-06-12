@@ -18,17 +18,17 @@ public:
 	D3D11_Device();
 	~D3D11_Device();
 
-	GpuBuffer*		newBuffer(const BufferDesc& desc);
-	Texture*		newTexture(const TextureDesc& desc);
-	//RenderTarget*	newRenderWindow(Window* hwnd);
-	//RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
-	FrameBuffer*	newFrameBuffer();
-	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	ShaderStage*	newProgram();
-	Pipeline*		newPipeline(const PipelineDesc& desc);
-	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
-	CommandBuffer*	newCommandBuffer();
-	CommandQueue*	newCommandQueue();
+	GpuBuffer*					newBuffer(const BufferDesc& desc);
+	Texture*					newTexture(const TextureDesc& desc);
+	FrameBuffer*				newFrameBuffer();
+	SwapChain*					newSwapChain(Window* wnd);
+	InputLayout*				newInputLayout(const InputElement* elements, size_t count);
+	ShaderStage*				newShader();
+	ShaderProgram*				newProgram();
+	Pipeline*					newPipeline(const PipelineDesc& desc);
+	DescriptorSet*				newDescriptorSet(Pipeline* pipeline);
+	CommandBuffer*				newCommandBuffer();
+	CommandQueue*				newCommandQueue();
 
 	ID3D11DeviceN*				getDevice() { return m_device; }
 	ID3D11ContextN*				getContext() { return m_context; }
@@ -37,7 +37,7 @@ public:
 	D3D11_BlendState*			getBlendState(const BlendDesc& desc);
 	D3D11_SamplerState*			getSamplerState(const SamplerDesc& desc);
 	D3D11_RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
-	D3D11_DepthStencilState*		getDepthStencilState(const DepthStencilDesc& desc);
+	D3D11_DepthStencilState*	getDepthStencilState(const DepthStencilDesc& desc);
 
 	ID3D11InputLayout*			getInputLayout(D3D11_Shader* vs, D3D11_InputLayout* layout);
 
@@ -62,7 +62,7 @@ private:
 	LayoutMap			m_layouts;
 	uint32_t			m_layoutMax;
 
-	uint32_t			m_programID;
+	uint32_t			m_shaderID;
 	uint32_t			m_layoutID;
 };
 

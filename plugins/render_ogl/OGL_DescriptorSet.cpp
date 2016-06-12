@@ -18,7 +18,7 @@ void OGL_DescriptorSet::setValue(const String& name, Texture* texture, size_t in
 
 }
 
-void OGL_DescriptorSet::setValue(const String& name, void* data, size_t size, size_t offset)
+void OGL_DescriptorSet::setValue(const String& name, const void* data, size_t size, size_t offset)
 {
 
 }

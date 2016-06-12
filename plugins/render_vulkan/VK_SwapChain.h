@@ -20,9 +20,12 @@ CU_NS_BEGIN
 class CU_VK_API VK_SwapChain : public SwapChain
 {
 public:
-	VK_SwapChain();
+	VK_SwapChain(Window* wnd);
 	~VK_SwapChain();
 
+	void present(){}
+
+private:
 	void createSurface();
 	void createChain();
 

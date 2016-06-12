@@ -14,16 +14,16 @@ public:
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
-	RenderTarget*	newRenderWindow(Window* wnd);
-	RenderTarget*	newRenderTexture(Texture* color, Texture* depth_stencil);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
-	ShaderStage*		newProgram();
+	ShaderStage*	newShader();
+	ShaderProgram*	newProgram();
 	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
 	Pipeline*		newPipeline(const PipelineDesc& desc);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
+	FrameBuffer*	newFrameBuffer();
+	SwapChain*		newSwapChain(Window* wnd);
 
-	OGL_Program* getProgramPipeline();
 private:
 
 };

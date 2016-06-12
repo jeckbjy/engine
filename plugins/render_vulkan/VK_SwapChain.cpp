@@ -3,7 +3,8 @@
 
 CU_NS_BEGIN
 
-VK_SwapChain::VK_SwapChain()
+VK_SwapChain::VK_SwapChain(Window* wnd)
+	: m_wnd(wnd)
 {
 
 }

@@ -168,7 +168,7 @@ struct CU_API TextureDesc
 };
 
 // 创建shader
-struct CU_API ProgramDesc
+struct CU_API ShaderDesc
 {
 	ShaderType	stage;
 	String		code;
@@ -178,20 +178,11 @@ struct CU_API ProgramDesc
 	String		profile;
 };
 
-struct CU_API ProgramPipelineDesc
-{
-	ShaderStage* vs;
-	ShaderStage* hs;
-	ShaderStage* ds;
-	ShaderStage* gs;
-	ShaderStage* ps;
-};
-
 // 管线
 class ShaderProgram;
 struct CU_API PipelineDesc
 {
-	ShaderProgram*		program;
+	ShaderProgram*			program;
 	const RenderStateDesc*	states;
 	PipelineDesc() :program(NULL), states(NULL){}
 };

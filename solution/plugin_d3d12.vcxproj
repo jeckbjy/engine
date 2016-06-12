@@ -104,6 +104,7 @@
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Plugin.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Program.h" />
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Shader.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_SwapChain.h" />
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Texture.h" />
   </ItemGroup>
@@ -120,6 +121,7 @@
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Plugin.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Program.cpp" />
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Shader.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_SwapChain.cpp" />
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Texture.cpp" />
   </ItemGroup>

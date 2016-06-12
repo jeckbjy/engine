@@ -3,22 +3,18 @@
 
 CU_NS_BEGIN
 
-// glDrawBuffer:设置渲染目标
-// 代表离线渲染,FrameBuffer
-class CU_OGL_API OGL_FrameBuffer : public RenderTarget
+class CU_OGL_API OGL_FrameBuffer : public FrameBuffer
 {
-protected:
-	static GLuint s_cur_fbo;
-	static bool bindFBO(GLuint fbo);
 public:
-	OGL_FrameBuffer(bool off_screen);
+	OGL_FrameBuffer();
 	~OGL_FrameBuffer();
 
-	void clear(uint32_t flags, const Color& color, float depth, int32_t stencil);
-	void discard(uint32_t flags);
-	void resize(uint32_t width, uint32_t height);
+	void bind();
 
-protected:
+private:
+	void update();
+
+private:
 	GLuint m_fbo;
 };
 

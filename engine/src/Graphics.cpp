@@ -95,18 +95,33 @@ void FrameBuffer::attach(size_t att, Texture* attachment)
 {
 	if (att >= ATTACHMENT_MAX)
 		return;
-	if (att >= m_attachments.size())
-		m_attachments.resize(att + 1);
-	m_attachments[att] = attachment;
+
+	if (att == ATT_DEPTH_STENCIL)
+		m_depthStencil = attachment;
+
+	size_t index = att - ATT_COLOR0;
+	if (index >= m_colors.size())
+		m_colors.resize(index + 1);
+
+	m_colors[index] = attachment;
 	m_dirty = true;
 }
 
 void FrameBuffer::detach(size_t att)
 {
-	if (att < m_attachments.size())
+	if (att == ATT_DEPTH_STENCIL)
 	{
-		m_attachments[att] = NULL;
+		m_depthStencil = NULL;
 		m_dirty = true;
+	}
+	else
+	{
+		size_t index = att - 1;
+		if (index < m_colors.size())
+		{
+			m_colors[index] = NULL;
+			m_dirty = true;
+		}
 	}
 }
 

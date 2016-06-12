@@ -10,7 +10,7 @@ public:
 	D3D11_Shader(uint32_t id);
 	~D3D11_Shader();
 
-	bool compile(const ProgramDesc& desc);
+	bool compile(const ShaderDesc& desc);
 
 	uint32_t getID() const { return m_id; }
 	ID3DBlob* getCode() { return m_code; }

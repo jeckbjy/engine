@@ -36,9 +36,6 @@
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Plugin.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d12\D3D12_Program.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Texture.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -49,6 +46,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_SwapChain.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_Program.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,9 +83,6 @@
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Plugin.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d12\D3D12_Program.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Texture.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -93,6 +93,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_SwapChain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_Program.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

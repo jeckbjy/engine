@@ -104,6 +104,7 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_Pipeline.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Plugin.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Program.h" />
+    <ClInclude Include="..\plugins\render_vulkan\VK_Shader.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_SwapChain.h" />
     <ClInclude Include="..\plugins\render_vulkan\VK_Texture.h" />
     <ClInclude Include="..\plugins\render_vulkan\Vk_CommandQueue.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="..\plugins\render_vulkan\VK_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Plugin.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Program.cpp" />
+    <ClCompile Include="..\plugins\render_vulkan\VK_Shader.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_SwapChain.cpp" />
     <ClCompile Include="..\plugins\render_vulkan\VK_Texture.cpp" />
   </ItemGroup>

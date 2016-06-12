@@ -46,22 +46,17 @@ Texture* D3D12_Device::newTexture(const TextureDesc& desc)
 	return new D3D12_Texture(m_device, desc);
 }
 
-//RenderTarget* D3D12_Device::newRenderWindow(Window* hwnd)
-//{
-//	return NULL;
-//}
-//
-//RenderTarget* D3D12_Device::newRenderTexture(Texture* rtv, Texture* dsv)
-//{
-//	return NULL;
-//}
-
 InputLayout* D3D12_Device::newInputLayout(const InputElement* elements, size_t count)
 {
 	return NULL;
 }
 
-ShaderStage* D3D12_Device::newProgram()
+ShaderStage* D3D12_Device::newShader()
+{
+	return NULL;
+}
+
+ShaderProgram* D3D12_Device::newProgram()
 {
 	return NULL;
 }

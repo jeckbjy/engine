@@ -17,9 +17,11 @@ public:
 	void write(const PixelData& data, uint level, uint face, bool discard);
 
 	void active(GLint index);
+	void bindToFrameBuffer(GLenum attachment);
 
 	GLuint handle() const { return m_handle; }
 	GLenum target() const { return m_target; }
+
 private:
 	void create1D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data);
 	void create2D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data);
