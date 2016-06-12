@@ -1,34 +1,16 @@
 #include "VK_Device.h"
-#include "VK_Graphics.h"
 
 CU_NS_BEGIN
 
-VK_Device::VK_Device(VK_Graphics* graphics)
-	: m_graphics(graphics)
+VK_Device::VK_Device()
+	: m_instance(VK_NULL_HANDLE)
+	, m_physical(VK_NULL_HANDLE)
+	, m_device(VK_NULL_HANDLE)
+	, m_descroptorPool(VK_NULL_HANDLE)
 {
-	VkDeviceQueueCreateInfo queue_info = 
-	{
-		VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-		NULL,
-		0,
-		0,
-		0,
-		NULL,
-	};
-
-	VkDeviceCreateInfo info = 
-	{
-		VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-		NULL,
-		0,
-		1,
-		&queue_info,
-		0, NULL,
-		0, NULL,
-		NULL
-	};
-
-	VK_CHECK(vkCreateDevice(m_graphics->getPhysicalDevice(), &info, NULL, &m_handle), "vkCreateDevice fail!");
+	createInstance();
+	createPhysical();
+	createDevice();
 
 	// create pool
 	VkDescriptorPoolSize typeCounts[1];
@@ -41,24 +23,126 @@ VK_Device::VK_Device(VK_Graphics* graphics)
 	pool_info.poolSizeCount = 1;
 	pool_info.pPoolSizes = typeCounts;
 	pool_info.maxSets = 1;
-	VK_CHECK(vkCreateDescriptorPool(m_handle, &pool_info, NULL, &m_descroptorPool), "vkCreateDescriptorPool fail!");
+	VK_CHECK(vkCreateDescriptorPool(m_device, &pool_info, NULL, &m_descroptorPool), "vkCreateDescriptorPool fail!");
 
 }
 
 VK_Device::~VK_Device()
 {
-	vkDestroyDevice(m_handle, NULL);
+	vkDestroyDevice(m_device, NULL);
+}
+
+void VK_Device::createInstance()
+{
+	const char *layers[] = { "VK_LAYER_LUNARG_standard_validation" };
+	const char *extensions[] = { "VK_KHR_surface", "VK_KHR_win32_surface", "VK_EXT_debug_report" };
+
+	VkApplicationInfo appInfo = {};
+	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	appInfo.pApplicationName = NULL;
+	appInfo.pEngineName = "CuteEngine";
+
+	VkInstanceCreateInfo instInfo = {};
+	instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	instInfo.pNext = NULL;
+	instInfo.pApplicationInfo = &appInfo;
+	instInfo.enabledLayerCount = 1;
+	instInfo.ppEnabledExtensionNames = layers;
+	instInfo.enabledExtensionCount = 3;
+	instInfo.ppEnabledExtensionNames = extensions;
+
+	VK_CHECK(vkCreateInstance(&instInfo, NULL, &m_instance), "vkCreateInstance fail!");
+}
+
+void VK_Device::createPhysical()
+{
+	uint32_t physicalCount = 0;
+	vkEnumeratePhysicalDevices(m_instance, &physicalCount, NULL);
+	if (physicalCount == 0)
+		return;
+	VkPhysicalDevice* physicals = new VkPhysicalDevice[physicalCount];
+	vkEnumeratePhysicalDevices(m_instance, &physicalCount, physicals);
+	// how to find a physical
+	m_physical = physicals[0];
+	delete[] physicals;
+
+	// Fill up the physical device memory properties: 
+	vkGetPhysicalDeviceMemoryProperties(m_physical, &m_memoryProps);
+
+	//// find queue index:first:supprot all,then:supprot graphics and compute
+	//uint32_t queueCount = 0;
+	//vkGetPhysicalDeviceQueueFamilyProperties(m_physical, &queueCount, NULL);
+	//VkQueueFamilyProperties* queueProps = new VkQueueFamilyProperties[queueCount];
+	//vkGetPhysicalDeviceQueueFamilyProperties(m_physical, &queueCount, queueProps);
+
+	//// find best queue index;
+	//uint32_t queueBits[] = 
+	//{
+	//	VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT | VK_QUEUE_SPARSE_BINDING_BIT,
+	//	VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT | VK_QUEUE_TRANSFER_BIT,
+	//	VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT,
+	//	VK_QUEUE_GRAPHICS_BIT,
+	//};
+
+	//m_queueIndex = UINT32_MAX;
+
+	//uint32_t count = sizeof(queueBits) / sizeof(uint32_t);
+	//for (uint32_t i = 0; i < count; ++i)
+	//{
+	//	uint32_t flags = queueBits[i];
+	//	for (uint32_t j = 0; j < queueCount; ++j)
+	//	{
+	//		if ((queueProps[j].queueFlags & flags) == flags)
+	//		{
+	//			m_queueIndex = j;
+	//			break;
+	//		}
+	//	}
+
+	//	if (m_queueIndex != UINT32_MAX)
+	//		break;
+	//}
+}
+
+void VK_Device::createDevice()
+{
+	VkDeviceQueueCreateInfo queueInfo = {};
+	queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+	queueInfo.queueFamilyIndex = 0;
+
+	VkDeviceCreateInfo deviceInfo = {};
+	deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	deviceInfo.queueCreateInfoCount = 1;
+	deviceInfo.pQueueCreateInfos = &queueInfo;
+
+	VK_CHECK(vkCreateDevice(m_physical, &deviceInfo, NULL, &m_device), "vkCreateDevice fail!");
 }
 
 void VK_Device::allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties)
 {
+	// find memoryTypeIndex;
+	uint32_t memoryTypeIndex = 0;
+	for (uint32_t i = 0; i < VK_MAX_MEMORY_TYPES; ++i)
+	{
+		if (typeBits & 1)
+		{
+			if ((m_memoryProps.memoryTypes[i].propertyFlags & properties) == properties)
+			{
+				memoryTypeIndex = i;
+				break;
+			}
+		}
+
+		typeBits >>= 1;
+	}
+
 	VkMemoryAllocateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	info.pNext = NULL;
 	info.allocationSize = bytes;
-	info.memoryTypeIndex = m_graphics->getMemoryType(typeBits, properties);
+	info.memoryTypeIndex = memoryTypeIndex;
 
-	VK_CHECK(vkAllocateMemory(m_handle, &info, NULL, &memory), "vkAllocateMemory fail!");
+	VK_CHECK(vkAllocateMemory(m_device, &info, NULL, &memory), "vkAllocateMemory fail!");
 }
 
 CU_NS_END

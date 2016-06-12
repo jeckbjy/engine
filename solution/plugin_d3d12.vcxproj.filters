@@ -24,9 +24,6 @@
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Device.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d12\D3D12_Graphics.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_InputLayout.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -69,9 +66,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Device.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d12\D3D12_Graphics.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_InputLayout.cpp">

@@ -24,8 +24,10 @@ ID3D12Device*	gD3D11NativeDevice()
 }
 
 D3D12_Device::D3D12_Device()
-:m_device(NULL)
+	: m_device(NULL)
+	, m_debuger(NULL)
 {
+	D3D12GetDebugInterface(IID_PPV_ARGS(&m_debuger));
 	D3D12_CHECK(D3D12CreateDevice(NULL, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device)), "D3D12CreateDevice fail!");
 }
 

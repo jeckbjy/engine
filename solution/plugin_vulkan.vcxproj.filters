@@ -21,9 +21,6 @@
     <ClInclude Include="..\plugins\render_vulkan\VK_Device.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_vulkan\VK_Graphics.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_vulkan\VK_InputLayout.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_Device.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_vulkan\VK_Graphics.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_vulkan\VK_InputLayout.cpp">

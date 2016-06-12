@@ -11,8 +11,6 @@ public:
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
-	//RenderTarget*	newRenderWindow(Window* hwnd);
-	//RenderTarget*	newRenderTexture(Texture* rtv, Texture* dsv /* = NULL */);
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
 	ShaderStage*	newProgram();
 	Pipeline*		newPipeline(const PipelineDesc& desc);
@@ -30,6 +28,7 @@ public:
 private:
 	ID3D12Device*			m_device;
 	ID3D12CommandAllocator* m_allocator;
+	ID3D12Debug*			m_debuger;
 };
 
 extern CU_D3D12_API D3D12_Device*	gD3D12Device();

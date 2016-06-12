@@ -21,9 +21,6 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d11\D3D11_Graphics.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_InputLayout.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderState.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d11\D3D11_RenderWindow.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Texture.h">
@@ -74,9 +68,6 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Device.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d11\D3D11_Graphics.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_InputLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -90,9 +81,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderState.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d11\D3D11_RenderWindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Texture.cpp">
