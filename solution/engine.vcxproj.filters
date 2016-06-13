@@ -7,15 +7,6 @@
     <Filter Include="engine">
       <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine">
-      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="engine\include">
-      <UniqueIdentifier>{6ECEB398-5A9C-A79E-4330-18C52F9D8303}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="engine\src">
-      <UniqueIdentifier>{921F4884-7ED7-89D1-E7DE-622DD3B524C2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="external">
       <UniqueIdentifier>{2839F3DC-1406-4EE8-3D1F-3C90294B8376}</UniqueIdentifier>
     </Filter>
@@ -184,7 +175,7 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\KeyedVector.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Light.h">
       <Filter>render</Filter>
@@ -274,7 +265,7 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\ProxyChannel.h">
-      <Filter>engine\include</Filter>
+      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Quaternion.h">
       <Filter>math</Filter>
@@ -328,7 +319,7 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\SortedVector.h">
-      <Filter>engine\include</Filter>
+      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Sphere.h">
       <Filter>math</Filter>
@@ -582,7 +573,7 @@
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\ProxyChannel.cpp">
-      <Filter>engine\src</Filter>
+      <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="..\engine\src\Quaternion.cpp">
       <Filter>math</Filter>

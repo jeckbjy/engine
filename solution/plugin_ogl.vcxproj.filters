@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="glew">
@@ -39,6 +39,21 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_Plugin.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Program.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_RenderTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_RenderWindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_Shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_SwapChain.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\OGL_Texture.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -50,15 +65,6 @@
     </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\wglew.h">
       <Filter>glew</Filter>
-    </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_Shader.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_Program.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_SwapChain.h">
-      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,20 +95,26 @@
     <ClCompile Include="..\plugins\render_ogl\OGL_Plugin.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Program.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_RenderTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_RenderWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_Shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_SwapChain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Texture.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\glew\src\glew.c">
       <Filter>glew</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_Shader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_Program.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_SwapChain.cpp">
-      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -112,6 +112,8 @@ function engine_vpaths()
 		"Convert.cpp",
 		"XMLFile.h",
 		"XMLFile.cpp",
+		"KeyedVector.h",
+		"SortedVector.h"
 	},
 	["math"] = {
 		"CMath.h",
@@ -176,6 +178,8 @@ function engine_vpaths()
 		"Packet.cpp",
 		"Protocol.h",
 		"Protocol.cpp",
+		"ProxyChannel.h",
+		"ProxyChannel.cpp",
 	},
 	["engine"] = {
 		"Event.h",
