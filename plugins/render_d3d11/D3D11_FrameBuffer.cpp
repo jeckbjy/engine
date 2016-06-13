@@ -32,21 +32,18 @@ void D3D11_FrameBuffer::bind(D3D11_CommandBuffer* cmds)
 void D3D11_FrameBuffer::update()
 {
 	m_dirty = false;
-	if (m_colors.empty())
+	if (m_attachments.empty())
 		return;
 
-	m_dsv = NULL;
-	if (m_depthStencil)
-	{
-		D3D11_Texture* tex = (D3D11_Texture*)m_depthStencil.get();
-		m_dsv = tex->getDSV();
-	}
+	D3D11_Texture* tex;
+	tex = (D3D11_Texture*)(m_attachments[0].get());
+	m_dsv = tex ? tex->getDSV() : NULL;
 
-	m_rtv.resize(m_colors.size());
-	for (size_t i = 0; i < m_colors.size(); ++i)
+	m_rtv.resize(m_attachments.size() - 1);
+	for (size_t i = 1; i < m_attachments.size(); ++i)
 	{
-		D3D11_Texture* tex = (D3D11_Texture*)(m_colors[i].get());
-		m_rtv[i] =  tex ? tex->getRTV() : NULL;
+		tex = (D3D11_Texture*)(m_attachments[i].get());
+		m_rtv[i - 1] =  tex ? tex->getRTV() : NULL;
 	}
 }
 

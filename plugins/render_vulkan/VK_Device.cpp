@@ -12,6 +12,20 @@
 
 CU_NS_BEGIN
 
+VK_Device* gVKDevice()
+{
+	return gGraphics.getDevice()->cast<VK_Device>();
+}
+
+VkDevice gVKNativeDevice()
+{
+	VK_Device* device = gGraphics.getDevice()->cast<VK_Device>();
+	if (device)
+		return device->native();
+
+	return VK_NULL_HANDLE;
+}
+
 VK_Device::VK_Device()
 	: m_instance(VK_NULL_HANDLE)
 	, m_physical(VK_NULL_HANDLE)

@@ -13,6 +13,8 @@ public:
 	void* map(PixelData& data, MAP_FLAG flag, uint level = 0, uint face = 0);
 	void  unmap();
 
+	VkImageView& getView() { return m_view; }
+
 private:
 	VK_Device*		m_device;
 	VkImage			m_image;

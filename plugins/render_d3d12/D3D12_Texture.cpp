@@ -27,6 +27,9 @@ D3D12_Texture::D3D12_Texture(ID3D12Device* device, const TextureDesc& desc)
 	props.CreationNodeMask = 1;
 	props.VisibleNodeMask = 1;
 	device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &dx_desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&m_handle));
+
+	//D3D12_RENDER_TARGET_VIEW_DESC viewDesc;
+	device->CreateRenderTargetView(m_handle, NULL, m_view);
 }
 
 D3D12_Texture::~D3D12_Texture()

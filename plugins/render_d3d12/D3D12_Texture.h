@@ -13,7 +13,8 @@ public:
 	void unmap();
 
 private:
-	ID3D12Resource* m_handle;
+	ID3D12Resource*				m_handle;
+	D3D12_CPU_DESCRIPTOR_HANDLE	m_view;
 };
 
 CU_NS_END

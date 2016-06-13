@@ -97,8 +97,7 @@ public:
 protected:
 	typedef SharedPtr<Texture>	TexturePtr;
 	typedef Vector<TexturePtr>	TextureVec;
-	TexturePtr	m_depthStencil;
-	TextureVec	m_colors;
+	TextureVec	m_attachments;
 	bool		m_dirty;
 };
 
@@ -113,7 +112,7 @@ public:
 
 class CU_API ShaderStage : public Object
 {
-	DECLARE_RTTI(ShaderStage, Object, OBJ_ID_PROTRAM);
+	DECLARE_RTTI(ShaderStage, Object, OBJ_ID_SHADER_STAGE);
 public:
 	ShaderStage(){}
 	virtual ~ShaderStage(){}
@@ -127,6 +126,7 @@ protected:
 
 class CU_API ShaderProgram : public Object
 {
+	DECLARE_RTTI(ShaderProgram, Object, OBJ_ID_SHADER_PROTRAM);
 public:
 	virtual ~ShaderProgram(){}
 	virtual void attach(ShaderStage* shader) = 0;
@@ -155,6 +155,7 @@ protected:
 
 class CU_API RenderPass : public Object
 {
+	DECLARE_RTTI(RenderPass, Object, OBJ_ID_RENDER_PASS);
 protected:
 	virtual ~RenderPass(){}
 };
@@ -181,8 +182,9 @@ public:
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
 };
 
-class CU_API Fence
+class CU_API Fence : public Object
 {
+	DECLARE_RTTI(Fence, Object, OBJ_ID_FENCE);
 public:
 	virtual void wait() = 0;
 	virtual void wait(uint64_t timeout) = 0;
@@ -234,7 +236,6 @@ public:
 class CU_API Graphics : public Object
 {
 	DECLARE_RTTI(Graphics, Object, OBJ_ID_GRAPHICS);
-
 public:
 	virtual ~Graphics(){}
 

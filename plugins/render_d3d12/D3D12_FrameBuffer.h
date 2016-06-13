@@ -9,11 +9,14 @@ public:
 	D3D12_FrameBuffer();
 	~D3D12_FrameBuffer();
 
-	void bind();
-	void attach(size_t att, Texture* attachment);
-	void detach(size_t att);
-private:
+	void bind(ID3D12GraphicsCommandList* cmdList);
 
+private:
+	void update();
+
+private:
+	D3D12_CPU_DESCRIPTOR_HANDLE m_dsv;
+	ID3D12DescriptorHeap		m_rtv;
 };
 
 CU_NS_END

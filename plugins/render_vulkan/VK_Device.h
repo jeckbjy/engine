@@ -40,7 +40,9 @@ private:
 	VkDescriptorPool	m_descroptorPool;
 	uint32_t			m_queueIndex;
 	VkPhysicalDeviceMemoryProperties m_memoryProps;
-
 };
+
+extern CU_VK_API VK_Device*	gVKDevice();
+extern CU_VK_API VkDevice	gVKNativeDevice();
 
 CU_NS_END
