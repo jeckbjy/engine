@@ -173,6 +173,43 @@ extern LPFN_ACCEPTEX		FAcceptEx;
 #define cu_last_error()		errno
 #endif
 
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+#ifdef _WIN32
+
+#ifndef S_IFLNK
+# define S_IFLNK 0xA000
+#endif
+
+/* Additional signals supported by uv_signal and or uv_kill. The CRT defines
+* the following signals already:
+*
+*   #define SIGINT           2
+*   #define SIGILL           4
+*   #define SIGABRT_COMPAT   6
+*   #define SIGFPE           8
+*   #define SIGSEGV         11
+*   #define SIGTERM         15
+*   #define SIGBREAK        21
+*   #define SIGABRT         22
+*
+* The additional signals have values that are common on other Unix
+* variants (Linux and Darwin)
+*/
+#define SIGHUP                1
+#define SIGKILL               9
+#define SIGWINCH             28
+
+/* The CRT defines SIGABRT_COMPAT as 6, which equals SIGABRT on many */
+/* unix-like platforms. However MinGW doesn't define it, so we do. */
+#ifndef SIGABRT_COMPAT
+# define SIGABRT_COMPAT       6
+#endif
+
+#endif
+
 #ifdef _WIN32
 #define CU_ERROR(ec) WSA ## ec
 #define CU_WIN_OR_POSIX(e_win, e_posix) e_win

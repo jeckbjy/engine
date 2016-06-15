@@ -5,277 +5,320 @@ CU_NS_BEGIN
 // norm:用整数标识浮点数
 enum PixelType
 {
-	PT_NONE,	// 未知类型
-	PT_BYTE,
-	PT_SHORT,
-	PT_SINT,
+	PT_UNDEFINED,
+	PT_UNORM,
+	PT_SNORM,
+	PT_USCALED,
+	PT_SSCALED,
 	PT_UINT,
-	PT_FLOAT16,
-	PT_FLOAT32,
+	PT_SINT,
+	PT_UFLOAT,
+	PT_SFLOAT,
+	PT_SRGB,
 };
 
 enum PixelChannel
 {
+	PC_DEFAULT = 0,
 	PC_ALPHA = 0x01,
-	PC_FLOAT = 0x02,
-	PC_INTEGER = 0x04,
-	PC_SIGNED = 0x08,
-	PC_DEPTH = 0x10,
-	PC_STENCIL = 0x20,
-	PC_LUMINANCE = 0x40,
-	PC_COMPRESSED = 0x80,
-	PC_NORM = 0x100,
-	PC_ENDIAN = 0x200,	//??
+	PC_BLOCK = 0x02,	// COMPRESSED
 	// 缩写
+	PC_D = PC_DEFAULT,
 	PC_A = PC_ALPHA,
-	PC_F = PC_FLOAT,
-	PC_I = PC_INTEGER,
-	PC_S = PC_SIGNED,
-	PC_D = PC_DEPTH,
-	PC_L = PC_LUMINANCE,
-	PC_C = PC_COMPRESSED,
-	PC_N = PC_NORM,
-	PC_E = PC_ENDIAN,
-	PC_DS = PC_D | PC_STENCIL,
-	PC_IE = PC_I | PC_E,
-	PC_IEA = PC_IE | PC_A,
-	PC_SE = PC_S | PC_E,
-	PC_SEA = PC_SE | PC_A,
-	PC_FA = PC_F | PC_A,
-	PC_FE = PC_F | PC_E,
-	PC_EA = PC_E | PC_A,
-	PC_LE = PC_L | PC_E,
-	PC_LEA = PC_LE | PC_A,
-	PC_CA = PC_C | PC_A,
-	PC_CS = PC_C | PC_S,
+	PC_B = PC_BLOCK,
 };
 
 struct PixelInfo
 {
 	const char* name;
-	uint32_t	flags;
 	PixelType	type;		// components类型
+	uint32_t	channel;
 	uint8_t		components;	// 元素个数
 	uint8_t		bytes;		// 总字节数
 };
 
-static PixelInfo g_infos[PIXEL_FORMAT_MAX];
+#define DEF_FORMAT(fmt, type, channel, components, bytes) {#fmt, type, channel, components, bytes }
 
-inline void set_fmt(PixelFormat fmt, const char* name, uint32_t flags, PixelType type, uint8_t components, uint8_t bytes)
+static PixelInfo gPixelInfoArray[PIXEL_FORMAT_MAX] = 
 {
-	PixelInfo& info = g_infos[fmt];
-	info.name = name;
-	info.flags = flags;
-	info.type = type;
-	info.components = components;
-	info.bytes = bytes;
-}
-
-//CU_C_CTOR(init_pixel_format)
-////void init_pixel_format()
-//{
-//	set_fmt(PF_UNKNOWN, "PF_UNKNOWN", 0, PT_BYTE, 0, 0);
-//
-//	set_fmt(PF_UINT_R8, "PF_UINT_R8", PC_IE, PT_UINT, 1, 1);
-//	set_fmt(PF_UINT_RG8, "PF_UINT_RG8", PC_IE, PT_UINT, 2, 2);
-//	set_fmt(PF_UINT_RGB8, "PF_UINT_RGB8", PC_IE, PT_UINT, 3, 3);
-//	set_fmt(PF_UINT_RGBA8, "PF_UINT_RGBA8", PC_IEA, PT_UINT, 4, 4);
-//	set_fmt(PF_UINT_R16, "PF_UINT_R16", PC_IE, PT_UINT, 1, 2);
-//	set_fmt(PF_UINT_RG16, "PF_UINT_RG16", PC_IE, PT_UINT, 2, 4);
-//	set_fmt(PF_UINT_RGB16, "PF_UINT_RGB16", PC_IE, PT_UINT, 3, 6);
-//	set_fmt(PF_UINT_RGBA16, "PF_UINT_RGBA16", PC_IEA, PT_UINT, 4, 8);
-//	set_fmt(PF_UINT_R32, "PF_UINT_R32", PC_IE, PT_UINT, 1, 4);
-//	set_fmt(PF_UINT_RG32, "PF_UINT_RG32", PC_IE, PT_UINT, 2, 8);
-//	set_fmt(PF_UINT_RGB32, "PF_UINT_RGB32", PC_IE, PT_UINT, 3, 12);
-//	set_fmt(PF_UINT_RGBA32, "PF_UINT_RGBA32", PC_IEA, PT_UINT, 4, 16);
-//
-//	set_fmt(PF_SINT_R8, "PF_SINT_R8", PC_IE, PT_SINT, 1, 1);
-//	set_fmt(PF_SINT_RG8, "PF_SINT_RG8", PC_IE, PT_SINT, 2, 2);
-//	set_fmt(PF_SINT_RGB8, "PF_SINT_RGB8", PC_IE, PT_SINT, 3, 3);
-//	set_fmt(PF_SINT_RGBA8, "PF_SINT_RGBA8", PC_IEA, PT_SINT, 4, 4);
-//	set_fmt(PF_SINT_R16, "PF_SINT_R16", PC_IE, PT_SINT, 1, 2);
-//	set_fmt(PF_SINT_RG16, "PF_SINT_RG16", PC_IE, PT_SINT, 2, 4);
-//	set_fmt(PF_SINT_RGB16, "PF_SINT_RGB16", PC_IE, PT_SINT, 3, 6);
-//	set_fmt(PF_SINT_RGBA16, "PF_SINT_RGBA16", PC_IEA, PT_SINT, 4, 8);
-//	set_fmt(PF_SINT_R32, "PF_SINT_R32", PC_IE, PT_SINT, 1, 4);
-//	set_fmt(PF_SINT_RG32, "PF_SINT_RG32", PC_IE, PT_SINT, 2, 8);
-//	set_fmt(PF_SINT_RGB32, "PF_SINT_RGB32", PC_IE, PT_SINT, 3, 12);
-//	set_fmt(PF_SINT_RGBA32, "PF_SINT_RGBA32", PC_IEA, PT_SINT, 4, 16);
-//
-//	set_fmt(PF_SNORM_R8, "PF_SNORM_R8", PC_SE, PT_BYTE, 1, 1);
-//	set_fmt(PF_SNORM_RG8, "PF_SNORM_RG8", PC_SE, PT_BYTE, 2, 2);
-//	set_fmt(PF_SNORM_RGB8, "PF_SNORM_RGB8", PC_SE, PT_BYTE, 3, 3);
-//	set_fmt(PF_SNORM_RGBA8, "PF_SNORM_RGBA8", PC_SEA, PT_BYTE, 4, 4);
-//	set_fmt(PF_SNORM_R16, "PF_SNORM_R16", PC_SE, PT_BYTE, 1, 2);
-//	set_fmt(PF_SNORM_RG16, "PF_SNORM_RG16", PC_SE, PT_BYTE, 2, 4);
-//	set_fmt(PF_SNORM_RGB16, "PF_SNORM_RGB16", PC_SE, PT_BYTE, 3, 6);
-//	set_fmt(PF_SNORM_RGBA16, "PF_SNORM_RGBA16", PC_SEA, PT_BYTE, 4, 8);
-//
-//	set_fmt(PF_FLOAT_R16, "PF_FLOAT_R16", PC_F, PT_FLOAT16, 1, 2);
-//	set_fmt(PF_FLOAT_GR16, "PF_FLOAT_GR16", PC_F, PT_FLOAT16, 2, 4);
-//	set_fmt(PF_FLOAT_RGB16, "PF_FLOAT_RGB16", PC_F, PT_FLOAT16, 3, 6);
-//	set_fmt(PF_FLOAT_RGBA16, "PF_FLOAT_RGBA16", PC_FA, PT_FLOAT16, 4, 8);
-//
-//	set_fmt(PF_FLOAT_R32, "PF_FLOAT_R32", PC_F, PT_FLOAT32, 1, 4);
-//	set_fmt(PF_FLOAT_GR32, "PF_FLOAT_GR32", PC_F, PT_FLOAT32, 2, 8);
-//	set_fmt(PF_FLOAT_RGB32, "PF_FLOAT_RGB32", PC_F, PT_FLOAT32, 3, 12);
-//	set_fmt(PF_FLOAT_RGBA32, "PF_FLOAT_RGBA32", PC_FA, PT_FLOAT32, 4, 16);
-//
-//	set_fmt(PF_FLOAT_R11G11B10, "PF_FLOAT_R11G11B10", PC_FE, PT_FLOAT32, 1, 4);
-//
-//	set_fmt(PF_R8G8B8, "PF_R8G8B8", PC_E, PT_BYTE, 3, 3);
-//	set_fmt(PF_B8G8R8, "PF_B8G8R8", PC_E, PT_BYTE, 3, 3);
-//	set_fmt(PF_R8G8B8A8, "PF_R8G8B8A8", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_B8G8R8A8, "PF_B8G8R8A8", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_A8R8G8B8, "PF_A8R8G8B8", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_A8B8G8R8, "PF_A8B8G8R8", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_X8R8G8B8, "PF_X8R8G8B8", PC_E, PT_BYTE, 4, 4);
-//	set_fmt(PF_X8B8G8R8, "PF_X8B8G8R8", PC_E, PT_BYTE, 4, 4);
-//	// srgb
-//	set_fmt(PF_R8G8B8_SRGB, "PF_R8G8B8_SRGB", PC_E, PT_BYTE, 3, 3);
-//	set_fmt(PF_B8G8R8_SRGB, "PF_B8G8R8_SRGB", PC_E, PT_BYTE, 3, 3);
-//	set_fmt(PF_R8G8B8A8_SRGB, "PF_R8G8B8A8_SRGB", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_B8G8R8A8_SRGB, "PF_B8G8R8A8_SRGB", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_A8R8G8B8_SRGB, "PF_A8R8G8B8_SRGB", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_A8B8G8R8_SRGB, "PF_A8B8G8R8_SRGB", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_X8R8G8B8_SRGB, "PF_X8R8G8B8_SRGB", PC_E, PT_BYTE, 4, 4);
-//	set_fmt(PF_X8B8G8R8_SRGB, "PF_X8B8G8R8_SRGB", PC_E, PT_BYTE, 4, 4);
-//
-//	set_fmt(PF_D32_FLOAT_S8X24_UINT, "PF_D32_FLOAT_S8X24_UINT", PC_DS, PT_UINT, 2, 8);
-//	set_fmt(PF_D24_UNORM_S8_UINT, "PF_D24_UNORM_S8_UINT", PC_DS, PT_UINT, 2, 4);
-//	set_fmt(PF_D32_FLOAT, "PF_D32_FLOAT", PC_D, PT_FLOAT32, 1, 4);
-//	set_fmt(PF_D16_UNORM, "PF_D16_UNORM", PC_D, PT_SHORT, 1, 2);
-//
-//	set_fmt(PF_L8, "PF_L8", PC_LE, PT_BYTE, 1, 1);
-//	set_fmt(PF_L16, "PF_L16", PC_LE, PT_BYTE, 1, 2);
-//	set_fmt(PF_A8, "PF_A8", PC_EA, PT_BYTE, 1, 1);
-//	set_fmt(PF_A4L4, "PF_A4L4", PC_LEA, PT_BYTE, 2, 1);
-//	set_fmt(PF_R5G6B5, "PF_R5G6B5", PC_E, PT_BYTE, 3, 2);
-//	set_fmt(PF_B5G6R5, "PF_B5G6R5", PC_E, PT_BYTE, 3, 2);
-//	set_fmt(PF_R3G3B2, "PF_R3G3B2", PC_E, PT_BYTE, 3, 1);
-//	set_fmt(PF_A4R4G4B4, "PF_A4R4G4B4", PC_EA, PT_BYTE, 4, 2);
-//	set_fmt(PF_A1R5G5B5, "PF_A1R5G5B5", PC_EA, PT_BYTE, 4, 2);
-//	set_fmt(PF_A2R10G10B10, "PF_A2R10G10B10", PC_EA, PT_BYTE, 4, 4);
-//	set_fmt(PF_A2B10G10R10, "PF_A2B10G10R10", PC_E, PT_BYTE, 4, 4);
-//	set_fmt(PF_R9G9B9E5, "PF_R9G9B9E5", PC_E, PT_BYTE, 4, 4);
-//
-//	set_fmt(PF_BC1_UNORM, "PF_BC1_UNORM", PC_C, PT_BYTE, 3, 8);
-//	set_fmt(PF_BC2_UNORM, "PF_BC2_UNORM", PC_CA, PT_BYTE, 4, 16);
-//	set_fmt(PF_BC3_UNORM, "PF_BC3_UNORM", PC_CA, PT_BYTE, 4, 16);
-//	set_fmt(PF_BC4_UNORM, "PF_BC4_UNORM", PC_C, PT_BYTE, 1, 8);
-//	set_fmt(PF_BC4_SNORM, "PF_BC4_SNORM", PC_CS, PT_BYTE, 1, 8);
-//	set_fmt(PF_BC5_UNORM, "PF_BC5_UNORM", PC_C, PT_BYTE, 2, 16);
-//	set_fmt(PF_BC5_SNORM, "PF_BC5_SNORM", PC_CS, PT_BYTE, 2, 16);
-//	set_fmt(PF_BC6H_UF16, "PF_BC6H_UF16", PC_C, PT_BYTE, 3, 16);
-//	set_fmt(PF_BC6H_SF16, "PF_BC6H_SF16", PC_C, PT_BYTE, 3, 16);
-//	set_fmt(PF_BC7_UNORM, "PF_BC7_UNORM", PC_CA, PT_BYTE, 4, 16);
-//
-//	set_fmt(PF_BC1_SRGB, "PF_BC1_SRGB", PC_CA, PT_BYTE, 4, 8);
-//	set_fmt(PF_BC2_SRGB, "PF_BC2_SRGB", PC_CA, PT_BYTE, 4, 16);
-//	set_fmt(PF_BC3_SRGB, "PF_BC3_SRGB", PC_CA, PT_BYTE, 4, 16);
-//	set_fmt(PF_BC4_SRGB, "PF_BC4_SRGB", PC_CA, PT_BYTE, 4, 8);
-//	set_fmt(PF_BC5_SRGB, "PF_BC5_SRGB", PC_CA, PT_BYTE, 4, 16);
-//	set_fmt(PF_BC7_SRGB, "PF_BC7_SRGB", PC_CA, PT_BYTE, 4, 16);
-//
-//	set_fmt(PF_ETC1_RGB8, "PF_ETC1_RGB8", PC_C, PT_BYTE, 3, 0);
-//	set_fmt(PF_ETC2_RGB8, "PF_ETC2_RGB8", PC_C, PT_BYTE, 3, 0);
-//	set_fmt(PF_ETC2_RGBA8, "PF_ETC2_RGBA8", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_ETC2_RGB8A1, "PF_ETC2_RGB8A1", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_ATC_RGB, "PF_ATC_RGB", PC_C, PT_BYTE, 3, 0);
-//	set_fmt(PF_ATC_RGBA_EXPLICIT_ALPHA, "PF_ATC_RGBA_EXPLICIT_ALPHA", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_ATC_RGBA_INTERPOLATED_ALPHA, "PF_ATC_RGBA_INTERPOLATED_ALPHA", PC_CA, PT_BYTE, 4, 0);
-//
-//	set_fmt(PF_PVRTC_RGB2, "PF_PVRTC_RGB2", PC_C, PT_BYTE, 3, 0);
-//	set_fmt(PF_PVRTC_RGBA2, "PF_PVRTC_RGBA2", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_PVRTC_RGB4, "PF_PVRTC_RGB4", PC_C, PT_BYTE, 3, 0);
-//	set_fmt(PF_PVRTC_RGBA4, "PF_PVRTC_RGBA4", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_PVRTC_2BPP, "PF_PVRTC_2BPP", PC_CA, PT_BYTE, 4, 0);
-//	set_fmt(PF_PVRTC_4BPP, "PF_PVRTC_4BPP", PC_CA, PT_BYTE, 4, 0);
-//}
-
-//static struct init_helper { init_helper(){ init_pixel_format(); } } g_helper;
+	DEF_FORMAT(PF_UNDEFINED, PT_UNDEFINED,	PC_D, 0, 0),
+	DEF_FORMAT(PF_R4G4_UNORM,			PT_UNORM,	PC_D, 2, 1),
+	DEF_FORMAT(PF_R4G4B4A4_UNORM,		PT_UNORM,	PC_A, 4, 2),
+	DEF_FORMAT(PF_B4G4R4A4_UNORM,		PT_UNORM,	PC_A, 4, 2), 
+	DEF_FORMAT(PF_R5G6B5_UNORM,			PT_UNORM,	PC_D, 3, 2),
+	DEF_FORMAT(PF_B5G6R5_UNORM,			PT_UNORM,	PC_D, 3, 2),
+	DEF_FORMAT(PF_R5G5B5A1_UNORM,		PT_UNORM,	PC_A, 4, 2),
+	DEF_FORMAT(PF_B5G5R5A1_UNORM,		PT_UNORM,	PC_A, 4, 2),
+	DEF_FORMAT(PF_A1R5G5B5_UNORM,		PT_UNORM,	PC_A, 4, 2),
+	DEF_FORMAT(PF_R8_UNORM,				PT_UNORM,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_SNORM,				PT_SNORM,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_USCALED,			PT_USCALED,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_SSCALED,			PT_SSCALED, PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_UINT,				PT_UINT,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_SINT,				PT_SINT,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8_SRGB,				PT_SRGB,	PC_D, 1, 1),
+	DEF_FORMAT(PF_R8G8_UNORM,			PT_UNORM,	PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_SNORM,			PT_SNORM,	PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_USCALED,			PT_USCALED, PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_SSCALED,			PT_USCALED, PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_UINT,			PT_UINT,	PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_SINT,			PT_SINT,	PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8_SRGB,			PT_SRGB,	PC_D, 2, 2),
+	DEF_FORMAT(PF_R8G8B8_UNORM,			PT_UNORM,	PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_SNORM,			PT_SNORM,	PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_USCALED,		PT_USCALED, PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_SSCALED,		PT_USCALED, PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_UINT,			PT_UINT,	PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_SINT,			PT_SINT,	PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8_SRGB,			PT_SRGB,	PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_UNORM,			PT_UNORM,	PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_SNORM,			PT_SNORM,	PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_USCALED,		PT_USCALED, PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_SSCALED,		PT_USCALED, PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_UINT,			PT_UINT,	PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_SINT,			PT_SINT,	PC_D, 3, 3),
+	DEF_FORMAT(PF_B8G8R8_SRGB,			PT_SRGB,	PC_D, 3, 3),
+	DEF_FORMAT(PF_R8G8B8A8_UNORM,		PT_UNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_SNORM,		PT_SNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_USCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_SSCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_UINT,		PT_UINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_SINT,		PT_SINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_R8G8B8A8_SRGB,		PT_SRGB,	PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_UNORM,		PT_UNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_SNORM,		PT_SNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_USCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_SSCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_UINT,		PT_UINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_SINT,		PT_SINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_B8G8R8A8_SRGB,		PT_SRGB,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_UNORM,		PT_UNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_SNORM,		PT_SNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_USCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_SSCALED,		PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_UINT,		PT_UINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_SINT,		PT_SINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A8B8G8R8_SRGB,		PT_SRGB,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_UNORM,	PT_UNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_SNORM,	PT_SNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_USCALED,	PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_SSCALED,	PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_UINT,		PT_UINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2R10G10B10_SINT,		PT_SINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_UNORM,	PT_UNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_SNORM,	PT_SNORM,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_USCALED,	PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_SSCALED,	PT_USCALED, PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_UINT,		PT_UINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_A2B10G10R10_SINT,		PT_SINT,	PC_A, 4, 4),
+	DEF_FORMAT(PF_R16_UNORM,			PT_UNORM,	PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_SNORM,			PT_SNORM,	PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_USCALED,			PT_USCALED, PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_SSCALED,			PT_SSCALED, PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_UINT,				PT_UINT,	PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_SINT,				PT_SINT,	PC_D, 1, 2),
+	DEF_FORMAT(PF_R16_SFLOAT,			PT_SFLOAT,	PC_D, 1, 2),
+	DEF_FORMAT(PF_R16G16_UNORM,			PT_UNORM,	PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_SNORM,			PT_SNORM,	PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_USCALED,		PT_USCALED, PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_SSCALED,		PT_SSCALED, PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_UINT,			PT_UINT,	PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_SINT,			PT_SINT,	PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16_SFLOAT,		PT_SFLOAT,	PC_D, 2, 4),
+	DEF_FORMAT(PF_R16G16B16_UNORM,		PT_UNORM,	PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_SNORM,		PT_SNORM,	PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_USCALED,	PT_USCALED, PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_SSCALED,	PT_SSCALED, PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_UINT,		PT_UINT,	PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_SINT,		PT_SINT,	PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16_SFLOAT,		PT_SFLOAT,	PC_D, 3, 6),
+	DEF_FORMAT(PF_R16G16B16A16_UNORM,	PT_UNORM,	PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_SNORM,	PT_SNORM,	PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_USCALED, PT_USCALED, PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_SSCALED, PT_SSCALED, PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_UINT,	PT_UINT,	PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_SINT,	PT_SINT,	PC_A, 4, 8),
+	DEF_FORMAT(PF_R16G16B16A16_SFLOAT,	PT_SFLOAT,	PC_A, 4, 8),
+	DEF_FORMAT(PF_R32_UINT,				PT_UINT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R32_SINT,				PT_SINT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R32_SFLOAT,			PT_SFLOAT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R32G32_UINT,			PT_UINT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R32G32_SINT,			PT_SINT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R32G32_SFLOAT,		PT_SFLOAT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R32G32B32_UINT,		PT_UINT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R32G32B32_SINT,		PT_SINT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R32G32B32_SFLOAT,		PT_SFLOAT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R32G32B32A32_UINT,	PT_UINT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_R32G32B32A32_SINT,	PT_SINT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_R32G32B32A32_SFLOAT,	PT_SFLOAT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_R64_UINT,				PT_UINT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R64_SINT,				PT_SINT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R64_SFLOAT,			PT_SFLOAT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_R64G64_UINT,			PT_UINT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R64G64_SINT,			PT_SINT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R64G64_SFLOAT,		PT_SFLOAT,	PC_D, 2, 8),
+	DEF_FORMAT(PF_R64G64B64_UINT,		PT_UINT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R64G64B64_SINT,		PT_SINT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R64G64B64_SFLOAT,		PT_SFLOAT,	PC_D, 3, 12),
+	DEF_FORMAT(PF_R64G64B64A64_UINT,	PT_UINT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_R64G64B64A64_SINT,	PT_SINT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_R64G64B64A64_SFLOAT,	PT_SFLOAT,	PC_A, 4, 16),
+	DEF_FORMAT(PF_B10G11R11_UFLOAT,		PT_UFLOAT,	PC_D, 3, 4),
+	DEF_FORMAT(PF_E5B9G9R9_UFLOAT,		PT_UFLOAT,	PC_D, 3, 4),
+	DEF_FORMAT(PF_D16_UNORM,			PT_UNORM,	PC_D, 1, 2),
+	DEF_FORMAT(PF_X8_D24_UNORM,			PT_UNORM,	PC_D, 1, 4),
+	DEF_FORMAT(PF_D32_SFLOAT,			PT_SFLOAT,	PC_D, 1, 4),
+	DEF_FORMAT(PF_S8_UINT,				PT_UINT,	PC_D, 1, 1),
+	DEF_FORMAT(PF_D16_UNORM_S8_UINT,	PT_UNORM,	PC_D, 2, 3),
+	DEF_FORMAT(PF_D24_UNORM_S8_UINT,	PT_UNORM,	PC_D, 2, 4),
+	DEF_FORMAT(PF_D32_SFLOAT_S8_UINT,	PT_SFLOAT,	PC_D, 2, 5),
+	DEF_FORMAT(PF_BC1_RGB_UNORM,		PT_UNORM,	PC_D, 3, 0),
+	DEF_FORMAT(PF_BC1_RGB_SRGB,			PT_SRGB,	PC_D, 3, 0),
+	DEF_FORMAT(PF_BC1_RGBA_UNORM,		PT_UNORM,	PC_D, 4, 0),
+	DEF_FORMAT(PF_BC1_RGBA_SRGB,		PT_SRGB,	PC_D, 4, 0),
+	DEF_FORMAT(PF_BC2_UNORM,			PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC2_SRGB,				PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC3_UNORM,			PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC3_SRGB,				PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC4_UNORM,			PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC4_SNORM,			PT_SNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC5_UNORM,			PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC5_SNORM,			PT_SNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC6H_UFLOAT,			PT_UFLOAT,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC6H_SFLOAT,			PT_SFLOAT,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC7_UNORM,			PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_BC7_SRGB,				PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8_UNORM,	PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8A1_UNORM,	PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8A1_SRGB,	PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8A8_UNORM,	PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ETC2_R8G8B8A8_SRGB,	PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_EAC_R11_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_EAC_R11_SNORM,		PT_SNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_EAC_R11G11_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_EAC_R11G11_SNORM,		PT_SNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_4x4_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_4x4_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_5x4_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_5x4_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_5x5_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_5x5_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_6x5_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_6x5_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_6x6_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_6x6_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x5_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x5_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x6_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x6_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x8_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_8x8_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x5_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x5_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x6_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x6_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x8_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x8_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x10_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_10x10_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_12x10_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_12x10_SRGB,		PT_SRGB,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_12x12_UNORM,		PT_UNORM,	PC_D, 0, 0),
+	DEF_FORMAT(PF_ASTC_12x12_SRGB,		PT_SRGB,	PC_D, 0, 0),
+};
 
 inline static const PixelInfo& getDesc(PixelFormat fmt)
 {
 	assert(fmt < PIXEL_FORMAT_MAX);
-	return g_infos[(int)fmt];
+	return gPixelInfoArray[(int)fmt];
 }
 
 uint PixelUtil::getFormat(const String& format)
 {
-	if (format == "a")
-		return PF_A8;
-	else if (format == "l")
-		return PF_L8;
-	else if (format == "la")
-		return PF_A4L4;		// a8l8?
-	else if (format == "rgb")
-		return PF_FLOAT_RGB32;
+	if (format == "rgb")
+		return PF_R32G32B32_SFLOAT;
 	else if (format == "rgba")
-		return PF_FLOAT_RGBA32;
+		return PF_R32G32B32A32_SFLOAT;
 	else if (format == "d24s8")
 		return PF_D24_UNORM_S8_UINT;
-	return PF_FLOAT_RGB32;
+
+	return PF_UNKNOWN;
+
+	//if (format == "a")
+	//	return PF_A8;
+	//else if (format == "l")
+	//	return PF_L8;
+	//else if (format == "la")
+	//	return PF_A4L4;		// a8l8?
+	//else if (format == "rgb")
+	//	return PF_FLOAT_RGB32;
+	//else if (format == "rgba")
+	//	return PF_FLOAT_RGBA32;
+	//else if (format == "d24s8")
+	//	return PF_D24_UNORM_S8_UINT;
+	//return PF_FLOAT_RGB32;
 }
 
 uint PixelUtil::getBytes(PixelFormat fmt)
 {
-	return g_infos[fmt].bytes;
+	return gPixelInfoArray[fmt].bytes;
 }
 
-uint PixelUtil::getElementCount(PixelFormat fmt)
+uint PixelUtil::getComponents(PixelFormat fmt)
 {
-	return g_infos[fmt].components;
+	return gPixelInfoArray[fmt].components;
 }
 
 uint PixelUtil::getMemorySize(PixelFormat fmt, uint width, uint height, uint depth)
 {
 	if (isCompressed(fmt))
 	{
-		switch (fmt)
-		{
-			// DXT formats work by dividing the image into 4x4 blocks, then encoding each
-			// 4x4 block with a certain number of bytes. 
-		case PF_BC1_UNORM:
-			return ((width + 3) / 4)*((height + 3) / 4) * 8 * depth;
-		case PF_BC2_UNORM:
-		case PF_BC3_UNORM:
-			return ((width + 3) / 4)*((height + 3) / 4) * 16 * depth;
-		case PF_BC4_SNORM:
-		case PF_BC4_UNORM:
-			return ((width + 3) / 4)*((height + 3) / 4) * 8 * depth;
-		case PF_BC5_SNORM:
-		case PF_BC5_UNORM:
-		case PF_BC6H_SF16:
-		case PF_BC6H_UF16:
-		case PF_BC7_UNORM:
-		case PF_BC7_SRGB:
-			return ((width + 3) / 4)*((height + 3) / 4) * 16 * depth;
-			// Size calculations from the PVRTC OpenGL extension spec
-			// http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
-			// Basically, 32 bytes is the minimum texture size.  Smaller textures are padded up to 32 bytes
-		case PF_PVRTC_RGB2:
-		case PF_PVRTC_RGBA2:
-		case PF_PVRTC_2BPP:
-			return (std::max((int)width, 16) * std::max((int)height, 8) * 2 + 7) / 8;
-		case PF_PVRTC_RGB4:
-		case PF_PVRTC_RGBA4:
-		case PF_PVRTC_4BPP:
-			return (std::max((int)width, 8) * std::max((int)height, 8) * 4 + 7) / 8;
-		case PF_ETC1_RGB8:
-		case PF_ETC2_RGB8:
-		case PF_ETC2_RGBA8:
-		case PF_ETC2_RGB8A1:
-			return ((width * height) >> 1);
-		case PF_ATC_RGB:
-			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
-		case PF_ATC_RGBA_EXPLICIT_ALPHA:
-		case PF_ATC_RGBA_INTERPOLATED_ALPHA:
-			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
-		default:
-			throw std::runtime_error("error format");
-			return 0;
-		}
+		//switch (fmt)
+		//{
+		//	// DXT formats work by dividing the image into 4x4 blocks, then encoding each
+		//	// 4x4 block with a certain number of bytes. 
+		//case PF_BC1_UNORM:
+		//	return ((width + 3) / 4)*((height + 3) / 4) * 8 * depth;
+		//case PF_BC2_UNORM:
+		//case PF_BC3_UNORM:
+		//	return ((width + 3) / 4)*((height + 3) / 4) * 16 * depth;
+		//case PF_BC4_SNORM:
+		//case PF_BC4_UNORM:
+		//	return ((width + 3) / 4)*((height + 3) / 4) * 8 * depth;
+		//case PF_BC5_SNORM:
+		//case PF_BC5_UNORM:
+		//case PF_BC6H_SF16:
+		//case PF_BC6H_UF16:
+		//case PF_BC7_UNORM:
+		//case PF_BC7_SRGB:
+		//	return ((width + 3) / 4)*((height + 3) / 4) * 16 * depth;
+		//	// Size calculations from the PVRTC OpenGL extension spec
+		//	// http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
+		//	// Basically, 32 bytes is the minimum texture size.  Smaller textures are padded up to 32 bytes
+		//case PF_PVRTC_RGB2:
+		//case PF_PVRTC_RGBA2:
+		//case PF_PVRTC_2BPP:
+		//	return (std::max((int)width, 16) * std::max((int)height, 8) * 2 + 7) / 8;
+		//case PF_PVRTC_RGB4:
+		//case PF_PVRTC_RGBA4:
+		//case PF_PVRTC_4BPP:
+		//	return (std::max((int)width, 8) * std::max((int)height, 8) * 4 + 7) / 8;
+		//case PF_ETC1_RGB8:
+		//case PF_ETC2_RGB8:
+		//case PF_ETC2_RGBA8:
+		//case PF_ETC2_RGB8A1:
+		//	return ((width * height) >> 1);
+		//case PF_ATC_RGB:
+		//	return ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		//case PF_ATC_RGBA_EXPLICIT_ALPHA:
+		//case PF_ATC_RGBA_INTERPOLATED_ALPHA:
+		//	return ((width + 3) / 4) * ((height + 3) / 4) * 16;
+		//default:
+		//	throw std::runtime_error("error format");
+		//	return 0;
+		//}
+		return 0;
 	}
 	else
 	{
@@ -296,49 +339,131 @@ uint PixelUtil::getImageSize(PixelFormat fmt, uint width, uint height, uint dept
 	return size;
 }
 
-bool PixelUtil::hasFlags(PixelFormat fmt, uint32_t flags)
-{
-	return (getDesc(fmt).flags & flags) == flags;
-}
-
 bool PixelUtil::isCompressed(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_COMPRESSED);
+	return fmt >= PF_BC1_RGB_UNORM && fmt <= PF_ASTC_12x12_SRGB;
 }
 
 bool PixelUtil::isDepth(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_D);
+	switch (fmt)
+	{
+	case PF_D16_UNORM:
+	case PF_X8_D24_UNORM:
+	case PF_D32_SFLOAT:
+	case PF_D16_UNORM_S8_UINT:
+	case PF_D24_UNORM_S8_UINT:
+	case PF_D32_SFLOAT_S8_UINT:
+		return true;
+	default:
+		return false;
+	}
 }
 
 bool PixelUtil::isStencil(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_S);
+	switch (fmt)
+	{
+	case PF_S8_UINT:
+	case PF_D16_UNORM_S8_UINT:
+	case PF_D24_UNORM_S8_UINT:
+	case PF_D32_SFLOAT_S8_UINT:
+		return true;
+	default:
+		return false;
+	}
 }
 
 bool PixelUtil::isDepthStencil(PixelFormat fmt)
 {
-	return fmt == PF_D32_FLOAT_S8X24_UINT || fmt == PF_D24_UNORM_S8_UINT;
+	switch (fmt)
+	{
+	case PF_D16_UNORM:
+	case PF_X8_D24_UNORM:
+	case PF_D32_SFLOAT:
+	case PF_S8_UINT:
+	case PF_D16_UNORM_S8_UINT:
+	case PF_D24_UNORM_S8_UINT:
+	case PF_D32_SFLOAT_S8_UINT:
+		return true;
+	default:
+		return false;
+	}
+}
+
+static inline bool hasChannel(PixelFormat fmt, uint32_t flag)
+{
+	return (gPixelInfoArray[fmt].channel & flag) == flag;
 }
 
 bool PixelUtil::isAlpha(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_A);
+	return hasChannel(fmt, PC_A);
 }
 
 bool PixelUtil::isFloat(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_FLOAT);
+	PixelType type = gPixelInfoArray[fmt].type;
+	return (type == PT_SFLOAT) || (type == PT_UFLOAT);
+}
+
+bool PixelUtil::isInteger(PixelFormat fmt)
+{
+	PixelType type = gPixelInfoArray[fmt].type;
+	return (type == PT_SINT) || (type == PT_UINT);
 }
 
 bool PixelUtil::isNormalized(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_NORM);
+	PixelType type = gPixelInfoArray[fmt].type;
+	return (type == PT_SNORM) || (type == PT_UNORM);
 }
 
-bool PixelUtil::isLuminance(PixelFormat fmt)
+bool PixelUtil::isScaled(PixelFormat fmt)
 {
-	return hasFlags(fmt, PC_LUMINANCE);
+	PixelType type = gPixelInfoArray[fmt].type;
+	return (type == PT_SSCALED) || (type == PT_USCALED);
 }
+
+bool PixelUtil::isSRGB(PixelFormat fmt)
+{
+	PixelType type = gPixelInfoArray[fmt].type;
+	return type == PT_SRGB;
+}
+
+bool PixelUtil::isSigned(PixelFormat fmt)
+{
+	PixelType type = gPixelInfoArray[fmt].type;
+	switch (type)
+	{
+		case PT_SNORM:
+		case PT_SSCALED:
+		case PT_SINT:
+		case PT_SFLOAT:
+			return true;
+		default:
+			return false;
+	}
+}
+
+bool PixelUtil::isUnsigned(PixelFormat fmt)
+{
+	PixelType type = gPixelInfoArray[fmt].type;
+	switch (type)
+	{
+	case PT_UNORM:
+	case PT_USCALED:
+	case PT_UINT:
+	case PT_UFLOAT:
+		return true;
+	default:
+		return false;
+	}
+}
+
+//bool PixelUtil::isLuminance(PixelFormat fmt)
+//{
+//	return hasFlags(fmt, PC_LUMINANCE);
+//}
 
 CU_NS_END
