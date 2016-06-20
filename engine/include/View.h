@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "Batch.h"
 #include "Vector2.h"
+#include "RenderPath.h"
 
 CU_NS_BEGIN
 

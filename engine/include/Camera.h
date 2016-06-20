@@ -14,7 +14,7 @@ CU_NS_BEGIN
 // ø…“‘…Ë÷√RenderPath
 class CU_API Camera : public Component, public ListNode<Camera, 2>
 {
-	DECLARE_RTTI(Camera, Component, TYPE_CAMERA);
+	DECLARE_RTTI(Camera, Component, OBJ_ID_CAMERA);
 	enum 
 	{ 
 		FLAG_ORTHO		= 0x01, 

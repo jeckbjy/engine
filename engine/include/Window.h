@@ -1,5 +1,6 @@
 #pragma once
 #include "API.h"
+#include "Object.h"
 
 #if defined(CU_OS_WINNT)
 #	include <Windows.h>
@@ -76,8 +77,11 @@ struct WINDOW_DESC
 	}
 };
 
-class CU_API Window
+class CU_API Window : public Object
 {
+	DECLARE_RTTI(Window, Object, OBJ_ID_WINDOW);
+
+private:
 	enum WindowFlag
 	{
 		WF_AUTO_FREE = 0x01,
@@ -87,7 +91,12 @@ class CU_API Window
 		WF_GAMMA = 0x10,
 		WF_MODAL = 0x20,
 		WF_DEPTH_STENCIL = 0x40,
+		WF_CLOSED = 0x80,
 	};
+
+public:
+	static bool pollEvents(); // 系统事件循环
+
 public:
 	Window(const WINDOW_DESC& desc);
 	~Window();
@@ -104,12 +113,10 @@ public:
 	void setFullscreen();
 	void setWindowed();
 
-	//virtual void onClose();
-	//virtual void onActive(bool flag);
-	//virtual void onResize(size_t w, size_t h);
-	//virtual void onPaint(){}
+	void show();
+	void hide();
 
-	//bool isClosed() const { return (m_flags & WF_CLOSED) != 0; }
+	bool isClosed() const { return (m_flags & WF_CLOSED) != 0; }
 	bool isHidden() const { return hasFlag(WF_HIDDEN); }
 	bool isActive() const { return hasFlag(WF_ACTIVE); }
 	bool isModal() const { return hasFlag(WF_MODAL); }

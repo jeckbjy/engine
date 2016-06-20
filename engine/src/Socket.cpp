@@ -108,7 +108,7 @@ socket_t Socket::accept(sockaddr* addr, socklen_t* len)
 	do 
 	{
 		sock = ::accept(m_sock, addr, len);
-	} while (sock == INVALID_SOCKET && last_error() == ERR_INTERRUPTED);
+	} while (sock == INVALID_SOCKET && getLastError() == ERR_INTERRUPTED);
 	return sock;
 }
 
@@ -118,7 +118,7 @@ int Socket::connect(const SocketAddress& addr)
 	do 
 	{
 		rc = ::connect(m_sock, addr.address(), addr.length());
-	} while (rc != 0 && last_error() == ERR_INTERRUPTED);
+	} while (rc != 0 && getLastError() == ERR_INTERRUPTED);
 	return rc;
 }
 
@@ -129,7 +129,7 @@ int Socket::send(const void* buf, int len, int flags /* = 0 */)
 	do
 	{
 		rc = ::send(m_sock, (const char*)buf, len, flags);
-	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
 	return rc;
 }
 
@@ -140,7 +140,7 @@ int Socket::recv(void* buf, int len, int flags /* = 0 */)
 	do
 	{
 		rc = ::recv(m_sock, (char*)buf, len, flags);
-	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
 	return rc;
 }
 
@@ -151,7 +151,7 @@ int Socket::sendTo(const SocketAddress& addr, const void* buf, int len, int flag
 	do
 	{
 		rc = ::sendto(m_sock, (const char*)(buf), len, flags, addr.address(), addr.length());
-	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
 	return rc;
 }
 
@@ -163,7 +163,7 @@ int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 *
 	do
 	{
 		rc = ::recvfrom(m_sock, (char*)buf, len, flags, addr.address(), &salen);
-	} while (rc < 0 && last_error() == ERR_INTERRUPTED);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
 	return rc;
 }
 

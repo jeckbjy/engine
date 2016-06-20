@@ -27,7 +27,7 @@ private:
 // ¶¯»­²¥·ÅÆ÷
 class CU_API Animator : public Component
 {
-	DECLARE_RTTI(Animator, Component, TYPE_ANIMATOR);
+	DECLARE_RTTI(Animator, Component, OBJ_ID_ANIMATOR);
 public:
 	Animator();
 	~Animator();

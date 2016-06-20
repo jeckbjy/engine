@@ -235,6 +235,26 @@ bool destroy_window(window_t hwnd)
 
 #endif
 
+#ifdef CU_OS_WIN
+bool Window::pollEvents()
+{
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+			return true;
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return false;
+}
+#else
+bool Window::pollEvents()
+{
+	return false;
+}
+#endif
+
 Window::Window(const WINDOW_DESC& desc)
 {
 	m_hwnd = create_window(desc);
@@ -340,6 +360,16 @@ void Window::setActive(bool state)
 		ShowWindow(m_hwnd, SW_SHOWMINNOACTIVE);
 #endif
 	setFlag(WF_ACTIVE, state);
+}
+
+void Window::show()
+{
+	setHidden(false);
+}
+
+void Window::hide()
+{
+	setHidden(true);
 }
 
 CU_NS_END

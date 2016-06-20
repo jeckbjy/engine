@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "SmartPtr.h"
 #include "GraphicsDesc.h"
 
 CU_NS_BEGIN
@@ -38,6 +39,10 @@ protected:
 	size_t m_count;
 	size_t m_stride;
 };
+
+typedef GpuBuffer VertexBuffer;
+typedef GpuBuffer IndexBuffer;
+typedef GpuBuffer UniformBuffer;
 
 class CU_API Texture : public GpuResource
 {
@@ -109,7 +114,6 @@ public:
 	virtual void present() = 0;
 };
 
-
 class CU_API ShaderStage : public Object
 {
 	DECLARE_RTTI(ShaderStage, Object, OBJ_ID_SHADER_STAGE);
@@ -175,11 +179,14 @@ public:
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setInputLayout(InputLayout* layout) = 0;
 	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets) = 0;
-	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset) = 0;
+	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset = 0) = 0;
 	virtual void setRenderTarget(RenderTarget* target) = 0;
-	virtual void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset) = 0;
-	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset) = 0;
+	virtual void draw(uint32_t vertexCount, uint32_t instanceCount = 0, uint32_t vertexOffset = 0, uint32_t instanceOffset = 0) = 0;
+	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount = 0, uint32_t indexOffset = 0, uint32_t instanceOffset = 0, uint32_t vertexOffset = 0) = 0;
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
+
+	// 仅有一个时调用
+	void setVertexBuffer(GpuBuffer* buffer, size_t offset = 0, size_t startSlot = 0);
 };
 
 class CU_API Fence : public Object
@@ -230,6 +237,8 @@ public:
 		BufferDesc desc(BU_INDEX, stride, counts, flags, data);
 		return newBuffer(desc);
 	}
+
+	ShaderStage* loadShader(ShaderType type, const String& path);
 };
 
 // 用于全局,枚举GPU
@@ -239,17 +248,28 @@ class CU_API Graphics : public Object
 public:
 	virtual ~Graphics(){}
 
-	Device* getDevice() { return NULL; }
+	void setDevice(Device* device){ m_device = device; }
+	Device* getDevice() { return m_device.get(); }
 
 private:
-	Device* m_device;
-	typedef std::vector<ShaderStage*>			ProgramVec;
-	typedef std::vector<ShaderProgram*>	ProgramPipelineVec;
-	ProgramVec			m_programs;
-	ProgramPipelineVec	m_progPipelines;
+	SharedPtr<Device> m_device;
 };
 
 // 全局接口
 extern CU_API Graphics gGraphics;
+
+typedef SharedPtr<GpuBuffer>		GpuBufferPtr;
+typedef SharedPtr<Texture>			TexturePtr;
+typedef SharedPtr<InputLayout>		InputLayoutPtr;
+typedef SharedPtr<RenderTarget>		RenderTargetPtr;
+typedef SharedPtr<FrameBuffer>		FrameBufferPtr;
+typedef SharedPtr<SwapChain>		SwapChainPtr;
+typedef SharedPtr<ShaderStage>		ShaderStagePtr;
+typedef SharedPtr<ShaderProgram>	ShaderProgramPtr;
+typedef SharedPtr<DescriptorSet>	DescriptorSetPtr;
+typedef SharedPtr<Pipeline>			PipelinePtr;
+typedef SharedPtr<CommandBuffer>	CommandBufferPtr;
+typedef SharedPtr<CommandQueue>		CommandQueuePtr;
+typedef SharedPtr<Device>			DevicePtr;
 
 CU_NS_END

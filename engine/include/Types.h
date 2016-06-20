@@ -257,7 +257,7 @@ enum ErrorCode
 	ERR_RETRY_AGAIN				= CU_WIN_OR_POSIX(ERROR_RETRY, EAGAIN),
 };
 
-inline error_t last_error()
+inline error_t getLastError()
 {
 #ifdef _WIN32
 	return ::GetLastError();

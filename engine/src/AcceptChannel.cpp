@@ -25,7 +25,7 @@ void AcceptChannel::perform(IOOperation* op)
 		if (sop->isInput())
 		{
 			socket_t sock = m_sock.accept();
-			error_t ec = last_error();
+			error_t ec = getLastError();
 			m_func(ec, sock);
 		}
 	}
@@ -64,7 +64,7 @@ void AcceptChannel::accept()
 	}
 	else
 	{// 完成或出错
-		completed(last_error(), sock);
+		completed(getLastError(), sock);
 	}
 #endif
 }

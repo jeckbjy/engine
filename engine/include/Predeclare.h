@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform.h"
+#include "SmartPtr.h"
 
 CU_NS_BEGIN
 
@@ -63,6 +64,7 @@ class GpuBuffer;
 class Texture;
 class RenderTarget;
 class ShaderStage;
+class ShaderProgram;
 class DescriptorSet;
 class Pipeline;
 class CommandBuffer;
@@ -70,17 +72,11 @@ class CommandQueue;
 class Device;
 class Graphics;
 
-typedef GpuBuffer VertexBuffer;
-typedef GpuBuffer IndexBuffer;
-typedef GpuBuffer UniformBuffer;
-
 // render
 class Playable;
 class Animatable;
 
 class View;
-struct RenderCommand;
-struct RenderTargetInfo;
 class RenderPath;
 class Renderer;
 class Engine;
@@ -116,6 +112,9 @@ class Application;
 // ÄÚ²¿ÀàID
 enum ObjectID
 {
+	OBJ_ID_OBJECT,
+	OBJ_ID_WINDOW,
+	//
 	OBJ_ID_GRAPHICS,
 	OBJ_ID_GPU_RESOURCE,
 	OBJ_ID_GPU_BUFFER,
@@ -133,6 +132,12 @@ enum ObjectID
 	OBJ_ID_COMMAND_QUEUE,
 	OBJ_ID_FENCE,
 	OBJ_ID_DEVICE,
+
+	// 
+	OBJ_ID_COMPONENT,
+	OBJ_ID_CAMERA,
+	OBJ_ID_LIGHT,
+	OBJ_ID_ANIMATOR,
 };
 
 CU_NS_END

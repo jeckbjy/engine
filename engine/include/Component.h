@@ -9,7 +9,7 @@ CU_NS_BEGIN
 class CU_API Component : public Object, public Animatable, public ListNode<Component>
 {
 	friend class Entity;
-	DECLARE_RTTI(Component, Object, TYPE_COMPONENT);
+	DECLARE_RTTI(Component, Object, OBJ_ID_COMPONENT);
 public:
 	Component();
 	virtual ~Component();

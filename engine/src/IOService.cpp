@@ -224,7 +224,7 @@ void IOService::connect(const SocketAddress& addr, const Socket& sock, Channel* 
 	}
 	else
 	{
-		error_t code = last_error();
+		error_t code = getLastError();
 		bool blocking = (code == EINPROGRESS || code == EWOULDBLOCK);
 		if (blocking)
 		{// 异步等待连接

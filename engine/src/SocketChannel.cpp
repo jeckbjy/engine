@@ -72,7 +72,7 @@ void SocketChannel::write()
 		int ret = m_sock.send(buf, len);
 		if (ret <= 0)
 		{// has error
-			m_code = last_error();
+			m_code = getLastError();
 			if (m_code == ERR_IN_PROGRESS)
 				m_serivce->send(m_sock.native(), this);
 			else

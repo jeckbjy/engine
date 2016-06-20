@@ -6,7 +6,7 @@ CU_NS_BEGIN
 
 class CU_API Light : public Component, public ListNode<Light, 2>
 {
-	DECLARE_RTTI(Light, Component, TYPE_LIGHT);
+	DECLARE_RTTI(Light, Component, OBJ_ID_LIGHT);
 public:
 	enum Type
 	{

@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include <stdio.h>
 
 CU_NS_BEGIN
 
@@ -111,6 +112,37 @@ void FrameBuffer::detach(size_t att)
 		m_attachments[att] = NULL;
 		m_dirty = true;
 	}
+}
+
+ShaderStage* Device::loadShader(ShaderType type, const String& path)
+{
+	FILE* fp = fopen(path.c_str(), "rt");
+	if (fp == NULL)
+		return NULL;
+	size_t count = 0;
+	fseek(fp, 0, SEEK_END);
+	count = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	// ╪стьнд╪Ч
+	String code;
+	code.resize(count);
+	fread(&code[0], 1, count, fp);
+	fclose(fp);
+
+	ShaderDesc desc;
+	desc.stage = type;
+	desc.code = code;
+	ShaderStage* shader = newShader();
+	shader->compile(desc);
+	return shader;
+}
+
+void CommandBuffer::setVertexBuffer(GpuBuffer* buffer, size_t offset /* = 0 */, size_t startSlot /* = 0 */)
+{
+	GpuBuffer* buffers[1] = { buffer };
+	size_t offsets[1] = { offset };
+	setVertexBuffers(startSlot, 1, buffers, offsets);
 }
 
 CU_NS_END
