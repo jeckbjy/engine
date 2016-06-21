@@ -42,12 +42,6 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_Program.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_RenderTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_RenderWindow.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\OGL_Shader.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -96,12 +90,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Program.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_RenderTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_RenderWindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Shader.cpp">

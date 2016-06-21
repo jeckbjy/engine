@@ -140,7 +140,6 @@
     <ClInclude Include="..\engine\include\IOOperation.h" />
     <ClInclude Include="..\engine\include\IOService.h" />
     <ClInclude Include="..\engine\include\IOServicePool.h" />
-    <ClInclude Include="..\engine\include\KeyedVector.h" />
     <ClInclude Include="..\engine\include\Light.h" />
     <ClInclude Include="..\engine\include\List.h" />
     <ClInclude Include="..\engine\include\Log.h" />
@@ -188,7 +187,6 @@
     <ClInclude Include="..\engine\include\Socket.h" />
     <ClInclude Include="..\engine\include\SocketAddress.h" />
     <ClInclude Include="..\engine\include\SocketChannel.h" />
-    <ClInclude Include="..\engine\include\SortedVector.h" />
     <ClInclude Include="..\engine\include\Sphere.h" />
     <ClInclude Include="..\engine\include\Stream.h" />
     <ClInclude Include="..\engine\include\StringPiece.h" />

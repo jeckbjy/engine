@@ -174,9 +174,6 @@
     <ClInclude Include="..\engine\include\IOServicePool.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="..\engine\include\KeyedVector.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\engine\include\Light.h">
       <Filter>render</Filter>
     </ClInclude>
@@ -317,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="..\engine\include\SocketChannel.h">
       <Filter>net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\engine\include\SortedVector.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\engine\include\Sphere.h">
       <Filter>math</Filter>
