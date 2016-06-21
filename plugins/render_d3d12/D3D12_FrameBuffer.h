@@ -16,7 +16,7 @@ private:
 
 private:
 	D3D12_CPU_DESCRIPTOR_HANDLE m_dsv;
-	ID3D12DescriptorHeap		m_rtv;
+	ID3D12DescriptorHeap*		m_rtv;
 };
 
 CU_NS_END

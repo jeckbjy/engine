@@ -15,7 +15,7 @@ D3D12_FrameBuffer::~D3D12_FrameBuffer()
 void D3D12_FrameBuffer::bind(ID3D12GraphicsCommandList* cmdList)
 {
 	update();
-	cmdList->OMSetRenderTargets(m_attachments.size() - 1, m_rtv.GetCPUDescriptorHandleForHeapStart(), true, m_dsv);
+	//cmdList->OMSetRenderTargets(m_attachments.size() - 1, m_rtv->GetCPUDescriptorHandleForHeapStart(), true, m_dsv);
 }
 
 void D3D12_FrameBuffer::update()

@@ -102,10 +102,11 @@ typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
 
 #endif
 
-class CU_D3D11_API D3D11RenderTarget : public RenderTarget
+enum D3D11ObjectID
 {
-public:
-	virtual void bind(ID3D11ContextN* context) = 0;
+	OBJ_ID_D3D11_START = OBJ_ID_PLUGIN_D3D11,
+	OBJ_ID_D3D11_FRAMEBUFFER,
+	OBJ_ID_D3D11_SWAPCHAIN,
 };
 
 CU_NS_END

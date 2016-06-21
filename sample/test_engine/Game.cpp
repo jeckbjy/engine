@@ -3,6 +3,8 @@
 #include "Model.h"
 
 BaseApp::BaseApp()
+	: m_width(1024)
+	, m_height(768)
 {
 }
 
@@ -23,8 +25,8 @@ void BaseApp::run()
 		return;
 
 	WINDOW_DESC desc;
-	desc.width = 1024;
-	desc.height = 768;
+	desc.width = m_width;
+	desc.height = m_height;
 	desc.title = "Game";
 
 	m_window = new Window(desc);
@@ -94,10 +96,14 @@ bool TriangleApp::init()
 	m_pipeline = newPipeline(m_program);
 	m_layout = m_device->newInputLayout(elements, 2);
 
+	m_cmdBuffer->setRenderTarget(m_swapchain);
+	m_cmdBuffer->setViewport(0, 0, m_width, m_height);
 	m_cmdBuffer->setVertexBuffer(m_vb);
 	m_cmdBuffer->setIndexBuffer(m_ib);
 	m_cmdBuffer->setPipeline(m_pipeline);
-	m_cmdBuffer->setRenderTarget(m_swapchain);
+	m_cmdBuffer->setInputLayout(m_layout);
+
+	m_cmdBuffer->clear();
 	m_cmdBuffer->drawIndexed(m_ib->bytes());
 
 	return true;

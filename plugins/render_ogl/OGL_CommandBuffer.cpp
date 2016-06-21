@@ -27,9 +27,9 @@ OGL_CommandBuffer::~OGL_CommandBuffer()
 
 }
 
-void OGL_CommandBuffer::reset()
+void OGL_CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-
+	m_target = target;
 }
 
 void OGL_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
@@ -53,11 +53,6 @@ void OGL_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	m_stencilRef = reference;
 }
 
-void OGL_CommandBuffer::setRenderTarget(RenderTarget* target)
-{
-	m_target = target;
-}
-
 void OGL_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
 	m_descriptors = descriptors;
@@ -79,6 +74,11 @@ void OGL_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuf
 }
 
 void OGL_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
+{
+
+}
+
+void OGL_CommandBuffer::clear(ClearMask masks, const Color& color, float depth, uint32_t stencil, uint8_t targetMask)
 {
 
 }

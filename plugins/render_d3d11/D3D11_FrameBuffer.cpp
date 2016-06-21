@@ -16,19 +16,6 @@ D3D11_FrameBuffer::~D3D11_FrameBuffer()
 
 }
 
-void D3D11_FrameBuffer::bind(D3D11_CommandBuffer* cmds)
-{
-	ID3D11ContextN* context = cmds->getContext();
-
-	if (m_dirty)
-	{
-		update();
-	}
-	if (m_rtv.empty())
-		return;
-	context->OMSetRenderTargets(m_rtv.size(), &m_rtv[0], m_dsv);
-}
-
 void D3D11_FrameBuffer::update()
 {
 	m_dirty = false;
@@ -45,6 +32,36 @@ void D3D11_FrameBuffer::update()
 		tex = (D3D11_Texture*)(m_attachments[i].get());
 		m_rtv[i - 1] =  tex ? tex->getRTV() : NULL;
 	}
+}
+
+void D3D11_FrameBuffer::bind(ID3D11ContextN* context)
+{
+	if (m_dirty)
+	{
+		update();
+	}
+	if (m_rtv.empty())
+		return;
+	context->OMSetRenderTargets(m_rtv.size(), &m_rtv[0], m_dsv);
+}
+
+void D3D11_FrameBuffer::clearRTV(ID3D11ContextN* context, const Color& color, uint8_t targetMask)
+{
+	if (m_rtv.empty())
+		return;
+	uint8_t mask = 1;
+	for (size_t i = 0; i < m_rtv.size(); ++i)
+	{
+		ID3D11RenderTargetView* view = m_rtv[i];
+		if (view && (targetMask & mask) != 0)
+			context->ClearRenderTargetView(view, color.data());
+	}
+}
+
+void D3D11_FrameBuffer::clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil)
+{
+	if (m_dsv)
+		context->ClearDepthStencilView(m_dsv, flags, depth, stencil);
 }
 
 CU_NS_END

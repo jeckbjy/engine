@@ -7,11 +7,14 @@ CU_NS_BEGIN
 class D3D11_CommandBuffer;
 class CU_D3D11_API D3D11_FrameBuffer : public FrameBuffer
 {
+	DECLARE_RTTI(D3D11_FrameBuffer, FrameBuffer, OBJ_ID_D3D11_FRAMEBUFFER);
 public:
 	D3D11_FrameBuffer();
 	~D3D11_FrameBuffer();
 
-	void bind(D3D11_CommandBuffer* cmds);
+	void bind(ID3D11ContextN* context);
+	void clearRTV(ID3D11ContextN* context, const Color& color, uint8_t targetMask);
+	void clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil);
 
 private:
 	void update();

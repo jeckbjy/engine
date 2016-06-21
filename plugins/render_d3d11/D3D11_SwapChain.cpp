@@ -40,7 +40,7 @@ D3D11_SwapChain::~D3D11_SwapChain()
 
 void D3D11_SwapChain::present()
 {
-
+	m_chain->Present(0, 0);
 }
 
 void D3D11_SwapChain::create(ID3D11DeviceN* device)
@@ -61,6 +61,24 @@ void D3D11_SwapChain::create(ID3D11DeviceN* device)
 		throw std::runtime_error("Unable to create rendertagert view");
 	}
 	// ´´½¨DS
+}
+
+void D3D11_SwapChain::bind(ID3D11ContextN* context)
+{
+	ID3D11RenderTargetView* views[1] = { m_rtv };
+	context->OMSetRenderTargets(1, views, m_dsv);
+}
+
+void D3D11_SwapChain::clearRTV(ID3D11ContextN* context, const Color& color)
+{
+	if (m_rtv)
+		context->ClearRenderTargetView(m_rtv, color.data());
+}
+
+void D3D11_SwapChain::clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil)
+{
+	if (m_dsv)
+		context->ClearDepthStencilView(m_dsv, flags, depth, stencil);
 }
 
 CU_NS_END

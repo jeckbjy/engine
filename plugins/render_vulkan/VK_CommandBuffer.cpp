@@ -15,6 +15,11 @@ VK_CommandBuffer::~VK_CommandBuffer()
 
 }
 
+void VK_CommandBuffer::setRenderTarget(RenderTarget* target)
+{
+
+}
+
 void VK_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
 	VkViewport viewport = { (float)x, (float)y, (float)w, (float)h, 0.0f, 1.0f };
@@ -73,7 +78,7 @@ void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 	vkCmdBindIndexBuffer(m_handle, vk_buffer->native(), 0, vk_buffer->getIndexType());
 }
 
-void VK_CommandBuffer::setRenderTarget(RenderTarget* target)
+void VK_CommandBuffer::clear(ClearMask masks, const Color& color, float depth, uint32_t stencil, uint8_t targetMask)
 {
 
 }

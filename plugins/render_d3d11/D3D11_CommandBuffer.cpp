@@ -4,6 +4,7 @@
 #include "D3D11_InputLayout.h"
 #include "D3D11_DescriptorSet.h"
 #include "D3D11_FrameBuffer.h"
+#include "D3D11_SwapChain.h"
 
 CU_NS_BEGIN
 
@@ -18,9 +19,19 @@ D3D11_CommandBuffer::~D3D11_CommandBuffer()
 
 }
 
-void D3D11_CommandBuffer::reset()
+void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-
+	m_target = target;
+	if (target->isKindOf<D3D11_SwapChain>())
+	{
+		D3D11_SwapChain* chain = (D3D11_SwapChain*)target;
+		chain->bind(m_context);
+	}
+	else if (target->isKindOf<D3D11_FrameBuffer>())
+	{
+		D3D11_FrameBuffer* fbo = (D3D11_FrameBuffer*)target;
+		fbo->bind(m_context);
+	}
 }
 
 void D3D11_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
@@ -96,9 +107,44 @@ void D3D11_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 	m_context->IASetIndexBuffer(dx_buffer->native(), format, offset);
 }
 
-void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
+void D3D11_CommandBuffer::clear(ClearMask masks, const Color& color, float depth, uint32_t stencil, uint8_t targetMask)
 {
-	m_target = target;
+	if (!m_target)
+		return;
+
+	if (masks & CLEAR_COLOR)
+	{
+		if (m_target->isKindOf<D3D11_SwapChain>())
+		{
+			D3D11_SwapChain* chain = (D3D11_SwapChain*)m_target;
+			chain->clearRTV(m_context, color);
+		}
+		else
+		{
+			D3D11_FrameBuffer* fbo = (D3D11_FrameBuffer*)m_target;
+			fbo->clearRTV(m_context, color, targetMask);
+		}
+	}
+
+	if (masks & CLEAR_DEPTH_STENCIL)
+	{
+		UINT32 clearFlag = 0;
+		if (masks & CLEAR_DEPTH)
+			clearFlag |= D3D11_CLEAR_DEPTH;
+		if (masks & CLEAR_STENCIL)
+			clearFlag |= D3D11_CLEAR_STENCIL;
+
+		if (m_target->isKindOf<D3D11_SwapChain>())
+		{
+			D3D11_SwapChain* chain = (D3D11_SwapChain*)m_target;
+			chain->clearDSV(m_context, clearFlag, depth, stencil);
+		}
+		else
+		{
+			D3D11_FrameBuffer* fbo = (D3D11_FrameBuffer*)m_target;
+			fbo->clearDSV(m_context, clearFlag, depth, stencil);
+		}
+	}
 }
 
 void D3D11_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
