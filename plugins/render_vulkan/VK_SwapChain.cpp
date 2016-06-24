@@ -18,16 +18,17 @@ void VK_SwapChain::createSurface()
 {
 	VkInstance instance = NULL;
 	VkResult err;
+	window_t handle = m_wnd->getHandle();
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 	VkWin32SurfaceCreateInfoKHR info = {};
 	info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 	info.hinstance = NULL;
-	info.hwnd = m_wnd->handle();
+	info.hwnd = handle;
 	err = vkCreateWin32SurfaceKHR(instance, &info, NULL, &m_surface);
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
 	VkAndroidSurfaceCreateInfoKHR info = {};
 	info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-	info.window = m_wnd->handle();
+	info.window = handle;
 	err = vkCreateAndroidSurfaceKHR(instance, &info, NULL, &m_surface);
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 	VkXcbSurfaceCreateInfoKHR info = {};
@@ -39,7 +40,7 @@ void VK_SwapChain::createSurface()
 	VkXlibSurfaceCreateInfoKHR info = {};
 	info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
 	info.dpy = NULL;
-	info.window = m_wnd->handle();
+	info.window = handle;
 	err = vkCreateXlibSurfaceKHR(instance, &info, NULL, &m_surface);
 #endif
 }

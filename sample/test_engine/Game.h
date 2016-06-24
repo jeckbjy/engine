@@ -10,9 +10,10 @@ class BaseApp : public Application
 public:
 	BaseApp();
 	~BaseApp();
-	void run();
 
-	virtual bool init(){ return true; }
+	virtual bool setup();
+	virtual bool init();
+	virtual void update();
 	virtual void draw();
 
 	 ShaderProgram* loadProgram(const char* vsFile, const char* psFile);
@@ -40,4 +41,3 @@ class TriangleApp : public BaseApp
 public:
 	bool init();
 };
-

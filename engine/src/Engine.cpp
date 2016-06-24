@@ -44,4 +44,9 @@ void Engine::update()
 	m_renderer->update();
 }
 
+void Engine::loadPlugin(const String& path, bool install)
+{
+	m_plugins.load(path, install);
+}
+
 CU_NS_END

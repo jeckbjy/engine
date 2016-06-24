@@ -56,9 +56,10 @@ D3D11_Device::D3D11_Device()
 		D3D_FEATURE_LEVEL_9_2,
 		D3D_FEATURE_LEVEL_9_1 
 	};
-
 	HRESULT hr;
-	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, featureLevels, 6, D3D11_SDK_VERSION, &m_device, NULL, &m_context);
+
+	UINT flags = D3D11_CREATE_DEVICE_DEBUG;
+	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 6, D3D11_SDK_VERSION, &m_device, NULL, &m_context);
 	D3D11_CHECK( hr, "D3D11CreateDevice fail!");
 
 	hr = CreateDXGIFactory(__uuidof(IDXGIFactoryN), (void**)&m_factory);

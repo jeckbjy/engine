@@ -3,22 +3,27 @@
 
 CU_NS_BEGIN
 
+Object::Object()
+{
+
+}
+
 Object::~Object()
 {
-	Context::Instance().removeListener(this);
+	//Context::Instance().removeListener(this);
 	// todo:使用通用算法实现
 	//m_handlers.release();
-	EventHandler* handler;
-	HandlerList::iterator tmp;
-	// 遍历并删除
-	for (HandlerList::iterator itor = m_handlers.begin(); itor != m_handlers.end(); )
-	{
-		handler = *itor;
-		Context::Instance().removeListener(*itor);
-		tmp = itor++;
-		m_handlers.erase(tmp);
-		handler->release();
-	}
+	//EventHandler* handler;
+	//HandlerList::iterator tmp;
+	//// 遍历并删除
+	//for (HandlerList::iterator itor = m_handlers.begin(); itor != m_handlers.end(); )
+	//{
+	//	handler = *itor;
+	//	Context::Instance().removeListener(*itor);
+	//	tmp = itor++;
+	//	m_handlers.erase(tmp);
+	//	handler->release();
+	//}
 }
 
 const AttributeList& Object::getAttributes() const

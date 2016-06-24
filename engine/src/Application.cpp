@@ -4,6 +4,7 @@
 CU_NS_BEGIN
 
 Application::Application()
+	: m_quit(false)
 {
 
 }
@@ -17,30 +18,39 @@ void Application::run()
 {
 	try
 	{
-		if (!init() || !gEngine.init())
+		if (!setup() || !gEngine.init())
 			return;
 		while (!m_quit)
 		{
 			gEngine.update();
 			update();
-			pumpMsg();
+			if (dispatchMsg())
+			{
+				m_quit = true;
+				break;
+			}
 		}
 	}
-	catch (std::exception exp)
+	catch (std::exception)
 	{
-		release();
 	}
+
+	cleanup();
 }
 
-void Application::pumpMsg()
+bool Application::dispatchMsg()
 {
 #ifdef CU_OS_WINNT
 	MSG msg;
 	while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
 	{
+		if (msg.message == WM_QUIT)
+			return true;
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
+	return false;
 #else
 
 #endif

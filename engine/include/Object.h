@@ -10,6 +10,7 @@ class CU_API Object : public RefCounted
 	//CU_NONCOPYABLE(Object);
 	DECLARE_RTTI(Object, RootRtti, OBJ_ID_OBJECT);
 public:
+	Object();
 	virtual ~Object();
 
 	uint32_t getObjectType() const { return getRtti()->getType(); }

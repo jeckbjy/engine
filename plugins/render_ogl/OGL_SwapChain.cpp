@@ -6,7 +6,7 @@ OGL_SwapChain::OGL_SwapChain(Window* wnd)
 	: m_wnd(wnd)
 {
 #if defined(CU_OS_WIN)
-	HWND hwnd = m_wnd->handle();
+	HWND hwnd = m_wnd->getHandle();
 	m_hdc = GetDC(hwnd);
 	m_hrc = wglCreateContext(m_hdc);
 	wglMakeCurrent(m_hdc, m_hrc);
@@ -22,7 +22,7 @@ OGL_SwapChain::~OGL_SwapChain()
 		wglDeleteContext(m_hrc);
 
 	if (m_hdc)
-		::ReleaseDC(m_wnd->handle(), m_hdc);
+		::ReleaseDC(m_wnd->getHandle(), m_hdc);
 
 #elif defined(CU_USE_X11)
 #elif defined(CU_USE_XCB)

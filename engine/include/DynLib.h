@@ -1,5 +1,6 @@
 #pragma once
 #include "API.h"
+#include "Plugin.h"
 
 CU_NS_BEGIN
 
@@ -9,19 +10,23 @@ class CU_API DynLib
 	CU_NONCOPYABLE(DynLib);
 public:
 	typedef void(*DllFun)(void);
-	static String& suffix();// บ๓ืบ
-	static String check_path(const String& path);
+	static const String& suffix();// บ๓ืบ
+	static String checkPath(const String& path);
 public:
 	DynLib();
 	~DynLib();
 
 	bool load(const String& path);
 	void unload();
-	void* getSymbol(const String& name);
 	bool isLoaded() const;
+	void* getSymbol(const String& name);
+
+	Plugin* loadPlugin();
+	Plugin* getPlugin() { return m_plugin; }
 
 private:
-	module_t _handle;
+	module_t m_handle;
+	Plugin*	 m_plugin;
 };
 
 CU_NS_END

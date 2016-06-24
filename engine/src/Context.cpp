@@ -83,7 +83,7 @@ void Context::removeListener(Object* sender)
 
 void Context::loadPlugin(const String& file)
 {
-	String path = DynLib::check_path(file);
+	String path = DynLib::checkPath(file);
 	// ∑¿÷π÷ÿ∏¥º”‘ÿ
 	if (m_libs.find(path) != m_libs.end())
 		return;

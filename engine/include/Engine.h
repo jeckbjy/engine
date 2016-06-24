@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Renderer.h"
+#include "PluginMgr.h"
 #include "Singleton.h"
 
 CU_NS_BEGIN
@@ -16,14 +17,13 @@ public:
 	bool init();
 	void update();	// 执行一帧
 
-	Graphics*	getGraphics(){ return m_graphics; }
-	void		setGraphics(Graphics* graphics) { m_graphics = graphics; }
+	void loadPlugin(const String& path, bool install = true);
 
 protected:
-	uint64	m_frame;
-	uint64	m_timestamp;
-	Renderer* m_renderer;
-	Graphics* m_graphics;	// 当前使用graphics
+	uint64		m_frame;
+	uint64		m_timestamp;
+	Renderer*	m_renderer;
+	PluginMgr	m_plugins;
 };
 
 extern CU_API Engine gEngine;

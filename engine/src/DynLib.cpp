@@ -22,13 +22,13 @@
 
 CU_NS_BEGIN
 
-String& DynLib::suffix()
+const String& DynLib::suffix()
 {
 	static String ss(DYNLIB_SUFFIX);
 	return ss;
 }
 
-String DynLib::check_path(const String& path)
+String DynLib::checkPath(const String& path)
 {
 	const String& suf = suffix();
 	if (path.size() > suf.size() && strcmp(path.data() + path.size() - suf.size(), suf.c_str()) == 0)
@@ -36,30 +36,67 @@ String DynLib::check_path(const String& path)
 	return path + suf;
 }
 
-DynLib::DynLib() :_handle(0){}
-DynLib::~DynLib(){ unload(); }
+DynLib::DynLib()
+	: m_handle(0)
+	, m_plugin(NULL)
+{
+}
+
+DynLib::~DynLib()
+{
+	if (m_plugin)
+	{
+		m_plugin->release();
+		m_plugin = NULL;
+	}
+
+	unload();
+}
 
 bool DynLib::load(const String& path)
 {
-	_handle = DYNLIB_LOAD(path.c_str());
-	return _handle != NULL;
+	m_handle = DYNLIB_LOAD(path.c_str());
+	if (!m_handle)
+	{
+		String realPath = path + suffix();
+		m_handle = DYNLIB_LOAD(realPath.c_str());
+	}
+
+	return m_handle != NULL;
 }
 
 void DynLib::unload()
 {
-	if (_handle)
+	if (m_handle)
 	{
-		if (DYNLIB_UNLOAD(_handle))
+		if (DYNLIB_UNLOAD(m_handle))
 			throw std::runtime_error("unload error");
-		_handle = 0;
+		m_handle = 0;
 	}
 }
 
 void* DynLib::getSymbol(const String& name)
 {
-	return (void*)DYNLIB_GETSYM(_handle, name.c_str());
+	return (void*)DYNLIB_GETSYM(m_handle, name.c_str());
 }
 
-bool DynLib::isLoaded() const { return _handle != 0; }
+bool DynLib::isLoaded() const 
+{
+	return m_handle != 0; 
+}
+
+Plugin* DynLib::loadPlugin()
+{
+	if (m_handle && !m_plugin)
+	{
+		PluginMainFun fun = (PluginMainFun)getSymbol(DLL_PLUGIN_MAIN_NAME);
+		if (fun != NULL)
+		{
+			m_plugin = fun();
+		}
+	}
+
+	return m_plugin;
+}
 
 CU_NS_END

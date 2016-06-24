@@ -165,6 +165,7 @@
     <ClInclude Include="..\engine\include\PlayController.h" />
     <ClInclude Include="..\engine\include\Playable.h" />
     <ClInclude Include="..\engine\include\Plugin.h" />
+    <ClInclude Include="..\engine\include\PluginMgr.h" />
     <ClInclude Include="..\engine\include\Poller.h" />
     <ClInclude Include="..\engine\include\Predeclare.h" />
     <ClInclude Include="..\engine\include\Profiler.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="..\engine\src\Plane.cpp" />
     <ClCompile Include="..\engine\src\PlayController.cpp" />
     <ClCompile Include="..\engine\src\Playable.cpp" />
+    <ClCompile Include="..\engine\src\PluginMgr.cpp" />
     <ClCompile Include="..\engine\src\Poller.cpp" />
     <ClCompile Include="..\engine\src\Profiler.cpp" />
     <ClCompile Include="..\engine\src\Protocol.cpp" />

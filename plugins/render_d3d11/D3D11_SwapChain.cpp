@@ -10,13 +10,14 @@ D3D11_SwapChain::D3D11_SwapChain(Window* wnd, IDXGIFactoryN* factory, ID3D11Devi
 {
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
-	desc.OutputWindow = wnd->handle();
+	desc.OutputWindow = wnd->getHandle();
 	desc.BufferDesc.Width = wnd->getWidth();
 	desc.BufferDesc.Height = wnd->getHeight();
 	desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;	// Ð´ËÀ£¿£¿
-
 	desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	desc.BufferDesc.RefreshRate.Numerator = 0;
+	desc.BufferDesc.RefreshRate.Denominator = 0;
 	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.BufferCount = 1;
@@ -53,7 +54,8 @@ void D3D11_SwapChain::create(ID3D11DeviceN* device)
 	D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
 	ZeroMemory(&rtv_desc, sizeof(rtv_desc));
 	rtv_desc.Format = tex_desc.Format;
-	rtv_desc.ViewDimension = m_wnd->isMultiSample() ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
+	rtv_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	//rtv_desc.ViewDimension = m_wnd->isMultiSample() ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
 	rtv_desc.Texture2D.MipSlice = 0;
 	hr = device->CreateRenderTargetView(m_buffer, &rtv_desc, &m_rtv);
 	if (FAILED(hr))

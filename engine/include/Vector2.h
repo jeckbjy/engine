@@ -112,6 +112,7 @@ public:
 	union
 	{
 		struct { T x, y; };
+		struct { T width, height; };
 		T m[2];
 	};
 };

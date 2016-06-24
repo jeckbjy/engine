@@ -10,12 +10,12 @@ public:
 	Application();
 	~Application();
 
-	virtual bool init(){ return true; }
-	virtual void release(){}
+	virtual bool setup() { return true; }
+	virtual void cleanup(){}
 	virtual void update(){}
 	void run();
 
-	void pumpMsg();
+	bool dispatchMsg();
 
 protected:
 	bool	m_quit;

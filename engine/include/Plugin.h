@@ -28,6 +28,8 @@ protected:
 	String m_name;
 };
 
+typedef Plugin* (*PluginMainFun)(void);
+
 // 外部统一使用此名字
 #define DLL_PLUGIN_MAIN_NAME "DllPluginMain"
 // 在CPP中自动定义

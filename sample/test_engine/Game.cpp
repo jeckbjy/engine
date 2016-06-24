@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "AssetCache.h"
 #include "Model.h"
+#include "Engine.h"
 
 BaseApp::BaseApp()
 	: m_width(1024)
@@ -13,23 +14,26 @@ BaseApp::~BaseApp()
 
 }
 
-void BaseApp::draw()
+bool BaseApp::init()
 {
-	m_cmdQueue->submit(m_cmdBuffer, NULL);
+	return true;
 }
 
-void BaseApp::run()
+bool BaseApp::setup()
 {
+	// load plugins
+	const char* plugins[] = { "plugin_d3d11" };
+
+	for (size_t i = 0; i < CU_ARRAY_SIZE(plugins); ++i)
+	{
+		gEngine.loadPlugin(plugins[i]);
+	}
+
 	m_device = gGraphics.getDevice();
 	if (!m_device)
-		return;
+		return false;
 
-	WINDOW_DESC desc;
-	desc.width = m_width;
-	desc.height = m_height;
-	desc.title = "Game";
-
-	m_window = new Window(desc);
+	m_window = new Window(NULL, "Test", m_width, m_height);
 
 	m_cmdBuffer = m_device->newCommandBuffer();
 	m_cmdQueue = m_device->newCommandQueue();
@@ -38,16 +42,20 @@ void BaseApp::run()
 	m_cmdBuffer->setRenderTarget(m_swapchain);
 
 	if (!init())
-		return;
+		return false;
 
-	m_window->show();
-	do 
-	{
-		draw();
-		// Ö´ÐÐÊ±¼ä
-		if (Window::pollEvents())
-			break;
-	} while (!m_window->isClosed());
+	return true;
+}
+
+void BaseApp::update()
+{
+	draw();
+}
+
+void BaseApp::draw()
+{
+	if (m_cmdQueue)
+		m_cmdQueue->submit(m_cmdBuffer, NULL);
 }
 
 ShaderProgram* BaseApp::loadProgram(const char* vsFile, const char* psFile)

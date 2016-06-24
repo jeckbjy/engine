@@ -78,29 +78,38 @@ enum D3D11_LOGIC_OP
 
 CU_NS_BEGIN
 
-#ifdef CU_OS_WINRT
-//////////////////////////////////////////////////////////////////////////
-typedef ID3D11Device1           ID3D11DeviceN;
-typedef ID3D11DeviceContext1    ID3D11ContextN;
-typedef ID3D11RasterizerState1  ID3D11RasterizerStateN;
-typedef IDXGIFactory2           IDXGIFactoryN;
-typedef IDXGIAdapter1           IDXGIAdapterN;          // we don`t need IDXGIAdapter2 functionality
-typedef IDXGIDevice2            IDXGIDeviceN;
-typedef IDXGISwapChain1         IDXGISwapChainN;
-typedef DXGI_SWAP_CHAIN_DESC1   DXGI_SWAP_CHAIN_DESC_N;
+//#ifdef CU_OS_WINRT
+////////////////////////////////////////////////////////////////////////////
+//typedef ID3D11Device1           ID3D11DeviceN;
+//typedef ID3D11DeviceContext1    ID3D11ContextN;
+//typedef ID3D11RasterizerState1  ID3D11RasterizerStateN;
+//typedef IDXGIFactory2           IDXGIFactoryN;
+//typedef IDXGIAdapter1           IDXGIAdapterN;          // we don`t need IDXGIAdapter2 functionality
+//typedef IDXGIDevice2            IDXGIDeviceN;
+//typedef IDXGISwapChain1         IDXGISwapChainN;
+//typedef DXGI_SWAP_CHAIN_DESC1   DXGI_SWAP_CHAIN_DESC_N;
+//
+//#else
+////////////////////////////////////////////////////////////////////////////
+//typedef ID3D11Device			ID3D11DeviceN;
+//typedef ID3D11DeviceContext		ID3D11ContextN;
+//typedef ID3D11RasterizerState	ID3D11RasterizerStateN;
+//typedef IDXGIFactory1			IDXGIFactoryN;
+//typedef IDXGIAdapter1			IDXGIAdapterN;
+//typedef IDXGIDevice1            IDXGIDeviceN;
+//typedef IDXGISwapChain          IDXGISwapChainN;
+//typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
+//
+//#endif
 
-#else
-//////////////////////////////////////////////////////////////////////////
 typedef ID3D11Device			ID3D11DeviceN;
 typedef ID3D11DeviceContext		ID3D11ContextN;
 typedef ID3D11RasterizerState	ID3D11RasterizerStateN;
-typedef IDXGIFactory1			IDXGIFactoryN;
-typedef IDXGIAdapter1			IDXGIAdapterN;
-typedef IDXGIDevice1            IDXGIDeviceN;
+typedef IDXGIFactory			IDXGIFactoryN;
+typedef IDXGIAdapter			IDXGIAdapterN;
+typedef IDXGIDevice				IDXGIDeviceN;
 typedef IDXGISwapChain          IDXGISwapChainN;
 typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
-
-#endif
 
 enum D3D11ObjectID
 {
