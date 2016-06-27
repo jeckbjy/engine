@@ -8,8 +8,19 @@
 
 CU_NS_BEGIN
 
-D3D11_CommandBuffer::D3D11_CommandBuffer()
+D3D11_CommandBuffer::D3D11_CommandBuffer(ID3D11DeviceN* device, ID3D11ContextN* context)
+	: m_context(context)
+	, m_target(NULL)
+	, m_pipeline(NULL)
+	, m_layout(NULL)
+	, m_descriptors(NULL)
 {
+	HRESULT hr;
+	if (m_context == NULL)
+	{
+		hr = device->CreateDeferredContext(0, &m_context);
+		D3D11_CHECK(hr, "CreateDeferredContext failed.");
+	}
 	memset(m_factors, 0, sizeof(m_factors));
 	m_stencilRef = 0;
 }

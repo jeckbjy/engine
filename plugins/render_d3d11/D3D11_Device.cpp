@@ -39,13 +39,42 @@ ID3D11ContextN* gD3D11NativeContext()
 
 D3D11_Device::D3D11_Device()
 	: m_device(NULL)
-	, m_factory(NULL)
 	, m_context(NULL)
+	, m_factory(NULL)
+	, m_adapter(NULL)
 	, m_linkage(NULL)
 	, m_layoutMax(0)
 	, m_shaderID(0)
 	, m_layoutID(0)
 {
+	HRESULT hr;
+
+	// create factory
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactoryN), (void**)&m_factory);
+	D3D11_CHECK(hr, "CreateDXGIFactory fail!");
+
+	// create adapter, find first adapter
+	UINT32 adapterIdx = 0;
+	IDXGIAdapter* adapter = NULL;
+	while ((hr = m_factory->EnumAdapters(adapterIdx, &adapter)) != DXGI_ERROR_NOT_FOUND)
+	{
+		if (FAILED(hr))
+		{
+			if (adapter)
+				adapter->Release();
+			++adapterIdx;
+		}
+		else
+		{
+			m_adapter = adapter;
+			break;
+		}
+	}
+
+	if (!m_adapter)
+		throw std::runtime_error("enumerate adapters failed.");
+
+	// create device
 	D3D_FEATURE_LEVEL featureLevels[] = 
 	{
 		D3D_FEATURE_LEVEL_11_1,
@@ -56,19 +85,16 @@ D3D11_Device::D3D11_Device()
 		D3D_FEATURE_LEVEL_9_2,
 		D3D_FEATURE_LEVEL_9_1 
 	};
-	HRESULT hr;
 
 	UINT flags = 0;
 #ifdef CU_DEBUG
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, CU_ARRAY_SIZE(featureLevels), D3D11_SDK_VERSION, &m_device, NULL, &m_context);
+	hr = D3D11CreateDevice(m_adapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, 0, featureLevels, CU_ARRAY_SIZE(featureLevels), D3D11_SDK_VERSION, &m_device, NULL, &m_context);
 	D3D11_CHECK( hr, "D3D11CreateDevice fail!");
 
-	hr = CreateDXGIFactory(__uuidof(IDXGIFactoryN), (void**)&m_factory);
-	D3D11_CHECK( hr, "CreateDXGIFactory fail!");
-
-	if (m_device->GetFeatureLevel() == D3D_FEATURE_LEVEL_11_0)
+	// create linkage
+	if (m_device->GetFeatureLevel() >= D3D_FEATURE_LEVEL_11_0)
 	{
 		hr = m_device->CreateClassLinkage(&m_linkage);
 		D3D11_CHECK(hr, "CreateClassLinkage fail!");
@@ -135,7 +161,8 @@ DescriptorSet* D3D11_Device::newDescriptorSet(Pipeline* pipeline)
 
 CommandBuffer* D3D11_Device::newCommandBuffer()
 {
-	return new D3D11_CommandBuffer();
+	// todo:deferred??
+	return new D3D11_CommandBuffer(m_device, m_context);
 }
 
 CommandQueue* D3D11_Device::newCommandQueue()

@@ -20,6 +20,8 @@ D3D11_Program::~D3D11_Program()
 
 void D3D11_Program::attach(ShaderStage* shader)
 {
+	if (!shader)
+		return;
 	ShaderType type = shader->getShaderType();
 	if (type < SHADER_COUNT)
 	{

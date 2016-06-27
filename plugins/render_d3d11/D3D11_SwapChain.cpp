@@ -7,20 +7,26 @@ CU_NS_BEGIN
 D3D11_SwapChain::D3D11_SwapChain(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device)
 	: m_wnd(wnd)
 	, m_chain(NULL)
+	, m_buffer(NULL)
+	, m_depthstencil(NULL)
+	, m_rtv(NULL)
+	, m_dsv(NULL)
 {
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
+	desc.BufferCount = 1;
 	desc.OutputWindow = wnd->getHandle();
 	desc.BufferDesc.Width = wnd->getWidth();
 	desc.BufferDesc.Height = wnd->getHeight();
-	desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;	// –¥À¿£ø£ø
+	desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;	// –¥À¿£ø£ø
 	desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	desc.BufferDesc.RefreshRate.Numerator = 0;
-	desc.BufferDesc.RefreshRate.Denominator = 0;
-	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	desc.BufferDesc.RefreshRate.Numerator = 60;
+	desc.BufferDesc.RefreshRate.Denominator = 1;
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	desc.BufferCount = 1;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+	desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	desc.Windowed = TRUE;
 

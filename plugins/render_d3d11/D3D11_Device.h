@@ -50,8 +50,10 @@ private:
 	typedef D3D11_StateMap<D3D11_DepthStencilState, DepthStencilDesc>	DepthStencilMap;
 
 	ID3D11DeviceN*		m_device;
-	IDXGIFactoryN*		m_factory;
 	ID3D11ContextN*		m_context;
+
+	IDXGIFactoryN*		m_factory;
+	IDXGIAdapterN*		m_adapter;
 	ID3D11ClassLinkage* m_linkage;
 
 	BlendMap			m_blends;

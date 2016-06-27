@@ -10,7 +10,7 @@ class D3D11_DescriptorSet;
 class D3D11_CommandBuffer : public CommandBuffer
 {
 public:
-	D3D11_CommandBuffer();
+	D3D11_CommandBuffer(ID3D11DeviceN* device, ID3D11ContextN* context);
 	~D3D11_CommandBuffer();
 
 	void setRenderTarget(RenderTarget* target);
@@ -41,8 +41,8 @@ private:
 	void prepare();
 
 private:
-	RenderTarget*			m_target;
 	ID3D11ContextN*			m_context;
+	RenderTarget*			m_target;
 	D3D11_Pipeline*			m_pipeline;
 	D3D11_InputLayout*		m_layout;
 	D3D11_DescriptorSet*	m_descriptors;
