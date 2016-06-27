@@ -31,7 +31,7 @@ void Application::run()
 			}
 		}
 	}
-	catch (std::exception)
+	catch (std::exception e)
 	{
 	}
 

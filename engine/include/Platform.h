@@ -199,6 +199,10 @@
 #	define CU_DECL_IMPORT
 #endif
 
+#if defined(DEBUG) || defined(_DEBUG)
+#define CU_DEBUG
+#endif
+
 // 链接方式，dll or lib，默认使用dll方式
 #if defined(CU_BUILD_LIB) || defined(CU_USE_LIB)
 #	define CU_API

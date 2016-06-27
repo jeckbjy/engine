@@ -112,8 +112,9 @@ function engine_vpaths()
 		"Convert.cpp",
 		"XMLFile.h",
 		"XMLFile.cpp",
-		"KeyedVector.h",
-		"SortedVector.h"
+		"Plugin.h",
+		"PluginMgr.h",
+		"PluginMgr.cpp",
 	},
 	["math"] = {
 		"CMath.h",
@@ -183,7 +184,6 @@ function engine_vpaths()
 	},
 	["engine"] = {
 		"Event.h",
-		"Plugin.h",
 		"Object.h",
 		"Object.cpp",
 		"Context.h",
