@@ -121,9 +121,9 @@ FrameBuffer* D3D11_Device::newFrameBuffer()
 	return new D3D11_FrameBuffer();
 }
 
-SwapChain* D3D11_Device::newSwapChain(Window* wnd)
+SwapChain* D3D11_Device::newSwapChain(const SwapChainDesc& desc)
 {
-	return new D3D11_SwapChain(wnd, m_factory, m_device);
+	return new D3D11_SwapChain(desc, m_factory, m_device);
 }
 
 InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t count)

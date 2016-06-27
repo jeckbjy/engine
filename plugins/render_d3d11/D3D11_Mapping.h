@@ -19,6 +19,10 @@ public:
 	static D3D11_COMPARISON_FUNC		getCompareOp(CompareOp op);
 	static D3D11_TEXTURE_ADDRESS_MODE	getAddressMode(AddressMode mode);
 
+	static DXGI_MODE_SCANLINE_ORDER		getScanlineOrder(ScanlineOrderMode mode);
+	static DXGI_MODE_SCALING			getScaling(ScalingMode mode);
+	static DXGI_SWAP_EFFECT				getSwapEffect(SwapMode mode);
+
 	static void fillSemantic(Semantic semantic, LPCSTR& name, UINT& index);
 	static void fillSampler(D3D11_SAMPLER_DESC& info, const SamplerDesc& desc);
 	static void fillRasterizer(D3D11_RASTERIZER_DESC& info, const RasterizerDesc& desc);

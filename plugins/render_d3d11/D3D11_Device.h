@@ -21,7 +21,7 @@ public:
 	GpuBuffer*					newBuffer(const BufferDesc& desc);
 	Texture*					newTexture(const TextureDesc& desc);
 	FrameBuffer*				newFrameBuffer();
-	SwapChain*					newSwapChain(Window* wnd);
+	SwapChain*					newSwapChain(const SwapChainDesc& desc);
 	InputLayout*				newInputLayout(const InputElement* elements, size_t count);
 	ShaderStage*				newShader();
 	ShaderProgram*				newProgram();

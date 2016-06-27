@@ -53,7 +53,7 @@ class CU_API Window : public Object
 {
 	DECLARE_RTTI(Window, Object, OBJ_ID_WINDOW);
 public:
-	Window();
+	Window(window_t hwnd);
 	Window(Window* parent, const String& title = "", size_t width = 1024, size_t height = 768, long style = WF_DEFAULT);
 	virtual ~Window();
 
@@ -67,21 +67,28 @@ public:
 	size_t getWidth() const { return m_width; }
 	size_t getHeight() const { return m_height; }
 
-	window_t getHandle() { return m_handle; }
-	void setHandle(window_t handle) { m_handle = handle; }
+	bool isFullscreen() const { return hasFlag(WF_FULLSCREEN); }
 
-public:
+	bool hasFlag(uint32_t mask) const { return (m_flags & mask) == mask; }
+	void setFlag(uint32_t mask) { m_flags |= mask; }
+
+	window_t getHandle() { return m_handle; }
+
 #ifdef CU_OS_WINNT
 	LRESULT processMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif
 
+private:
+	void create(const char* title, size_t width, size_t height, long flags);
+	void fillRect();
+
 protected:
 	window_t	m_handle;
+	uint32_t	m_flags;
 	int			m_x;
 	int			m_y;
 	size_t		m_width;
 	size_t		m_height;
-	bool		m_closed : 1;
 };
 
 CU_NS_END

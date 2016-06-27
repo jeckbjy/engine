@@ -37,7 +37,7 @@ bool BaseApp::setup()
 
 	m_cmdBuffer = m_device->newCommandBuffer();
 	m_cmdQueue = m_device->newCommandQueue();
-	m_swapchain = m_device->newSwapChain(m_window);
+	m_swapchain = m_device->newSwapChain(SwapChainDesc(m_window));
 	m_cmdBuffer->setViewport(0, 0, m_window->getWidth(), m_window->getHeight());
 	m_cmdBuffer->setRenderTarget(m_swapchain);
 

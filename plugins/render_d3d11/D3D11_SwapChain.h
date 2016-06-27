@@ -7,7 +7,7 @@ class CU_D3D11_API D3D11_SwapChain : public SwapChain
 {
 	DECLARE_RTTI(D3D11_SwapChain, SwapChain, OBJ_ID_D3D11_SWAPCHAIN);
 public:
-	D3D11_SwapChain(Window* wnd, IDXGIFactoryN* factory, ID3D11DeviceN* device);
+	D3D11_SwapChain(const SwapChainDesc& info, IDXGIFactoryN* factory, ID3D11DeviceN* device);
 	~D3D11_SwapChain();
 
 	void present();
@@ -17,7 +17,7 @@ public:
 	void clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil);
 
 private:
-	void create(ID3D11DeviceN* device);
+	void create(ID3D11DeviceN* device, const DXGI_SWAP_CHAIN_DESC* chainDesc);
 
 private:
 	Window*					m_wnd;
@@ -26,6 +26,8 @@ private:
 	ID3D11Texture2D*		m_depthstencil;
 	ID3D11RenderTargetView* m_rtv;
 	ID3D11DepthStencilView*	m_dsv;
+	PixelFormat				m_dsFormat;
+	UINT					m_dsFlag;
 };
 
 CU_NS_END

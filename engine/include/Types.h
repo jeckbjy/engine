@@ -144,8 +144,8 @@ typedef DWORD	error_t;
 typedef long	ioctl_req_t;
 #else
 #   define MAX_PATH				MAXPATHLEN
-#	define INVALID_HANDLE_VALUE -1
-#	define INVALID_SOCKET		-1
+#	define INVALID_HANDLE_VALUE 0
+#	define INVALID_SOCKET		0
 typedef int		handle_t;
 typedef void*	module_t;
 typedef int		socket_t;

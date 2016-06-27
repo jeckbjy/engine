@@ -151,6 +151,21 @@ D3D11_TEXTURE_ADDRESS_MODE D3D11_Mapping::getAddressMode(AddressMode mode)
 	return (D3D11_TEXTURE_ADDRESS_MODE)mode;
 }
 
+DXGI_MODE_SCANLINE_ORDER D3D11_Mapping::getScanlineOrder(ScanlineOrderMode mode)
+{
+	return (DXGI_MODE_SCANLINE_ORDER)mode;
+}
+
+DXGI_MODE_SCALING D3D11_Mapping::getScaling(ScalingMode mode)
+{
+	return (DXGI_MODE_SCALING)mode;
+}
+
+DXGI_SWAP_EFFECT D3D11_Mapping::getSwapEffect(SwapMode mode)
+{
+	return (DXGI_SWAP_EFFECT)mode;
+}
+
 void D3D11_Mapping::fillSemantic(Semantic semantic, LPCSTR& name, UINT& index)
 {
 	static const LPCSTR sematic_names[] = { "POSITION", "NORMAL", "COLOR", "TANGENT", "BINORMAL", "BLENDWEIGHTS", "BLENDINDICES" };

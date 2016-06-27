@@ -199,6 +199,29 @@ enum ClearMask
 	CLEAR_DEPTH_STENCIL = CLEAR_DEPTH | CLEAR_STENCIL
 };
 
+enum SwapMode
+{
+	SWAP_DISCARD,		// 后台缓存复制到前台缓存后，清除后台缓存内容
+	SWAP_SEQUENTIAL,	// 后台缓存复制到前台缓存后，保留后台缓存原内容不变
+	SWAP_FLIP,
+};
+
+// 描线
+enum ScanlineOrderMode
+{
+	SCANLINE_ORDER_UNSPECIFIED,
+	SCANLINE_ORDER_PROGRESSIVE,
+	SCANLINE_ORDER_UPPER_FIELD_FIRST,
+	SCANLINE_ORDER_LOWER_FIELD_FIRST,
+};
+
+enum ScalingMode
+{
+	SCALING_UNSPECIFIED,
+	SCALING_CENTERED,
+	SCALING_STRETCHED,
+};
+
 // 编程语言
 enum GpuLanguage
 {

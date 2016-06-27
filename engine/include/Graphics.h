@@ -226,7 +226,7 @@ public:
 	virtual CommandBuffer*	newCommandBuffer() = 0;
 	virtual CommandQueue*	newCommandQueue() = 0;
 	virtual FrameBuffer*	newFrameBuffer() = 0;
-	virtual SwapChain*		newSwapChain(Window* wnd) = 0;
+	virtual SwapChain*		newSwapChain(const SwapChainDesc& desc) = 0;
 
 	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
 	{

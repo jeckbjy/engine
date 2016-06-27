@@ -233,6 +233,23 @@ TextureDesc::TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, Textu
 
 }
 
+SwapChainDesc::SwapChainDesc(Window* wnd, PixelFormat format /* = PF_R8G8B8A8_UNORM */, PixelFormat dsFormat, size_t bufferCount /* = 1 */)
+	: wnd(wnd)
+	, format(format)
+	, depthStencilFormat(dsFormat)
+	, bufferCount(bufferCount)
+	, sampleCount(1)
+	, sampleQuailty(0)
+	, refreshRateNumerator(60)
+	, refreshRateDenominator(1)
+	, scanlineOrdering(SCANLINE_ORDER_UNSPECIFIED)
+	, scaling(SCALING_UNSPECIFIED)
+	, swapMode(SWAP_DISCARD)
+	, readOnlyDepth(false)
+	, readOnlyStencil(false)
+{
+}
+
 InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)
 	:semantic(sem), format(format), slot(slot), offset(0), rate(rate)
 {

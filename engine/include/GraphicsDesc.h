@@ -1,5 +1,6 @@
 #pragma once
 #include "Color.h"
+#include "Window.h"
 #include "PixelFormat.h"
 #include "GraphicsDefs.h"
 
@@ -125,15 +126,6 @@ struct CU_API BlendDesc
 	uint32_t getHashCode() const;
 };
 
-struct CU_API RenderStateDesc
-{
-	RasterizerDesc		rasterizer;
-	DepthStencilDesc	depthStencil;
-	BlendDesc			blend;
-	MultisampleDesc		multisample;
-	Topology			topology;
-};
-
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
@@ -178,6 +170,15 @@ struct CU_API ShaderDesc
 	String		profile;
 };
 
+struct CU_API RenderStateDesc
+{
+	RasterizerDesc		rasterizer;
+	DepthStencilDesc	depthStencil;
+	BlendDesc			blend;
+	MultisampleDesc		multisample;
+	Topology			topology;
+};
+
 // 管线
 class ShaderProgram;
 struct CU_API PipelineDesc
@@ -185,6 +186,25 @@ struct CU_API PipelineDesc
 	ShaderProgram*			program;
 	const RenderStateDesc*	states;
 	PipelineDesc() :program(NULL), states(NULL){}
+};
+
+//
+struct CU_API SwapChainDesc
+{
+	Window*		wnd;
+	PixelFormat format;
+	PixelFormat	depthStencilFormat;	// 深度缓冲区
+	size_t		bufferCount;		// 后台缓冲区个数
+	size_t		sampleCount;
+	size_t		sampleQuailty;
+	size_t		refreshRateNumerator;
+	size_t		refreshRateDenominator;
+	ScanlineOrderMode scanlineOrdering;
+	ScalingMode	scaling;
+	SwapMode	swapMode;
+	bool		readOnlyDepth;
+	bool		readOnlyStencil;
+	SwapChainDesc(Window* wnd, PixelFormat format = PF_R8G8B8A8_UNORM, PixelFormat dsFormat = PF_D24_UNORM_S8_UINT, size_t bufferCount = 1);
 };
 
 struct CU_API InputElement
