@@ -43,6 +43,12 @@ void D3D12_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t stencilRef
 	m_handle->OMSetStencilRef(stencilRef);
 }
 
+void D3D12_CommandBuffer::setTopology(Topology topology)
+{
+	D3D12_PRIMITIVE_TOPOLOGY primite = (D3D12_PRIMITIVE_TOPOLOGY)topology;
+	m_handle->IASetPrimitiveTopology(primite);
+}
+
 void D3D12_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
 

@@ -96,16 +96,20 @@ void Window::fillRect()
 		return;
 
 	RECT rect;
-	if (GetWindowRect(m_handle, &rect))
-	{
-		m_x = rect.left;
-		m_y = rect.top;
-	}
 
 	if (GetClientRect(m_handle, &rect))
 	{
+		m_x = rect.left;
+		m_y = rect.top;
 		m_width = rect.right - rect.left;
 		m_height = rect.bottom - rect.top;
+	}
+	else
+	{
+		m_x = 0;
+		m_y = 0;
+		m_width = 1024;
+		m_height = 768;
 	}
 }
 

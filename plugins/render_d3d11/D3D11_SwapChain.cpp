@@ -13,6 +13,7 @@ D3D11_SwapChain::D3D11_SwapChain(const SwapChainDesc& info, IDXGIFactoryN* facto
 	, m_dsv(NULL)
 	, m_dsFormat(info.depthStencilFormat)
 	, m_dsFlag(0)
+	, m_syncInterval(info.syncInterval)
 {
 	if (info.readOnlyDepth)
 		m_dsFlag |= D3D11_DSV_READ_ONLY_DEPTH;
@@ -23,14 +24,22 @@ D3D11_SwapChain::D3D11_SwapChain(const SwapChainDesc& info, IDXGIFactoryN* facto
 	ZeroMemory(&desc, sizeof(desc));
 	desc.SwapEffect = D3D11_Mapping::getSwapEffect(info.swapMode);
 	desc.OutputWindow = m_wnd->getHandle();
-	desc.BufferCount = 1;
+	desc.BufferCount = info.bufferCount;
 	desc.BufferDesc.Width = m_wnd->getWidth();
 	desc.BufferDesc.Height = m_wnd->getHeight();
 	desc.BufferDesc.Format = D3D11_Mapping::getFormat(info.format);
 	desc.BufferDesc.ScanlineOrdering = D3D11_Mapping::getScanlineOrder(info.scanlineOrdering);
 	desc.BufferDesc.Scaling = D3D11_Mapping::getScaling(info.scaling);
-	desc.BufferDesc.RefreshRate.Numerator = (UINT)info.refreshRateNumerator;
-	desc.BufferDesc.RefreshRate.Denominator = (UINT)info.refreshRateDenominator;
+	if (m_syncInterval > 0)
+	{
+		desc.BufferDesc.RefreshRate.Numerator = (UINT)info.refreshRateNumerator;
+		desc.BufferDesc.RefreshRate.Denominator = (UINT)info.refreshRateDenominator;
+	}
+	else
+	{
+		desc.BufferDesc.RefreshRate.Numerator = 0;
+		desc.BufferDesc.RefreshRate.Denominator = 1;
+	}
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.SampleDesc.Count = (UINT)info.sampleCount;
 	desc.SampleDesc.Quality = (UINT)info.sampleQuailty;
@@ -56,12 +65,15 @@ D3D11_SwapChain::~D3D11_SwapChain()
 
 void D3D11_SwapChain::present()
 {
-	m_chain->Present(0, 0);
+	m_chain->Present(m_syncInterval, 0);
 }
 
 void D3D11_SwapChain::create(ID3D11DeviceN* device, const DXGI_SWAP_CHAIN_DESC* chainDesc)
 {
 	D3D11_RELEASE(m_buffer);
+	D3D11_RELEASE(m_depthstencil);
+	D3D11_RELEASE(m_rtv);
+	D3D11_RELEASE(m_dsv);
 
 	HRESULT hr;
 	hr = m_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&m_buffer);
@@ -85,10 +97,12 @@ void D3D11_SwapChain::create(ID3D11DeviceN* device, const DXGI_SWAP_CHAIN_DESC* 
 		dsDesc.Usage = D3D11_USAGE_DEFAULT;
 		dsDesc.Width = texDesc.Width;
 		dsDesc.Height = texDesc.Height;
+		dsDesc.ArraySize = 1;
 		dsDesc.Format = D3D11_Mapping::getFormat(m_dsFormat);
-		dsDesc.MipLevels = 1;	// 1 or 0 ??
-		dsDesc.CPUAccessFlags = 0;
 		dsDesc.SampleDesc = texDesc.SampleDesc;
+		dsDesc.MipLevels = 1;
+		dsDesc.CPUAccessFlags = 0;
+		dsDesc.MiscFlags = 0;
 
 		if (m_dsFlag == 0)
 			dsDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;

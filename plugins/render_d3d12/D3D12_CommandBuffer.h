@@ -16,6 +16,7 @@ public:
 	void setScissor(int x, int y, size_t w, size_t h);
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t stencilRef);
+	void setTopology(Topology topology);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
 	void setInputLayout(InputLayout* layout);

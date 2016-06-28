@@ -42,6 +42,11 @@ void VK_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	vkCmdSetStencilReference(m_handle, (VkStencilFaceFlags)mask, (uint32_t)reference);
 }
 
+void VK_CommandBuffer::setTopology(Topology topology)
+{
+
+}
+
 void VK_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
 

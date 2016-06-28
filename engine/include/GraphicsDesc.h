@@ -199,6 +199,7 @@ struct CU_API SwapChainDesc
 	size_t		sampleQuailty;
 	size_t		refreshRateNumerator;
 	size_t		refreshRateDenominator;
+	size_t		syncInterval;
 	ScanlineOrderMode scanlineOrdering;
 	ScalingMode	scaling;
 	SwapMode	swapMode;

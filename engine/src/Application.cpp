@@ -22,7 +22,7 @@ void Application::run()
 			return;
 		while (!m_quit)
 		{
-			gEngine.update();
+			//gEngine.update();
 			update();
 			if (dispatchMsg())
 			{

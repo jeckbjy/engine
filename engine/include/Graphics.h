@@ -176,6 +176,7 @@ public:
 	virtual void setScissor(int x, int y, size_t w, size_t h) = 0;
 	virtual void setBlendFactor(const float factors[4]) = 0;
 	virtual void setStencilRef(StencilFaceFlags mask, size_t reference) = 0;
+	virtual void setTopology(Topology topology) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setInputLayout(InputLayout* layout) = 0;

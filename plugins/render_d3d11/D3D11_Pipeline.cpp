@@ -50,9 +50,12 @@ void D3D11_Pipeline::bind(D3D11_CommandBuffer* cmdBuffer)
 		if (m_d3dLayout)
 			context->IASetInputLayout(m_d3dLayout.get());
 
-		context->RSSetState(m_rasterizer->getState());
-		context->OMSetDepthStencilState(m_depthStencil->getState(), cmdBuffer->getStencilRef());
-		context->OMSetBlendState(m_blend->getState(), cmdBuffer->getFactors(), cmdBuffer->getSampleMask());
+		if (m_rasterizer)
+			context->RSSetState(m_rasterizer->getState());
+		if (m_depthStencil)
+			context->OMSetDepthStencilState(m_depthStencil->getState(), cmdBuffer->getStencilRef());
+		if (m_blend)
+			context->OMSetBlendState(m_blend->getState(), cmdBuffer->getFactors(), cmdBuffer->getSampleMask());
 	}
 
 	m_program->bind(context);

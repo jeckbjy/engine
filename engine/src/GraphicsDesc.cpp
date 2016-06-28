@@ -242,6 +242,7 @@ SwapChainDesc::SwapChainDesc(Window* wnd, PixelFormat format /* = PF_R8G8B8A8_UN
 	, sampleQuailty(0)
 	, refreshRateNumerator(60)
 	, refreshRateDenominator(1)
+	, syncInterval(1)
 	, scanlineOrdering(SCANLINE_ORDER_UNSPECIFIED)
 	, scaling(SCALING_UNSPECIFIED)
 	, swapMode(SWAP_DISCARD)

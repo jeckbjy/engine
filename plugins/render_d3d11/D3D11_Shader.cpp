@@ -1,5 +1,6 @@
 #include "D3D11_Shader.h"
 #include "D3D11_Device.h"
+#include <iostream>
 
 CU_NS_BEGIN
 
@@ -23,6 +24,7 @@ D3D11_Shader::~D3D11_Shader()
 
 bool D3D11_Shader::compile(const ShaderDesc& desc)
 {
+	m_type = desc.stage;
 	ID3DBlob* errors = NULL;
 	UINT flags = 0;
 	bool rowMajor = true;
@@ -36,12 +38,25 @@ bool D3D11_Shader::compile(const ShaderDesc& desc)
 		flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 	}
 
+	static const char* DefaultEntry[] =
+	{
+		"VSMain", "HSMain", "DSMain", "GSMain", "PSMain", "CSMain"
+	};
+
+	static const char* DefaultProfile[] =
+	{
+		"vs_5_0", "hs_5_0", "ds_5_0", "gs_5_0", "ps_5_0", "cs_5_0"
+	};
+
+	const char* entry	= desc.entry.empty()   ? DefaultEntry[m_type] : desc.entry.c_str();
+	const char* profile = desc.profile.empty() ? DefaultProfile[m_type] : desc.profile.c_str();
+
 	HRESULT hr = D3DCompile(
 		desc.code.c_str(),
 		desc.code.size(),
 		NULL, NULL, NULL,
-		desc.entry.c_str(),
-		desc.profile.c_str(),
+		entry,
+		profile,
 		flags,
 		0,
 		&m_code,
@@ -56,6 +71,11 @@ bool D3D11_Shader::compile(const ShaderDesc& desc)
 		{
 			parse();
 		}
+	}
+	else
+	{
+		const char* err = (const char*)errors->GetBufferPointer();
+		std::cout << err << std::endl;
 	}
 
 	D3D11_RELEASE(errors);

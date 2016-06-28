@@ -28,6 +28,7 @@ private:
 	ID3D11DepthStencilView*	m_dsv;
 	PixelFormat				m_dsFormat;
 	UINT					m_dsFlag;
+	UINT					m_syncInterval;
 };
 
 CU_NS_END

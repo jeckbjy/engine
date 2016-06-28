@@ -53,6 +53,11 @@ void OGL_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	m_stencilRef = reference;
 }
 
+void OGL_CommandBuffer::setTopology(Topology topology)
+{
+	m_primitive = topology;
+}
+
 void OGL_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
 {
 	m_descriptors = descriptors;

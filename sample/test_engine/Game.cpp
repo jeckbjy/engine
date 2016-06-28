@@ -2,6 +2,7 @@
 #include "AssetCache.h"
 #include "Model.h"
 #include "Engine.h"
+#include "Util.h"
 
 BaseApp::BaseApp()
 	: m_width(1024)
@@ -54,6 +55,10 @@ void BaseApp::update()
 
 void BaseApp::draw()
 {
+	m_cmdBuffer->clear();
+	m_cmdBuffer->drawIndexed(m_ib->count());
+	m_swapchain->present();
+
 	if (m_cmdQueue)
 		m_cmdQueue->submit(m_cmdBuffer, NULL);
 }
@@ -100,7 +105,7 @@ bool TriangleApp::init()
 	m_vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
 	m_ib = m_device->newIndexBuffer(INDEX16, 3, index_data);
 
-	m_program = loadProgram("triangle.vs", "triangle.ps");
+	m_program = loadProgram("./assets/color.hlsl.vs", "./assets/color.hlsl.ps");
 	m_pipeline = newPipeline(m_program);
 	m_layout = m_device->newInputLayout(elements, 2);
 
@@ -110,9 +115,7 @@ bool TriangleApp::init()
 	m_cmdBuffer->setIndexBuffer(m_ib);
 	m_cmdBuffer->setPipeline(m_pipeline);
 	m_cmdBuffer->setInputLayout(m_layout);
-
-	m_cmdBuffer->clear();
-	m_cmdBuffer->drawIndexed(m_ib->bytes());
+	m_cmdBuffer->setTopology(PT_TRIANGLE_LIST);
 
 	return true;
 }

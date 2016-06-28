@@ -68,15 +68,10 @@ void D3D11_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
 	m_stencilRef = reference;
 }
 
-//void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
-//{
-//	((D3D11RenderTarget*)target)->bind(m_context);
-//}
-
-void D3D11_CommandBuffer::setTopology(Topology primitive)
+void D3D11_CommandBuffer::setTopology(Topology topology)
 {
-	D3D11_PRIMITIVE_TOPOLOGY dx_prim = (D3D11_PRIMITIVE_TOPOLOGY)primitive;
-	m_context->IASetPrimitiveTopology(dx_prim);
+	D3D11_PRIMITIVE_TOPOLOGY primite = (D3D11_PRIMITIVE_TOPOLOGY)topology;
+	m_context->IASetPrimitiveTopology(primite);
 }
 
 void D3D11_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)

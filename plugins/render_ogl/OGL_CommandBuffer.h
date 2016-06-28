@@ -19,6 +19,7 @@ public:
 	void setBlendFactor(const float factors[4]);
 	void setStencilRef(StencilFaceFlags mask, size_t reference);
 
+	void setTopology(Topology topology);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
 	void setInputLayout(InputLayout* layout);
