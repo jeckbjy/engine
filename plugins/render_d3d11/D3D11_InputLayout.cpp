@@ -32,6 +32,9 @@ D3D11_InputLayout::~D3D11_InputLayout()
 
 ID3D11InputLayout* D3D11_InputLayout::createLayout(ID3D11DeviceN* device, ID3DBlob* code)
 {
+	if (code == NULL)
+		return NULL;
+
 	ID3D11InputLayout* layout = NULL;
 	HRESULT hr = device->CreateInputLayout(m_desc, m_count, code->GetBufferPointer(), code->GetBufferSize(), &layout);
 	if (FAILED(hr))

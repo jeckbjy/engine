@@ -59,8 +59,8 @@ void BaseApp::draw()
 	m_cmdBuffer->drawIndexed(m_ib->count());
 	m_swapchain->present();
 
-	if (m_cmdQueue)
-		m_cmdQueue->submit(m_cmdBuffer, NULL);
+	//if (m_cmdQueue)
+	//	m_cmdQueue->submit(m_cmdBuffer, NULL);
 }
 
 ShaderProgram* BaseApp::loadProgram(const char* vsFile, const char* psFile)
@@ -94,12 +94,13 @@ bool TriangleApp::init()
 		{ SEMANTIC_COLOR},
 	};
 
-	// 数据
+	// 数据,注意旋转方向，否则会不显示的
 	float vertex_data[] = {
-		-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f
+		-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,   0.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f
 	};
+
 	short index_data[] = { 0, 1, 2 };
 
 	m_vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
