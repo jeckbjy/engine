@@ -16,7 +16,6 @@ public:
 private:
 	D3D11_INPUT_ELEMENT_DESC* m_desc;
 	UINT		m_count;
-	bool		m_instanced;	// ÊÇ·ñº¬ÓÐinstance
 	uint32_t	m_id;
 };
 

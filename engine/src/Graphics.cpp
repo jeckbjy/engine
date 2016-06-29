@@ -50,9 +50,19 @@ uint32_t InputLayout::hash(const InputElement* elements, size_t count)
 	return 0;
 }
 
+static bool InputElementCmp(const InputElement& e1, const InputElement& e2)
+{
+	if (e1.slot < e2.slot)
+		return true;
+	if (e1.semantic < e2.semantic)
+		return true;
+	return false;
+}
+
 InputLayout::InputLayout(const InputElement* elements, size_t count)
 {
-	static const PixelFormat g_types[SEMANTIC_MAX] = {
+	static const PixelFormat g_types[SEMANTIC_MAX] = 
+	{
 		PF_FLOAT3, PF_FLOAT3, PF_FLOAT3, PF_FLOAT3, PF_FLOAT3,
 		PF_FLOAT4, PF_UINT4,
 		PF_FLOAT2, PF_FLOAT2, PF_FLOAT2, PF_FLOAT2,
@@ -61,14 +71,51 @@ InputLayout::InputLayout(const InputElement* elements, size_t count)
 
 	m_hash = hash(elements, count);
 
-	// todo:自动统计offset
+	// 排序
+	bool needSort = false;
 	m_elements.resize(count);
 	for (size_t i = 0; i < count; ++i)
 	{
 		InputElement& elem = m_elements[i];
 		elem = elements[i];
+
 		if (elem.format == PF_UNKNOWN)
 			elem.format = g_types[(int)elem.semantic];
+
+		if (elem.rate == INPUT_RATE_INSTANCE)
+			m_instanced = true;
+
+		if (!needSort && i > 0)
+		{
+			InputElement& prev = m_elements[i - 1];
+			if (elem.slot < prev.slot)
+				needSort = true;
+			else if (elem.semantic < prev.semantic)
+				needSort = true;
+		}
+	}
+
+	if (needSort)
+	{
+		std::sort(m_elements.begin(), m_elements.end(), &InputElementCmp);
+	}
+
+	// 计算偏移
+	InputElement* prev;
+	InputElement* curr;
+	for (size_t i = 1; i < count; ++i)
+	{
+		prev = &m_elements[i - 1];
+		curr = &m_elements[i];
+
+		if (prev->slot == curr->slot)
+		{
+			curr->offset = prev->offset + PixelUtil::getBytes(prev->format);
+		}
+		else
+		{
+			curr->offset = 0;
+		}
 	}
 }
 

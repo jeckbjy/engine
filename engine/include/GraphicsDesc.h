@@ -215,7 +215,7 @@ struct CU_API InputElement
 	uint8_t			slot;		// BufferÎ»ÖÃ
 	uint8_t			offset;		// Æ«ÒÆ
 	InputRate		rate;
-	InputElement(){ memset(this, 0, sizeof(InputElement)); }
+	InputElement() { memset(this, 0, sizeof(InputElement)); }
 	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
 };
 

@@ -80,6 +80,7 @@ protected:
 	typedef std::vector<InputElement> ElementVec;
 	ElementVec	m_elements;
 	uint32_t	m_hash;
+	bool		m_instanced;
 };
 
 class CU_API RenderTarget : public Object
