@@ -63,6 +63,7 @@ void D3D11_Program::link()
 	D3D11_Shader* shader;
 	UniformDesc* srcDesc;
 	UniformDesc* dstDesc;
+	UniformDesc* tmpDesc;
 	for (uint8_t i = 0; i < SHADER_COUNT; ++i)
 	{
 		shader = m_shaders[i];
@@ -75,13 +76,12 @@ void D3D11_Program::link()
 			// 先求出索引
 			if(srcDesc->isVariable())
 			{
-				dstDesc = uniforms[srcDesc->index];
-				index = indexMap[dstDesc->name];
+				tmpDesc = uniforms[srcDesc->index];
+				index = indexMap[tmpDesc->name];
 				stageInfo = (index << 32) + srcDesc->offset;
 			}
 			else
 			{
-				index = indexMap[srcDesc->name];
 				stageInfo = srcDesc->slot;
 			}
 

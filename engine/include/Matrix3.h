@@ -2,11 +2,16 @@
 #include "CMath.h"
 #include "Vector3.h"
 
+#define MATRIX_MAJOR_ROW	1	// 行主序,dx
+#define MATRIX_MAJOR_COL	2	// 列主序,gl
+#define MATRIX_MAJOR		MATRIX_MAJOR_ROW
+
 CU_NS_BEGIN
 
 /** A 3x3 matrix. Can be used for non-homogenous transformations of three dimensional vectors and points. */
 class CU_API Matrix3
 {
+	friend class Matrix4;
 public:
 	static const Matrix3 ZERO;
 	static const Matrix3 IDENTITY;
@@ -26,7 +31,7 @@ public:
 
 	void swap(Matrix3& other);
 
-	Vector3 getColumn(size_t col) const;
+	void getColumn(size_t col, Vector3& vec) const;
 	void setColumn(size_t col, const Vector3& vec);
 
 	float determinant() const;
@@ -105,17 +110,17 @@ public:
 	union
 	{
 		float m[3][3];
-		float _m[9];
-		struct  
+		float mm[9];
+		struct
 		{
-#ifdef COL_MAJOR
-			float m00, m10, m20;
-			float m01, m11, m21;
-			float m02, m12, m22;
-#else
+#if (MATRIX_MAJOR == MATRIX_MAJOR_ROW)
 			float m00, m01, m02;
 			float m10, m11, m12;
 			float m20, m21, m22;
+#else
+			float m00, m10, m20;
+			float m01, m11, m21;
+			float m02, m12, m22;
 #endif
 		};
 	};

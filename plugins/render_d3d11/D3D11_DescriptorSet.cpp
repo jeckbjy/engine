@@ -22,8 +22,7 @@ D3D11_DescriptorSet::D3D11_DescriptorSet(D3D11_Program* program, D3D11_Device* d
 			{
 			case UT_CBUFFER:
 			{
-				BufferDesc buffDesc(BU_UNIFORM, desc->bytes, 1, RES_DEFAULT, NULL);
-				D3D11_Buffer* buffer = (D3D11_Buffer*)device->newBuffer(buffDesc);
+				D3D11_Buffer* buffer = (D3D11_Buffer*)device->newUniformBuffer(desc->bytes);;
 				m_descriptors[i].set(TYPE_BUFFER, buffer);
 				break;
 			}
@@ -71,23 +70,23 @@ void D3D11_DescriptorSet::setValue(const String& name, const void* data, size_t 
 
 	UniformDesc* owner;
 	uint64_t varInfo;
-	uint32_t varIdx;
+	uint32_t bufIdx;
 	uint32_t varOff;
 	Descriptor* descriptor;
 	for (StageInfoMap::iterator itor = desc->stages.begin(); itor != desc->stages.end(); ++itor)
 	{
 		varInfo = itor->second;
-		varIdx = varInfo >> 32;
+		bufIdx = varInfo >> 32;
 		varOff = varInfo & 0xFFFFFFFF;
-		if (varIdx >= m_descriptors.size())
+		if (bufIdx >= m_descriptors.size())
 			continue;
-		owner = m_program->getUniformByIndex(varIdx);
-		descriptor = &(m_descriptors[owner->index]);
+		owner = m_program->getUniformByIndex(bufIdx);
+		descriptor = &(m_descriptors[bufIdx]);
 		if (descriptor->type != TYPE_BUFFER)
 			continue;
 		D3D11_Buffer* buffer = descriptor->buffer;
 		// ¿½±´Êý¾Ý
-		buffer->write(data, size, desc->offset + offset);
+		buffer->write(data, size, varOff + offset);
 	}
 }
 

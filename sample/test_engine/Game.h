@@ -1,4 +1,5 @@
 #pragma once
+#include "Matrix4.h"
 #include "Window.h"
 #include "Graphics.h"
 #include "Application.h"
@@ -34,6 +35,9 @@ protected:
 	InputLayoutPtr		m_layout;
 	GpuBufferPtr		m_vb;
 	GpuBufferPtr		m_ib;
+	Matrix4				m_worldMatrix;
+	Matrix4				m_projMatrix;
+	Matrix4				m_viewMatrix;
 };
 
 class TriangleApp : public BaseApp

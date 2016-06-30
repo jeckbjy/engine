@@ -136,7 +136,7 @@ void Transform::setWorldScale(const Vector3& scale)
 	if (m_parent != nullptr)
 	{
 		Matrix3 rotScale;
-		m_parent->getWorldMatrix().toMatrix3(rotScale);
+		m_parent->getWorldMatrix().getMatrix3(rotScale);
 		rotScale.inverse();
 
 		Matrix3 scaleMat = Matrix3(Quaternion::IDENTITY, scale);

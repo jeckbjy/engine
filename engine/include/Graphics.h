@@ -147,6 +147,20 @@ public:
 	//virtual void setValue(const String& name, GpuBuffer* value, size_t index) = 0;
 	virtual void setValue(const String& name, Texture* texture, size_t index = 0) = 0;
 	virtual void setValue(const String& name, const void* data, size_t size, size_t offset) = 0;
+
+	// 单个普通数据
+	template<typename T>
+	void setValue(const String& name, const T& value, size_t index = 0)
+	{
+		this->setValue(name, (void*)&value, sizeof(T), sizeof(T) * index);
+	}
+
+	// 数组
+	template<typename T>
+	void setValue(const String& name, const T* value, size_t count = 1, size_t offset = 0)
+	{
+		this->setValue(name, (void*)value, sizeof(T) * count, sizeof(T)* offset);
+	}
 };
 
 // 渲染管线,计算管线
@@ -230,18 +244,9 @@ public:
 	virtual FrameBuffer*	newFrameBuffer() = 0;
 	virtual SwapChain*		newSwapChain(const SwapChainDesc& desc) = 0;
 
-	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
-	{
-		BufferDesc desc(BU_VERTEX, stride, counts, flags, data);
-		return newBuffer(desc);
-	}
-	GpuBuffer* newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT)
-	{
-		uint32_t stride = type == INDEX16 ? sizeof(uint16_t) : sizeof(uint32_t);
-		BufferDesc desc(BU_INDEX, stride, counts, flags, data);
-		return newBuffer(desc);
-	}
-
+	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
+	GpuBuffer* newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
+	GpuBuffer* newUniformBuffer(uint32_t bytes, const void* data = NULL, RES_FLAG flags = RES_DYNAMIC);
 	ShaderStage* loadShader(ShaderType type, const String& path);
 };
 

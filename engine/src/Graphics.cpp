@@ -161,6 +161,25 @@ void FrameBuffer::detach(size_t att)
 	}
 }
 
+GpuBuffer* Device::newVertexBuffer(uint32_t stride, uint32_t counts, const void* data /* = NULL */, RES_FLAG flags /* = RES_DEFAULT */)
+{
+	BufferDesc desc(BU_VERTEX, stride, counts, flags, data);
+	return newBuffer(desc);
+}
+
+GpuBuffer* Device::newIndexBuffer(IndexType type, uint32_t counts, const void* data /* = NULL */, RES_FLAG flags /* = RES_DEFAULT */)
+{
+	uint32_t stride = type == INDEX16 ? sizeof(uint16_t) : sizeof(uint32_t);
+	BufferDesc desc(BU_INDEX, stride, counts, flags, data);
+	return newBuffer(desc);
+}
+
+GpuBuffer* Device::newUniformBuffer(uint32_t bytes, const void* data /* = NULL */, RES_FLAG flags /* = RES_DYNAMIC */)
+{
+	BufferDesc desc(BU_UNIFORM, bytes, 1, flags, data);
+	return newBuffer(desc);
+}
+
 ShaderStage* Device::loadShader(ShaderType type, const String& path)
 {
 	FILE* fp = fopen(path.c_str(), "rt");

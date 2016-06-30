@@ -34,6 +34,11 @@ bool BaseApp::setup()
 	if (!m_device)
 		return false;
 
+	m_worldMatrix.set(0.0f);
+	//m_projMatrix = Matrix4::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	m_projMatrix = Matrix4::perspectiveFov(Math::PI / 4.0f, m_width / m_height, 0.1f, 1000.0f);
+	m_viewMatrix = Matrix4::lookAt(Vector3(0, 0, 0), Vector3::UNIT_Z, Vector3::UNIT_Y);
+
 	m_window = new Window(NULL, "Test", m_width, m_height);
 
 	m_cmdBuffer = m_device->newCommandBuffer();
@@ -89,13 +94,15 @@ bool TriangleApp::init()
 		Vector3 color;
 	};
 
-	InputElement elements[] = {
+	InputElement elements[] = 
+	{
 		{ SEMANTIC_POSITION},
 		{ SEMANTIC_COLOR},
 	};
 
 	// 数据,注意旋转方向，否则会不显示的
-	float vertex_data[] = {
+	float vertex_data[] = 
+	{
 		-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,   0.0f, 1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f
@@ -105,10 +112,14 @@ bool TriangleApp::init()
 
 	m_vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
 	m_ib = m_device->newIndexBuffer(INDEX16, 3, index_data);
+	m_layout = m_device->newInputLayout(elements, 2);
 
 	m_program = loadProgram("./assets/color.hlsl.vs", "./assets/color.hlsl.ps");
 	m_pipeline = newPipeline(m_program);
-	m_layout = m_device->newInputLayout(elements, 2);
+	m_descriptors = m_device->newDescriptorSet(m_pipeline);
+	m_descriptors->setValue("worldMatrix", m_worldMatrix);
+	m_descriptors->setValue("viewMatrix", m_viewMatrix);
+	m_descriptors->setValue("projMatrix", m_projMatrix);
 
 	m_cmdBuffer->setRenderTarget(m_swapchain);
 	m_cmdBuffer->setViewport(0, 0, m_width, m_height);
@@ -117,6 +128,7 @@ bool TriangleApp::init()
 	m_cmdBuffer->setPipeline(m_pipeline);
 	m_cmdBuffer->setInputLayout(m_layout);
 	m_cmdBuffer->setTopology(PT_TRIANGLE_LIST);
+	m_cmdBuffer->setDescriptorSet(m_descriptors);
 
 	return true;
 }

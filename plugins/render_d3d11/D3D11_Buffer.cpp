@@ -38,10 +38,8 @@ D3D11_Buffer::D3D11_Buffer(const BufferDesc& desc, ID3D11DeviceN* device)
 	init_data.SysMemSlicePitch = 0;
 	init_data.pSysMem = desc.data;
 
-	D3D11_CHECK(
-		device->CreateBuffer(&d3d_desc, &init_data, &m_handle),
-		"CreateBuffer fail!"
-		);
+	HRESULT hr = device->CreateBuffer(&d3d_desc, desc.data ? &init_data : NULL, &m_handle);
+	D3D11_CHECK( hr, "CreateBuffer fail!");
 }
 
 D3D11_Buffer::~D3D11_Buffer()
@@ -55,7 +53,7 @@ void* D3D11_Buffer::map(size_t offset, size_t len, MAP_FLAG access)
 	ID3D11ContextN* context = gD3D11NativeContext();
 	if (context)
 	{
-		D3D11_MAP type = D3D11_MAP_WRITE;
+		D3D11_MAP type = D3D11_MAP_WRITE_DISCARD;
 		D3D11_MAPPED_SUBRESOURCE res;
 		context->Map(m_handle, 0, type, 0,  &res);
 		return (char*)res.pData + offset;

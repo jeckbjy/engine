@@ -256,4 +256,15 @@ InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0
 {
 }
 
+UniformDesc::UniformDesc()
+	: type(UT_UNKNOWN)
+	, slot(UINT32_MAX)
+	, arrays(1)
+	, bytes(0)
+	, offset(0)
+	, index(UINT32_MAX)
+{
+
+}
+
 CU_NS_END

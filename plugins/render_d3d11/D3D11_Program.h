@@ -23,8 +23,8 @@ public:
 
 private:
 	D3D11_Shader*	m_shaders[SHADER_COUNT];
-	UniformVec		m_uniformVec;
-	UniformMap		m_uniformMap;
+	UniformVec		m_uniformVec;	// 仅含有descriptor
+	UniformMap		m_uniformMap;	// 含有Variable和descriptor
 };
 
 CU_NS_END

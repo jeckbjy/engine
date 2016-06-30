@@ -4,7 +4,7 @@ CU_NS_BEGIN
 
 Frustum::Frustum()
 {
-	set(Matrix4::identity());
+	set(Matrix4::IDENTITY);
 }
 
 void Frustum::set(const Matrix4& mat)

@@ -73,10 +73,10 @@ void Matrix3::swap(Matrix3& other)
 	std::swap(m[2][2], other.m[2][2]);
 }
 
-Vector3 Matrix3::getColumn(size_t col) const
+void Matrix3::getColumn(size_t col, Vector3& vec) const
 {
 	assert(col < 3);
-	return Vector3(m[0][col], m[1][col], m[2][col]);
+	vec.set(m[0][col], m[1][col], m[2][col]);
 }
 
 void Matrix3::setColumn(size_t col, const Vector3& vec)
@@ -931,7 +931,7 @@ Matrix3 Matrix3::operator -() const
 Matrix3& Matrix3::operator +=(const Matrix3& rhs)
 {
 	for (int i = 0; i < 9; ++i)
-		_m[i] += rhs._m[i];
+		mm[i] += rhs.mm[i];
 
 	return *this;
 }
@@ -940,7 +940,7 @@ Matrix3& Matrix3::operator -=(const Matrix3& rhs)
 {
 	for (int i = 0; i < 9; ++i)
 	{
-		_m[i] -= rhs._m[i];
+		mm[i] -= rhs.mm[i];
 	}
 
 	return *this;
@@ -964,21 +964,21 @@ Matrix3& Matrix3::operator *=(const Matrix3& rhs)
 Matrix3& Matrix3::operator +=(float rhs)
 {
 	for (int i = 0; i < 9; ++i)
-		_m[i] += rhs;
+		mm[i] += rhs;
 	return *this;
 }
 
 Matrix3& Matrix3::operator -=(float rhs)
 {
 	for (int i = 0; i < 9; ++i)
-		_m[i] -= rhs;
+		mm[i] -= rhs;
 	return *this;
 }
 
 Matrix3& Matrix3::operator *=(float rhs)
 {
 	for (int i = 0; i < 9; ++i)
-		_m[i] *= rhs;
+		mm[i] *= rhs;
 	return *this;
 }
 
