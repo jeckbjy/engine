@@ -141,12 +141,12 @@ void OGL_CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount,
 #else
 	if (instanceCount <= 1)
 	{
-		glDrawElementsBaseVertex(m_primitive, indexCount, indexType, indexOffset, vertexOffset);
+		glDrawElementsBaseVertex(m_primitive, indexCount, indexType, (void*)indexOffset, vertexOffset);
 	}
 	else
 	{
 		// todo: set instanceOffset
-		glDrawElementsInstancedBaseVertex(m_primitive, indexCount, indexType, indexOffset, instanceCount, vertexOffset);
+		glDrawElementsInstancedBaseVertex(m_primitive, indexCount, indexType, (void*)indexOffset, instanceCount, vertexOffset);
 	}
 #endif
 
