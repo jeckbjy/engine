@@ -19,7 +19,7 @@ public:
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 	FrameBuffer*	newFrameBuffer();
-	SwapChain*		newSwapChain();
+	SwapChain*		newSwapChain(const SwapChainDesc& desc);
 
 	ID3D12Device* getDevice() { return m_device; }
 	ID3D12CommandAllocator* getAllocator() { return m_allocator; }

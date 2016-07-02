@@ -86,9 +86,9 @@ FrameBuffer* D3D12_Device::newFrameBuffer()
 	return new D3D12_FrameBuffer();
 }
 
-SwapChain* D3D12_Device::newSwapChain()
+SwapChain* D3D12_Device::newSwapChain(const SwapChainDesc& desc)
 {
-	return new D3D12_SwapChain();
+	return new D3D12_SwapChain(desc);
 }
 
 CU_NS_END

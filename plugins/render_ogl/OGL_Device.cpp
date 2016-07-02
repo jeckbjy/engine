@@ -137,9 +137,9 @@ FrameBuffer* OGL_Device::newFrameBuffer()
 	return new OGL_FrameBuffer();
 }
 
-SwapChain* OGL_Device::newSwapChain(Window* wnd)
+SwapChain* OGL_Device::newSwapChain(const SwapChainDesc& desc)
 {
-	return new OGL_SwapChain(wnd);
+	return new OGL_SwapChain(desc);
 }
 
 CU_NS_END

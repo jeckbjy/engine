@@ -17,7 +17,7 @@ VK_CommandBuffer::~VK_CommandBuffer()
 
 void VK_CommandBuffer::setRenderTarget(RenderTarget* target)
 {
-
+	target->bind(NULL);
 }
 
 void VK_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
@@ -64,8 +64,8 @@ void VK_CommandBuffer::setInputLayout(InputLayout* layout)
 
 void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
-	VkBuffer vk_buffers[CU_MAX_BOUND_VERTEX_BUFFERS];
-	VkDeviceSize vk_offsets[CU_MAX_BOUND_VERTEX_BUFFERS];
+	VkBuffer vk_buffers[CU_MAX_VERTEX_BUFFERS];
+	VkDeviceSize vk_offsets[CU_MAX_VERTEX_BUFFERS];
 
 	for (size_t i = 0; i < counts; ++i)
 	{

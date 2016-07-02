@@ -235,7 +235,7 @@ TextureDesc::TextureDesc(PixelFormat fmt, uint32_t width, uint32_t height, Textu
 
 SwapChainDesc::SwapChainDesc(Window* wnd, PixelFormat format /* = PF_R8G8B8A8_UNORM */, PixelFormat dsFormat, size_t bufferCount /* = 1 */)
 	: wnd(wnd)
-	, format(format)
+	, colorFormat(format)
 	, depthStencilFormat(dsFormat)
 	, bufferCount(bufferCount)
 	, sampleCount(1)

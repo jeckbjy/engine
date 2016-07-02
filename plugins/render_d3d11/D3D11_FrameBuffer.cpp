@@ -34,8 +34,9 @@ void D3D11_FrameBuffer::update()
 	}
 }
 
-void D3D11_FrameBuffer::bind(ID3D11ContextN* context)
+void D3D11_FrameBuffer::bind(void* param)
 {
+	ID3D11ContextN* context = (ID3D11ContextN*)param;
 	if (m_dirty)
 	{
 		update();

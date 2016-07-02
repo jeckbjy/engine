@@ -3,8 +3,8 @@
 
 CU_NS_BEGIN
 
-VK_SwapChain::VK_SwapChain(Window* wnd)
-	: m_wnd(wnd)
+VK_SwapChain::VK_SwapChain(const SwapChainDesc& desc)
+	: m_wnd(desc.wnd)
 {
 
 }
@@ -56,6 +56,16 @@ void VK_SwapChain::createChain()
 	info.imageExtent = { 0, 0 };
 	info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+}
+
+void VK_SwapChain::present()
+{
+
+}
+
+void VK_SwapChain::bind(void*)
+{
+
 }
 
 CU_NS_END

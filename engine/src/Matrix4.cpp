@@ -37,21 +37,21 @@ Matrix4 Matrix4::orthoOffCenter(float left, float right, float bottom, float top
 Matrix4 Matrix4::perspective(float width, float height, float zNear, float zFar)
 {
 	Matrix4 m;
-	m.perspectiveLH(width, height, zNear, zFar);
+	m.setPerspectiveLH(width, height, zNear, zFar);
 	return m;
 }
 
 Matrix4 Matrix4::perspectiveFov(float fovy, float aspect, float zNear, float zFar)
 {
 	Matrix4 m;
-	m.perspectiveFovLH(fovy, aspect, zNear, zFar);
+	m.setPerspectiveFovLH(fovy, aspect, zNear, zFar);
 	return m;
 }
 
 Matrix4 Matrix4::perspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar)
 {
 	Matrix4 m;
-	m.perspectiveOffCenterLH(left, right, bottom, top, zNear, zFar);
+	m.setPerspectiveOffCenterLH(left, right, bottom, top, zNear, zFar);
 	return m;
 }
 
@@ -852,12 +852,12 @@ void Matrix4::setLookAtRH(const Vector3& eye, const Vector3& at, const Vector3& 
 		xAxis.x, yAxis.x, zAxis.x, 0,
 		xAxis.y, yAxis.y, zAxis.y, 0,
 		xAxis.z, yAxis.z, zAxis.z, 0,
-		dotX, dotY, dotZ, 1
-		);
+		dotX,	 dotY,	  dotZ,	   1);
 }
 
 void Matrix4::setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up)
 {
+	//diffrent: left-hand(at - eye) vs right-hand(eye -at)
 	Vector3 zAxis = Vector3::normalize(at - eye);
 	Vector3 xAxis = Vector3::normalize(Vector3::cross(up, zAxis));
 	Vector3 yAxis = Vector3::cross(zAxis, xAxis);
@@ -870,8 +870,7 @@ void Matrix4::setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& 
 		xAxis.x, yAxis.x, zAxis.x, 0,
 		xAxis.y, yAxis.y, zAxis.y, 0,
 		xAxis.z, yAxis.z, zAxis.z, 0,
-		dotX, dotY, dotZ, 1
-		);
+		dotX,	 dotY,	  dotZ,    1);
 }
 
 Matrix4 Matrix4::operator -() const

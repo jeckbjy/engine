@@ -1,15 +1,15 @@
 #include "OGL_API.h"
-#include "Window.h"
 
 CU_NS_BEGIN
 
 class CU_OGL_API OGL_SwapChain : public SwapChain
 {
 public:
-	OGL_SwapChain(Window* wnd);
+	OGL_SwapChain(const SwapChainDesc& desc);
 	~OGL_SwapChain();
 
 	void present();
+	void bind(void*);
 
 private:
 	Window*		m_wnd;

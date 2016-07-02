@@ -5,8 +5,8 @@
 #include "Util.h"
 
 BaseApp::BaseApp()
-	: m_width(1024)
-	, m_height(768)
+	: m_width(800)
+	, m_height(600)
 {
 }
 
@@ -34,10 +34,10 @@ bool BaseApp::setup()
 	if (!m_device)
 		return false;
 
-	m_worldMatrix.set(0.0f);
+	m_worldMatrix.set(1.0f);
 	//m_projMatrix = Matrix4::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 	m_projMatrix = Matrix4::perspectiveFov(Math::PI / 4.0f, m_width / m_height, 0.1f, 1000.0f);
-	m_viewMatrix = Matrix4::lookAt(Vector3(0, 0, 0), Vector3::UNIT_Z, Vector3::UNIT_Y);
+	m_viewMatrix = Matrix4::lookAt(Vector3(0, 0, -10), Vector3(0,0,-9), Vector3::UNIT_Y);
 
 	m_window = new Window(NULL, "Test", m_width, m_height);
 

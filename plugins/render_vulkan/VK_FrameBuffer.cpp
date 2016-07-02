@@ -24,7 +24,7 @@ void VK_FrameBuffer::destroy()
 	}
 }
 
-void VK_FrameBuffer::bind()
+void VK_FrameBuffer::bind(void*)
 {
 
 }

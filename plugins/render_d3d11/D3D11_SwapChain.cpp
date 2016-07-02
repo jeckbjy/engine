@@ -27,7 +27,7 @@ D3D11_SwapChain::D3D11_SwapChain(const SwapChainDesc& info, IDXGIFactoryN* facto
 	desc.BufferCount = info.bufferCount;
 	desc.BufferDesc.Width = m_wnd->getWidth();
 	desc.BufferDesc.Height = m_wnd->getHeight();
-	desc.BufferDesc.Format = D3D11_Mapping::getFormat(info.format);
+	desc.BufferDesc.Format = D3D11_Mapping::getFormat(info.colorFormat);
 	desc.BufferDesc.ScanlineOrdering = D3D11_Mapping::getScanlineOrder(info.scanlineOrdering);
 	desc.BufferDesc.Scaling = D3D11_Mapping::getScaling(info.scaling);
 	if (m_syncInterval > 0)
@@ -131,8 +131,9 @@ void D3D11_SwapChain::create(ID3D11DeviceN* device, const DXGI_SWAP_CHAIN_DESC* 
 	}
 }
 
-void D3D11_SwapChain::bind(ID3D11ContextN* context)
+void D3D11_SwapChain::bind(void* param)
 {
+	ID3D11ContextN* context = (ID3D11ContextN*)param;
 	ID3D11RenderTargetView* views[1] = { m_rtv };
 	context->OMSetRenderTargets(1, views, m_dsv);
 }

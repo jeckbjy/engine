@@ -9,7 +9,7 @@ public:
 	D3D12_FrameBuffer();
 	~D3D12_FrameBuffer();
 
-	void bind(ID3D12GraphicsCommandList* cmdList);
+	void bind(void* param);
 
 private:
 	void update();

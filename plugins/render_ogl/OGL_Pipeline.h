@@ -15,7 +15,7 @@ public:
 
 private:
 	RenderStateDesc*	m_states;
-	OGL_Program*	m_program;
+	OGL_Program*		m_program;
 };
 
 CU_NS_END

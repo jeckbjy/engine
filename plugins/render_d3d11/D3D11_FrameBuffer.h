@@ -12,7 +12,7 @@ public:
 	D3D11_FrameBuffer();
 	~D3D11_FrameBuffer();
 
-	void bind(ID3D11ContextN* context);
+	void bind(void* param);
 	void clearRTV(ID3D11ContextN* context, const Color& color, uint8_t targetMask);
 	void clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil);
 

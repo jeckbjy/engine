@@ -9,7 +9,7 @@ public:
 	VK_FrameBuffer();
 	~VK_FrameBuffer();
 
-	void bind();
+	void bind(void*);
 
 private:
 	void destroy();

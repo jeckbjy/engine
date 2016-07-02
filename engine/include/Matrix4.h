@@ -7,6 +7,7 @@ CU_NS_BEGIN
 
 // 注意：Matrix默认构造函数并没有初始化数据,如果想初始化为零需要用,Matrix(0.0f)初始化，或者set(0.0f)
 // dx左手坐标系，gl右手坐标系
+// unity:左手坐标系, ogre:右手坐标系
 // projection推导 http://www.nshen.net/article/2014-10-16/stage3d-projection-matrix/
 class CU_API Matrix4
 {
@@ -16,21 +17,21 @@ public:
 	static Matrix4 perspective(float width, float height, float zNear, float zFar);
 	static Matrix4 perspectiveFov(float fovy, float aspect, float zNear, float zFar);
 	static Matrix4 perspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar);
-	static Matrix4 lookAt(const Vector3& eye, const Vector3& at, const Vector3& up);
+	static Matrix4 lookAt(const Vector3& eye, const Vector3& at, const Vector3& up = Vector3::UNIT_Y);
 
 	static Matrix4 orthoRH(float width, float height, float zNear, float zFar);
 	static Matrix4 orthoOffCenterRH(float left, float right, float bottom, float top, float zNear, float zFar);
 	static Matrix4 perspectiveRH(float width, float height, float zNear, float zFar);
 	static Matrix4 perspectiveFovRH(float fovy, float aspect, float zNear, float zFar);
 	static Matrix4 perspectiveOffCenterRH(float left, float right, float bottom, float top, float zNear, float zFar);
-	static Matrix4 lookAtRH(const Vector3& eye, const Vector3& at, const Vector3& up);
+	static Matrix4 lookAtRH(const Vector3& eye, const Vector3& at, const Vector3& up = Vector3::UNIT_Y);
 
 	static Matrix4 orthoLH(float width, float height, float zNear, float zFar);
 	static Matrix4 orthoOffCenterLH(float left, float right, float bottom, float top, float zNear, float zFar);
 	static Matrix4 perspectiveLH(float width, float height, float zNear, float zFar);
 	static Matrix4 perspectiveFovLH(float fovy, float aspect, float zNear, float zFar);
 	static Matrix4 perspectiveOffCenterLH(float left, float right, float bottom, float top, float zNear, float zFar);
-	static Matrix4 lookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up);
+	static Matrix4 lookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up = Vector3::UNIT_Y);
 
 public:
 	enum { ARRAY_SIZE = 16 };
@@ -103,8 +104,8 @@ public:
 	void setPerspectiveFovLH(float fovy, float aspect, float zNear, float zFar);
 	void setPerspectiveOffCenterRH(float left, float right, float bottom, float top, float zNear, float zFar);
 	void setPerspectiveOffCenterLH(float left, float right, float bottom, float top, float zNear, float zFar);
-	void setLookAtRH(const Vector3& eye, const Vector3& at, const Vector3& up);
-	void setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up);
+	void setLookAtRH(const Vector3& eye, const Vector3& at, const Vector3& up = Vector3::UNIT_Y);
+	void setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up = Vector3::UNIT_Y);
 
 	bool isAffine() const { return (m30 == 0) && (m31 == 0) && (m32 == 0) && (m33 == 1); }
 

@@ -33,16 +33,7 @@ D3D11_CommandBuffer::~D3D11_CommandBuffer()
 void D3D11_CommandBuffer::setRenderTarget(RenderTarget* target)
 {
 	m_target = target;
-	if (target->isKindOf<D3D11_SwapChain>())
-	{
-		D3D11_SwapChain* chain = (D3D11_SwapChain*)target;
-		chain->bind(m_context);
-	}
-	else if (target->isKindOf<D3D11_FrameBuffer>())
-	{
-		D3D11_FrameBuffer* fbo = (D3D11_FrameBuffer*)target;
-		fbo->bind(m_context);
-	}
+	target->bind(m_context);
 }
 
 void D3D11_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
@@ -91,9 +82,9 @@ void D3D11_CommandBuffer::setInputLayout(InputLayout* layout)
 
 void D3D11_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
-	ID3D11Buffer* dx_buffers[CU_MAX_BOUND_VERTEX_BUFFERS];
-	UINT32 dx_strides[CU_MAX_BOUND_VERTEX_BUFFERS];
-	UINT32 dx_offsets[CU_MAX_BOUND_VERTEX_BUFFERS];
+	ID3D11Buffer* dx_buffers[CU_MAX_VERTEX_BUFFERS];
+	UINT32 dx_strides[CU_MAX_VERTEX_BUFFERS];
+	UINT32 dx_offsets[CU_MAX_VERTEX_BUFFERS];
 	D3D11_Buffer* buffer;
 	for (size_t i = 0; i < counts; ++i)
 	{

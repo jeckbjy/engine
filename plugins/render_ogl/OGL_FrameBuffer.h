@@ -9,7 +9,7 @@ public:
 	OGL_FrameBuffer();
 	~OGL_FrameBuffer();
 
-	void bind();
+	void bind(void*);
 
 private:
 	void update();

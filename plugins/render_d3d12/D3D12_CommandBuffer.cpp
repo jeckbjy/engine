@@ -66,7 +66,7 @@ void D3D12_CommandBuffer::setInputLayout(InputLayout* layout)
 
 void D3D12_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
 {
-	D3D12_VERTEX_BUFFER_VIEW views[CU_MAX_BOUND_VERTEX_BUFFERS];
+	D3D12_VERTEX_BUFFER_VIEW views[CU_MAX_VERTEX_BUFFERS];
 	for (size_t i = 0; i < counts; ++i)
 	{
 		D3D12_Buffer* dx_buffer = (D3D12_Buffer*)buffers[i];

@@ -261,6 +261,9 @@ struct CU_API PixelUtil
 	static uint getFormat(const String& format);
 	static uint getBytes(PixelFormat fmt);			// 总共占有多少字节
 	static uint getComponents(PixelFormat fmt);		// 返回有多少个元素
+	static uint getColorBits(PixelFormat fmt);
+	static uint getDepthBits(PixelFormat fmt);
+	static uint getStencilBits(PixelFormat fmt);
 
 	static uint getMemorySize(PixelFormat fmt, uint width, uint height, uint depth);
 	static uint getImageSize(PixelFormat fmt, uint width, uint height, uint depth, uint mipmaps, uint faces);

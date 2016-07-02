@@ -77,10 +77,15 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 
 // http://www.luluathena.com/?p=1739
 // http://www.cnblogs.com/vertexshader/articles/3022981.html
-#	define CU_USE_SPO	// Separate Program Object
-#	define CU_USE_PBO	// Pixel Buffer Object
-#	define CU_USE_TEXTURE_ARRAY
-#	define CU_USE_DRAW_INDEX_BASE
-#	define CU_USE_UNIFORM_BLOCK
-// µÍ°æ±¾µÄopengl
-#	define GU_GL_ES2
+#define CU_USE_SPO	// Separate Program Object
+#define CU_USE_PBO	// Pixel Buffer Object
+#define CU_USE_TEXTURE_ARRAY
+#define CU_USE_DRAW_INDEX_BASE
+#define CU_USE_UNIFORM_BLOCK
+
+// °æ±¾
+#define OGL_VERSION_2	2
+#define OGL_VERSION_3	3
+#define OGL_VERSION_4	4
+
+#define OGL_VERSION		OGL_VERSION_4

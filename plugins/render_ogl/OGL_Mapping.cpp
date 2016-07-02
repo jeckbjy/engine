@@ -209,11 +209,13 @@ GLbitfield OGL_Mapping::getAccess(MAP_FLAG type)
 
 GLint OGL_Mapping::getPrimitiveMode(Topology type)
 {
-	static const GLint gl_topology[] = { 
+	static const GLint gl_topology[] = 
+	{
 		0, GL_POINTS, 
 		GL_LINES, GL_LINE_STRIP, GL_TRIANGLES, GL_TRIANGLE_STRIP, 
 		GL_LINES_ADJACENCY, GL_LINE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY, GL_TRIANGLE_STRIP_ADJACENCY
 	};
+
 	if (type < PT_CTRL_PATCH_LIST1)
 		return gl_topology[type];
 

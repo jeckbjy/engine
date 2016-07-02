@@ -17,12 +17,12 @@ public:
 	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
 	ShaderStage*	newShader();
 	ShaderProgram*	newProgram();
-	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
 	Pipeline*		newPipeline(const PipelineDesc& desc);
+	DescriptorSet*	newDescriptorSet(Pipeline* pipeline);
 	CommandBuffer*	newCommandBuffer();
 	CommandQueue*	newCommandQueue();
 	FrameBuffer*	newFrameBuffer();
-	SwapChain*		newSwapChain(Window* wnd);
+	SwapChain*		newSwapChain(const SwapChainDesc& desc);
 
 private:
 

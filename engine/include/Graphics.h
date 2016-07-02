@@ -88,6 +88,8 @@ class CU_API RenderTarget : public Object
 	DECLARE_RTTI(RenderTarget, Object, OBJ_ID_RENDER_TARGET);
 public:
 	virtual ~RenderTarget(){}
+	// 内部调用使用
+	virtual void bind(void* param) = 0;
 };
 
 class CU_API FrameBuffer : public RenderTarget
@@ -195,10 +197,10 @@ public:
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
 	virtual void setInputLayout(InputLayout* layout) = 0;
-	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets) = 0;
+	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets = NULL) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset = 0) = 0;
 
-	virtual void clear(ClearMask masks = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, uint32_t stencil = 0, uint8_t targetMask = 0xFF) = 0;
+	virtual void clear(ClearMask mask = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, uint32_t stencil = 0, uint8_t targetMask = 0xFF) = 0;
 	virtual void draw(uint32_t vertexCount, uint32_t instanceCount = 0, uint32_t vertexOffset = 0, uint32_t instanceOffset = 0) = 0;
 	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount = 0, uint32_t indexOffset = 0, uint32_t instanceOffset = 0, uint32_t vertexOffset = 0) = 0;
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;

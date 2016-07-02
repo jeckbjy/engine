@@ -26,7 +26,7 @@ public:
 	void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets);
 	void setIndexBuffer(IndexBuffer* buffer, size_t offset);
 
-	void clear(ClearMask masks /* = CLEAR_ALL */, const Color& color /* = Color::BLACK */, float depth /* = 1.0f */, uint32_t stencil /* = 0 */, uint8_t targetMask /* = 0xFF */);
+	void clear(ClearMask mask /* = CLEAR_ALL */, const Color& color /* = Color::BLACK */, float depth /* = 1.0f */, uint32_t stencil /* = 0 */, uint8_t targetMask /* = 0xFF */);
 	void draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset);
 	void drawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t indexOffset, uint32_t instanceOffset, uint32_t vertexOffset);
 	void dispatch(size_t x, size_t y, size_t z);
@@ -39,13 +39,17 @@ private:
 	OGL_Pipeline*		m_pipeline;
 	OGL_InputLayout*	m_layout;
 	OGL_Buffer*			m_index;
+	OGL_Buffer*			m_vertices[CU_MAX_VERTEX_BUFFERS];
 	DescriptorSet*		m_descriptors;
-	Topology			m_primitive;
+	GLint				m_primitive;
 	size_t				m_vertexStart;
 	size_t				m_vertexCount;	// ¶¥µãÊýÄ¿
 	size_t				m_indexStart;
 	size_t				m_indexCount;
 	size_t				m_instanceCount;
+
+	size_t				m_verticeStart;
+	size_t				m_verticeCount;
 
 	float				m_factors[4];
 	StencilFaceFlags	m_stencilMask;

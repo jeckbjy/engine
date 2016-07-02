@@ -192,7 +192,7 @@ struct CU_API PipelineDesc
 struct CU_API SwapChainDesc
 {
 	Window*		wnd;
-	PixelFormat format;
+	PixelFormat colorFormat;
 	PixelFormat	depthStencilFormat;	// 深度缓冲区
 	size_t		bufferCount;		// 后台缓冲区个数
 	size_t		sampleCount;

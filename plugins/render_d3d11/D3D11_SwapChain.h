@@ -12,7 +12,7 @@ public:
 
 	void present();
 
-	void bind(ID3D11ContextN* context);
+	void bind(void* param);
 	void clearRTV(ID3D11ContextN* context, const Color& color);
 	void clearDSV(ID3D11ContextN* context, UINT32 flags, float depth, UINT8 stencil);
 

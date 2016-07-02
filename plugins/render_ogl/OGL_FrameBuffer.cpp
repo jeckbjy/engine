@@ -18,7 +18,7 @@ OGL_FrameBuffer::~OGL_FrameBuffer()
 	}
 }
 
-void OGL_FrameBuffer::bind()
+void OGL_FrameBuffer::bind(void*)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 	if (m_dirty)

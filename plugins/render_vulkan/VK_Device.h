@@ -21,7 +21,7 @@ public:
 	CommandBuffer*		newCommandBuffer();
 	CommandQueue*		newCommandQueue();
 	FrameBuffer*		newFrameBuffer();
-	SwapChain*			newSwapChain(Window* wnd);
+	SwapChain*			newSwapChain(const SwapChainDesc& desc);
 
 	void allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 

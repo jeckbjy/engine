@@ -11,18 +11,8 @@ class CU_OGL_API OGL_InputLayout : public InputLayout
 public:
 	OGL_InputLayout(const InputElement* elements, size_t count);
 	~OGL_InputLayout();
-	//void release();
 
-//	void bind(OGLProgram* prog);
-//	void unbind(OGLProgram* prog);
-//
-//	void bind_attrs(OGLProgram* prog);
-//private:
-//#ifdef CU_USE_VAO
-//	typedef std::map<OGLProgram*, GLuint> VAOMap;
-//	VAOMap m_vaos;
-//#endif
-//	VertexDeclaration m_desc;
+	void bind();
 };
 
 CU_NS_END

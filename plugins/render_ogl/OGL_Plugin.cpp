@@ -1,30 +1,39 @@
 #include "OGL_Plugin.h"
-#include "OGL_API.h"
-//#include "OGL_Device.h"
-//#include "OGL_Mapping.h"
-//#include "Root.h"
+#include "OGL_Device.h"
 
 CU_NS_BEGIN
 
 DEF_PLUGIN(CU_OGL_API, OGL_Plugin)
 
-//OGLDevice* g_ogl_render = NULL;
+OGL_Plugin::OGL_Plugin()
+	: Plugin(OGL_NAME)
+	, m_device(NULL)
+{
+
+}
+
+OGL_Plugin::~OGL_Plugin()
+{
+	CU_SAFE_RELEASE(m_device);
+}
 
 void OGL_Plugin::install()
 {
-	//g_ogl_render = new OGLDevice();
-	//g_ogl_render->init();
-	//Root::Instance().addDevice(g_ogl_render);
+	if (!m_device)
+	{
+		m_device = new OGL_Device();
+		m_device->retain();
+	}
+
+	gGraphics.setDevice(m_device);
 }
 
 void OGL_Plugin::uninstall()
 {
-	//Root::Instance().delDevice(g_ogl_render);
-	//if (g_ogl_render != NULL)
-	//{
-	//	delete g_ogl_render;
-	//	g_ogl_render = NULL;
-	//}
+	if ((OGL_Device*)gGraphics.getDevice() == m_device)
+	{
+		gGraphics.setDevice(NULL);
+	}
 }
 
 CU_NS_END

@@ -5,7 +5,7 @@ CU_NS_BEGIN
 // norm:用整数标识浮点数
 enum PixelType
 {
-	PT_UNDEFINED,
+	PT_UNKNOWN,
 	PT_UNORM,
 	PT_SNORM,
 	PT_USCALED,
@@ -41,7 +41,7 @@ struct PixelInfo
 
 static PixelInfo gPixelInfoArray[PIXEL_FORMAT_MAX] = 
 {
-	DEF_FORMAT(PF_UNDEFINED, PT_UNDEFINED,	PC_D, 0, 0),
+	DEF_FORMAT(PF_UNKNOWN,				PT_UNKNOWN, PC_D, 0, 0),
 	DEF_FORMAT(PF_R4G4_UNORM,			PT_UNORM,	PC_D, 2, 1),
 	DEF_FORMAT(PF_R4G4B4A4_UNORM,		PT_UNORM,	PC_A, 4, 2),
 	DEF_FORMAT(PF_B4G4R4A4_UNORM,		PT_UNORM,	PC_A, 4, 2), 
@@ -268,6 +268,45 @@ uint PixelUtil::getBytes(PixelFormat fmt)
 uint PixelUtil::getComponents(PixelFormat fmt)
 {
 	return gPixelInfoArray[fmt].components;
+}
+
+uint PixelUtil::getColorBits(PixelFormat fmt)
+{
+	return gPixelInfoArray[fmt].bytes * 8;
+}
+
+uint PixelUtil::getDepthBits(PixelFormat fmt)
+{
+	switch (fmt)
+	{
+	case PF_D16_UNORM:
+		return 16;
+	case PF_X8_D24_UNORM:
+		return 24;
+	case PF_D32_SFLOAT:
+		return 32;
+	case PF_D16_UNORM_S8_UINT:
+		return 16;
+	case PF_D24_UNORM_S8_UINT:
+		return 24;
+	case PF_D32_SFLOAT_S8_UINT:
+		return 32;
+	default:
+		return 0;
+	}
+}
+
+uint PixelUtil::getStencilBits(PixelFormat fmt)
+{
+	switch (fmt)
+	{
+	case PF_D16_UNORM_S8_UINT:
+	case PF_D24_UNORM_S8_UINT:
+	case PF_D32_SFLOAT_S8_UINT:
+		return 8;
+	default:
+		return 0;
+	}
 }
 
 uint PixelUtil::getMemorySize(PixelFormat fmt, uint width, uint height, uint depth)

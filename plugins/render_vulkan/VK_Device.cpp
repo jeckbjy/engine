@@ -226,9 +226,9 @@ FrameBuffer* VK_Device::newFrameBuffer()
 	return new VK_FrameBuffer();
 }
 
-SwapChain* VK_Device::newSwapChain(Window* wnd)
+SwapChain* VK_Device::newSwapChain(const SwapChainDesc& desc)
 {
-	return new VK_SwapChain(wnd);
+	return new VK_SwapChain(desc);
 }
 
 CU_NS_END

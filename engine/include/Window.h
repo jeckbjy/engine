@@ -58,7 +58,6 @@ public:
 	virtual ~Window();
 
 	void show(bool showFlag = true);
-
 	//void setTitle(const String& title);
 	//String getTitle() const;
 
@@ -73,6 +72,7 @@ public:
 	void setFlag(uint32_t mask) { m_flags |= mask; }
 
 	window_t getHandle() { return m_handle; }
+
 
 #ifdef CU_OS_WINNT
 	LRESULT processMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
