@@ -1,12 +1,12 @@
-#include "D3D11_InputLayout.h"
+#include "D3D11_VertexLayout.h"
 #include "D3D11_Mapping.h"
 #include "D3D11_Device.h"
 #include "D3D11_Program.h"
 
 CU_NS_BEGIN
 
-D3D11_InputLayout::D3D11_InputLayout(uint32_t id, const InputElement* elements, size_t count)
-	: InputLayout(elements, count)
+D3D11_VertexLayout::D3D11_VertexLayout(uint32_t id, const VertexElement* elements, size_t count)
+	: VertexLayout(elements, count)
 	, m_count(count)
 	, m_id(id)
 {
@@ -14,7 +14,7 @@ D3D11_InputLayout::D3D11_InputLayout(uint32_t id, const InputElement* elements, 
 	for (size_t i = 0; i < count; ++i)
 	{
 		D3D11_INPUT_ELEMENT_DESC& desc = m_desc[i];
-		const InputElement& elem = m_elements[i];
+		const VertexElement& elem = m_elements[i];
 		D3D11_Mapping::fillSemantic(elem.semantic, desc.SemanticName, desc.SemanticIndex);
 		desc.Format = D3D11_Mapping::getFormat(elem.format);
 		desc.InputSlot = elem.slot;
@@ -24,12 +24,12 @@ D3D11_InputLayout::D3D11_InputLayout(uint32_t id, const InputElement* elements, 
 	}
 }
 
-D3D11_InputLayout::~D3D11_InputLayout()
+D3D11_VertexLayout::~D3D11_VertexLayout()
 {
 	delete[] m_desc;
 }
 
-ID3D11InputLayout* D3D11_InputLayout::createLayout(ID3D11DeviceN* device, ID3DBlob* code)
+ID3D11InputLayout* D3D11_VertexLayout::createLayout(ID3D11DeviceN* device, ID3DBlob* code)
 {
 	if (code == NULL)
 		return NULL;

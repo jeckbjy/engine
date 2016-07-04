@@ -4,7 +4,7 @@
 CU_NS_BEGIN
 
 class D3D12_Pipeline;
-class D3D12_InputLayout;
+class D3D12_VertexLayout;
 class CU_D3D12_API D3D12_CommandBuffer : public CommandBuffer
 {
 public:
@@ -19,8 +19,7 @@ public:
 	void setTopology(Topology topology);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
-	void setInputLayout(InputLayout* layout);
-	void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets);
+	void setVertexArray(VertexArray* vertexs);
 	void setIndexBuffer(IndexBuffer* buffer, size_t offset);
 
 	void clear(ClearMask masks /* = CLEAR_ALL */, const Color& color /* = Color::BLACK */, float depth /* = 1.0f */, uint32_t stencil /* = 0 */, uint8_t targetMask /* = 0xFF */);
@@ -30,14 +29,14 @@ public:
 
 	ID3D12GraphicsCommandList* native() { return m_handle; }
 
-	D3D12_InputLayout* getLayout() { return m_layout; }
+	D3D12_VertexLayout* getLayout() { return m_layout; }
 
 private:
 	void prepare();
 
 private:
 	ID3D12GraphicsCommandList*	m_handle;
-	D3D12_InputLayout*			m_layout;
+	D3D12_VertexLayout*			m_layout;
 	D3D12_Pipeline*				m_pipeline;
 };
 

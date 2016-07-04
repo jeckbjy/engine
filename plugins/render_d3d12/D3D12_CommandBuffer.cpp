@@ -1,5 +1,5 @@
 #include "D3D12_CommandBuffer.h"
-#include "D3D12_InputLayout.h"
+#include "D3D12_VertexLayout.h"
 #include "D3D12_Pipeline.h"
 #include "D3D12_Buffer.h"
 
@@ -59,22 +59,22 @@ void D3D12_CommandBuffer::setPipeline(Pipeline* pipeline)
 	m_pipeline = (D3D12_Pipeline*)pipeline;
 }
 
-void D3D12_CommandBuffer::setInputLayout(InputLayout* layout)
+void D3D12_CommandBuffer::setVertexArray(VertexArray* vertexs)
 {
-	m_layout = (D3D12_InputLayout*)layout;
-}
+	m_layout = (D3D12_VertexLayout*)vertexs->getLayout();
 
-void D3D12_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
-{
 	D3D12_VERTEX_BUFFER_VIEW views[CU_MAX_VERTEX_BUFFERS];
+
+	size_t counts = vertexs->getBufferCount();
+	size_t start = vertexs->getStartSlot();
 	for (size_t i = 0; i < counts; ++i)
 	{
-		D3D12_Buffer* dx_buffer = (D3D12_Buffer*)buffers[i];
-		views[i].BufferLocation = dx_buffer->getGPUVirtualAddress();
-		views[i].SizeInBytes = dx_buffer->bytes();
-		views[i].StrideInBytes = dx_buffer->stride();
+		D3D12_Buffer* buffer = (D3D12_Buffer*)vertexs->getBuffer(i);
+		views[i].BufferLocation = buffer->getGPUVirtualAddress();
+		views[i].SizeInBytes = buffer->bytes();
+		views[i].StrideInBytes = buffer->stride();
 	}
-	m_handle->IASetVertexBuffers(startSlot, counts, views);
+	m_handle->IASetVertexBuffers(start, counts, views);
 }
 
 void D3D12_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)

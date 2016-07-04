@@ -2,28 +2,23 @@
 #include "OGL_Mapping.h"
 #include "OGL_Buffer.h"
 #include "OGL_Program.h"
-#include "OGL_InputLayout.h"
 #include "OGL_Pipeline.h"
+#include "OGL_VertexArray.h"
 
 CU_NS_BEGIN
 
 OGL_CommandBuffer::OGL_CommandBuffer()
 	: m_target(NULL)
 	, m_pipeline(NULL)
-	, m_layout(NULL)
 	, m_index(NULL)
 	, m_descriptors(NULL)
 	, m_primitive(GL_TRIANGLES)
-	, m_vertexCount(0)
 	, m_vertexStart(0)
+	, m_vertexCount(0)
 	, m_indexStart(0)
 	, m_indexCount(0)
 	, m_instanceCount(0)
 {
-	for (int i = 0; i < CU_MAX_VERTEX_BUFFERS; ++i)
-	{
-		m_vertices[i] = NULL;
-	}
 }
 
 OGL_CommandBuffer::~OGL_CommandBuffer()
@@ -73,19 +68,9 @@ void OGL_CommandBuffer::setPipeline(Pipeline* pipeline)
 	m_pipeline = (OGL_Pipeline*)pipeline;
 }
 
-void OGL_CommandBuffer::setInputLayout(InputLayout* layout)
+void OGL_CommandBuffer::setVertexArray(VertexArray* vao)
 {
-	m_layout = (OGL_InputLayout*)layout;
-}
-
-void OGL_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
-{
-	m_verticeStart = startSlot;
-	m_verticeCount = counts;
-	for (size_t i = 0; i < counts; ++i)
-	{
-		m_vertices[startSlot + i] = (OGL_Buffer*)buffers[i];
-	}
+	m_vertexs = (OGL_VertexArray*)vao;
 }
 
 void OGL_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
@@ -165,11 +150,11 @@ void OGL_CommandBuffer::dispatch(size_t x, size_t y, size_t z)
 void OGL_CommandBuffer::prepare()
 {
 	if (m_pipeline)
+	{
 		m_pipeline->bind();
 
-	if (m_layout)
-	{
-		m_layout->bind();
+		if (m_vertexs)
+			m_vertexs->bind(m_pipeline->getProgram());
 	}
 }
 

@@ -1,7 +1,7 @@
 #include "VK_Pipeline.h"
 #include "VK_Device.h"
 #include "VK_Mapping.h"
-#include "VK_InputLayout.h"
+#include "VK_VertexLayout.h"
 #include "VK_CommandBuffer.h"
 
 CU_NS_BEGIN
@@ -55,7 +55,7 @@ VK_GraphicsPipeline::~VK_GraphicsPipeline()
 
 void VK_GraphicsPipeline::bind(VK_CommandBuffer* cmdBuffer)
 {
-	VK_InputLayout* layout = cmdBuffer->getLayout();
+	VK_VertexLayout* layout = cmdBuffer->getLayout();
 	if (!layout)
 		return;
 

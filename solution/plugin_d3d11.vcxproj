@@ -97,7 +97,7 @@
     <ClInclude Include="..\plugins\render_d3d11\D3D11_DescriptorSet.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Device.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_FrameBuffer.h" />
-    <ClInclude Include="..\plugins\render_d3d11\D3D11_InputLayout.h" />
+    <ClInclude Include="..\plugins\render_d3d11\D3D11_VertexLayout.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Mapping.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Pipeline.h" />
     <ClInclude Include="..\plugins\render_d3d11\D3D11_Plugin.h" />
@@ -114,7 +114,7 @@
     <ClCompile Include="..\plugins\render_d3d11\D3D11_DescriptorSet.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Device.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_FrameBuffer.cpp" />
-    <ClCompile Include="..\plugins\render_d3d11\D3D11_InputLayout.cpp" />
+    <ClCompile Include="..\plugins\render_d3d11\D3D11_VertexLayout.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Mapping.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Pipeline.cpp" />
     <ClCompile Include="..\plugins\render_d3d11\D3D11_Plugin.cpp" />

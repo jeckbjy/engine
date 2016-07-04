@@ -1,6 +1,6 @@
 #include "D3D11_Pipeline.h"
 #include "D3D11_Program.h"
-#include "D3D11_InputLayout.h"
+#include "D3D11_VertexLayout.h"
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_RenderState.h"
 #include "D3D11_Device.h"
@@ -44,7 +44,7 @@ void D3D11_Pipeline::bind(D3D11_CommandBuffer* cmdBuffer)
 	if (vs)
 	{
 		// graphics pipeline
-		D3D11_InputLayout* layout = cmdBuffer->getLayout();
+		D3D11_VertexLayout* layout = cmdBuffer->getLayout();
 		if (m_curlayout != layout)
 			m_d3dLayout = device->getInputLayout(vs, layout);
 		if (m_d3dLayout)

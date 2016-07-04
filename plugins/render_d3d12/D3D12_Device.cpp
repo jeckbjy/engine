@@ -46,7 +46,7 @@ Texture* D3D12_Device::newTexture(const TextureDesc& desc)
 	return new D3D12_Texture(m_device, desc);
 }
 
-InputLayout* D3D12_Device::newInputLayout(const InputElement* elements, size_t count)
+VertexLayout* D3D12_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
 	return NULL;
 }

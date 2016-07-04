@@ -1,4 +1,4 @@
-#include "VK_InputLayout.h"
+#include "VK_VertexLayout.h"
 #include "VK_Mapping.h"
 
 CU_NS_BEGIN
@@ -10,8 +10,8 @@ struct BindInfo
 	BindInfo() :stride(0), rate(INPUT_RATE_VERTEX){}
 };
 
-VK_InputLayout::VK_InputLayout(const InputElement* elements, size_t count)
-	: InputLayout(elements, count)
+VK_VertexLayout::VK_VertexLayout(const VertexElement* elements, size_t count)
+	: VertexLayout(elements, count)
 	, m_bindings(NULL)
 	, m_attrs(NULL)
 {
@@ -23,7 +23,7 @@ VK_InputLayout::VK_InputLayout(const InputElement* elements, size_t count)
 	BindingMap bindings;
 	for (size_t i = 0; i < count; ++i)
 	{
-		const InputElement& elem = m_elements[i];
+		const VertexElement& elem = m_elements[i];
 		BindInfo info = bindings[elem.slot];
 		info.stride += PixelUtil::getBytes(elem.format);
 		info.rate = elem.rate;
@@ -46,7 +46,7 @@ VK_InputLayout::VK_InputLayout(const InputElement* elements, size_t count)
 	for (size_t i = 0; i < count; ++i)
 	{
 		VkVertexInputAttributeDescription& attr = m_attrs[i];
-		const InputElement& elem = m_elements[i];
+		const VertexElement& elem = m_elements[i];
 		attr.location = 0;	// 需要通过prog才能确定??
 		attr.binding = elem.slot;
 		attr.format = VK_Mapping::getFormat(elem.format);
@@ -54,7 +54,7 @@ VK_InputLayout::VK_InputLayout(const InputElement* elements, size_t count)
 	}
 }
 
-VK_InputLayout::~VK_InputLayout()
+VK_VertexLayout::~VK_VertexLayout()
 {
 	if (m_attrs)
 	{

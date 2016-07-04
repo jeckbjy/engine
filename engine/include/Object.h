@@ -17,9 +17,6 @@ public:
 
 	bool isKindOf(const Rtti* rtti) const { return getRtti()->isKindOf(rtti); }
 
-	virtual void addAttributes() const { }
-	const AttributeList& getAttributes() const;
-
 	void addListener(EventHandler* handler);
 	void removeListener(EventHandler* handler);
 	void removeListener(uint32_t type, Object* sender = NULL);

@@ -1,7 +1,7 @@
 #include "VK_CommandBuffer.h"
 #include "VK_Buffer.h"
 #include "VK_Pipeline.h"
-#include "VK_InputLayout.h"
+#include "VK_VertexLayout.h"
 
 CU_NS_BEGIN
 
@@ -57,24 +57,44 @@ void VK_CommandBuffer::setPipeline(Pipeline* pipeline)
 	m_pipeline = pipeline->cast<VK_Pipeline>();
 }
 
-void VK_CommandBuffer::setInputLayout(InputLayout* layout)
-{
-	m_layout = layout->cast<VK_InputLayout>();
-}
+//void VK_CommandBuffer::setInputLayout(VertexLayout* layout)
+//{
+//	m_layout = layout->cast<VK_InputLayout>();
+//}
+//
+//void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
+//{
+//	VkBuffer vk_buffers[CU_MAX_VERTEX_BUFFERS];
+//	VkDeviceSize vk_offsets[CU_MAX_VERTEX_BUFFERS];
+//
+//	for (size_t i = 0; i < counts; ++i)
+//	{
+//		VK_Buffer* tmp = (VK_Buffer*)buffers[i];
+//		vk_buffers[i] = tmp->native();
+//		vk_offsets[i] = offsets ? offsets[i] : 0;
+//	}
+//
+//	vkCmdBindVertexBuffers(m_handle, startSlot, counts, vk_buffers ,vk_offsets);
+//}
 
-void VK_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
+void VK_CommandBuffer::setVertexArray(VertexArray* vertexs)
 {
+	m_layout = vertexs->getLayout()->cast<VK_VertexLayout>();
+
 	VkBuffer vk_buffers[CU_MAX_VERTEX_BUFFERS];
 	VkDeviceSize vk_offsets[CU_MAX_VERTEX_BUFFERS];
 
+	size_t counts = vertexs->getBufferCount();
+	size_t startSlot = vertexs->getStartSlot();
+
 	for (size_t i = 0; i < counts; ++i)
 	{
-		VK_Buffer* tmp = (VK_Buffer*)buffers[i];
+		VK_Buffer* tmp = (VK_Buffer*)vertexs->getBuffer(i);
 		vk_buffers[i] = tmp->native();
-		vk_offsets[i] = offsets ? offsets[i] : 0;
+		vk_offsets[i] = vertexs->getOffset(i);
 	}
 
-	vkCmdBindVertexBuffers(m_handle, startSlot, counts, vk_buffers ,vk_offsets);
+	vkCmdBindVertexBuffers(m_handle, startSlot, counts, vk_buffers, vk_offsets);
 }
 
 void VK_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)

@@ -7,7 +7,7 @@
 #include "D3D11_Pipeline.h"
 #include "D3D11_SwapChain.h"
 #include "D3D11_FrameBuffer.h"
-#include "D3D11_InputLayout.h"
+#include "D3D11_VertexLayout.h"
 #include "D3D11_RenderState.h"
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_DescriptorSet.h"
@@ -126,13 +126,19 @@ SwapChain* D3D11_Device::newSwapChain(const SwapChainDesc& desc)
 	return new D3D11_SwapChain(desc, m_factory, m_device);
 }
 
-InputLayout* D3D11_Device::newInputLayout(const InputElement* elements, size_t count)
+VertexLayout* D3D11_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
 	++m_layoutID;
 	if (m_layoutID == 0)
 		m_layoutID = 1;
-	return new D3D11_InputLayout(m_layoutID, elements, count);
+	return new D3D11_VertexLayout(m_layoutID, elements, count);
 }
+
+VertexArray* D3D11_Device::newVertexArray(VertexLayout* layout)
+{
+	return new VertexArray(layout);
+}
+
 
 ShaderStage* D3D11_Device::newShader()
 {
@@ -190,7 +196,7 @@ D3D11_DepthStencilState* D3D11_Device::getDepthStencilState(const DepthStencilDe
 	return m_depthStencils.obtain(m_device, desc);
 }
 
-ID3D11InputLayout* D3D11_Device::getInputLayout(D3D11_Shader* vs, D3D11_InputLayout* layout)
+ID3D11InputLayout* D3D11_Device::getInputLayout(D3D11_Shader* vs, D3D11_VertexLayout* layout)
 {
 	if (vs == NULL || layout == NULL)
 		return NULL;

@@ -269,6 +269,7 @@ function engine_vpaths()
 		"Application.cpp",
 		"Window.h",
 		"Window.cpp",
+		"WindowMSW.cpp",
 		"UIView.h",
 		"UIWidget.h"
 		--"UIElement.h",

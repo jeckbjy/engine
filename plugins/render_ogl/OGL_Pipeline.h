@@ -13,6 +13,8 @@ public:
 
 	void bind();
 
+	OGL_Program* getProgram() { return m_program; }
+
 private:
 	RenderStateDesc*	m_states;
 	OGL_Program*		m_program;

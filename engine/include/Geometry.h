@@ -49,7 +49,7 @@ public:
 	float			getLodDistance() const { return m_distance; }
 
 protected:
-	InputLayout*	m_vertex;
+	VertexLayout*	m_vertex;
 	IndexBuffer*	m_index;
 	DrawParam		m_params;
 	float			m_distance;		// lod

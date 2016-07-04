@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D11_API D3D11_InputLayout : public InputLayout
+class CU_D3D11_API D3D11_VertexLayout : public VertexLayout
 {
 public:
-	D3D11_InputLayout(uint32_t id, const InputElement* elements, size_t count);
-	~D3D11_InputLayout();
+	D3D11_VertexLayout(uint32_t id, const VertexElement* elements, size_t count);
+	~D3D11_VertexLayout();
 
 	ID3D11InputLayout* createLayout(ID3D11DeviceN* device, ID3DBlob* code);
 

@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_VK_API VK_InputLayout : public InputLayout
+class CU_VK_API VK_VertexLayout : public VertexLayout
 {
 public:
-	VK_InputLayout(const InputElement* elements, size_t count);
-	~VK_InputLayout();
+	VK_VertexLayout(const VertexElement* elements, size_t count);
+	~VK_VertexLayout();
 
 	VkPipelineVertexInputStateCreateInfo* getInfo() { return &m_info; }
 

@@ -3,7 +3,7 @@
 #include "VK_Texture.h"
 #include "VK_Program.h"
 #include "VK_Pipeline.h"
-#include "VK_InputLayout.h"
+#include "VK_VertexLayout.h"
 #include "VK_FrameBuffer.h"
 #include "VK_SwapChain.h"
 #include "VK_DescriptorSet.h"
@@ -179,9 +179,9 @@ Texture* VK_Device::newTexture(const TextureDesc& desc)
 	return new VK_Texture(this, desc);
 }
 
-InputLayout* VK_Device::newInputLayout(const InputElement* elements, size_t count)
+VertexLayout* VK_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
-	return new VK_InputLayout(elements, count);
+	return new VK_VertexLayout(elements, count);
 }
 
 ShaderStage* VK_Device::newShader()

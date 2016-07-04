@@ -5,7 +5,7 @@
 CU_NS_BEGIN
 
 class D3D11_Shader;
-class D3D11_InputLayout;
+class D3D11_VertexLayout;
 
 class D3D11_BlendState;
 class D3D11_SamplerState;
@@ -22,7 +22,8 @@ public:
 	Texture*					newTexture(const TextureDesc& desc);
 	FrameBuffer*				newFrameBuffer();
 	SwapChain*					newSwapChain(const SwapChainDesc& desc);
-	InputLayout*				newInputLayout(const InputElement* elements, size_t count);
+	VertexLayout*				newVertexLayout(const VertexElement* elements, size_t count);
+	VertexArray*				newVertexArray(VertexLayout* layout);
 	ShaderStage*				newShader();
 	ShaderProgram*				newProgram();
 	Pipeline*					newPipeline(const PipelineDesc& desc);
@@ -39,7 +40,7 @@ public:
 	D3D11_RasterizerState*		getRasterizerState(const RasterizerDesc& desc);
 	D3D11_DepthStencilState*	getDepthStencilState(const DepthStencilDesc& desc);
 
-	ID3D11InputLayout*			getInputLayout(D3D11_Shader* vs, D3D11_InputLayout* layout);
+	ID3D11InputLayout*			getInputLayout(D3D11_Shader* vs, D3D11_VertexLayout* layout);
 
 private:
 	typedef std::map<uint64_t, ID3D11InputLayout*>						LayoutMap;

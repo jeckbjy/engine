@@ -2,7 +2,7 @@
 #include "D3D12_Mapping.h"
 #include "D3D12_Device.h"
 #include "D3D12_Program.h"
-#include "D3D12_InputLayout.h"
+#include "D3D12_VertexLayout.h"
 #include "D3D12_CommandBuffer.h"
 
 CU_NS_BEGIN
@@ -45,7 +45,7 @@ void D3D12_GraphicsPipeline::bind(D3D12_CommandBuffer* cmdBuffer)
 {
 	D3D12_Device* device = gD3D12Device();
 	// ²éÕÒ
-	D3D12_InputLayout* layout = cmdBuffer->getLayout();
+	D3D12_VertexLayout* layout = cmdBuffer->getLayout();
 	if (!layout)
 		return;
 

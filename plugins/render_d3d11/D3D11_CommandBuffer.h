@@ -4,7 +4,7 @@
 CU_NS_BEGIN
 
 class D3D11_Pipeline;
-class D3D11_InputLayout;
+class D3D11_VertexLayout;
 class D3D11_DescriptorSet;
 
 class D3D11_CommandBuffer : public CommandBuffer
@@ -22,8 +22,7 @@ public:
 	void setTopology(Topology topology);
 	void setDescriptorSet(DescriptorSet* descriptors);
 	void setPipeline(Pipeline* pipeline);
-	void setInputLayout(InputLayout* layout);
-	void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets);
+	void setVertexArray(VertexArray* vertexs);
 	void setIndexBuffer(IndexBuffer* buffer, size_t offset);
 
 	void clear(ClearMask masks /* = CLEAR_ALL */, const Color& color /* = Color::Black */, float depth /* = 1.0f */, uint32_t stencil /* = 0 */, uint8_t targetMask);
@@ -32,7 +31,7 @@ public:
 	void dispatch(size_t x, size_t y, size_t z);
 
 	ID3D11ContextN*		getContext() { return m_context; }
-	D3D11_InputLayout*	getLayout() { return m_layout; }
+	D3D11_VertexLayout*	getLayout() { return m_layout; }
 	const float*		getFactors() const { return m_factors; }
 	size_t				getStencilRef() const { return m_stencilRef; }
 	UINT				getSampleMask() const{ return m_sampleMask; }
@@ -44,7 +43,7 @@ private:
 	ID3D11ContextN*			m_context;
 	RenderTarget*			m_target;
 	D3D11_Pipeline*			m_pipeline;
-	D3D11_InputLayout*		m_layout;
+	D3D11_VertexLayout*		m_layout;
 	D3D11_DescriptorSet*	m_descriptors;
 	float					m_factors[4];
 	UINT					m_sampleMask;

@@ -3,11 +3,11 @@
 
 CU_NS_BEGIN
 
-class CU_D3D12_API D3D12_InputLayout : public InputLayout
+class CU_D3D12_API D3D12_VertexLayout : public VertexLayout
 {
 public:
-	D3D12_InputLayout(const InputElement* elements, size_t count);
-	~D3D12_InputLayout();
+	D3D12_VertexLayout(const VertexElement* elements, size_t count);
+	~D3D12_VertexLayout();
 
 	void fillLayout(D3D12_INPUT_LAYOUT_DESC& desc);
 

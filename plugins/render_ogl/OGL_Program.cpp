@@ -46,6 +46,10 @@ OGL_Program::OGL_Program()
 :m_handle(0)
 {
 	CreateProgram(m_handle);
+	for (int i = 0; i < SEMANTIC_MAX; ++i)
+	{
+		m_attrs[i] = -1;
+	}
 }
 
 OGL_Program::~OGL_Program()
@@ -95,6 +99,11 @@ void OGL_Program::link()
 void OGL_Program::bind()
 {
 	UseProgram(m_handle);
+}
+
+GLint OGL_Program::getLocation(Semantic semantic)
+{
+	return m_attrs[semantic];
 }
 
 bool OGL_Program::parseAttribute(GLuint handle)

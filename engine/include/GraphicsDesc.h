@@ -208,15 +208,16 @@ struct CU_API SwapChainDesc
 	SwapChainDesc(Window* wnd, PixelFormat format = PF_R8G8B8A8_UNORM, PixelFormat dsFormat = PF_D24_UNORM_S8_UINT, size_t bufferCount = 1);
 };
 
-struct CU_API InputElement
+struct CU_API VertexElement
 {
 	Semantic		semantic;	//
 	PixelFormat		format;
 	uint8_t			slot;		// Buffer位置
 	uint8_t			offset;		// 偏移
+	uint8_t			stride;		// 跨度,相同slot应该有相同跨度
 	InputRate		rate;
-	InputElement() { memset(this, 0, sizeof(InputElement)); }
-	InputElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
+	VertexElement() { memset(this, 0, sizeof(VertexElement)); }
+	VertexElement(Semantic sem, PixelFormat format = PF_UNKNOWN, uint8_t slot = 0, InputRate rate = INPUT_RATE_VERTEX);
 };
 
 // shader reflection

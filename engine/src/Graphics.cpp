@@ -45,12 +45,12 @@ void GpuBuffer::read(void* data, size_t len, size_t offset /* = 0 */)
 	unmap();
 }
 
-uint32_t InputLayout::hash(const InputElement* elements, size_t count)
+uint32_t VertexLayout::hash(const VertexElement* elements, size_t count)
 {
 	return 0;
 }
 
-static bool InputElementCmp(const InputElement& e1, const InputElement& e2)
+static bool InputElementCmp(const VertexElement& e1, const VertexElement& e2)
 {
 	if (e1.slot < e2.slot)
 		return true;
@@ -59,7 +59,7 @@ static bool InputElementCmp(const InputElement& e1, const InputElement& e2)
 	return false;
 }
 
-InputLayout::InputLayout(const InputElement* elements, size_t count)
+VertexLayout::VertexLayout(const VertexElement* elements, size_t count)
 {
 	static const PixelFormat g_types[SEMANTIC_MAX] = 
 	{
@@ -69,14 +69,17 @@ InputLayout::InputLayout(const InputElement* elements, size_t count)
 		PF_FLOAT2, PF_FLOAT2, PF_FLOAT2, PF_FLOAT2
 	};
 
-	m_hash = hash(elements, count);
+	typedef std::vector<int> StrideVec;
 
 	// ≈≈–Ú
 	bool needSort = false;
 	m_elements.resize(count);
+
+	StrideVec strides(count);
+
 	for (size_t i = 0; i < count; ++i)
 	{
-		InputElement& elem = m_elements[i];
+		VertexElement& elem = m_elements[i];
 		elem = elements[i];
 
 		if (elem.format == PF_UNKNOWN)
@@ -87,12 +90,21 @@ InputLayout::InputLayout(const InputElement* elements, size_t count)
 
 		if (!needSort && i > 0)
 		{
-			InputElement& prev = m_elements[i - 1];
+			VertexElement& prev = m_elements[i - 1];
 			if (elem.slot < prev.slot)
 				needSort = true;
 			else if (elem.semantic < prev.semantic)
 				needSort = true;
 		}
+
+		strides[elem.slot] += PixelUtil::getBytes(elem.format);
+	}
+
+	// …Ë÷√øÁ∂»
+	for (size_t i = 0; i < count; ++i)
+	{
+		VertexElement& elem = m_elements[i];
+		elem.stride = strides[elem.slot];
 	}
 
 	if (needSort)
@@ -101,8 +113,8 @@ InputLayout::InputLayout(const InputElement* elements, size_t count)
 	}
 
 	// º∆À„∆´“∆
-	InputElement* prev;
-	InputElement* curr;
+	VertexElement* prev;
+	VertexElement* curr;
 	for (size_t i = 1; i < count; ++i)
 	{
 		prev = &m_elements[i - 1];
@@ -117,16 +129,18 @@ InputLayout::InputLayout(const InputElement* elements, size_t count)
 			curr->offset = 0;
 		}
 	}
+
+	m_hash = hash(elements, count);
 }
 
-bool InputLayout::equal(const InputElement* elements, size_t count) const
+bool VertexLayout::equal(const VertexElement* elements, size_t count) const
 {
 	if (m_elements.size() != count)
 		return false;
 	for (size_t i = 0; i < count; ++i)
 	{
-		const InputElement& e1 = m_elements[i];
-		const InputElement& e2 = elements[i];
+		const VertexElement& e1 = m_elements[i];
+		const VertexElement& e2 = elements[i];
 		if (
 			(e1.semantic != e2.semantic) ||
 			(e1.format != e2.format) ||
@@ -137,6 +151,36 @@ bool InputLayout::equal(const InputElement* elements, size_t count) const
 	}
 
 	return true;
+}
+
+VertexArray::VertexArray(VertexLayout* layout)
+	: m_layout(layout)
+	, m_dirty(true)
+	, m_startSlot(0)
+{
+
+}
+
+void VertexArray::setLayout(VertexLayout* layout)
+{
+	if (m_layout != layout)
+	{
+		m_layout = layout;
+		m_dirty = true;
+	}
+}
+
+void VertexArray::setBuffer(GpuBuffer* buffer, size_t slot /* = 0 */, size_t offset)
+{
+	if (slot >= m_buffers.size())
+	{
+		m_buffers.resize(slot + 1);
+		m_offsets.resize(slot + 1);
+	}
+
+	m_buffers[slot] = buffer;
+	m_offsets[slot] = offset;
+	m_dirty = true;
 }
 
 void FrameBuffer::attach(size_t att, Texture* attachment)
@@ -159,6 +203,16 @@ void FrameBuffer::detach(size_t att)
 		m_attachments[att] = NULL;
 		m_dirty = true;
 	}
+}
+
+VertexLayout* Device::newVertexLayout(const VertexElement* elements, size_t count)
+{
+	return new VertexLayout(elements, count);
+}
+
+VertexArray* Device::newVertexArray(VertexLayout* layout)
+{
+	return new VertexArray(layout);
 }
 
 GpuBuffer* Device::newVertexBuffer(uint32_t stride, uint32_t counts, const void* data /* = NULL */, RES_FLAG flags /* = RES_DEFAULT */)
@@ -202,13 +256,6 @@ ShaderStage* Device::loadShader(ShaderType type, const String& path)
 	ShaderStage* shader = newShader();
 	shader->compile(desc);
 	return shader;
-}
-
-void CommandBuffer::setVertexBuffer(GpuBuffer* buffer, size_t offset /* = 0 */, size_t startSlot /* = 0 */)
-{
-	GpuBuffer* buffers[1] = { buffer };
-	size_t offsets[1] = { offset };
-	setVertexBuffers(startSlot, 1, buffers, offsets);
 }
 
 CU_NS_END

@@ -14,6 +14,8 @@ public:
 
 	void bind();
 
+	GLint getLocation(Semantic semantic);
+
 private:
 	bool parseAttribute(GLuint handle);
 	bool parseUniform(GLuint handle);

@@ -251,7 +251,7 @@ SwapChainDesc::SwapChainDesc(Window* wnd, PixelFormat format /* = PF_R8G8B8A8_UN
 {
 }
 
-InputElement::InputElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)
+VertexElement::VertexElement(Semantic sem, PixelFormat format, uint8_t slot /* = 0 */, InputRate rate)
 	:semantic(sem), format(format), slot(slot), offset(0), rate(rate)
 {
 }

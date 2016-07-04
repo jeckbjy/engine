@@ -64,23 +64,54 @@ protected:
 	size_t		m_mipmaps;
 };
 
-// vertex顶点结构
-class CU_API InputLayout : public Object
+class CU_API VertexLayout : public Object
 {
-	DECLARE_RTTI(InputLayout, Object, OBJ_ID_INPUT_LAYOUT)
+	DECLARE_RTTI(VertexLayout, Object, OBJ_ID_INPUT_LAYOUT)
 public:
-	static uint32_t hash(const InputElement* elements, size_t count);
+	typedef std::vector<VertexElement> ElementVec;
 
-	InputLayout(const InputElement* elements, size_t count);
-	virtual ~InputLayout(){}
+	static uint32_t hash(const VertexElement* elements, size_t count);
 
-	bool equal(const InputElement* elements, size_t count) const;
+	VertexLayout(const VertexElement* elements, size_t count);
+	virtual ~VertexLayout(){}
+
+	bool equal(const VertexElement* elements, size_t count) const;
+	const ElementVec& getElements() const { return m_elements; }
 
 protected:
-	typedef std::vector<InputElement> ElementVec;
 	ElementVec	m_elements;
 	uint32_t	m_hash;
 	bool		m_instanced;
+};
+
+// 含有顶点结构和多个VertexBuffer, VertexArray
+class CU_API VertexArray : public Object
+{
+public:
+	typedef std::vector<GpuBufferPtr> BufferArray;
+	typedef std::vector<uint32_t>	  OffsetArray;
+
+	VertexArray(VertexLayout* layout);
+	virtual ~VertexArray(){}
+
+	void setLayout(VertexLayout* layout);
+	void setBuffer(GpuBuffer* buffer, size_t slot = 0, size_t offset = 0);
+	void setStartSlot(size_t start) { m_startSlot = start; }
+
+	VertexLayout*	getLayout() { return m_layout.get(); }
+	size_t			getBufferCount() { return m_buffers.size(); }
+	GpuBuffer*		getBuffer(size_t slot) { return m_buffers[slot]; }
+	size_t			getOffset(size_t slot) { return m_offsets[slot]; }
+	BufferArray&	getBufferArray() { return m_buffers; }
+	OffsetArray&	getOffsetArray() { return m_offsets; }
+	size_t			getStartSlot() const { return m_startSlot; }
+
+protected:
+	bool			m_dirty;
+	VertexLayoutPtr m_layout;
+	BufferArray		m_buffers;
+	OffsetArray		m_offsets;
+	size_t			m_startSlot;
 };
 
 class CU_API RenderTarget : public Object
@@ -196,17 +227,13 @@ public:
 	virtual void setTopology(Topology topology) = 0;
 	virtual void setDescriptorSet(DescriptorSet* descriptors) = 0;
 	virtual void setPipeline(Pipeline* pipeline) = 0;
-	virtual void setInputLayout(InputLayout* layout) = 0;
-	virtual void setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets = NULL) = 0;
+	virtual void setVertexArray(VertexArray* vertexs) = 0;
 	virtual void setIndexBuffer(IndexBuffer* buffer, size_t offset = 0) = 0;
 
 	virtual void clear(ClearMask mask = CLEAR_ALL, const Color& color = Color::BLACK, float depth = 1.0f, uint32_t stencil = 0, uint8_t targetMask = 0xFF) = 0;
 	virtual void draw(uint32_t vertexCount, uint32_t instanceCount = 0, uint32_t vertexOffset = 0, uint32_t instanceOffset = 0) = 0;
 	virtual void drawIndexed(uint32_t indexCount, uint32_t instanceCount = 0, uint32_t indexOffset = 0, uint32_t instanceOffset = 0, uint32_t vertexOffset = 0) = 0;
 	virtual void dispatch(size_t x, size_t y, size_t z) = 0;
-
-	// 仅有一个时调用
-	void setVertexBuffer(GpuBuffer* buffer, size_t offset = 0, size_t startSlot = 0);
 };
 
 class CU_API Fence : public Object
@@ -236,7 +263,8 @@ public:
 
 	virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
 	virtual Texture*		newTexture(const TextureDesc& desc) = 0;
-	virtual InputLayout*	newInputLayout(const InputElement* elements, size_t count) = 0;
+	virtual VertexLayout*	newVertexLayout(const VertexElement* elements, size_t count);
+	virtual VertexArray*	newVertexArray(VertexLayout* layout);
 	virtual ShaderStage*	newShader() = 0;
 	virtual ShaderProgram*	newProgram() = 0;
 	virtual Pipeline*		newPipeline(const PipelineDesc& desc) = 0;
@@ -268,19 +296,5 @@ private:
 
 // 全局接口
 extern CU_API Graphics gGraphics;
-
-typedef SharedPtr<GpuBuffer>		GpuBufferPtr;
-typedef SharedPtr<Texture>			TexturePtr;
-typedef SharedPtr<InputLayout>		InputLayoutPtr;
-typedef SharedPtr<RenderTarget>		RenderTargetPtr;
-typedef SharedPtr<FrameBuffer>		FrameBufferPtr;
-typedef SharedPtr<SwapChain>		SwapChainPtr;
-typedef SharedPtr<ShaderStage>		ShaderStagePtr;
-typedef SharedPtr<ShaderProgram>	ShaderProgramPtr;
-typedef SharedPtr<DescriptorSet>	DescriptorSetPtr;
-typedef SharedPtr<Pipeline>			PipelinePtr;
-typedef SharedPtr<CommandBuffer>	CommandBufferPtr;
-typedef SharedPtr<CommandQueue>		CommandQueuePtr;
-typedef SharedPtr<Device>			DevicePtr;
 
 CU_NS_END

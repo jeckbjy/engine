@@ -27,9 +27,6 @@
     <ClInclude Include="..\plugins\render_ogl\OGL_FrameBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_ogl\OGL_InputLayout.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\OGL_Mapping.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -49,6 +46,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\OGL_Texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_ogl\OGL_VertexArray.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_ogl\glew\include\GL\glew.h">
@@ -77,9 +77,6 @@
     <ClCompile Include="..\plugins\render_ogl\OGL_FrameBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_ogl\OGL_InputLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Mapping.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -99,6 +96,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\OGL_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_ogl\OGL_VertexArray.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_ogl\glew\src\glew.c">

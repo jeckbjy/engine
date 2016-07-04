@@ -32,8 +32,7 @@ protected:
 	ShaderProgramPtr	m_program;
 	PipelinePtr			m_pipeline;
 	DescriptorSetPtr	m_descriptors;
-	InputLayoutPtr		m_layout;
-	GpuBufferPtr		m_vb;
+	VertexArrayPtr		m_vao;
 	GpuBufferPtr		m_ib;
 	Matrix4				m_worldMatrix;
 	Matrix4				m_projMatrix;

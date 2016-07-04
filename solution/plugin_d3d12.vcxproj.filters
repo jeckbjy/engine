@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
@@ -30,9 +30,6 @@
     <ClInclude Include="..\plugins\render_d3d12\D3D12_FrameBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\plugins\render_d3d12\D3D12_InputLayout.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Mapping.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\plugins\render_d3d12\D3D12_Texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins\render_d3d12\D3D12_VertexLayout.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,9 +77,6 @@
     <ClCompile Include="..\plugins\render_d3d12\D3D12_FrameBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\plugins\render_d3d12\D3D12_InputLayout.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Mapping.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -99,6 +96,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\plugins\render_d3d12\D3D12_Texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins\render_d3d12\D3D12_VertexLayout.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

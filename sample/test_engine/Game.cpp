@@ -94,7 +94,7 @@ bool TriangleApp::init()
 		Vector3 color;
 	};
 
-	InputElement elements[] = 
+	VertexElement elements[] = 
 	{
 		{ SEMANTIC_POSITION},
 		{ SEMANTIC_COLOR},
@@ -110,9 +110,14 @@ bool TriangleApp::init()
 
 	short index_data[] = { 0, 1, 2 };
 
-	m_vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
+	GpuBuffer* vb;
+	VertexLayout* layout;
+
+	vb = m_device->newVertexBuffer(sizeof(CustomVertex), 3, vertex_data);
 	m_ib = m_device->newIndexBuffer(INDEX16, 3, index_data);
-	m_layout = m_device->newInputLayout(elements, 2);
+	layout = m_device->newVertexLayout(elements, 2);
+	m_vao = m_device->newVertexArray(layout);
+	m_vao->setBuffer(vb);
 
 	m_program = loadProgram("./assets/color.hlsl.vs", "./assets/color.hlsl.ps");
 	m_pipeline = newPipeline(m_program);
@@ -123,10 +128,9 @@ bool TriangleApp::init()
 
 	m_cmdBuffer->setRenderTarget(m_swapchain);
 	m_cmdBuffer->setViewport(0, 0, m_width, m_height);
-	m_cmdBuffer->setVertexBuffer(m_vb);
+	m_cmdBuffer->setVertexArray(m_vao);
 	m_cmdBuffer->setIndexBuffer(m_ib);
 	m_cmdBuffer->setPipeline(m_pipeline);
-	m_cmdBuffer->setInputLayout(m_layout);
 	m_cmdBuffer->setTopology(PT_TRIANGLE_LIST);
 	m_cmdBuffer->setDescriptorSet(m_descriptors);
 

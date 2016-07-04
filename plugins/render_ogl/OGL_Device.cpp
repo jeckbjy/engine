@@ -3,12 +3,12 @@
 #include "OGL_Program.h"
 #include "OGL_Texture.h"
 #include "OGL_Buffer.h"
-#include "OGL_InputLayout.h"
 #include "OGL_CommandBuffer.h"
 #include "OGL_Pipeline.h"
 #include "OGL_DescriptorSet.h"
 #include "OGL_FrameBuffer.h"
 #include "OGL_SwapChain.h"
+#include "OGL_VertexArray.h"
 #include "Window.h"
 
 CU_NS_BEGIN
@@ -102,9 +102,14 @@ DescriptorSet* OGL_Device::newDescriptorSet(Pipeline* pipeline)
 	return new OGL_DescriptorSet(pipeline);
 }
 
-InputLayout* OGL_Device::newInputLayout(const InputElement* elements, size_t count)
+VertexLayout* OGL_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
-	return new OGL_InputLayout(elements, count);
+	return new VertexLayout(elements, count);
+}
+
+VertexArray* OGL_Device::newVertexArray(VertexLayout* layout)
+{
+	return new OGL_VertexArray(layout);
 }
 
 ShaderStage* OGL_Device::newShader()

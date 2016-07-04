@@ -26,13 +26,6 @@ Object::~Object()
 	//}
 }
 
-const AttributeList& Object::getAttributes() const
-{
-	if (!getRtti()->hasAttributes())
-		addAttributes();
-	return getRtti()->getAttributes();
-}
-
 void Object::addListener(EventHandler* handler)
 {
 	handler->retain();

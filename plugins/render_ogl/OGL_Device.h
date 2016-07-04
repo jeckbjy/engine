@@ -14,7 +14,8 @@ public:
 
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
-	InputLayout*	newInputLayout(const InputElement* elements, size_t count);
+	VertexLayout*	newVertexLayout(const VertexElement* elements, size_t count);
+	VertexArray*	newVertexArray(VertexLayout* layout);
 	ShaderStage*	newShader();
 	ShaderProgram*	newProgram();
 	Pipeline*		newPipeline(const PipelineDesc& desc);

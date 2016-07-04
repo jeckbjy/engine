@@ -62,7 +62,11 @@ class HandlerMgr;
 class Color;
 class GpuBuffer;
 class Texture;
+class VertexLayout;
+class VertexArray;
 class RenderTarget;
+class FrameBuffer;
+class SwapChain;
 class ShaderStage;
 class ShaderProgram;
 class DescriptorSet;
@@ -108,6 +112,22 @@ class OctreeQuery;
 // ui
 class Window;
 class Application;
+
+// some used SharedPtr
+typedef SharedPtr<GpuBuffer>		GpuBufferPtr;
+typedef SharedPtr<Texture>			TexturePtr;
+typedef SharedPtr<VertexLayout>		VertexLayoutPtr;
+typedef SharedPtr<VertexArray>		VertexArrayPtr;
+typedef SharedPtr<RenderTarget>		RenderTargetPtr;
+typedef SharedPtr<FrameBuffer>		FrameBufferPtr;
+typedef SharedPtr<SwapChain>		SwapChainPtr;
+typedef SharedPtr<ShaderStage>		ShaderStagePtr;
+typedef SharedPtr<ShaderProgram>	ShaderProgramPtr;
+typedef SharedPtr<DescriptorSet>	DescriptorSetPtr;
+typedef SharedPtr<Pipeline>			PipelinePtr;
+typedef SharedPtr<CommandBuffer>	CommandBufferPtr;
+typedef SharedPtr<CommandQueue>		CommandQueuePtr;
+typedef SharedPtr<Device>			DevicePtr;
 
 // ÄÚ²¿ÀàID
 enum ObjectID

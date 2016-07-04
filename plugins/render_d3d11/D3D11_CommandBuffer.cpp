@@ -1,7 +1,7 @@
 #include "D3D11_CommandBuffer.h"
 #include "D3D11_Buffer.h"
 #include "D3D11_Pipeline.h"
-#include "D3D11_InputLayout.h"
+#include "D3D11_VertexLayout.h"
 #include "D3D11_DescriptorSet.h"
 #include "D3D11_FrameBuffer.h"
 #include "D3D11_SwapChain.h"
@@ -75,26 +75,27 @@ void D3D11_CommandBuffer::setPipeline(Pipeline* pipeline)
 	m_pipeline = pipeline->cast<D3D11_Pipeline>();
 }
 
-void D3D11_CommandBuffer::setInputLayout(InputLayout* layout)
+void D3D11_CommandBuffer::setVertexArray(VertexArray* vertexs)
 {
-	m_layout = layout->cast<D3D11_InputLayout>();
-}
+	m_layout = (D3D11_VertexLayout*)vertexs->getLayout();
 
-void D3D11_CommandBuffer::setVertexBuffers(size_t startSlot, size_t counts, GpuBuffer** buffers, size_t* offsets)
-{
-	ID3D11Buffer* dx_buffers[CU_MAX_VERTEX_BUFFERS];
-	UINT32 dx_strides[CU_MAX_VERTEX_BUFFERS];
-	UINT32 dx_offsets[CU_MAX_VERTEX_BUFFERS];
+	ID3D11Buffer* dxBuffers[CU_MAX_VERTEX_BUFFERS];
+	UINT32 dxStrides[CU_MAX_VERTEX_BUFFERS];
+	UINT32 dxOffsets[CU_MAX_VERTEX_BUFFERS];
+
+	size_t counts = vertexs->getBufferCount();
+	size_t start = vertexs->getStartSlot();
 	D3D11_Buffer* buffer;
 	for (size_t i = 0; i < counts; ++i)
 	{
-		buffer = buffers[i]->cast<D3D11_Buffer>();
-		dx_buffers[i] = buffer->native();
-		dx_strides[i] = buffer->stride();
-		dx_offsets[i] = offsets ? offsets[i] : 0;
+		buffer = (D3D11_Buffer*)vertexs->getBuffer(i);
+
+		dxBuffers[i] = buffer->native();
+		dxStrides[i] = buffer->stride();
+		dxOffsets[i] = vertexs->getOffset(i);
 	}
 
-	m_context->IASetVertexBuffers(startSlot, counts, dx_buffers, dx_strides, dx_offsets);
+	m_context->IASetVertexBuffers(start, counts, dxBuffers, dxStrides, dxOffsets);
 }
 
 void D3D11_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)

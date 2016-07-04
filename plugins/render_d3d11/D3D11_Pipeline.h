@@ -7,7 +7,7 @@ CU_NS_BEGIN
 class D3D11_Device;
 class D3D11_Shader;
 class D3D11_Program;
-class D3D11_InputLayout;
+class D3D11_VertexLayout;
 class D3D11_CommandBuffer;
 
 class D3D11_BlendState;
@@ -30,7 +30,7 @@ private:
 	D3D11_BlendState*			m_blend;
 	D3D11_RasterizerState*		m_rasterizer;
 	D3D11_DepthStencilState*	m_depthStencil;
-	D3D11_InputLayout*			m_curlayout;
+	D3D11_VertexLayout*			m_curlayout;
 	ComInputLayout				m_d3dLayout;
 };
 
