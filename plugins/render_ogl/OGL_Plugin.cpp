@@ -1,5 +1,6 @@
 #include "OGL_Plugin.h"
 #include "OGL_Device.h"
+#include "OGL_SwapChain.h"
 
 CU_NS_BEGIN
 
@@ -21,6 +22,15 @@ void OGL_Plugin::install()
 {
 	if (!m_device)
 	{
+#ifdef CU_USE_GLEW
+		Window* wnd = new Window(NULL, "OGLCreator");
+		SwapChainDesc desc(wnd);
+		SwapChain* chain = new OGL_SwapChain(desc);
+		GLenum result = glewInit();
+		delete chain;
+		if (result != GLEW_OK)
+			throw std::runtime_error("glew init fail!");
+#endif
 		m_device = new OGL_Device();
 		m_device->retain();
 	}

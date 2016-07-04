@@ -13,18 +13,19 @@ public:
 	~OGL_VertexArray();
 
 	void bind(OGL_Program* prog);
-private:
-	// 查找
-};
+	void unbind(OGL_Program* prog);
 
-// vao:需要三方面东西：layout,vbo,prog
-//class CU_OGL_API OGL_InputLayout : public InputLayout
-//{
-//public:
-//	OGL_InputLayout(const InputElement* elements, size_t count);
-//	~OGL_InputLayout();
-//
-//	void bind(OGL_Program* prog, OGL_Buffer* buffers);
-//};
+private:
+	void bindAttributes(OGL_Program* prog);
+	void unbindAttributes(OGL_Program* prog);
+	void destroy();
+
+private:
+	typedef std::map<uint32_t, GLuint> VAOMap;
+
+#ifdef CU_USE_VAO
+	VAOMap m_vaos;
+#endif
+};
 
 CU_NS_END

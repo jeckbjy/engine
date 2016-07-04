@@ -46,7 +46,7 @@ enum WindowFlag
 	WF_CAPTION		= 0x08,		// 是否可见标题
 	WF_FREE			= 0x10,		// 是否需要释放
 
-	WF_DEFAULT		= WF_VISIBLE | WF_RESIZABLE,
+	WF_DEFAULT		= WF_RESIZABLE,
 };
 
 class CU_API Window : public Object

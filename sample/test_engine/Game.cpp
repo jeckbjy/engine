@@ -50,6 +50,7 @@ bool BaseApp::setup()
 	if (!init())
 		return false;
 
+	m_window->show();
 	return true;
 }
 

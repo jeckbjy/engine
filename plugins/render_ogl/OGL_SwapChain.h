@@ -12,7 +12,7 @@ public:
 	void bind(void*);
 
 private:
-	Window*		m_wnd;
+	WindowPtr	m_wnd;
 #if defined(CU_OS_WIN)
 	HDC			m_hdc;
 	HGLRC		m_hrc;

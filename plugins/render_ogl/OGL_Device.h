@@ -10,8 +10,6 @@ public:
 	OGL_Device();
 	~OGL_Device();
 
-	virtual bool init();
-
 	GpuBuffer*		newBuffer(const BufferDesc& desc);
 	Texture*		newTexture(const TextureDesc& desc);
 	VertexLayout*	newVertexLayout(const VertexElement* elements, size_t count);

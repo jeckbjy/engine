@@ -21,7 +21,6 @@ public:
 	 Pipeline* newPipeline(ShaderProgram* prog);
 
 protected:
-	typedef SharedPtr<Window>	WindowPtr;
 	size_t				m_width;
 	size_t				m_height;
 	Device*				m_device;

@@ -129,6 +129,8 @@ typedef SharedPtr<CommandBuffer>	CommandBufferPtr;
 typedef SharedPtr<CommandQueue>		CommandQueuePtr;
 typedef SharedPtr<Device>			DevicePtr;
 
+typedef SharedPtr<Window>			WindowPtr;
+
 // ÄÚ²¿ÀàID
 enum ObjectID
 {

@@ -13,56 +13,6 @@
 
 CU_NS_BEGIN
 
-#ifdef WIN32
-// 初始化glew必须要先创建一个窗体设置wgl
-class OGLWindowContext
-{
-public:
-	OGLWindowContext()
-		:_free(false), _hwnd(NULL), _hdc(NULL), _hrc(NULL)
-	{
-		/*_hrc = wglGetCurrentContext();
-		if (_hrc)
-		return;
-		if (Window::current() == NULL)
-		{
-		_hwnd = Window::create_window("__gl_init_tmp", 0, 0);
-		_free = true;
-		}
-		else
-		{
-		_hwnd = Window::current()->handle();
-		_free = false;
-		}
-		if (_hwnd)
-		{
-		_hdc = GetDC(_hwnd);
-		_hrc = wglCreateContext(_hdc);
-		if (_hdc && _hrc)
-		wglMakeCurrent(_hdc, _hrc);
-
-		}*/
-	}
-	~OGLWindowContext()
-	{
-		if (_free)
-		{
-			if (_hrc)
-				wglDeleteContext(_hrc);
-			if (_hdc)
-				::ReleaseDC(_hwnd, _hdc);
-			if (_hwnd)
-				::DestroyWindow(_hwnd);
-		}
-	}
-private:
-	bool	_free;
-	HWND	_hwnd;
-	HDC		_hdc;
-	HGLRC	_hrc;
-};
-#endif
-
 OGL_Device::OGL_Device()
 {
 
@@ -71,20 +21,6 @@ OGL_Device::OGL_Device()
 OGL_Device::~OGL_Device()
 {
 
-}
-
-bool OGL_Device::init()
-{
-#ifdef CU_USE_GLEW
-#ifdef WIN32
-	OGLWindowContext context;
-#endif
-	if (GLEW_OK != glewInit())
-		return false;
-#else
-#endif
-
-	return true;
 }
 
 GpuBuffer* OGL_Device::newBuffer(const BufferDesc& desc)
