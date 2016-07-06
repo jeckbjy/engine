@@ -23,7 +23,6 @@ public:
 	FrameBuffer*				newFrameBuffer();
 	SwapChain*					newSwapChain(const SwapChainDesc& desc);
 	VertexLayout*				newVertexLayout(const VertexElement* elements, size_t count);
-	VertexArray*				newVertexArray(VertexLayout* layout);
 	ShaderStage*				newShader();
 	ShaderProgram*				newProgram();
 	Pipeline*					newPipeline(const PipelineDesc& desc);
@@ -64,9 +63,6 @@ private:
 
 	LayoutMap			m_layouts;
 	uint32_t			m_layoutMax;
-
-	uint32_t			m_shaderID;
-	uint32_t			m_layoutID;
 };
 
 extern CU_D3D11_API D3D11_Device*	gD3D11Device();

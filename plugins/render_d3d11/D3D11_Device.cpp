@@ -44,8 +44,6 @@ D3D11_Device::D3D11_Device()
 	, m_adapter(NULL)
 	, m_linkage(NULL)
 	, m_layoutMax(0)
-	, m_shaderID(0)
-	, m_layoutID(0)
 {
 	HRESULT hr;
 
@@ -128,29 +126,17 @@ SwapChain* D3D11_Device::newSwapChain(const SwapChainDesc& desc)
 
 VertexLayout* D3D11_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
-	++m_layoutID;
-	if (m_layoutID == 0)
-		m_layoutID = 1;
-	return new D3D11_VertexLayout(m_layoutID, elements, count);
+	return new D3D11_VertexLayout(newID(), elements, count);
 }
-
-VertexArray* D3D11_Device::newVertexArray(VertexLayout* layout)
-{
-	return new VertexArray(layout);
-}
-
 
 ShaderStage* D3D11_Device::newShader()
 {
-	++m_shaderID;
-	if (m_shaderID == 0)
-		m_shaderID = 1;
-	return new D3D11_Shader(m_shaderID);
+	return new D3D11_Shader(newID());
 }
 
 ShaderProgram* D3D11_Device::newProgram()
 {
-	return new D3D11_Program();
+	return new D3D11_Program(newID());
 }
 
 Pipeline* D3D11_Device::newPipeline(const PipelineDesc& desc)

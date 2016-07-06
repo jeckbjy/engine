@@ -24,7 +24,7 @@ CU_NS_BEGIN
 class CU_OGL_API OGL_Shader : public ShaderStage
 {
 public:
-	OGL_Shader();
+	OGL_Shader(uint32_t id);
 	~OGL_Shader();
 
 	bool compile(const ShaderDesc& desc);

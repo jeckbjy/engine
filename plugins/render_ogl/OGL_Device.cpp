@@ -38,24 +38,19 @@ DescriptorSet* OGL_Device::newDescriptorSet(Pipeline* pipeline)
 	return new OGL_DescriptorSet(pipeline);
 }
 
-VertexLayout* OGL_Device::newVertexLayout(const VertexElement* elements, size_t count)
-{
-	return new VertexLayout(elements, count);
-}
-
 VertexArray* OGL_Device::newVertexArray(VertexLayout* layout)
 {
-	return new OGL_VertexArray(layout);
+	return new OGL_VertexArray(newID(), layout);
 }
 
 ShaderStage* OGL_Device::newShader()
 {
-	return new OGL_Shader();
+	return new OGL_Shader(newID());
 }
 
 ShaderProgram* OGL_Device::newProgram()
 {
-	return new OGL_Program();
+	return new OGL_Program(newID());
 }
 
 Pipeline* OGL_Device::newPipeline(const PipelineDesc& desc)

@@ -6,7 +6,7 @@ CU_NS_BEGIN
 class CU_OGL_API OGL_Program : public ShaderProgram
 {
 public:
-	OGL_Program();
+	OGL_Program(uint32_t id);
 	~OGL_Program();
 
 	void attach(ShaderStage* stage);

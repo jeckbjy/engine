@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Util.h"
 #include <stdio.h>
 
 CU_NS_BEGIN
@@ -45,9 +46,20 @@ void GpuBuffer::read(void* data, size_t len, size_t offset /* = 0 */)
 	unmap();
 }
 
-uint32_t VertexLayout::hash(const VertexElement* elements, size_t count)
+size_t VertexLayout::hash(const VertexElement* elements, size_t count)
 {
-	return 0;
+	size_t result = 0;
+	const VertexElement* elem;
+	for (size_t i = 0; i < count; ++i)
+	{
+		elem = &(elements[i]);
+		Util::hash_combine(result, elem->semantic);
+		Util::hash_combine(result, elem->format);
+		Util::hash_combine(result, elem->slot);
+		Util::hash_combine(result, elem->rate);
+	}
+
+	return result;
 }
 
 static bool InputElementCmp(const VertexElement& e1, const VertexElement& e2)
@@ -59,7 +71,8 @@ static bool InputElementCmp(const VertexElement& e1, const VertexElement& e2)
 	return false;
 }
 
-VertexLayout::VertexLayout(const VertexElement* elements, size_t count)
+VertexLayout::VertexLayout(uint32_t id, const VertexElement* elements, size_t count)
+	:m_id(id)
 {
 	static const PixelFormat g_types[SEMANTIC_MAX] = 
 	{
@@ -145,7 +158,6 @@ bool VertexLayout::equal(const VertexElement* elements, size_t count) const
 			(e1.semantic != e2.semantic) ||
 			(e1.format != e2.format) ||
 			(e1.slot != e2.slot) ||
-			(e1.offset != e2.offset) ||
 			(e1.rate != e2.rate))
 			return false;
 	}
@@ -153,8 +165,9 @@ bool VertexLayout::equal(const VertexElement* elements, size_t count) const
 	return true;
 }
 
-VertexArray::VertexArray(VertexLayout* layout)
-	: m_layout(layout)
+VertexArray::VertexArray(uint32_t id, VertexLayout* layout)
+	: m_id(id)
+	, m_layout(layout)
 	, m_dirty(true)
 	, m_startSlot(0)
 {
@@ -207,12 +220,12 @@ void FrameBuffer::detach(size_t att)
 
 VertexLayout* Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
-	return new VertexLayout(elements, count);
+	return new VertexLayout(newID(), elements, count);
 }
 
 VertexArray* Device::newVertexArray(VertexLayout* layout)
 {
-	return new VertexArray(layout);
+	return new VertexArray(newID(), layout);
 }
 
 GpuBuffer* Device::newVertexBuffer(uint32_t stride, uint32_t counts, const void* data /* = NULL */, RES_FLAG flags /* = RES_DEFAULT */)
@@ -232,6 +245,13 @@ GpuBuffer* Device::newUniformBuffer(uint32_t bytes, const void* data /* = NULL *
 {
 	BufferDesc desc(BU_UNIFORM, bytes, 1, flags, data);
 	return newBuffer(desc);
+}
+
+VertexLayout* Device::getLayout(VertexElement* elements, size_t count)
+{
+	size_t hashCode = VertexLayout::hash(elements, count);
+	// ≤È’“
+	return new VertexLayout(newID(), elements, count);
 }
 
 ShaderStage* Device::loadShader(ShaderType type, const String& path)

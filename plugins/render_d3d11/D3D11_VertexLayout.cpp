@@ -6,9 +6,8 @@
 CU_NS_BEGIN
 
 D3D11_VertexLayout::D3D11_VertexLayout(uint32_t id, const VertexElement* elements, size_t count)
-	: VertexLayout(elements, count)
+	: VertexLayout(id, elements, count)
 	, m_count(count)
-	, m_id(id)
 {
 	m_desc = new D3D11_INPUT_ELEMENT_DESC[count];
 	for (size_t i = 0; i < count; ++i)

@@ -3,8 +3,9 @@
 
 CU_NS_BEGIN
 
-VK_Shader::VK_Shader(VK_Device* device)
-	: m_device(device)
+VK_Shader::VK_Shader(uint32_t id, VK_Device* device)
+	: ShaderStage(id)
+	, m_device(device)
 	, m_module(VK_NULL_HANDLE)
 {
 }

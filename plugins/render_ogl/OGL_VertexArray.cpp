@@ -5,8 +5,8 @@
 
 CU_NS_BEGIN
 
-OGL_VertexArray::OGL_VertexArray(VertexLayout* layout)
-	: VertexArray(layout)
+OGL_VertexArray::OGL_VertexArray(uint32_t id, VertexLayout* layout)
+	: VertexArray(id, layout)
 {
 
 }

@@ -3,8 +3,8 @@
 
 CU_NS_BEGIN
 
-D3D12_VertexLayout::D3D12_VertexLayout(const VertexElement* elements, size_t count)
-	: VertexLayout(elements, count)
+D3D12_VertexLayout::D3D12_VertexLayout(uint32_t id, const VertexElement* elements, size_t count)
+	: VertexLayout(id, elements, count)
 	, m_id(0)
 {
 	m_desc = new D3D12_INPUT_ELEMENT_DESC[count];

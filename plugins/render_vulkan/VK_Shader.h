@@ -7,7 +7,7 @@ class VK_Device;
 class CU_VK_API VK_Shader : public ShaderStage
 {
 public:
-	VK_Shader(VK_Device* device);
+	VK_Shader(uint32_t id, VK_Device* device);
 	~VK_Shader();
 
 	bool compile(const ShaderDesc& desc);

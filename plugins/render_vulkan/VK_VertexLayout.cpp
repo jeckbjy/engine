@@ -10,8 +10,8 @@ struct BindInfo
 	BindInfo() :stride(0), rate(INPUT_RATE_VERTEX){}
 };
 
-VK_VertexLayout::VK_VertexLayout(const VertexElement* elements, size_t count)
-	: VertexLayout(elements, count)
+VK_VertexLayout::VK_VertexLayout(uint32_t id, const VertexElement* elements, size_t count)
+	: VertexLayout(id, elements, count)
 	, m_bindings(NULL)
 	, m_attrs(NULL)
 {

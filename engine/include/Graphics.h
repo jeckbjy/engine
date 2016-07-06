@@ -70,17 +70,18 @@ class CU_API VertexLayout : public Object
 public:
 	typedef std::vector<VertexElement> ElementVec;
 
-	static uint32_t hash(const VertexElement* elements, size_t count);
+	static size_t hash(const VertexElement* elements, size_t count);
 
-	VertexLayout(const VertexElement* elements, size_t count);
+	VertexLayout(uint32_t id, const VertexElement* elements, size_t count);
 	virtual ~VertexLayout(){}
 
 	bool equal(const VertexElement* elements, size_t count) const;
 	const ElementVec& getElements() const { return m_elements; }
 
 protected:
+	uint32_t	m_id;
+	size_t		m_hash;
 	ElementVec	m_elements;
-	uint32_t	m_hash;
 	bool		m_instanced;
 };
 
@@ -91,7 +92,7 @@ public:
 	typedef std::vector<GpuBufferPtr> BufferArray;
 	typedef std::vector<uint32_t>	  OffsetArray;
 
-	VertexArray(VertexLayout* layout);
+	VertexArray(uint32_t id, VertexLayout* layout);
 	virtual ~VertexArray(){}
 
 	void setLayout(VertexLayout* layout);
@@ -106,7 +107,10 @@ public:
 	OffsetArray&	getOffsetArray() { return m_offsets; }
 	size_t			getStartSlot() const { return m_startSlot; }
 
+	uint32_t		getID() const { return m_id; }
+
 protected:
+	uint32_t		m_id;
 	bool			m_dirty;
 	VertexLayoutPtr m_layout;
 	BufferArray		m_buffers;
@@ -152,23 +156,32 @@ class CU_API ShaderStage : public Object
 {
 	DECLARE_RTTI(ShaderStage, Object, OBJ_ID_SHADER_STAGE);
 public:
-	ShaderStage(){}
+	ShaderStage(uint32_t id):m_id(id){}
 	virtual ~ShaderStage(){}
 
 	virtual bool compile(const ShaderDesc& desc) = 0;
-	ShaderType getShaderType() const { return m_type; }
+
+	ShaderType	getShaderType() const { return m_type; }
+	uint32_t	getID() const { return m_id; }
 
 protected:
-	ShaderType m_type;
+	ShaderType	m_type;
+	uint32_t	m_id;
 };
 
 class CU_API ShaderProgram : public Object
 {
 	DECLARE_RTTI(ShaderProgram, Object, OBJ_ID_SHADER_PROTRAM);
 public:
+	ShaderProgram(uint32_t id) :m_id(id){}
 	virtual ~ShaderProgram(){}
 	virtual void attach(ShaderStage* shader) = 0;
 	virtual void link() = 0;
+
+	uint32_t getID() const { return m_id; }
+
+protected:
+	uint32_t m_id;
 };
 
 // used for material
@@ -259,6 +272,7 @@ class CU_API Device : public Object
 {
 	DECLARE_RTTI(Device, Object, OBJ_ID_DEVICE);
 public:
+	Device() :m_uniqueID(0){}
 	virtual ~Device(){}
 
 	virtual GpuBuffer*		newBuffer(const BufferDesc& desc) = 0;
@@ -274,10 +288,17 @@ public:
 	virtual FrameBuffer*	newFrameBuffer() = 0;
 	virtual SwapChain*		newSwapChain(const SwapChainDesc& desc) = 0;
 
-	GpuBuffer* newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
-	GpuBuffer* newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
-	GpuBuffer* newUniformBuffer(uint32_t bytes, const void* data = NULL, RES_FLAG flags = RES_DYNAMIC);
-	ShaderStage* loadShader(ShaderType type, const String& path);
+	GpuBuffer*				newVertexBuffer(uint32_t stride, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
+	GpuBuffer*				newIndexBuffer(IndexType type, uint32_t counts, const void* data = NULL, RES_FLAG flags = RES_DEFAULT);
+	GpuBuffer*				newUniformBuffer(uint32_t bytes, const void* data = NULL, RES_FLAG flags = RES_DYNAMIC);
+	VertexLayout*			getLayout(VertexElement* elements, size_t count);
+	ShaderStage*			loadShader(ShaderType type, const String& path);
+
+	uint32_t newID() { return ++m_uniqueID; }
+
+protected:
+	uint32_t m_uniqueID;
+	// cache
 };
 
 // 用于全局,枚举GPU

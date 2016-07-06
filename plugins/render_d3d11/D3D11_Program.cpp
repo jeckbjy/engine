@@ -2,7 +2,8 @@
 
 CU_NS_BEGIN
 
-D3D11_Program::D3D11_Program()
+D3D11_Program::D3D11_Program(uint32_t id)
+	: ShaderProgram(id)
 {
 	for (size_t i = 0; i < SHADER_COUNT; ++i)
 	{

@@ -12,7 +12,6 @@ public:
 
 	bool compile(const ShaderDesc& desc);
 
-	uint32_t getID() const { return m_id; }
 	ID3DBlob* getCode() { return m_code; }
 
 	ID3D11DeviceChild* getHandle() { return m_shader; }
@@ -29,7 +28,6 @@ private:
 private:
 	ID3D11DeviceChild*	m_shader;
 	ID3DBlob*			m_code;		// vsÐèÒª
-	uint32_t			m_id;		// Î¨Ò»ID
 	UniformVec			m_uniforms;
 };
 

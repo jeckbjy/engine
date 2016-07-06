@@ -2,7 +2,8 @@
 
 CU_NS_BEGIN
 
-VK_Program::VK_Program()
+VK_Program::VK_Program(uint32_t id)
+	: ShaderProgram(id)
 {
 
 }

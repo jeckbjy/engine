@@ -8,7 +8,7 @@ typedef std::map<String, UniformDesc*> UniformMap;
 class CU_D3D11_API D3D11_Program : public ShaderProgram
 {
 public:
-	D3D11_Program();
+	D3D11_Program(uint32_t id);
 	~D3D11_Program();
 
 	void attach(ShaderStage* shader);

@@ -9,7 +9,7 @@ class OGL_Program;
 class CU_OGL_API OGL_VertexArray : public VertexArray
 {
 public:
-	OGL_VertexArray(VertexLayout* layout);
+	OGL_VertexArray(uint32_t id, VertexLayout* layout);
 	~OGL_VertexArray();
 
 	void bind(OGL_Program* prog);

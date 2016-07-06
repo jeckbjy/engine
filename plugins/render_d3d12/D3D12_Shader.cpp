@@ -2,8 +2,9 @@
 
 CU_NS_BEGIN
 
-D3D12_Shader::D3D12_Shader()
-	: m_code(NULL)
+D3D12_Shader::D3D12_Shader(uint32_t id)
+	: ShaderStage(id)
+	, m_code(NULL)
 {
 }
 

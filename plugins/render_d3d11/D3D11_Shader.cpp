@@ -5,7 +5,8 @@
 CU_NS_BEGIN
 
 D3D11_Shader::D3D11_Shader(uint32_t id)
-	: m_shader(NULL)
+	: ShaderStage(id)
+	, m_shader(NULL)
 	, m_code(NULL)
 {
 }
