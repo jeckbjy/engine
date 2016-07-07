@@ -181,17 +181,17 @@ Texture* VK_Device::newTexture(const TextureDesc& desc)
 
 VertexLayout* VK_Device::newVertexLayout(const VertexElement* elements, size_t count)
 {
-	return new VK_VertexLayout(elements, count);
+	return new VK_VertexLayout(newID(), elements, count);
 }
 
 ShaderStage* VK_Device::newShader()
 {
-	return new VK_Shader(this);
+	return new VK_Shader(newID(), this);
 }
 
 ShaderProgram* VK_Device::newProgram()
 {
-	return new VK_Program();
+	return new VK_Program(newID());
 }
 
 Pipeline* VK_Device::newPipeline(const PipelineDesc& desc)

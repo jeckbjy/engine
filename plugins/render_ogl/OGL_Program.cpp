@@ -76,25 +76,50 @@ void OGL_Program::attach(ShaderStage* stage)
 
 void OGL_Program::link()
 {
-	bool successed = true;
-#ifdef CU_USE_SPO
-	//ShaderMap::iterator itor = m_shaders.find(ST_VERTEX);
-	//if (itor != m_shaders.end() && !parse_attrs(itor->second))
-	//	successed = true;
-	//else
-	//	successed = false;
-	//todo: 对所有的shader解析uniform
-#else
-	GLint success;
+	if (!m_shaders[SHADER_VERTEX])
+		return;
+
+#ifndef CU_USE_SPO
+	GLint result;
 	glLinkProgram(m_handle);
-	glGetProgramiv(m_handle, GL_LINK_STATUS, &success);
-	successed = (success == GL_TRUE);
-	//if (!parse_attrs(m_handle))
-	//	successed = false;
-	//if (!parse_uniform(m_handle))
-	//	successed = false;
+	glGetProgramiv(m_handle, GL_LINK_STATUS, &result);
+	bool success = (result == GL_TRUE);
+	if (!success)
+	{
+		return;
+	}
 #endif
-	//return successed;
+
+	// parse attribute
+#ifdef CU_USE_SPO
+	parseAttribute(m_shaders[SHADER_VERTEX]->native());
+#else
+	parseAttribute(m_handle);
+#endif
+
+	// parse uniforms
+#ifdef CU_USE_SPO
+	for (int i = 0; i < SHADER_COUNT; ++i)
+	{
+		if (!m_shaders[i])
+			continue;
+		GLuint handle = m_shaders[i]->native();
+		// 解析
+		UniformVec uniforms;
+		bool result = parseUniform(handle, uniforms);
+		if (!result)
+			continue;
+
+	}
+#else
+	parseUniform(m_handle, m_uniformVec);
+	// 建立map
+	for (size_t i = 0; i < m_uniformVec.size(); ++i)
+	{
+
+	}
+
+#endif
 }
 
 void OGL_Program::bind()
@@ -140,7 +165,7 @@ bool OGL_Program::parseAttribute(GLuint handle)
 	return successed;
 }
 
-bool OGL_Program::parseUniform(GLuint handle)
+bool OGL_Program::parseUniform(GLuint handle, UniformVec& uniforms)
 {
 	return true;
 }

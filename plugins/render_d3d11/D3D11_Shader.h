@@ -3,7 +3,6 @@
 
 CU_NS_BEGIN
 
-typedef std::vector<UniformDesc*> UniformVec;
 class CU_D3D11_API D3D11_Shader : public ShaderStage
 {
 public:

@@ -18,14 +18,16 @@ public:
 
 private:
 	bool parseAttribute(GLuint handle);
-	bool parseUniform(GLuint handle);
+	bool parseUniform(GLuint handle, UniformVec& uniforms);
 
 private:
-	typedef std::map<uint8_t, OGL_Shader*> ShaderMap;
+	typedef SharedPtr<OGL_Shader> ShaderPtr;
 	GLuint		m_handle;
-	ShaderMap	m_shaders;
+	ShaderPtr	m_shaders[SHADER_COUNT];
 	// 解析
 	GLint		m_attrs[SEMANTIC_MAX];
+	UniformVec	m_uniformVec;	// 仅含有descriptor
+	UniformMap	m_uniformMap;	// 含有Variable和descriptor
 };
 
 CU_NS_END

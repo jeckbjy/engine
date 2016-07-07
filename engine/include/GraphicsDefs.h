@@ -384,6 +384,7 @@ enum ShaderType
 	SHADER_GEOMETRY,
 	SHADER_PIXEL,		// fragment
 	SHADER_COMPUTE,
+
 	SHADER_COUNT,
 };
 

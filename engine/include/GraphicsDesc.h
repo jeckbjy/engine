@@ -236,5 +236,7 @@ struct CU_API UniformDesc
 	UniformDesc();
 	bool isVariable() const { return slot == UINT32_MAX; }
 };
+typedef std::vector<UniformDesc*>		UniformVec;
+typedef std::map<String, UniformDesc*>	UniformMap;
 
 CU_NS_END

@@ -4,7 +4,6 @@
 CU_NS_BEGIN
 
 class D3D11_Shader;
-typedef std::map<String, UniformDesc*> UniformMap;
 class CU_D3D11_API D3D11_Program : public ShaderProgram
 {
 public:
