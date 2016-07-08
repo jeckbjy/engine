@@ -1,4 +1,5 @@
 #include "OGL_Program.h"
+#include "OGL_Mapping.h"
 #include "OGL_Texture.h"
 #include "OGL_Buffer.h"
 #include "OGL_DescriptorSet.h"
@@ -55,6 +56,17 @@ OGL_Program::OGL_Program(uint32_t id)
 
 OGL_Program::~OGL_Program()
 {
+	// 释放
+	UniformDesc* desc;
+	for (UniformMap::iterator itor = m_uniformMap.begin(); itor != m_uniformMap.end(); ++itor)
+	{
+		desc = itor->second;
+		delete desc;
+	}
+
+	m_uniformMap.clear();
+	m_uniformVec.clear();
+
 	if (m_handle)
 	{
 		DeleteProgram(m_handle);
@@ -112,13 +124,28 @@ void OGL_Program::link()
 
 	}
 #else
-	parseUniform(m_handle, m_uniformVec);
+	UniformVec uniforms;
+	parseUniform(m_handle, uniforms);
+	m_uniformVec.reserve(uniforms.size());
+	UniformDesc* desc;
 	// 建立map
-	for (size_t i = 0; i < m_uniformVec.size(); ++i)
+	for (size_t i = 0; i < uniforms.size(); ++i)
 	{
+		desc = uniforms[i];
 
+		UniformMap::iterator itor = m_uniformMap.find(desc->name);
+		if (itor != m_uniformMap.end())
+		{
+			// 说明已经存在,应该校验类型必须一致,目前直接忽略
+			delete desc;
+			continue;
+		}
+
+		// 需要重新建立索引??
+		m_uniformMap[desc->name] = desc;
+		if (!desc->isVariable())
+			m_uniformVec.push_back(*desc);
 	}
-
 #endif
 }
 
@@ -167,6 +194,79 @@ bool OGL_Program::parseAttribute(GLuint handle)
 
 bool OGL_Program::parseUniform(GLuint handle, UniformVec& uniforms)
 {
+	// get max buffer size
+	GLint bufSize;
+	glGetProgramiv(handle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &bufSize);
+#ifdef CU_USE_UNIFORM_BLOCK
+	GLint blockNameSize;
+	glGetProgramiv(handle, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &blockNameSize);
+	if (blockNameSize > bufSize)
+		bufSize = blockNameSize;
+#endif
+
+	// create buffer
+	UniformDesc* desc = NULL;
+	GLchar* name = new GLchar[bufSize];
+
+	// parse block
+#ifdef CU_USE_UNIFORM_BLOCK
+	GLint blockCount = 0;
+	glGetProgramiv(handle, GL_ACTIVE_UNIFORM_BLOCKS, &blockCount);
+	for (GLint i = 0; i < blockCount; ++i)
+	{
+		GLsizei blockSize = 0;
+		glGetActiveUniformBlockName(handle, i, bufSize, &blockSize, name);
+
+		desc = new UniformDesc();
+		desc->name = name;
+		desc->type = UT_CBUFFER;
+		desc->slot = i;
+		desc->bytes = blockSize;
+		uniforms.push_back(desc);
+	}
+#endif
+
+	// parse active uniforms
+	GLenum	type;
+	GLint	size;
+	GLint	activeCount;
+	glGetProgramiv(handle, GL_ACTIVE_UNIFORMS, &activeCount);
+	for (GLuint index = 0; index < (GLuint)activeCount; ++index)
+	{
+		glGetActiveUniform(handle, index, bufSize, NULL, &size, &type, name);
+
+		// If this is an array uniform, strip array indexers off it since GL does not
+		// seem to be consistent across different drivers/implementations in how it returns
+		// array uniforms. On some systems it will return "u_matrixArray", while on others
+		// it will return "u_matrixArray[0]".
+		char* c = strchr(name, '[');
+		if (c)
+			*c = '\0';
+
+		desc = new UniformDesc();
+		desc->name = name;
+		desc->type = OGL_Mapping::getUniformType(type);
+		desc->bytes = size;	// calc
+
+		// check is variable
+#ifdef CU_USE_UNIFORM_BLOCK
+		GLint blockIndex = -1;
+		glGetActiveUniformsiv(handle, 1, &index, GL_UNIFORM_BLOCK_INDEX, &blockIndex);
+		if (blockIndex != -1)
+		{
+			GLint offset;
+			glGetActiveUniformsiv(handle, 1, &index, GL_UNIFORM_OFFSET, &offset);
+			desc->index = index;
+			desc->offset = offset;
+			uniforms.push_back(desc);
+			continue;
+		}
+#endif
+
+		desc->slot = glGetUniformLocation(handle, name);
+		uniforms.push_back(desc);
+	}
+
 	return true;
 }
 

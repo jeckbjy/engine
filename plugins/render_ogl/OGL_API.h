@@ -24,11 +24,17 @@
 #include "API.h"
 #include "Graphics.h"
 
+// °æ±¾
+#define OGL_VERSION_2	2
+#define OGL_VERSION_3	3
+#define OGL_VERSION_4	4
+
 #ifdef _WIN32
 #	define GLEW_STATIC
 #	include<GL/glew.h>
 #	define CU_USE_GLEW
 #	define CU_HAS_VAO
+#	define CU_HAS_SPO
 
 #elif defined(__ANDROID__) || defined(__QNX__)
 #	include<EGL/egl.h>
@@ -77,19 +83,17 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 
 // http://www.luluathena.com/?p=1739
 // http://www.cnblogs.com/vertexshader/articles/3022981.html
-#define CU_USE_SPO	// Separate Program Object
 #define CU_USE_PBO	// Pixel Buffer Object
 #define CU_USE_TEXTURE_ARRAY
 #define CU_USE_DRAW_INDEX_BASE
 #define CU_USE_UNIFORM_BLOCK
 
+#define OGL_VERSION		OGL_VERSION_4
+
 #if defined(CU_HAS_VAO) && !defined(CU_NO_VAO)
 #define CU_USE_VAO
 #endif
 
-// °æ±¾
-#define OGL_VERSION_2	2
-#define OGL_VERSION_3	3
-#define OGL_VERSION_4	4
-
-#define OGL_VERSION		OGL_VERSION_4
+#if defined(CU_HAS_SPO) && !defined(CU_NO_SPO)
+#define CU_USE_SPO
+#endif

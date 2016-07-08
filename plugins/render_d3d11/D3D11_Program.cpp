@@ -13,6 +13,15 @@ D3D11_Program::D3D11_Program(uint32_t id)
 
 D3D11_Program::~D3D11_Program()
 {
+	for (UniformMap::iterator itor = m_uniformMap.begin(); itor != m_uniformMap.end(); ++itor)
+	{
+		UniformDesc* desc = itor->second;
+		delete desc;
+	}
+
+	m_uniformMap.clear();
+	m_uniformVec.clear();
+
 	for (size_t i = 0; i < SHADER_COUNT; ++i)
 	{
 		CU_SAFE_RELEASE(m_shaders[i]);

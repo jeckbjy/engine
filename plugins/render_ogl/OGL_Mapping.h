@@ -12,6 +12,8 @@ struct CU_OGL_API OGL_Mapping
 	static GLenum getBufferUsage(BufferUsage type);
 	static GLbitfield getAccess(MAP_FLAG type);
 	static GLint getPrimitiveMode(Topology type);
+
+	static UniformType getUniformType(GLenum type);
 };
 
 CU_NS_END
