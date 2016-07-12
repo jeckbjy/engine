@@ -111,6 +111,8 @@ void OGL_Program::link()
 
 	// parse uniforms
 #ifdef CU_USE_SPO
+	UniformDesc* desc;
+	// 注意：每个都有独立命名空间，相同的名字可能对应到不同的slot中
 	for (int i = 0; i < SHADER_COUNT; ++i)
 	{
 		if (!m_shaders[i])
@@ -118,16 +120,24 @@ void OGL_Program::link()
 		GLuint handle = m_shaders[i]->native();
 		// 解析
 		UniformVec uniforms;
-		bool result = parseUniform(handle, uniforms);
-		if (!result)
-			continue;
+		parseUniform(handle, uniforms);
+		// 合并
+		for (size_t j = 0; j < uniforms.size(); ++j)
+		{
+			desc = uniforms[j];
+			UniformMap::iterator itor = m_uniformMap.find(desc->name);
+			if (itor == m_uniformMap.end())
+			{
 
+			}
+		}
 	}
 #else
 	UniformVec uniforms;
 	parseUniform(m_handle, uniforms);
 	m_uniformVec.reserve(uniforms.size());
 	UniformDesc* desc;
+	// 计算global variable偏移
 	// 建立map
 	for (size_t i = 0; i < uniforms.size(); ++i)
 	{
@@ -144,7 +154,10 @@ void OGL_Program::link()
 		// 需要重新建立索引??
 		m_uniformMap[desc->name] = desc;
 		if (!desc->isVariable())
+		{
+			desc->index = m_uniformVec.size() - 1;
 			m_uniformVec.push_back(*desc);
+		}
 	}
 #endif
 }
@@ -227,6 +240,7 @@ bool OGL_Program::parseUniform(GLuint handle, UniformVec& uniforms)
 #endif
 
 	// parse active uniforms
+	size_t offset = 0;
 	GLenum	type;
 	GLint	size;
 	GLint	activeCount;
@@ -234,6 +248,7 @@ bool OGL_Program::parseUniform(GLuint handle, UniformVec& uniforms)
 	for (GLuint index = 0; index < (GLuint)activeCount; ++index)
 	{
 		glGetActiveUniform(handle, index, bufSize, NULL, &size, &type, name);
+
 
 		// If this is an array uniform, strip array indexers off it since GL does not
 		// seem to be consistent across different drivers/implementations in how it returns
@@ -262,7 +277,11 @@ bool OGL_Program::parseUniform(GLuint handle, UniformVec& uniforms)
 			continue;
 		}
 #endif
-
+		if (desc->isBasicFormat())
+		{
+			desc->offset = offset;
+			offset += desc->bytes;
+		}
 		desc->slot = glGetUniformLocation(handle, name);
 		uniforms.push_back(desc);
 	}

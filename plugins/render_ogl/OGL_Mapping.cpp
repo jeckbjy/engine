@@ -226,6 +226,14 @@ UniformType OGL_Mapping::getUniformType(GLenum type)
 {
 	switch (type)
 	{
+	case GL_BOOL:
+		return UT_BOOL1;
+	case GL_BOOL_VEC2:
+		return UT_BOOL2;
+	case GL_BOOL_VEC3:
+		return UT_BOOL3;
+	case GL_BOOL_VEC4:
+		return UT_BOOL4;
 	case GL_FLOAT:
 		return UT_FLOAT1;
 	case GL_FLOAT_VEC2:
@@ -242,6 +250,14 @@ UniformType OGL_Mapping::getUniformType(GLenum type)
 		return UT_INT3;
 	case GL_INT_VEC4:
 		return UT_INT4;
+	case GL_UNSIGNED_INT:
+		return UT_UINT1;
+	case GL_UNSIGNED_INT_VEC2:
+		return UT_UINT2;
+	case GL_UNSIGNED_INT_VEC3:
+		return UT_UINT3;
+	case GL_UNSIGNED_INT_VEC4:
+		return UT_UINT4;
 	case GL_FLOAT_MAT2:
 		return UT_MATRIX_2X2;
 	case GL_FLOAT_MAT2x3:
@@ -268,6 +284,16 @@ UniformType OGL_Mapping::getUniformType(GLenum type)
 		return UT_SAMPLER3D;
 	case GL_SAMPLER_CUBE:
 		return UT_SAMPLERCUBE;
+	case GL_SAMPLER_2D_MULTISAMPLE:
+		return UT_SAMPLER2DMS;
+	case GL_IMAGE_1D:
+		return UT_RWTEXTURE1D;
+	case GL_IMAGE_2D:
+		return UT_RWTEXTURE2D;
+	case GL_IMAGE_3D:
+		return UT_RWTEXTURE3D;
+	case GL_IMAGE_2D_MULTISAMPLE:
+		return UT_RWTEXTURE2DMS;
 	default:
 		return UT_UNKNOWN;
 	}

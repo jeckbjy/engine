@@ -3,6 +3,7 @@
 
 CU_NS_BEGIN
 
+// glProgramUniform glUniform
 class CU_OGL_API OGL_Program : public ShaderProgram
 {
 public:
@@ -15,6 +16,8 @@ public:
 	void bind();
 
 	GLint getLocation(Semantic semantic);
+
+	const UniformVec& getUniformVec() const { return m_uniformVec; }
 
 private:
 	bool parseAttribute(GLuint handle);

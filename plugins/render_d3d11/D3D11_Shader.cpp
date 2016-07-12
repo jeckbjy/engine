@@ -276,12 +276,15 @@ UniformType D3D11_Shader::getVariableType(D3D11_SHADER_TYPE_DESC& desc)
 		switch (desc.Type)
 		{
 		case D3D_SVT_BOOL:
-			return UT_BOOL;
+			return UT_BOOL1;
 		case D3D_SVT_INT:
-		case D3D_SVT_UINT:
 			return UT_INT1;
+		case D3D_SVT_UINT:
+			return UT_UINT1;
 		case D3D_SVT_FLOAT:
 			return UT_FLOAT1;
+		case D3D_SVT_MIN16FLOAT:
+			return UT_HALF1;
 		}
 		break;
 	}
@@ -289,20 +292,29 @@ UniformType D3D11_Shader::getVariableType(D3D11_SHADER_TYPE_DESC& desc)
 	{
 		switch (desc.Type)
 		{
+		case D3D_SVT_BOOL:
+			return UniformType(UT_BOOL1 + desc.Columns);
 		case D3D_SVT_INT:
 			return UniformType(UT_INT1 + desc.Columns);
+		case D3D_SVT_UINT:
+			return UniformType(UT_UINT1 + desc.Columns);
 		case D3D_SVT_FLOAT:
 			return UniformType(UT_FLOAT1 + desc.Columns);
+		case D3D_SVT_MIN16FLOAT:
+			return UniformType(UT_HALF1 + desc.Columns);
 		}
 		break;
 	}
 	case D3D_SVC_MATRIX_COLUMNS:
 	case D3D_SVC_MATRIX_ROWS:
+	{
 		if (desc.Rows > 2 && desc.Columns > 2)
 		{
 			UINT index = (desc.Rows - 2) * 3 + (desc.Columns - 2);
 			return UniformType(UT_MATRIX_2X2 + index);
 		}
+		break;
+	}
 	case D3D_SVC_STRUCT:
 		return UT_STRUCT;
 	default:

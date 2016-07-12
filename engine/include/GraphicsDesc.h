@@ -228,13 +228,14 @@ struct CU_API UniformDesc
 	UniformType	type;
 	String		name;
 	uint32_t	slot;		// desicroptor bind slot,UINT32_MAX表明是个variable
-	uint32_t	arrays;
+	uint32_t	arrays;		// 数组个数
 	uint32_t	bytes;		// variable or uniform buffer 字节大小
 	uint32_t	offset;		// variable 在block中偏移
 	uint32_t	index;		// variable 对应的block索引
 	StageInfoMap stages;
 	UniformDesc();
 	bool isVariable() const { return slot == UINT32_MAX; }
+	bool isBasicFormat() const { return type >= UT_BOOL1 && type <= UT_FLOAT4; }
 };
 typedef std::vector<UniformDesc*>		UniformVec;
 typedef std::map<String, UniformDesc*>	UniformMap;
