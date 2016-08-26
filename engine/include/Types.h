@@ -112,6 +112,8 @@ typedef std::string			String;
 typedef std::wstring		WString;
 typedef std::vector<String>	StringList;
 
+#define NPOS ((unsigned int)-1)
+
 template<class T>
 class Vector : public std::vector<T>{};
 template<class T>
@@ -173,6 +175,11 @@ extern LPFN_ACCEPTEX		FAcceptEx;
 #define cu_last_error()		errno
 #endif
 
+// 因为linux会被打断，封装一层
+extern int sock_recv(socket_t sock, void* buff, int size, int flags = 0);
+extern int sock_send(socket_t sock, const void* buff, int size, int flags = 0);
+extern int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, int fromlen);
+extern int sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen);
 
 //////////////////////////////////////////////////////////////////////////
 //

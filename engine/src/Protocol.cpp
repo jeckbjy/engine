@@ -9,7 +9,8 @@ CU_NS_BEGIN
 void PacketProtocol::process(Session* sess)
 {
 	// parse packet and post to process
-	pt_decoder decoder(&sess->getReader());
+	Buffer& buffer = sess->getReader();
+	pt_decoder decoder(&buffer);
 	for (;;)
 	{
 		if (!decoder.parse())
@@ -33,16 +34,16 @@ void PacketProtocol::process(Session* sess)
 				// todo:dump msg
 				LOG_ERROR("decode msg fail:msgid = %d, msglen = %d", decoder.msgid(), decoder.msglen());
 			}
+			// for next
+			buffer.discard();
 		}
 		else
 		{
 			BufferEvent* ev = new BufferEvent();
 			ev->sess = sess;
-			ev->buff = decoder.split();
+			buffer.split(ev->buff);
 			gNetService->post(ev);
 		}
-		// for next
-		decoder.discard();
 	}
 }
 
@@ -50,18 +51,15 @@ void TextProtocol::process(Session* sess)
 {
 	// 查找结束
 	Buffer& reader = sess->getReader();
-	uint rpos = reader.find('\r', 0);
-	if (rpos == Buffer::npos)
+	uint rpos = reader.find("\r\n", 0);
+	if (rpos == NPOS)
 		return;
-	uint epos = reader.find('\n', rpos);
-	if (epos != rpos + 1)
-		return;
+
+	reader.seek(rpos, SEEK_SET);
 	// 解析出value
 	TextEvent* ev = new TextEvent();
 	ev->sess = sess;
-	reader.front(ev->text, rpos);
-	reader.seek(epos + 1, SEEK_SET);
-	reader.discard();
+	reader.split(ev->text);
 	gNetService->post(ev);
 }
 

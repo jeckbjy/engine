@@ -157,8 +157,8 @@ int Socket::sendTo(const SocketAddress& addr, const void* buf, int len, int flag
 
 int Socket::recvFrom(SocketAddress& addr, void* buf, int len, int flags /* = 0 */)
 {
-	assert(m_sock != INVALID_SOCKET);
 	socklen_t salen;
+	assert(m_sock != INVALID_SOCKET);
 	int rc;
 	do
 	{

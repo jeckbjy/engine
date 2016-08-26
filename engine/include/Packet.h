@@ -53,34 +53,34 @@ class pt_pair : public std::pair<U, V> {};
 
 // stl helper
 template<typename T>
-inline void pt_push_back(pt_vec<T>& stl, typename pt_vec<T>::value_type& t)
+inline void pt_push(pt_vec<T>& stl, typename pt_vec<T>::value_type& t)
 {
 	stl.push_back(t);
 }
 template<typename T>
-inline void pt_push_back(pt_list<T>& stl, typename pt_list<T>::value_type& t)
+inline void pt_push(pt_list<T>& stl, typename pt_list<T>::value_type& t)
 {
 	stl.push_back(t);
 }
 template<typename T>
-inline void pt_push_back(pt_set<T>& stl, typename pt_set<T>::value_type& t)
+inline void pt_push(pt_set<T>& stl, typename pt_set<T>::value_type& t)
 {
 	stl.insert(t);
 }
 template<typename T>
-inline void pt_push_back(pt_hset<T>& stl, typename pt_hset<T>::value_type& t)
+inline void pt_push(pt_hset<T>& stl, typename pt_hset<T>::value_type& t)
 {
 	stl.insert(t);
 }
 
 template<typename U, typename V>
-inline void pt_push_back(pt_map<U, V>& stl, typename pt_map<U, V>::value_type& t)
+inline void pt_push(pt_map<U, V>& stl, typename pt_map<U, V>::value_type& t)
 {
 	stl.insert(t);
 }
 
 template<typename U, typename V>
-inline void pt_push_back(pt_hmap<U, V>& stl, typename pt_hmap<U, V>::value_type& t)
+inline void pt_push(pt_hmap<U, V>& stl, typename pt_hmap<U, V>::value_type& t)
 {
 	stl.insert(t);
 }
@@ -168,7 +168,6 @@ struct pt_num
 	pt_num& operator*=(T x) { data *= x; return *this; }
 	pt_num& operator/=(T x) { assert(x != 0); data /= x; return *this; }
 
-
 	pt_num operator +(T x) { pt_num copy(*this); data += x; return copy; }
 	pt_num operator -(T x) { pt_num copy(*this); data -= x; return copy; }
 	pt_num operator *(T x) { pt_num copy(*this); data *= x; return copy; }
@@ -176,6 +175,26 @@ struct pt_num
 
 	pt_num operator++(int) { pt_num copy(*this); ++data; return copy; }
 	pt_num operator--(int) { pt_num copy(*this); --data; return copy; }
+	pt_num operator-() { return pt_num(-data); }
+};
+
+class pt_encoder;
+class pt_decoder;
+struct pt_message
+{
+	uint64_t uid;
+	pt_message() :uid(0){}
+	virtual ~pt_message(){}
+	virtual uint msgid() const { return 0; }
+	virtual void encode(pt_encoder& stream) const = 0;
+	virtual void decode(pt_decoder& stream) = 0;
+};
+
+template<int TMSG_ID>
+struct TPacket : pt_message
+{
+	enum { MSG_ID = TMSG_ID, };
+	size_t msgid() const { return MSG_ID; }
 };
 
 // 不使用命名空间proto type
@@ -193,23 +212,8 @@ typedef pt_num<double>				pt_f64;
 typedef pt_num<int>					pt_sint;
 typedef pt_num<unsigned int>		pt_uint;
 typedef std::string					pt_str;
-
-class pt_encoder;
-class pt_decoder;
-struct pt_message
-{
-	virtual ~pt_message(){}
-	virtual uint msgid() const { return 0; }
-	virtual void encode(pt_encoder& stream) const = 0;
-	virtual void decode(pt_decoder& stream) = 0;
-};
-
-template<int TMSG_ID>
-struct TPacket : pt_message
-{
-	enum { MSG_ID = TMSG_ID, };
-	size_t msgid() const { return MSG_ID; }
-};
+typedef pt_message					pt_msg;
+typedef Buffer						pt_stream;
 
 struct pt_convert
 {
@@ -246,49 +250,73 @@ struct pt_convert
 	inline static void decode(uint64_t n, float& dst)	{ dst = decodef32(n); }
 };
 
-class pt_encoder
+class CU_API pt_encoder
 {
 public:
-	pt_encoder(Buffer* stream) :m_tag(0), m_stream(stream){}
+	pt_encoder(pt_stream* stream);
 
-	// 顶层packet
-	void encode(pt_message& msg);
-
-	void write_msg(const pt_message& msg);
-	void write_buf(const char* buf, size_t len);
-	void write_var(uint64_t data);
-	void write_beg(size_t& index, size_t tag);
-	void write_end(size_t& index);
-	void write_tag(size_t tag, uint64_t val);
+	// 顶层消息
+	void encode(pt_msg& msg);
 
 public:
-	bool write_field(const pt_message& msg, size_t tag);
+	void write_msg(const pt_msg& msg);
+	void write_var(uint64_t data);
+	void write_buf(const char* buf, size_t len);
+	void write_tag(size_t tag, uint64_t val, bool ext);
+
+	void write_beg(size_t& spos, size_t tag);
+	bool write_end(size_t& spos, size_t tag);
+
+public:
+	template<typename T>
+	pt_encoder& operator <<(const T& data)
+	{
+		write(data, 1);
+		return *this;
+	}
+
+	template<typename T>
+	pt_encoder& write(const T& data, size_t tag = 1)
+	{
+		m_tag += tag;
+		if (write_field(data, m_tag))
+			m_tag = 0;
+
+		return *this;
+	}
+
+public:// field
+	bool write_field(const pt_msg& msg, size_t tag);
 	bool write_field(const pt_str& str, size_t tag);
+
 	template<typename T>
 	typename pt_enable_if<pt_is_basic<T>::value, bool>::type
 		write_field(const T& data, size_t tag)
 	{
 		uint64_t tmp = pt_convert::encode(data);
-		if (tmp == 0)
-			return false;
-		write_tag(tag, tmp);
-	}
+		if (tmp > 0)
+			write_tag(tag, tmp, false);
 
+		return tmp > 0;
+	}
+	
 	template<typename STL>
 	typename pt_enable_if<pt_is_stl<STL>::value, bool>::type
 		write_field(const STL& data, size_t tag)
 	{
-		size_t index;
-		write_beg(index, tag);
-		// 写入数据
+		size_t spos;
+		write_beg(spos, tag);
+
 		typename STL::const_iterator cur_itor;
 		typename STL::const_iterator end_itor = data.end();
 		for (cur_itor = data.begin(); cur_itor != end_itor; ++cur_itor)
 		{
 			write_item(*cur_itor);
 		}
-		write_end(index);
+
+		return write_end(spos, tag);
 	}
+
 	// wrapper
 	template<typename T>
 	bool write_field(const pt_ptr<T>& ptr, size_t tag)
@@ -297,30 +325,17 @@ public:
 			return false;
 		return write_field(*ptr, tag);
 	}
-
+	
 	template<typename T>
 	bool write_field(const pt_num<T>& num, size_t tag)
 	{
 		return write_field(num.data, tag);
 	}
 
-	template<typename T>
-	pt_encoder& operator << (const T& data)
-	{
-		return write(data, 1);
-	}
-
-	template<typename T>
-	pt_encoder& write(const T& data, size_t tag)
-	{
-		m_tag += tag;
-		if (write_field(data, m_tag))
-			m_tag = 0;
-		return *this;
-	}
-public:
+public:// item for stl
+	void write_item(const pt_msg& msg);
 	void write_item(const pt_str& str);
-	void write_item(const pt_message& msg);
+
 	template<typename T>
 	typename pt_enable_if<pt_is_basic<T>::value>::type
 		write_item(const T& data)
@@ -329,81 +344,35 @@ public:
 		write_var(tmp);
 	}
 
-private:
-	struct Tag
-	{
-		size_t tpos;
-		size_t bpos;
-		size_t leng;
-	};
-	typedef std::vector<Tag> TagVec;
-	size_t	m_tag;
-	Buffer* m_stream;
-	TagVec	m_indexs;
+protected:
+	size_t		m_tag;
+	pt_stream*	m_stream;
 };
 
-// 解码
 class CU_API pt_decoder
 {
 public:
-	pt_decoder(Buffer* stream);
+	pt_decoder(pt_stream* stream);
 
 	bool parse();
-	bool decode(pt_message& msg);
-
-	bool read_tag(bool use_tag);
-	bool pre_read(size_t tag);
-
-	uint suspend(size_t len);
-	void recovery(size_t epos);
-	bool eof() const;
-	bool read_buf(char* buf, size_t len);
-	bool read_var(uint64_t& data);
-	void read_msg(pt_message& msg);
-
-	uint msgid() const { return m_msgid; }
-	uint msglen() const { return m_head_len + m_body_len + m_tail_len; }
-	Buffer split();
-	void discard() { m_stream->discard(); }
+	bool decode(pt_msg& msg);
 
 public:
-	void read_field(pt_str& str);
-	void read_field(pt_message& msg);
-	template<typename T>
-	void read_field(pt_ptr<T>& ptr)
-	{
-		ptr = new T();
-		read_field(*ptr);
-	}
+	bool pre_read(size_t tag);
 
-	template<typename T>
-	void read_field(pt_num<T>& num)
-	{
-		pt_convert::decode(m_data, num.data);
-	}
+	bool read_tag();
+	bool read_buf(char* buf, size_t len);
+	bool read_var(uint64_t& data);
+	void read_msg(pt_msg& msg);
 
-	template<typename T>
-	typename pt_enable_if<pt_is_basic<T>::value>::type
-		read_field(T& num)
-	{
-		pt_convert::decode(m_data, num);
-	}
+	void suspend(size_t& epos, size_t len);
+	void recovery(size_t epos);
+	bool eof() const;
 
-	template<typename STL>
-	typename pt_enable_if<pt_is_stl<STL>::value>::type
-		read_field(STL& stl)
-	{
-		uint epos = suspend();
-		typename STL::value_type item;
-		while (!eof())
-		{
-			// read_item
-			read_item(item);
-			pt_push_back(stl, item);
-		}
-		recovery(epos);
-	}
+	size_t msgid() const { return m_msgid; }
+	size_t msglen() const { return m_msglen; }
 
+public:
 	template<typename T>
 	pt_decoder& operator>>(T& data)
 	{
@@ -419,34 +388,67 @@ public:
 	}
 
 public:
+	void read_field(pt_msg& msg);
+	void read_field(pt_str& str);
+
+	template<typename T>
+	void read_field(pt_ptr<T>& ptr)
+	{
+		ptr = new T();
+		read_field(*ptr);
+	}
+	
+	template<typename T>
+	void read_field(pt_num<T>& num)
+	{
+		pt_convert::decode(m_val, num.data);
+	}
+	
+	template<typename T>
+	typename pt_enable_if<pt_is_basic<T>::value>::type
+		read_field(T& num)
+	{
+		pt_convert::decode(m_val, num);
+	}
+	
+	template<typename STL>
+	typename pt_enable_if<pt_is_stl<STL>::value>::type
+		read_field(STL& stl)
+	{
+		size_t epos;
+		suspend(epos);
+		typename STL::value_type item;
+		while (!eof())
+		{
+			read_item(item);
+			pt_push(stl, item);
+		}
+		recovery(epos);
+	}
+	
+public:
+	void read_item(pt_msg& msg);
 	void read_item(pt_str& str);
-	void read_item(pt_message& msg);
+
 	template<typename T>
 	typename pt_enable_if<pt_is_basic<T>::value>::type
 		read_item(T& data)
 	{
-		pt_convert::decode(m_data, data);
+		pt_convert::decode(m_val, data);
 	}
 
-private:
-	enum
-	{
-		T_VAL,	// 数值类型
-		T_MSG,	// len+content类型
-	};
-	typedef std::vector<size_t> SizeVec;
-	Buffer* m_stream;
-	SizeVec	m_sizes;
-	size_t	m_tag;
-	size_t	m_epos;			// 当前有效数据结尾
-	// read tags temp data
-	char	m_type;
-	uint64	m_data;
-	// read head temp data
-	size_t	m_msgid;
-	size_t	m_head_len;		// 消息头长度
-	size_t	m_body_len;		// 消息体长度,不含index
-	size_t	m_tail_len;		// 索引大小
+protected:
+	pt_stream*	m_stream;
+	size_t		m_epos;
+	// tag info
+	size_t		m_tag;
+	uint64_t	m_val;
+	bool		m_ext;
+	// msg info
+	char		m_head;
+	size_t		m_msgid;
+	size_t		m_msglen;
+	uint64_t	m_uid;
 };
 
 CU_NS_END

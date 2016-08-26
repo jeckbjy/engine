@@ -44,4 +44,44 @@ struct NetInit
 NetInit gNet;
 #endif
 
+int sock_recv(socket_t sock, void* buff, int size, int flags /* = 0 */)
+{
+	int rc;
+	do
+	{
+		rc = ::recv(sock, (char*)buff, size, flags);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
+	return rc;
+}
+
+int sock_send(socket_t sock, const void* buff, int size, int flags /* = 0 */)
+{
+	int rc;
+	do
+	{
+		rc = ::send(sock, (const char*)buff, size, flags);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
+	return rc;
+}
+
+int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, int fromlen)
+{
+	int rc;
+	do
+	{
+		rc = ::recvfrom(sock, (char*)buff, size, flags, from, &fromlen);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
+	return rc;
+}
+
+int sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen)
+{
+	int rc;
+	do
+	{
+		rc = ::sendto(sock, (const char*)(buff), size, flags, to, tolen);
+	} while (rc < 0 && getLastError() == ERR_INTERRUPTED);
+	return rc;
+}
+
 CU_NS_END

@@ -49,10 +49,10 @@ void SocketChannel::connect(const SocketAddress& addr)
 	reconnect();
 }
 
-void SocketChannel::send(const Buffer & buf)
+void SocketChannel::send(const Buffer& buf)
 {
 	LockGuard<Mutex> guard(m_mutex);
-	m_writer.append(buf);
+	m_writer.merge(buf);
 	write();
 }
 
@@ -63,49 +63,18 @@ void SocketChannel::recv()
 
 void SocketChannel::write()
 {
-	m_writer.seek(0, SEEK_SET);
-	// todo:cannot seek
-	while (!m_writer.eof())
-	{
-		char* buf = m_writer.chunk_data();
-		int len = (int)m_writer.chunk_size();
-		int ret = m_sock.send(buf, len);
-		if (ret <= 0)
-		{// has error
-			m_code = getLastError();
-			if (m_code == ERR_IN_PROGRESS)
-				m_serivce->send(m_sock.native(), this);
-			else
-				notify(EV_ERROR);
-			break;
-		}
+	bool result = m_writer.send(m_sock.native());
 
-		m_writer.seek(len, SEEK_CUR);
-		if (ret < len)
-		{
-			m_serivce->send(m_sock.native(), this);
-			break;
-		}
+	if (!result)
+	{
+		m_code = getLastError();
+		notify(EV_ERROR);
 	}
-	m_writer.discard();
 }
 
 void SocketChannel::read()
 {
-	// 从尾部添加数据
-	m_reader.seek(0, SEEK_END);
-	// available()无效暂时无法MSG_PEEK
-	char* buf;
-	uint len;
-	for (;;)
-	{
-		m_reader.get_free(buf, len);
-		int ret = m_sock.recv(buf, len);
-		if (ret < 0)
-			break;
-		m_reader.expand((size_t)ret);
-		m_reader.seek(ret, SEEK_CUR);
-	}
+	m_reader.recv(m_sock.native());
 }
 
 void SocketChannel::attach()
