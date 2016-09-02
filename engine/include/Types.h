@@ -112,6 +112,8 @@ typedef std::string			String;
 typedef std::wstring		WString;
 typedef std::vector<String>	StringList;
 
+extern const String STR_EMPTY;
+
 #define NPOS ((unsigned int)-1)
 
 template<class T>

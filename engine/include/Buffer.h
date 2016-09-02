@@ -23,14 +23,11 @@ public:
 	bool peek(void* data, size_t length);
 	bool read(void* data, size_t length);
 	bool write(const void* data, size_t length);
-
-	// 不相对于当前游标
-	bool get(void* data, size_t length, size_t offset = 0);
-	bool put(const void* data, size_t length, size_t offset = 0);
-	void insert(const void* data, size_t length, size_t offset);
-	void erase(size_t length, size_t offset);
-	bool expand(size_t length);	// 扩容
 	void seek(long length, int origin = SEEK_CUR);
+
+	void insert(size_t length);
+	bool erase(size_t length);
+	bool expand(size_t length);	// 扩容size
 
 	// 其他操作
 	void release();
@@ -53,18 +50,21 @@ public:
 	uint size() const { return m_size; }
 	uint position() const { return m_cpos; }
 
+	String toString() const;
+
 private:
 	size_t  calc_size(size_t length);
 	node_t* get_node(size_t& offs, size_t& cpos, long length, int origin = SEEK_SET);
-	node_t* new_node(size_t length = 0);
 	buff_t* new_buff(size_t length, const char* data = NULL);
-	void set_node(node_t* node, buff_t* buff, size_t length = 0);
+	node_t* new_node(buff_t* buff, size_t node_size = 0, char* data = NULL);
+	node_t* new_node(size_t buff_size, size_t node_size = 0);
+	void set_node(node_t* node, buff_t* buff, size_t node_size = 0, char* data = NULL);
 	void free_buff(buff_t* buff);
 	void free_node(node_t* node);
 	void push_node(node_t* node);
 	void check_copy(node_t* node);
 
-	bool _read(node_t* node, size_t offs, void* data, size_t length);
+	bool _read(node_t* node, size_t offs, void* data, size_t length) const;
 	bool _write(node_t* node, size_t offs, const void* data, size_t length);
 	bool _compare(node_t* node, size_t offs, const char* data, size_t length);
 
@@ -75,7 +75,7 @@ private:
 	size_t	m_cpos;		// position,相对于起点
 	size_t	m_size;		// 总大小
 	size_t	m_mark;		// 纯标识使用,没任何限制
-	size_t	m_alloc;	// 分配内存大小
+	size_t	m_alloc;	// 分配内存大小,0表示内存连续,2倍分配
 };
 
 CU_NS_END

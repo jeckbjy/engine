@@ -150,35 +150,42 @@ void pt_encoder::write_tag(size_t tag, uint64_t val, bool ext)
 
 void pt_encoder::write_beg(size_t& spos, size_t tag)
 {
+	// Ô¤Áô¿Õ¼ä
 	spos = m_stream->position();
-	m_stream->seek(2, SEEK_CUR);
+	m_stream->write(NULL, 2);
 }
 
 bool pt_encoder::write_end(size_t& spos, size_t tag)
 {
 	size_t epos = m_stream->position();
 	size_t leng = epos - spos - 2;
+
 	if (leng == 0)
 	{
 		m_stream->seek(-2, SEEK_CUR);
+		m_stream->erase(2);
 		return false;
 	}
 	else
 	{
-		char	data[20];
-		size_t	size;
+		char data[20];
+		size_t size;
+
 		if (tag != 0)
 			size = encode_tag(data, tag, leng, true);
 		else
 			size = encode_var(data, leng);
 
-		if (size == 1)
-			m_stream->erase(spos + 1, 1);
+		m_stream->seek(spos, SEEK_SET);
+
+		if (size < 2)
+			m_stream->erase(2 - size);
 		else if (size > 2)
-			m_stream->insert(spos + 2, size - 2);
+			m_stream->insert(size - 2);
 
-		m_stream->put(data, size, spos);
+		m_stream->write(data, size);
 
+		m_stream->seek(0, SEEK_END);
 		return true;
 	}
 }

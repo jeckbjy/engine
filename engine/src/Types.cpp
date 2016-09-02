@@ -2,6 +2,8 @@
 
 CU_NS_BEGIN
 
+const String STR_EMPTY;
+
 #ifdef CU_OS_WIN
 LPFN_CONNECTEX FConnectEx = NULL;
 LPFN_ACCEPTEX  FAcceptEx = NULL;
