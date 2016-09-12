@@ -416,4 +416,16 @@ void pt_decoder::read_item(pt_msg& msg)
 	read_msg(msg);
 }
 
+void pt_decoder::read_item(pt_str& str)
+{
+	if (!read_var(m_val))
+		return;
+
+	size_t len = (size_t)m_val;
+
+	str.clear();
+	str.resize(len);
+	read_buf(&str[0], len);
+}
+
 CU_NS_END
