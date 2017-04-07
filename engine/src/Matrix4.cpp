@@ -1,14 +1,15 @@
-#include "Matrix4.h"
-#include "CMath.h"
+//! Math
+#include "Cute/Matrix4.h"
+#include "Cute/Math.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 inline static float MINOR(
-	const Matrix4& m,
-	size_t r0, size_t r1, size_t r2,
-	size_t c0, size_t c1, size_t c2)
+const Matrix4& m,
+size_t r0, size_t r1, size_t r2,
+size_t c0, size_t c1, size_t c2)
 {
-	return 
+	return
 		m[r0][c0] * (m[r1][c1] * m[r2][c2] - m[r2][c1] * m[r1][c2]) -
 		m[r0][c1] * (m[r1][c0] * m[r2][c2] - m[r2][c0] * m[r1][c2]) +
 		m[r0][c2] * (m[r1][c0] * m[r2][c1] - m[r2][c0] * m[r1][c1]);
@@ -254,9 +255,9 @@ void Matrix4::set(const Vector3& axis, float angle)
 }
 
 void Matrix4::set(
-	float t00, float t01, float t02, float t03, 
-	float t10, float t11, float t12, float t13, 
-	float t20, float t21, float t22, float t23, 
+	float t00, float t01, float t02, float t03,
+	float t10, float t11, float t12, float t13,
+	float t20, float t21, float t22, float t23,
 	float t30, float t31, float t32, float t33)
 {
 	m00 = t00; m01 = t01; m02 = t02; m03 = t03;
@@ -325,7 +326,7 @@ void Matrix4::getMatrix3(Matrix3& mat) const
 float Matrix4::determinant() const
 {
 	return
-		m[0][0] * MINOR(*this, 1, 2, 3, 1, 2, 3) - 
+		m[0][0] * MINOR(*this, 1, 2, 3, 1, 2, 3) -
 		m[0][1] * MINOR(*this, 1, 2, 3, 0, 2, 3) +
 		m[0][2] * MINOR(*this, 1, 2, 3, 0, 1, 3) -
 		m[0][3] * MINOR(*this, 1, 2, 3, 0, 1, 2);
@@ -391,25 +392,25 @@ Matrix4 Matrix4::inverse() const
 Matrix4 Matrix4::adjoint() const
 {
 	return Matrix4(
-		 MINOR(*this, 1, 2, 3, 1, 2, 3),
+		MINOR(*this, 1, 2, 3, 1, 2, 3),
 		-MINOR(*this, 0, 2, 3, 1, 2, 3),
-		 MINOR(*this, 0, 1, 3, 1, 2, 3),
+		MINOR(*this, 0, 1, 3, 1, 2, 3),
 		-MINOR(*this, 0, 1, 2, 1, 2, 3),
 
 		-MINOR(*this, 1, 2, 3, 0, 2, 3),
-		 MINOR(*this, 0, 2, 3, 0, 2, 3),
+		MINOR(*this, 0, 2, 3, 0, 2, 3),
 		-MINOR(*this, 0, 1, 3, 0, 2, 3),
-		 MINOR(*this, 0, 1, 2, 0, 2, 3),
+		MINOR(*this, 0, 1, 2, 0, 2, 3),
 
-		 MINOR(*this, 1, 2, 3, 0, 1, 3),
+		MINOR(*this, 1, 2, 3, 0, 1, 3),
 		-MINOR(*this, 0, 2, 3, 0, 1, 3),
-		 MINOR(*this, 0, 1, 3, 0, 1, 3),
+		MINOR(*this, 0, 1, 3, 0, 1, 3),
 		-MINOR(*this, 0, 1, 2, 0, 1, 3),
 
 		-MINOR(*this, 1, 2, 3, 0, 1, 2),
-		 MINOR(*this, 0, 2, 3, 0, 1, 2),
+		MINOR(*this, 0, 2, 3, 0, 1, 2),
 		-MINOR(*this, 0, 1, 3, 0, 1, 2),
-		 MINOR(*this, 0, 1, 2, 0, 1, 2));
+		MINOR(*this, 0, 1, 2, 0, 1, 2));
 }
 
 Matrix4 Matrix4::transpose() const
@@ -524,7 +525,7 @@ void Matrix4::decompose(Quaternion* rotation, Vector3* translation, Vector3* sca
 	}
 	if (rotation == NULL)
 		return;
-	if (scaleX < MATH_TOLERANCE || scaleY < MATH_TOLERANCE || scaleZ < MATH_TOLERANCE)
+	if (scaleX < Math::EPSILON || scaleY < Math::EPSILON || scaleZ < Math::EPSILON)
 		return;
 	xaxis /= scaleX;
 	yaxis /= scaleY;
@@ -532,8 +533,8 @@ void Matrix4::decompose(Quaternion* rotation, Vector3* translation, Vector3* sca
 
 	// Now calculate the rotation from the resulting matrix (axes).
 	float trace = xaxis.x + yaxis.y + zaxis.z + 1.0f;
-
-	if (trace > MATH_EPSILON)
+	
+	if (trace > Math::EPSILON)
 	{
 		float s = 0.5f / sqrt(trace);
 		rotation->w = 0.25f / s;
@@ -634,10 +635,10 @@ void Matrix4::getTranslation(Vector3& t) const
 
 void Matrix4::getRotation(Quaternion& q) const
 {
-	q.w = 0.5 * sqrt((std::max)(0.0, 1.0 + m00 + m11 + m22));
-	q.x = 0.5 * sqrt((std::max)(0.0, 1.0 + m00 - m11 - m22));
-	q.y = 0.5 * sqrt((std::max)(0.0, 1.0 - m00 + m11 - m22));
-	q.z = 0.5 * sqrt((std::max)(0.0, 1.0 - m00 - m11 + m22));
+	q.w = 0.5f * (float)sqrt((std::max)(0.0, 1.0 + m00 + m11 + m22));
+	q.x = 0.5f * (float)sqrt((std::max)(0.0, 1.0 + m00 - m11 - m22));
+	q.y = 0.5f * (float)sqrt((std::max)(0.0, 1.0 - m00 + m11 - m22));
+	q.z = 0.5f * (float)sqrt((std::max)(0.0, 1.0 - m00 - m11 + m22));
 
 	q.x = q.x * Math::sign(m12 - m21);
 	q.y = q.y * Math::sign(m20 - m02);
@@ -647,7 +648,7 @@ void Matrix4::getRotation(Quaternion& q) const
 String Matrix4::toString() const
 {
 	char buf[256];
-	snprintf(buf, sizeof(buf), "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g", 
+	snprintf(buf, sizeof(buf), "%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g",
 		m00, m01, m02, m03,
 		m10, m11, m12, m13,
 		m20, m21, m22, m23,
@@ -709,10 +710,10 @@ void Matrix4::setOrthoRH(float width, float height, float zNear, float zFar)
 {
 	float q = 1 / (zFar - zNear);
 	this->set(
-		2.0 / width, 0.0,			0.0,		0,
-		0.0,		2.0 / height,	0.0,		0,
-		0.0,		0.0,			-q,			0,
-		0.0,		0.0,			zNear * q,  1);
+		2.0f / width, 0.0, 0.0, 0,
+		0.0, 2.0f / height, 0.0, 0,
+		0.0, 0.0, -q, 0,
+		0.0, 0.0, zNear * q, 1.0f);
 }
 
 void Matrix4::setOrthoLH(float width, float height, float zNear, float zFar)
@@ -720,10 +721,10 @@ void Matrix4::setOrthoLH(float width, float height, float zNear, float zFar)
 	float q = 1 / (zFar - zNear);
 
 	this->set(
-		2.0 / width,0.0,			0, 0,
-		0.0,		2.0 / height,	0, 0,
-		0.0,		0.0,			q, 0,
-		0.0,		0.0,	 -zNear*q, 1.0);
+		2.0f / width, 0.0, 0, 0,
+		0.0, 2.0f / height, 0, 0,
+		0.0, 0.0, q, 0,
+		0.0, 0.0, -zNear*q, 1.0f);
 }
 
 void Matrix4::setOrthoOffCenterRH(float left, float right, float bottom, float top, float zNear, float zFar)
@@ -761,10 +762,10 @@ void Matrix4::setPerspectiveRH(float width, float height, float zNear, float zFa
 	float q = zFar / (zFar - zNear);
 	float n = zNear + zNear;
 	this->set(
-		n / width,	0,			0,			0,
-		0,			n / height, 0,			0,
-		0,			0,			-q,			-1,
-		0,			0,			-zNear*q,	0);
+		n / width, 0, 0, 0,
+		0, n / height, 0, 0,
+		0, 0, -q, -1,
+		0, 0, -zNear*q, 0);
 }
 
 void Matrix4::setPerspectiveLH(float width, float height, float zNear, float zFar)
@@ -772,10 +773,10 @@ void Matrix4::setPerspectiveLH(float width, float height, float zNear, float zFa
 	float q = zFar / (zFar - zNear);
 	float n = zNear + zNear;
 	this->set(
-		n / width,	0,			0,			0,
-		0,			n / height, 0,			0,
-		0,			0,			q,			1,
-		0,			0,			-zNear*q,	0);
+		n / width, 0, 0, 0,
+		0, n / height, 0, 0,
+		0, 0, q, 1,
+		0, 0, -zNear*q, 0);
 }
 
 void Matrix4::setPerspectiveFovRH(float fovy, float aspect, float zNear, float zFar)
@@ -785,8 +786,8 @@ void Matrix4::setPerspectiveFovRH(float fovy, float aspect, float zNear, float z
 	float q = zFar / (zFar - zNear);
 
 	this->set(
-		w, 0,  0,  0,
-		0, h,  0,  0,
+		w, 0, 0, 0,
+		0, h, 0, 0,
 		0, 0, -q, -1,
 		0, 0, -zNear * q, 0);
 }
@@ -815,10 +816,10 @@ void Matrix4::setPerspectiveOffCenterRH(float left, float right, float bottom, f
 	float h = top + bottom;
 
 	this->set(
-		n * invW,	0,			0,	 0,
-		0,			n * invH,	0,	 0,
-		w * invW,   h * invH,	-q,	-1,
-		0,			0,	  -zNear*q,  0);
+		n * invW, 0, 0, 0,
+		0, n * invH, 0, 0,
+		w * invW, h * invH, -q, -1,
+		0, 0, -zNear*q, 0);
 }
 
 void Matrix4::setPerspectiveOffCenterLH(float left, float right, float bottom, float top, float zNear, float zFar)
@@ -832,10 +833,10 @@ void Matrix4::setPerspectiveOffCenterLH(float left, float right, float bottom, f
 	float h = top + bottom;
 
 	this->set(
-		n * invW,	0,			0, 0,
-		0,			n * invH,	0, 0,
-		-w * invW, -h * invH,	q, 1,
-		0,			0,	 -zNear*q, 0 );
+		n * invW, 0, 0, 0,
+		0, n * invH, 0, 0,
+		-w * invW, -h * invH, q, 1,
+		0, 0, -zNear*q, 0);
 }
 
 void Matrix4::setLookAtRH(const Vector3& eye, const Vector3& at, const Vector3& up)
@@ -852,7 +853,7 @@ void Matrix4::setLookAtRH(const Vector3& eye, const Vector3& at, const Vector3& 
 		xAxis.x, yAxis.x, zAxis.x, 0,
 		xAxis.y, yAxis.y, zAxis.y, 0,
 		xAxis.z, yAxis.z, zAxis.z, 0,
-		dotX,	 dotY,	  dotZ,	   1);
+		dotX, dotY, dotZ, 1);
 }
 
 void Matrix4::setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& up)
@@ -870,7 +871,7 @@ void Matrix4::setLookAtLH(const Vector3& eye, const Vector3& at, const Vector3& 
 		xAxis.x, yAxis.x, zAxis.x, 0,
 		xAxis.y, yAxis.y, zAxis.y, 0,
 		xAxis.z, yAxis.z, zAxis.z, 0,
-		dotX,	 dotY,	  dotZ,    1);
+		dotX, dotY, dotZ, 1);
 }
 
 Matrix4 Matrix4::operator -() const
@@ -964,4 +965,4 @@ Matrix4& Matrix4::operator /=(float rhs)
 	return *this;
 }
 
-CU_NS_END
+CUTE_NS_END

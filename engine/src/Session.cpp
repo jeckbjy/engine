@@ -1,66 +1,92 @@
-#include "Session.h"
-#include "NetEvent.h"
-#include "NetService.h"
+//! Server
+#include "Cute/Session.h"
+#include "Cute/Server.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
-Session::Session(uint id, IOService* service, IProtocol* proto, socket_t sock)
-: m_id(id)
-, m_type(0)
-, m_proto(proto)
-, m_data(0)
+Session::Session(SocketChannel* socket, uint32 id, uint32 type)
+	: m_socket(socket)
+	, m_id(id)
+	, m_type(type)
+	, m_data(NULL)
 {
-	m_channel = new SocketChannel(&Session::notify,service, sock);
-	m_channel->setCallbackOwner(this);
-	m_channel->retain();
-	m_connector = sock == INVALID_SOCKET ? true : false;
+	if (m_socket)
+	{
+		m_socket->setListener(this);
+		if (m_socket->isActive())
+		{
+			m_peer = m_socket->peerAddress();
+		}
+	}
 }
 
 Session::~Session()
 {
-	m_channel->reset();
-	m_channel->release();
 }
 
-void Session::send(const char* str)
+bool Session::isActive() const
 {
-	Buffer buf;
-	buf.write(str, strlen(str));
-	send(buf);
+	return m_socket->isActive();
 }
 
-void Session::notify(uint8_t type)
+bool Session::isClosing() const
 {
-	switch (type)
-	{
-	case SocketChannel::EV_ERROR:
-	{
-		// 连接失败,尝试重连
-		if (m_connector && m_channel->isConnecting())
-		{
-			gNetService->setConnectFail();
-		}
-
-		ErrorEvent* ev = new ErrorEvent();
-		ev->sess = this;
-		ev->code = m_channel->getLastCode();
-		gNetService->post(ev);
-		break;
-	}
-	case SocketChannel::EV_CONNECT:
-	{
-		ConnectEvent* ev = new ConnectEvent();
-		ev->sess = this;
-		gNetService->post(ev);
-		break;
-	}
-	case SocketChannel::EV_READ:
-	{
-		if (m_proto)
-			m_proto->process(this);
-		break;
-	}
-	}
+	return m_socket->isClosing();
 }
 
-CU_NS_END
+void Session::setClosing()
+{
+	m_socket->setClosing(true);
+}
+
+void Session::send(const BufferList& data)
+{
+	m_socket->send(data);
+}
+
+void Session::connect(const SocketAddress& addr)
+{
+	m_peer = addr;
+	m_socket->connect(m_peer);
+}
+
+void Session::reconnect()
+{
+	m_socket->connect(m_peer);
+}
+
+void Session::shutdown(int how /* = SHUT_RD */)
+{
+	m_socket->shutdown(how);
+}
+
+void Session::close()
+{
+	m_socket->close();
+}
+
+void Session::fireRead(SocketChannel* channel)
+{
+	// packet ??
+	//BufferList& reader = channel->getReader();
+	// 先解析出一个Packet
+	// 放到队列里处理
+	// 校验 parse
+	//PacketEvent* ev = new PacketEvent();
+}
+
+void Session::fireWrite(SocketChannel* channel)
+{
+}
+
+void Session::fireConnect(SocketChannel* channel)
+{
+}
+
+void Session::fireError(SocketChannel* channel)
+{
+	Server::get().kick(this);
+}
+
+CUTE_NS_END
+

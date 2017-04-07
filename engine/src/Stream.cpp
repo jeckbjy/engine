@@ -1,135 +1,43 @@
-#include "Stream.h"
+//! Stream
+#include "Cute/Stream.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
-char* Stream::readLine(char* str, int num)
+Stream::Stream()
 {
-	if (num <= 0)
-		return NULL;
-	char c = 0;
-	size_t maxCharsToRead = num - 1;
-	for (size_t i = 0; i < maxCharsToRead; ++i)
-	{
-		size_t result = read(&c, 1, 1);
-		if (result != 1)
-		{
-			str[i] = '\0';
-			break;
-		}
-		if (c == '\n')
-		{
-			str[i] = c;
-			str[i + 1] = '\0';
-			break;
-		}
-		else if (c == '\r')
-		{
-			str[i] = c;
-			// next may be '\n'
-			size_t pos = position();
 
-			char nextChar = 0;
-			if (read(&nextChar, 1, 1) != 1)
-			{
-				// no more characters
-				str[i + 1] = '\0';
-				break;
-			}
-			if (nextChar == '\n')
-			{
-				if (i == maxCharsToRead - 1)
-				{
-					str[i + 1] = '\0';
-					break;
-				}
-				else
-				{
-					str[i + 1] = nextChar;
-					str[i + 2] = '\0';
-					break;
-				}
-			}
-			else
-			{
-				seek(pos, SEEK_SET);
-				str[i + 1] = '\0';
-				break;
-			}
-		}
-		str[i] = c;
-	}
-	return str; // what if first read failed?
 }
 
-bool Stream::readLine(String& str)
+Stream::~Stream()
+{
+
+}
+
+void Stream::rewind()
+{
+	seek(0, SEEK_SET);
+}
+
+bool Stream::eof() const
+{
+	return position() >= length();
+}
+
+bool Stream::readLine(String& data)
 {
 	return true;
 }
 
-void Stream::skipWhiteSpace()
+bool Stream::skipLine()
 {
 	char c;
-	do
+	do 
 	{
-		if (read(c) != 1)
-		{// 没有数据了
-			return;
-		}
-	} while (isspace(c));
-	if (!seek(-1, SEEK_CUR))
-		throw std::runtime_error("Failed to seek backwards one character after skipping whitespace.");
+		if (!read(c))
+			return false;
+	} while (c != '\n');
+
+	return true;
 }
 
-bool Stream::skipLine(uint len)
-{
-	char c;
-	while (len > 0)
-	{
-		do
-		{
-			if (read(c) != 1)
-				return true;
-		} while (c != '\n');
-		--len;
-	}
-	return eof();
-}
-
-bool Stream::readMagic(uint32& magic)
-{
-	int num = 4;
-	assert(num <= 4);
-	size_t pos = position();
-	char buf[4] = { 0 };
-	if (read(buf, num) == num)
-	{
-		// 判断是否相同
-		if (memcmp(&magic, buf, num) == 0)
-			return true;
-	}
-	// 读取失败，返回
-	seek(pos, SEEK_SET);
-	return false;
-}
-
-uint Stream::readVariant()
-{
-	return 0;
-}
-
-void Stream::writeVariant(uint data)
-{
-	// 写入
-}
-
-uint Stream::read(String& data)
-{
-	return 0;
-}
-
-uint Stream::write(const String& data)
-{
-	return 0;
-}
-
-CU_NS_END
+CUTE_NS_END

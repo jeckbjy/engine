@@ -1,7 +1,7 @@
-#include "Component.h"
-#include "SceneManager.h"
+// module Scene
+#include "Cute/Component.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 Component::Component()
 {
@@ -13,16 +13,4 @@ Component::~Component()
 
 }
 
-void Component::attach(Entity* entity)
-{
-	gSceneMgr().attach(this);
-	m_owner = entity;
-}
-
-void Component::detach()
-{
-	gSceneMgr().detach(this);
-	m_owner = NULL;
-}
-
-CU_NS_END
+CUTE_NS_END

@@ -1,7 +1,8 @@
-#include "Matrix3.h"
-#include "Quaternion.h"
+//! Math
+#include "Cute/Matrix3.h"
+#include "Cute/Quaternion.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 struct EulerAngleOrderData
 {
@@ -41,8 +42,8 @@ Matrix3::Matrix3(float v)
 }
 
 Matrix3::Matrix3(
-	float m00, float m01, float m02, 
-	float m10, float m11, float m12, 
+	float m00, float m01, float m02,
+	float m10, float m11, float m12,
 	float m20, float m21, float m22)
 {
 	m[0][0] = m00; m[0][1] = m01; m[0][2] = m02;
@@ -101,7 +102,7 @@ float Matrix3::determinant() const
 void Matrix3::orthonormalize()
 {
 	// Compute q0
-	float invLength = Math::invsqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
+	float invLength = Math::invSqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
 
 	m[0][0] *= invLength;
 	m[1][0] *= invLength;
@@ -114,7 +115,7 @@ void Matrix3::orthonormalize()
 	m[1][1] -= dot0*m[1][0];
 	m[2][1] -= dot0*m[2][0];
 
-	invLength = Math::invsqrt(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
+	invLength = Math::invSqrt(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
 
 	m[0][1] *= invLength;
 	m[1][1] *= invLength;
@@ -128,7 +129,7 @@ void Matrix3::orthonormalize()
 	m[1][2] -= dot0*m[1][0] + dot1*m[1][1];
 	m[2][2] -= dot0*m[2][0] + dot1*m[2][1];
 
-	invLength = Math::invsqrt(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
+	invLength = Math::invSqrt(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
 
 	m[0][2] *= invLength;
 	m[1][2] *= invLength;
@@ -215,7 +216,7 @@ void Matrix3::decomposition(Quaternion& rotation, Vector3& scale) const
 void Matrix3::QDUDecomposition(Matrix3& matQ, Vector3& vecD, Vector3& vecU) const
 {
 	// Build orthogonal matrix Q
-	float invLength = Math::invsqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
+	float invLength = Math::invSqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
 	matQ[0][0] = m[0][0] * invLength;
 	matQ[1][0] = m[1][0] * invLength;
 	matQ[2][0] = m[2][0] * invLength;
@@ -225,7 +226,7 @@ void Matrix3::QDUDecomposition(Matrix3& matQ, Vector3& vecD, Vector3& vecU) cons
 	matQ[1][1] = m[1][1] - dot*matQ[1][0];
 	matQ[2][1] = m[2][1] - dot*matQ[2][0];
 
-	invLength = Math::invsqrt(matQ[0][1] * matQ[0][1] + matQ[1][1] * matQ[1][1] + matQ[2][1] * matQ[2][1]);
+	invLength = Math::invSqrt(matQ[0][1] * matQ[0][1] + matQ[1][1] * matQ[1][1] + matQ[2][1] * matQ[2][1]);
 	matQ[0][1] *= invLength;
 	matQ[1][1] *= invLength;
 	matQ[2][1] *= invLength;
@@ -240,7 +241,7 @@ void Matrix3::QDUDecomposition(Matrix3& matQ, Vector3& vecD, Vector3& vecU) cons
 	matQ[1][2] -= dot*matQ[1][1];
 	matQ[2][2] -= dot*matQ[2][1];
 
-	invLength = Math::invsqrt(matQ[0][2] * matQ[0][2] + matQ[1][2] * matQ[1][2] + matQ[2][2] * matQ[2][2]);
+	invLength = Math::invSqrt(matQ[0][2] * matQ[0][2] + matQ[1][2] * matQ[1][2] + matQ[2][2] * matQ[2][2]);
 	matQ[0][2] *= invLength;
 	matQ[1][2] *= invLength;
 	matQ[2][2] *= invLength;
@@ -411,7 +412,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	// Adjust right
 	float y = matA[0][0] - (Math::abs(root1 - t22) <= Math::abs(root2 - t22) ? root1 : root2);
 	float z = matA[0][1];
-	float invLength = Math::invsqrt(y*y + z*z);
+	float invLength = Math::invSqrt(y*y + z*z);
 	float sin = z*invLength;
 	float cos = -y*invLength;
 
@@ -434,7 +435,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	// Adjust left
 	y = matA[0][0];
 	z = matA[1][0];
-	invLength = Math::invsqrt(y*y + z*z);
+	invLength = Math::invSqrt(y*y + z*z);
 	sin = z*invLength;
 	cos = -y*invLength;
 
@@ -458,7 +459,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	// Adjust right
 	y = matA[0][1];
 	z = matA[0][2];
-	invLength = Math::invsqrt(y*y + z*z);
+	invLength = Math::invSqrt(y*y + z*z);
 	sin = z*invLength;
 	cos = -y*invLength;
 
@@ -481,7 +482,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	// Adjust left
 	y = matA[1][1];
 	z = matA[2][1];
-	invLength = Math::invsqrt(y*y + z*z);
+	invLength = Math::invSqrt(y*y + z*z);
 	sin = z*invLength;
 	cos = -y*invLength;
 
@@ -530,7 +531,7 @@ void Matrix3::singularValueDecomposition(Matrix3& matL, Vector3& matS, Matrix3& 
 				// 2x2 closed form factorization
 				tmp = (mat[1][1] * mat[1][1] - mat[2][2] * mat[2][2] + mat[1][2] * mat[1][2]) / (mat[1][2] * mat[2][2]);
 				tan0 = 0.5f*(tmp + Math::sqrt(tmp*tmp + 4.0f));
-				cos0 = Math::invsqrt(1.0f + tan0*tan0);
+				cos0 = Math::invSqrt(1.0f + tan0*tan0);
 				sin0 = tan0*cos0;
 
 				for (col = 0; col < 3; col++)
@@ -542,7 +543,7 @@ void Matrix3::singularValueDecomposition(Matrix3& matL, Vector3& matS, Matrix3& 
 				}
 
 				tan1 = (mat[1][2] - mat[2][2] * tan0) / mat[1][1];
-				cos1 = Math::invsqrt(1.0f + tan1*tan1);
+				cos1 = Math::invSqrt(1.0f + tan1*tan1);
 				sin1 = -tan1*cos1;
 
 				for (row = 0; row < 3; row++)
@@ -566,7 +567,7 @@ void Matrix3::singularValueDecomposition(Matrix3& matL, Vector3& matS, Matrix3& 
 				// 2x2 closed form factorization
 				tmp = (mat[0][0] * mat[0][0] + mat[1][1] * mat[1][1] - mat[0][1] * mat[0][1]) / (mat[0][1] * mat[1][1]);
 				tan0 = 0.5f*(-tmp + Math::sqrt(tmp*tmp + 4.0f));
-				cos0 = Math::invsqrt(1.0f + tan0*tan0);
+				cos0 = Math::invSqrt(1.0f + tan0*tan0);
 				sin0 = tan0*cos0;
 
 				for (col = 0; col < 3; col++)
@@ -578,7 +579,7 @@ void Matrix3::singularValueDecomposition(Matrix3& matL, Vector3& matS, Matrix3& 
 				}
 
 				tan1 = (mat[0][1] - mat[1][1] * tan0) / mat[0][0];
-				cos1 = Math::invsqrt(1.0f + tan1*tan1);
+				cos1 = Math::invSqrt(1.0f + tan1*tan1);
 				sin1 = -tan1*cos1;
 
 				for (row = 0; row < 3; row++)
@@ -989,4 +990,4 @@ Matrix3& Matrix3::operator /=(float rhs)
 	return *this;
 }
 
-CU_NS_END
+CUTE_NS_END

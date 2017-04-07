@@ -1,6 +1,7 @@
-#include "Light.h"
+// module Scene
+#include "Cute/Light.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 Light::Light()
 {
@@ -12,4 +13,4 @@ Light::~Light()
 
 }
 
-CU_NS_END
+CUTE_NS_END

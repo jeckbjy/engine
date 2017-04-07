@@ -6,285 +6,98 @@ export LD_LIBRARY_PATH=./:$LD_LIBRARY_PATH
 local bin_dir = "build/bin/%{cfg.buildcfg}"
 local lib_dir = "build/bin/%{cfg.buildcfg}"
 local obj_dir = "build/obj/%{cfg.buildcfg}/%{prj.name}"
+local lib_kind = iif(_ACTION =="gmake","StaticLib", "SharedLib")
 
 local src_dir = nil
 
 -- 查找并自动添加路径
-function my_vpaths(files)
-	local result = {}
-	for k,v in pairs(files) do
-		local array = {}
-		result[k] = array
-		for _,file in pairs(v) do
-			local index,_ = string.find(file, "/")
-			if index ~= nil then
-				table.insert(array, file)
-			elseif string.sub(file, -2, -1) == ".h" then
-				table.insert(array, "engine/include/"..file)
-			elseif string.sub(file, -4, -1) == ".cpp" then
-				table.insert(array, "engine/src/"..file)
+function read_module(file_path)
+	local file_module = nil
+	
+	print(file_path)
+	local file = io.open(file_path, "r")
+	local line = file:read("*line")
+	
+	if line ~= nil then
+		-- 支持两种方式//!或者//module
+		if string.startswith(line, "//!") then
+			file_module = string.sub(line, 4);
+		else
+			local pos = nil
+			pos = string.find(line, "module")
+			if pos ~= nil then
+				file_module = string.sub(line, pos + 6)
 			end
 		end
 	end
-	for k, v in pairs(result) do
-		print(k)
-		for _, file in pairs(v) do
-			print(file)
+	
+	file:close()
+	
+	-- trim
+	if file_module ~= nil then
+		file_module = string.gsub(file_module, "^%s*(.-)%s*$", "%1")
+	end
+	return file_module
+end
+
+function module_vpaths(dirs, base_module)	
+	-- 遍历所有目录文件
+	local src_files = {}
+	for _,pattern in pairs(dirs) do
+		local tmp = os.matchfiles(pattern)
+		for _, file in pairs(tmp) do
+			--print(file)
+			table.insert(src_files, file);
 		end
 	end
-	vpaths(result)
-end
-
-function engine_vpaths()
-	my_vpaths {
-	["external"] = {
-		"engine/src/xml/pugiconfig.hpp",
-		"engine/src/xml/pugixml.hpp",
-		"engine/src/xml/pugixml.cpp"
-	},
 	
-	["core"] = {
-		"API.h",
-		"Macro.h",
-		"Platform.h",
-		"Predeclare.h",
-		"Mutex.h",
-		"Mutex.cpp",
-		"Condition.h",
-		"Condition.cpp",
-		"SyncEvent.h",
-		"SyncEvent.cpp",
-		"Thread.h",
-		"Thread.cpp",
-		"CProcess.h",
-		"CProcess.cpp",
-		"DynLib.h",
-		"DynLib.cpp",
-		"Algo.h",
-		"Bits.h",
-		"Types.h",
-		"Types.cpp",
-		"List.h",
-		"Array.h",
-		"Tree.h",
-		"Tuple.h",
-		"Traits.h",
-		"FuncTraits.h",
-		"Function.h",
-		"Delegate.h",
-		"Singleton.h",
-		"Range.h",
-		"FourCC.h",
-		"Util.h",
-		"Util.cpp",
-		"Ref.h",
-		"Ref.cpp",
-		"SmartPtr.h",
-		"Variant.h",
-		"Variant.cpp",
-		"Attribute.h",
-		"Rtti.h",
-		"Rtti.cpp",
-		-- todo:StringPiece->Range:目前StringPiece没有太大作用
-		"StringPiece.h",
-		"StringPiece.cpp",
-		"Buffer.h",
-		"Buffer.cpp",
-		"Config.h",
-		"Config.cpp",
-		"Table.h",
-		"Table.cpp",
-		"File.h",
-		"File.cpp",
-		"Stream.h",
-		"Stream.cpp",
-		"Archive.h",
-		"Atomic.h",
-		"Console.h",
-		"Console.cpp",
-		"LogChannel.h",
-		"LogChannel.cpp",
-		"Log.h",
-		"Log.cpp",
-		"Profiler.h",
-		"Profiler.cpp",
-		"Convert.h",
-		"Convert.cpp",
-		"XMLFile.h",
-		"XMLFile.cpp",
-		"Plugin.h",
-		"PluginMgr.h",
-		"PluginMgr.cpp",
-	},
-	["math"] = {
-		"CMath.h",
-		"CMath.cpp",
-		"Rect.h",
-		"Vector2.h",
-		"Vector3.h",
-		"Vector4.h",
-		"Matrix3.h",
-		"Matrix3.cpp",
-		"Matrix4.h",
-		"Matrix4.cpp",
-		"Matrix3x4.h",
-		"Matrix3x4.cpp",
-		"Quaternion.h",
-		"Quaternion.cpp",
-		"AABox.h",
-		"AABox.cpp",
-		"Sphere.h",
-		"Sphere.cpp",
-		"Plane.h",
-		"Plane.cpp",
-		"Ray.h",
-		"Ray.cpp",
-		"Frustum.h",
-		"Frustum.cpp",
-	},
-	["net"] = {
-		"AcceptChannel.h",
-		"AcceptChannel.cpp",
-		"Acceptor.h",
-		"Acceptor.cpp",
-		"Channel.h",
-		"Channel.cpp",
-		"HandlerMgr.h",
-		"HandlerMgr.cpp",
-		"IOService.h",
-		"IOService.cpp",
-		"IOServicePool.h",
-		"IOServicePool.cpp",
-		"IOOperation.h",
-		"IOOperation.cpp",
-		"Poller.h",
-		"Poller.cpp",
-		"Procotol.h",
-		"Procotol.cpp",
-		"Proto.h",
-		"Proto.cpp",
-		"NetEvent.h",
-		"NetEvent.cpp",
-		"NetService.h",
-		"NetService.cpp",
-		"Session.h",
-		"Session.cpp",
-		"Socket.h",
-		"Socket.cpp",
-		"SocketAddress.h",
-		"SocketAddress.cpp",
-		"SocketChannel.h",
-		"SocketChannel.cpp",
-		"Packet.h",
-		"Packet.cpp",
-		"Protocol.h",
-		"Protocol.cpp",
-		"ProxyChannel.h",
-		"ProxyChannel.cpp",
-	},
-	["engine"] = {
-		"Event.h",
-		"Object.h",
-		"Object.cpp",
-		"Context.h",
-		"Context.cpp",
-		"WorkQueue.h",
-		"WorkQueue.cpp",
-		"Asset.h",
-		"AssetCache.h",
-		"AssetCache.cpp",
-		"Engine.h",
-		"Engine.cpp",
-	},
-	["graphics"] = {
-		"Color.h",
-		"Color.cpp",
-		"PixelFormat.h",
-		"PixelFormat.cpp",
-		"Graphics.h",
-		"Graphics.cpp",
-		"GraphicsDefs.h",
-		"GraphicsDesc.h",
-		"GraphicsDesc.cpp",
-		"VertexLayout.h",
-		"VertexLayout.cpp",
-	},
-	["render"] = {
-		"Animatable.h",
-		"Animatable.cpp",
-		"Animation.h",
-		"Animation.cpp",
-		"Animator.h",
-		"Animator.cpp",
-		"Playable.h",
-		"Playable.cpp",
-		"PlayController.h",
-		"PlayController.cpp",
-		"Batch.h",
-		"Batch.cpp",
-		"View.h",
-		"View.cpp",
-		"Renderer.h",
-		"Renderer.cpp",
-		"RenderPath.h",
-		"RenderPath.cpp",
-		"SceneManager.h",
-		"SceneManager.cpp",
-		"Entity.h",
-		"Entity.cpp",
-		"Component.h",
-		"Component.cpp",
-		"Transform.h",
-		"Transform.cpp",
-		"Drawable.h",
-		"Drawable.cpp",
-		"Canvas.h",
-		"Canvas.cpp",
-		"Camera.h",
-		"Camera.cpp",
-		"Light.h",
-		"Light.cpp",
-		"Model.h",
-		"Skeleton.h",
-		"Skeleton.cpp",
-		"Geometry.h",
-		"Geometry.cpp",
-		"Model.h",
-		"Model.cpp",
-		"ModelRender.h",
-		"ModelRender.cpp",
-		"Material.h",
-		"Material.cpp",
-		"Shader.h",
-		"Shader.cpp",
-		"Octree.h",
-		"Octree.cpp",
-		"OctreeQuery.h",
-		"OctreeQuery.cpp",
-		"Occlusion.h",
-		"Occlusion.cpp",
-	},
-	["ui"] = {
-		"Application.h",
-		"Application.cpp",
-		"Window.h",
-		"Window.cpp",
-		"WindowMSW.cpp",
-		"UIView.h",
-		"UIWidget.h"
-		--"UIElement.h",
-		--"UIElement.cpp",
-	},
-	["audio"] = {
-	},
-}
+	-- 读取module,相同名字的.h和.cpp需要在同一个module下
+	local file_modules = {}
+	for _, file in pairs(src_files) do
+		local basename = path.getbasename(file);
+		local fmodule = read_module(file);
+		--print("set module",file, fmodule)
+		if fmodule ~= nil then
+			file_modules[basename] = fmodule;
+		end
+	end
+	
+	-- 生成vpaths
+	local file_vpaths = {}
+	
+	for _, file in pairs(src_files) do
+		local basename = path.getbasename(file);
+		local fmodule = file_modules[basename];
+		if fmodule == nil then
+			fmodule = base_module
+		end
+		
+		--
+		local vpath = fmodule;
+		-- if string.endswith(file, ".h") then
+		-- 	vpath = fmodule .. "/include";
+		-- else
+		-- 	vpath = fmodule .. "/src";
+		-- end
+		
+		if file_vpaths[vpath] == nil then
+			file_vpaths[vpath] = {}
+		end
+		
+		table.insert(file_vpaths[vpath], file)
+	end
+	
+	-- 写入摸
+	
+	vpaths(file_vpaths);
+	
 end
 
-workspace "engine"
+workspace "Cute"
 	location("solution")
 	--toolset "v140"
 	--basedir("solution")
-	--startproject "engine"
+	startproject "game"
 	startproject "unit"
 	configurations {"Debug", "Release"}
 	language "c++"
@@ -318,13 +131,62 @@ workspace "engine"
 	filter {"action:gmake","kind:SharedLib"}
 		buildoptions {"-fPIC"}
 	filter {}
+	
 -- 主工程
+group "core"
 project("engine")
-	defines {"CU_BUILD_DLL"}
-	kind (iif(_ACTION =="gmake","StaticLib", "SharedLib"))
-	files {"engine/include/**.*", "engine/src/**.*"}
-	engine_vpaths()
+	defines {"CUTE_BUILD_DLL"}
+	kind (lib_kind)
+	-- add files
+	files({"engine/**.*"})
+	removefiles({"engine/src/conversion/**.*"})
+	removefiles({"engine/src/pcre/**.*"})
+	removefiles({"engine/backup/**.*"})
+	module_vpaths({"engine/**.*"}, "Core")
+	
+-- 服务器
+group "server"	
+	project("world")
+		kind ("ConsoleApp")
+		dependson {"engine"}
+		files {"server/world/**.*"}
+		module_vpaths({"server/world/**.*"}, "src")
+		--vpaths ({["src"]="server/world/**.*"})
 
+	project("game")
+		kind ("ConsoleApp")
+		dependson {"engine"}
+		files {"server/game/**.*"}
+		module_vpaths({"server/game/**.*"}, "src")
+		--vpaths ({["src"]="server/game/**.*"})
+		
+	-- 机器人测试工具
+	project("robot")
+		kind ("ConsoleApp")
+		dependson {"engine"}
+		files {"server/robot/**.*"}
+		vpaths ({["src"]="server/robot/**.*"})
+
+group "tools"
+	-- 表格自动生成并校验工具
+	project("tabgen")
+		kind ("ConsoleApp")
+		dependson {"engine"}
+		files {"tools/tabgen/**.*"}
+
+	-- execel转csv工具
+	project("csvgen")
+		language("C#")
+		kind("ConsoleApp")
+		--libdirs { "tools/csvgen/EPPlus"}
+		links {"Excel", "System", "System.Data", "System.XML"}
+		files {"tools/csvgen/src/**.*"}
+		vpaths({["src"] = "tools/csvgen/src/**.*"});
+	
+--[[
+group "sql"
+	project("plugin_mysql")
+		
 group "render"
 	project("plugin_ogl")
 		src_dir = "plugins/render_ogl/"
@@ -379,7 +241,7 @@ group "render"
 		libdirs { "D:/Program Files (x86)/Windows Kits/10/Lib/10.0.10069.0/um/x64"}
 		files { src_dir .. "**.*" }
 		vpaths { ["src"] = {src_dir.. "**.*"} }
---[[
+
 group "importer"
 	project("plugin_fbx")
 		src_dir = "plugins/fbx/"
@@ -422,7 +284,7 @@ group "importer"
 		vpaths{
 			["src"] = { src_dir .. "**.*" }
 		}
-	]]
+
 group "test"
 	project "test_engine"
 		src_dir = "sample/test_engine/"
@@ -452,3 +314,4 @@ group "test"
 		kind "ConsoleApp"
 		includedirs {"."}
 		files { src_dir.."**.h", src_dir.."**.cpp" }
+]]

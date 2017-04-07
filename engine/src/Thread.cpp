@@ -1,30 +1,65 @@
-#include "Thread.h"
+// module Thread
+#include "Cute/Thread.h"
+#include "Cute/Runnable.h"
+#include "Cute/Exception.h"
+#include "Cute/ThreadLocal.h"
+#include "Cute/ErrorHandler.h"
+#include "Cute/Atomic.h"
+
+CUTE_NS_BEGIN
+
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
 #ifdef _WIN32
-#include <process.h>	// _beginthreadex
-#endif
-
-CU_NS_BEGIN
-
-#ifdef _WIN32
-#	define __RET				unsigned
-#	define __API				__stdcall
-//#	define __RET				DWORD
-//#	define __API				WINAPI
-
 #	define __key_t				DWORD
 #	define __key_create(key)	(key = TlsAlloc()) == TLS_OUT_OF_INDEXES
 #	define __key_free(key)		TlsFree(key)
 #	define __key_get(key)		TlsGetValue(key)
 #	define __key_set(k,v)		TlsSetValue(k,v)
 #else
-#	define __RET				void*
-#	define __API
 #	define __key_t				pthread_key_t
 #	define __key_create(key)	pthread_key_create(&key, NULL)
 #	define __key_free(key)		pthread_key_delete(key)
 #	define __key_get(key)		pthread_getspecific(key)
 #	define __key_set(k,v)		pthread_setspecific(k,v)
 #endif
+
+__RET __API RunnableEntry(void* args)
+{
+#if defined(CUTE_OS_FAMILY_POSIX)
+	sigset_t sset;
+	sigemptyset(&sset);
+	sigaddset(&sset, SIGQUIT);
+	sigaddset(&sset, SIGTERM);
+	sigaddset(&sset, SIGPIPE);
+	pthread_sigmask(SIG_BLOCK, &sset, 0);
+#endif
+
+	Thread* pThread = (Thread*)(args);
+
+#if CUTE_OS == CUTE_OS_LINUX
+	pThread->m_tid = (thread_id)syscall(SYS_gettid);
+#endif
+	try
+	{
+		pThread->run();
+	}
+	catch (Exception& exc)
+	{
+		ErrorHandler::handle(exc);
+	}
+	catch (std::exception& exc)
+	{
+		ErrorHandler::handle(exc);
+	}
+	catch (...)
+	{
+		ErrorHandler::handle();
+	}
+
+	return 0;
+}
 
 class ThreadHolder
 {
@@ -33,24 +68,80 @@ public:
 	ThreadHolder()
 	{
 		if (__key_create(_key))
-			throw std::runtime_error("cannot allocate thread context key");
+			throw SystemException("cannot allocate thread context key");
 	}
-	~ThreadHolder(){ __key_free(_key); }
-	Thread* get() const{ return reinterpret_cast<Thread*>(__key_get(_key)); }
-	void set(Thread* data) { __key_set(_key, data); }
+
+	~ThreadHolder()
+	{
+		__key_free(_key); 
+	}
+
+	Thread* get() const
+	{
+		return reinterpret_cast<Thread*>(__key_get(_key)); 
+	}
+
+	void set(Thread* data)
+	{
+		__key_set(_key, data); 
+	}
 };
 
-static ThreadHolder gCurThread;
-static thread_id	gMainThreadID = Thread::currentID();
-
-static __RET __API Entry(void* arg)
-{
-	Thread* impl = reinterpret_cast<Thread*>(arg);
-	gCurThread.set(impl);
-	impl->process();
-	return 0;
+namespace{
+	static ThreadHolder gCurrentThread;
+	static thread_id	gMainTID = Thread::currentTID();
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+class RunnableHolder : public Runnable
+{
+public:
+	RunnableHolder(Runnable& target)
+		: m_target(target)
+	{
+	}
+
+	~RunnableHolder()
+	{
+	}
+
+	void run()
+	{
+		m_target.run();
+	}
+
+private:
+	Runnable& m_target;
+};
+
+class CallableHolder : public Runnable
+{
+public:
+	CallableHolder(Thread::Callable callable, void* data) 
+		: m_callable(callable)
+		, m_data(data)
+	{
+	}
+
+	~CallableHolder()
+	{
+	}
+
+	void run()
+	{
+		m_callable(m_data);
+	}
+
+private:
+	Thread::Callable m_callable;
+	void* m_data;
+};
+
+//////////////////////////////////////////////////////////////////////////
+// Thread static
+//////////////////////////////////////////////////////////////////////////
 void Thread::sleep(long milliseconds)
 {
 #ifdef _WIN32
@@ -69,7 +160,13 @@ void Thread::yield()
 #endif
 }
 
-thread_id Thread::currentID()
+Thread* Thread::current()
+{
+	Thread* th = gCurrentThread.get();
+	return th;
+}
+
+Thread::TID Thread::currentTID()
 {
 #ifdef _WIN32
 	return ::GetCurrentThreadId();
@@ -80,124 +177,421 @@ thread_id Thread::currentID()
 
 bool Thread::isMainThread()
 {
-	return currentID() == gMainThreadID;
+	return currentTID() == gMainTID;
 }
 
-Thread* Thread::current()
+int Thread::getMinOSPriority(int policy /* = POLICY_DEFAULT */)
 {
-	Thread* thread = gCurThread.get();
-	return thread;
+#ifdef CUTE_OS_FAMILY_WINDOWS
+	return PRIO_LOWEST;
+#else
+#	if defined(CUTE_THREAD_PRIORITY_MIN)
+	return CUTE_THREAD_PRIORITY_MIN;
+#	elif defined(__VMS) || defined(__digital__)
+	return PRI_OTHER_MIN;
+#	else
+	return sched_get_priority_min(policy);
+#	endif
+#endif
 }
 
-Thread::Thread(size_t size)
-: m_handle(0)
-, m_id(0)
-, m_size(size)
-, m_func(0)
-, m_data(0)
+int Thread::getMaxOSPriority(int policy /* = POLICY_DEFAULT */)
 {
+#ifdef CUTE_OS_FAMILY_WINDOWS
+	return PRIO_HIGHEST;
+#else
+#	if defined(CUTE_THREAD_PRIORITY_MAX)
+	return CUTE_THREAD_PRIORITY_MAX;
+#	elif defined(__VMS) || defined(__digital__)
+	return PRI_OTHER_MAX;
+#	else
+	return sched_get_priority_max(policy);
+#	endif
+#endif
+}
 
+//////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////
+String makeName(int id)
+{
+	std::ostringstream threadName;
+	threadName << '#' << id;
+	return threadName.str();
+}
+
+int uniqueId()
+{
+	static Atomic counter;
+	return ++counter;
+}
+
+#ifdef CUTE_OS_FAMILY_POSIX
+int mapPrio(int prio, int policy = SCHED_OTHER)
+{
+	int pmin = Thread::getMinOSPriority(policy);
+	int pmax = Thread::getMaxOSPriority(policy);
+
+	switch (prio)
+	{
+	case Thread::PRIO_LOWEST:
+		return pmin;
+	case Thread::PRIO_LOW:
+		return pmin + (pmax - pmin) / 4;
+	case Thread::PRIO_NORMAL:
+		return pmin + (pmax - pmin) / 2;
+	case Thread::PRIO_HIGH:
+		return pmin + 3 * (pmax - pmin) / 4;
+	case Thread::PRIO_HIGHEST:
+		return pmax;
+	default:
+		cute_bugcheck_msg("invalid thread priority");
+	}
+	return -1; // just to satisfy compiler - we'll never get here anyway
+}
+
+int reverseMapPrio(int prio, int policy = SCHED_OTHER)
+{
+	if (policy == SCHED_OTHER)
+	{
+		int pmin = Thread::getMinOSPriority(policy);
+		int pmax = Thread::getMaxOSPriority(policy);
+		int normal = pmin + (pmax - pmin) / 2;
+		if (prio == pmax)
+			return Thread::PRIO_HIGHEST;
+		if (prio > normal)
+			return Thread::PRIO_HIGH;
+		else if (prio == normal)
+			return Thread::PRIO_NORMAL;
+		else if (prio > pmin)
+			return Thread::PRIO_LOW;
+		else
+			return Thread::PRIO_LOWEST;
+	}
+	else
+	{
+		return Thread::PRIO_HIGHEST;
+	}
+}
+#endif
+
+Thread::Thread()
+	: m_target(0)
+	, m_thread(0)
+	, m_id(uniqueId())
+	, m_prio(PRIO_NORMAL)
+	, m_prioOS(0)
+	, m_policy(SCHED_OTHER)
+	, m_stackSize(0)
+	, m_cpu(-1)
+	, m_name(makeName(m_id))
+	, m_pTLS(0)
+{
+}
+
+Thread::Thread(const String& name)
+	: m_target(0)
+	, m_thread(0)
+	, m_id(uniqueId())
+	, m_prio(PRIO_NORMAL)
+	, m_prioOS(0)
+	, m_policy(SCHED_OTHER)
+	, m_stackSize(0)
+	, m_cpu(-1)
+	, m_name(name)
+	, m_pTLS(0)
+{
 }
 
 Thread::~Thread()
 {
-	detach();
+	delete m_pTLS;
 }
 
-void RunnableEntry(void* args)
+void Thread::startInternal(Runnable* target)
 {
-	Runnable* runner = (Runnable*)(args);
-	runner->run();
-	runner->release();
-}
+	if (isRunning())
+		throw SystemException("thread already running");
 
-void Thread::start(Runnable* target)
-{
-	target->retain();
-	this->start(&RunnableEntry, target);
-}
+	m_target = target;
 
-void Thread::start(func_t func, void* data /* = 0 */)
-{
-	if (joinable())
-		throw std::runtime_error("thread already running");
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+	//////////////////////////////////////////////////////////////////////////
+	// windows
+	//////////////////////////////////////////////////////////////////////////
+#	ifdef _DLL
+	m_thread = CreateThread(NULL, m_stackSize, &RunnableEntry, this, 0, &m_tid);
+#	else
+	unsigned threadId;
+	m_thread = (HANDLE)_beginthreadex(NULL, m_stackSize, &RunnableEntry, this, 0, &threadId);
+	m_tid = threadId;
+#	endif
 
-	m_func = func;
-	m_data = data;
-#ifdef _WIN32
-	m_handle = (thread_t)_beginthreadex(NULL, m_size, &Entry, this, 0, &m_id);
-	//_thread = CreateThread(NULL, _stackSize, &Entry, this, 0, &_thread_id);
-	if (m_handle == NULL)
-		throw std::runtime_error("cannot create thread");
+	if (!m_thread)
+		throw SystemException("cannot create thread");
+
+	if (m_prio != PRIO_NORMAL && !SetThreadPriority(m_thread, m_prio))
+		throw SystemException("cannot set thread priority");
+
 #else
-	pthread_attr_t attr;
-	pthread_attr_init(&attr);
-	if (m_size != 0)
+	//////////////////////////////////////////////////////////////////////////
+	// posix
+	//////////////////////////////////////////////////////////////////////////
+	pthread_attr_t attributes;
+	pthread_attr_init(&attributes);
+
+	if (m_stackSize != 0)
 	{
-		if (pthread_attr_setstacksize(&attr, m_size) != 0)
+		if (0 != pthread_attr_setstacksize(&attributes, m_stackSize))
 		{
-			pthread_attr_destroy(&attr);
-			throw std::runtime_error("cannot set thread stack size");
+			pthread_attr_destroy(&attributes);
+			throw SystemException("cannot set thread stack size");
 		}
 	}
-	if (pthread_create(&m_handle, &attr, &Entry, data) != 0)
+
+	if (pthread_create(&m_thread, &attributes, &RunnableEntry, this))
 	{
-		m_handle = 0;
-		pthread_attr_destroy(&attr);
-		throw std::runtime_error("cannot start thread");
+		pthread_attr_destroy(&attributes);
+		throw SystemException("cannot start thread");
 	}
-	pthread_attr_destroy(&attr);
+
+#if CUTE_OS == CUTE_OS_LINUX
+	// On Linux the TID is acquired from the running thread using syscall
+	m_tid = 0;
+#elif CUTE_OS == CUTE_OS_MAC_OS_X
+	m_tid = static_cast<TID>(pthread_mach_thread_np(m_thread));
+#else
+	m_tid = m_thread;
 #endif
+
+	//_pData->started = true;
+	pthread_attr_destroy(&attributes);
+
+	if (m_policy == SCHED_OTHER)
+	{
+		if (m_prio != PRIO_NORMAL)
+		{
+			struct sched_param par;
+			par.sched_priority = mapPrio(m_prio, SCHED_OTHER);
+			if (pthread_setschedparam(m_thread, SCHED_OTHER, &par))
+				throw SystemException("cannot set thread priority");
+		}
+	}
+	else
+	{
+		struct sched_param par;
+		par.sched_priority = m_osPrio;
+		if (pthread_setschedparam(m_thread, m_policy, &par))
+			throw SystemException("cannot set thread priority");
+	}
+
+#endif
+}
+
+void Thread::run()
+{
+	if (m_target)
+		m_target->run();
+}
+
+void Thread::start(Runnable& target)
+{
+	startInternal(new RunnableHolder(target));
+}
+
+void Thread::start(Callable target, void* data/* = 0 */)
+{
+	startInternal(new CallableHolder(target, data));
 }
 
 void Thread::join()
 {
-	if (!joinable())
-		return;
-#ifdef _WIN32
-	switch (WaitForSingleObject(m_handle, INFINITE))
+#ifdef CUTE_OS_FAMILY_WINDOWS
+	switch (WaitForSingleObject(m_thread, INFINITE))
 	{
 	case WAIT_OBJECT_0:
 		detach();
 		return;
 	default:
-		throw std::exception("cannot join thread");
+		throw SystemException("cannot join thread");
 	}
 #else
 	void* result;
-	if (pthread_join(m_handle, &result))
-		throw std::runtime_error("cannot join thread");
+	if (pthread_join(m_thread, &result))
+		throw SystemException("cannot join thread");
+#endif
+}
+
+bool Thread::join(long milliseconds)
+{
+	if (!isRunning())
+		return true;
+
+#ifdef CUTE_OS_FAMILY_WINDOWS
+	switch (WaitForSingleObject(m_thread, milliseconds + 1))
+	{
+	case WAIT_TIMEOUT:
+		return false;
+	case WAIT_OBJECT_0:
+		detach();
+		return true;
+	default:
+		throw SystemException("cannot join thread");
+	}
+#else
+	// todo: pthread_timedjoin_np
+	void* result;
+	struct timespec abstime;
+	abstime.tv_sec = milliseconds / 1000;
+	abstime.tv_nsec = (milliseconds % 1000) * 1000000;
+	if (pthread_timedjoin(m_thread, &result, &abstime))
+		throw SystemException("cannot join thread");
 #endif
 }
 
 void Thread::detach()
 {
-	if (m_handle == 0)
+	if (m_thread == 0)
 		return;
+
 #ifdef _WIN32
-	CloseHandle(m_handle);
+	if (CloseHandle(m_thread))
+		m_thread = 0;
 #else
-	int ret = pthread_detach(m_handle);
+	int ret = pthread_detach(m_thread);
 	if (ret != 0)
-		throw std::runtime_error("pthread_detach");
+		throw SystemException("pthread_detach");
+	m_thread = NULL;
 #endif
-	m_handle = NULL;
-	m_id = 0;
 }
 
-void Thread::process()
+bool Thread::isRunning() const
 {
-#ifdef	CU_OS_POSIX
-	sigset_t sset;
-	sigemptyset(&sset);
-	sigaddset(&sset, SIGQUIT);
-	sigaddset(&sset, SIGTERM);
-	sigaddset(&sset, SIGPIPE);
-	pthread_sigmask(SIG_BLOCK, &sset, 0);
-#endif
-	m_func(m_data);
-	m_func = 0;
-	m_data = 0;
+	return m_thread != NULL;
 }
 
-CU_NS_END
+ThreadLocalStorage& Thread::tls()
+{
+	if (!m_pTLS)
+		m_pTLS = new ThreadLocalStorage;
+	return *m_pTLS;
+}
+
+void Thread::clearTLS()
+{
+	if (m_pTLS)
+	{
+		delete m_pTLS;
+		m_pTLS = 0;
+	}
+}
+
+void Thread::setName(String& name)
+{
+	m_name = name;
+}
+
+void Thread::setStackSize(int size)
+{
+#if defined(CUTE_OS_FAMILY_UNIX) && defined(PTHREAD_STACK_MIN)
+	if (size != 0)
+	{
+#if defined(CUTE_OS_FAMILY_BSD)
+		// we must round up to a multiple of the memory page size
+		const int STACK_PAGE_SIZE = 4096;
+		size = ((size + STACK_PAGE_SIZE - 1) / STACK_PAGE_SIZE) * STACK_PAGE_SIZE;
+#endif
+		if (size < PTHREAD_STACK_MIN)
+			size = PTHREAD_STACK_MIN;
+	}
+#endif
+
+	m_stackSize = size;
+}
+
+void Thread::setAffinity(int cpu)
+{
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+	DWORD mask = 1;
+	mask <<= cpu;
+	if (SetThreadAffinityMask(m_thread, mask) == 0)
+		throw SystemException("Failed to set affinity");
+
+	m_cpu = cpu;
+#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+	kern_return_t ret;
+	thread_affinity_policy policy;
+	policy.affinity_tag = cpu;
+
+	ret = thread_policy_set(
+		pthread_mach_thread_np(m_thread),
+		THREAD_AFFINITY_POLICY,
+		(thread_policy_t)&policy,
+		THREAD_AFFINITY_POLICY_COUNT);
+
+	if (ret != KERN_SUCCESS)
+		throw SystemException("Failed to set affinity");
+
+	yield();
+#else
+
+#	ifdef HAVE_PTHREAD_SETAFFINITY_NP
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	CPU_SET(cpu, &cpuset);
+#	ifdef HAVE_THREE_PARAM_SCHED_SETAFFINITY
+	if (pthread_setaffinity_np(m_thread, sizeof(cpuset), &cpuset) != 0)
+		throw SystemException("Failed to set affinity");
+#	else
+	if (pthread_setaffinity_np(m_thread, &cpuset) != 0)
+		throw SystemException("Failed to set affinity");
+#	endif
+#	endif
+	yield();
+#endif
+}
+
+void Thread::setPriority(Priority prio)
+{
+	if (m_prio != prio)
+	{
+		m_prio = prio;
+		m_policy = SCHED_OTHER;
+		if (isRunning())
+		{
+#ifdef CUTE_OS_FAMILY_WINDOWS
+			if (SetThreadPriority(m_thread, m_prio) == 0)
+				throw SystemException("cannot set thread priority");
+#else
+			struct sched_param par;
+			par.sched_priority = mapPrio(m_prio, SCHED_OTHER);
+			if (pthread_setschedparam(m_thread, SCHED_OTHER, &par))
+				throw SystemException("cannot set thread priority");
+#endif
+		}
+	}
+}
+
+void Thread::setOSPriority(int prio, int policy /* = POLICY_DEFAULT */)
+{
+#ifdef CUTE_OS_FAMILY_WINDOWS
+	setPriority((Priority)prio);
+#else
+	if (m_prioOS != prio || m_policy != policy)
+	{
+		if (isRunning())
+		{
+			struct sched_param par;
+			par.sched_priority = prio;
+			if (pthread_setschedparam(m_thread, policy, &par))
+				throw SystemException("cannot set thread priority");
+		}
+
+		m_prio = reverseMapPrio(prio, policy);
+		m_prioOS = prio;
+		m_policy = policy;
+	}
+#endif
+}
+
+CUTE_NS_END

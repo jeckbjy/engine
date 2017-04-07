@@ -1,6 +1,7 @@
-#include "Matrix3x4.h"
+//! Math
+#include "Cute/Matrix3x4.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 const Matrix3x4 Matrix3x4::ZERO(
 0.0f, 0.0f, 0.0f, 0.0f,
@@ -46,7 +47,7 @@ Vector3 Matrix3x4::getScale() const
 
 Matrix3x4 Matrix3x4::inverse() const
 {
-	float det = 
+	float det =
 		m00 * m11 * m22 +
 		m10 * m21 * m02 +
 		m20 * m01 * m12 -
@@ -207,4 +208,4 @@ Matrix3x4& Matrix3x4::operator *=(float rhs)
 	return *this;
 }
 
-CU_NS_END
+CUTE_NS_END

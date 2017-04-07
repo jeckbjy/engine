@@ -1,7 +1,9 @@
-#include "Quaternion.h"
-#include "Matrix3.h"
+//! Math
+#include "Cute/Quaternion.h"
+#include "Cute/Matrix3.h"
+#include "Cute/Math.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 struct EulerAngleOrderData
 {
@@ -9,11 +11,12 @@ struct EulerAngleOrderData
 };
 
 const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
-const Quaternion Quaternion::IDENTITY(0.0f, 0.0f, 0.0f, 1.0f);
+const Quaternion Quaternion::IDENTITY(1.0f, 0.0f, 0.0f, 0.0f);
 
-static const EulerAngleOrderData EA_LOOKUP[6] = {
+static const EulerAngleOrderData EA_LOOKUP[6] = 
+{
 	{ 0, 1, 2 }, { 0, 2, 1 }, { 1, 0, 2 },
-	{ 1, 2, 0 }, { 2, 0, 1 }, { 2, 1, 0 } 
+	{ 1, 2, 0 }, { 2, 0, 1 }, { 2, 1, 0 }
 };
 
 void Quaternion::lerp(Quaternion* dst, const Quaternion& q1, const Quaternion& q2, float t)
@@ -119,7 +122,7 @@ void Quaternion::slerp(Quaternion* dst, const Quaternion& q1, const Quaternion& 
 	}
 }
 
-static void slerp_squad(Quaternion* dst,const Quaternion& q1, const Quaternion& q2, float t)
+static void slerp_squad(Quaternion* dst, const Quaternion& q1, const Quaternion& q2, float t)
 {
 	// cos(omega) = q1 * q2;
 	// slerp(q1, q2, t) = (q1*sin((1-t)*omega) + q2*sin(t*omega))/sin(omega);
@@ -241,7 +244,7 @@ Quaternion Quaternion::inverse() const
 
 Quaternion Quaternion::conjugate() const
 {
-	return Quaternion(w, - x, -y, -z);
+	return Quaternion(w, -x, -y, -z);
 }
 
 float Quaternion::normalize()
@@ -523,8 +526,8 @@ void Quaternion::toAxisAngle(Vector3& axis, float& angle) const
 	float sqrLength = x*x + y*y + z*z;
 	if (sqrLength > 0.0)
 	{
-		angle = 2.0*Math::acos(w);
-		float invLength = Math::invsqrt(sqrLength);
+		angle = 2.0f*Math::acos(w);
+		float invLength = Math::invSqrt(sqrLength);
 		axis.x = x*invLength;
 		axis.y = y*invLength;
 		axis.z = z*invLength;
@@ -604,4 +607,4 @@ Quaternion& Quaternion::operator *=(const float& rhs)
 	return *this;
 }
 
-CU_NS_END
+CUTE_NS_END

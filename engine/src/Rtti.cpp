@@ -1,59 +1,59 @@
-#include "Rtti.h"
+#include "Cute/RTTI.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 struct RttiManager
 {
-	typedef std::map<uint32_t, Rtti*> FourCCMap;
-	typedef std::map<String, Rtti*> NameMap;
+	typedef std::map<uint32_t, RTTI*>	TypeMap;
+	typedef std::map<String, RTTI*>		NameMap;
 
-	FourCCMap fourCCMap;
-	NameMap   nameMap;
+	TypeMap typeMap;
+	NameMap	nameMap;
 
-	Rtti* find(uint32_t type)
+	void regist(RTTI* rtti)
 	{
-		FourCCMap::iterator itor = fourCCMap.find(type);
-		if (itor != fourCCMap.end())
+		if (!rtti->getName().empty())
+			nameMap[rtti->getName()] = rtti;
+		
+		if (rtti->getType() != 0)
+			typeMap[rtti->getType()] = rtti;
+	}
+
+	RTTI* find(uint32_t type)
+	{
+		TypeMap::iterator itor = typeMap.find(type);
+		if (itor != typeMap.end())
 			return itor->second;
+
 		return NULL;
 	}
 
-	Rtti* find(const String& name)
+	RTTI* find(const String& name)
 	{
 		NameMap::iterator itor = nameMap.find(name);
 		if (itor != nameMap.end())
 			return itor->second;
+
 		return NULL;
 	}
 };
 
 static RttiManager gRttiMgr;
 
-Rtti* Rtti::find(uint32_t type)
-{
-	return gRttiMgr.find(type);
-}
-
-Rtti* Rtti::find(const String& name)
-{
-	return gRttiMgr.find(name);
-}
-
-Rtti::Rtti(const Rtti* parent, const char* name, FourCC fourCC, Creator fun)
-: m_parent(parent)
-, m_name(name)
-, m_type(fourCC)
-, m_creator(fun)
-, m_registed(false)
+//////////////////////////////////////////////////////////////////////////
+// RTTI
+//////////////////////////////////////////////////////////////////////////
+RTTI::RTTI(const RTTI* parent, const char* name, FourCC type, Creator fun)
+	: m_parent(parent)
+	, m_name(name)
+	, m_type(type)
+	, m_creator(fun)
 {
 	m_depth = parent ? parent->m_depth + 1 : 0;
-	if (name)
-		gRttiMgr.nameMap[name] = this;
-	if (fourCC)
-		gRttiMgr.fourCCMap[fourCC] = this;
+	gRttiMgr.regist(this);
 }
 
-bool Rtti::isKindOf(const Rtti* other) const
+bool RTTI::isKindOf(const RTTI* other) const
 {
 	if (other == this)
 		return true;
@@ -61,33 +61,35 @@ bool Rtti::isKindOf(const Rtti* other) const
 	if (m_depth <= other->m_depth)
 		return false;
 	// 父类中，查找深度,必然能查到
-	const Rtti* cur = m_parent;
+	const RTTI* cur = m_parent;
 	while (cur->m_depth != other->m_depth)
 		cur = cur->m_parent;
 	return cur == other;
 }
 
-bool Rtti::isKindOf(const String& name) const
+bool RTTI::isKindOf(const String& name) const
 {
-	const Rtti* cur = this;
+	const RTTI* cur = this;
 	while (cur && cur->m_name != name)
 		cur = cur->m_parent;
 	return cur != NULL;
 }
 
-bool Rtti::isKindOf(uint32_t type) const
+bool RTTI::isKindOf(uint32_t type) const
 {
-	const Rtti* cur = this;
+	const RTTI* cur = this;
 	while (cur && cur->m_type != type)
 		cur = cur->m_parent;
 	return cur != NULL;
 
 }
 
-void Rtti::addAttribute(const Attribute& attr)
+void* RTTI::create()
 {
-	m_registed = true;
-	m_attributes.push_back(attr);
+	if (m_creator)
+		return m_creator();
+
+	return NULL;
 }
 
-CU_NS_END
+CUTE_NS_END

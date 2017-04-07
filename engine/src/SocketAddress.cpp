@@ -1,42 +1,56 @@
-#include "SocketAddress.h"
+//! Network/Core
+#include "Cute/SocketAddress.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
-#ifdef CU_OS_WIN
+#ifdef _WIN32
 void inet_aton(const char* str, struct in_addr* addr4)
 {
 	addr4->s_addr = inet_addr(str);
 }
 #endif
 
-SocketAddress::SocketAddress(ushort port /* = 0 */)
+SocketAddress::SocketAddress()
 {
 	::memset(&m_addr6, 0, sizeof(m_addr6));
 	m_addr4.sin_addr.s_addr = htonl(INADDR_ANY);
 	m_addr4.sin_family = AF_INET;
-	m_addr4.sin_port = htons(port);
+	m_addr4.sin_port = htons(0);
 }
 
-SocketAddress::SocketAddress(const String& host_port)
+SocketAddress::SocketAddress(uint16_t hostPort)
 {
-	parse(host_port);
+	::memset(&m_addr6, 0, sizeof(m_addr6));
+	m_addr4.sin_addr.s_addr = htonl(INADDR_ANY);
+	m_addr4.sin_family = AF_INET;
+	m_addr4.sin_port = htons(hostPort);
 }
 
-SocketAddress::SocketAddress(const String& addr, ushort port)
+SocketAddress::SocketAddress(const String& host)
 {
-	parse(addr);
-	m_addr4.sin_port = htons(port);
+	parse(host);
 }
 
-SocketAddress::SocketAddress(sockaddr* addr, socklen_t len)
+SocketAddress::SocketAddress(const String& hostAddr, uint16_t hostPort)
+{
+	parse(hostAddr);
+	m_addr4.sin_port = htons(hostPort);
+}
+
+SocketAddress::SocketAddress(const struct sockaddr* addr, socklen_t len)
 {
 	assert(len <= MAX_ADDR_LEN);
 	memcpy(&m_addr4, addr, len);
 }
 
-void SocketAddress::swap(SocketAddress& addr)
+SocketAddress::~SocketAddress()
 {
-	std::swap(m_addr6, addr.m_addr6);
+
+}
+
+void SocketAddress::swap(SocketAddress& other)
+{
+	std::swap(m_addr6, other.m_addr6);
 }
 
 void SocketAddress::parse(const String& addr)
@@ -55,14 +69,15 @@ void SocketAddress::parse(const String& addr)
 		char tmp;
 		bool res = sscanf(str_port, "%u%c", &port, &tmp) == 1;
 		if (res && port <= 0xFFFF){
-			port = htons((ushort)port);
-		}else{
+			port = htons((uint16_t)port);
+		}		else{
 			struct servent* se = getservbyname(str_port, NULL);
 			if (se)
 				port = se->s_port;
 		}
 		m_addr4.sin_port = port;
-	}else{
+	}
+	else{
 		host = addr;
 	}
 	// check host
@@ -72,17 +87,19 @@ void SocketAddress::parse(const String& addr)
 		if (index == String::npos)
 			throw std::runtime_error("parse ipv6 host error.");
 		host = host.substr(1, index);
-		af = IPv6;
-	}else{
-		af = IPv4;
+		af = AddressFamily::IPv6;
+	}
+	else{
+		af = AddressFamily::IPv4;
 	}
 
 	// do parse
 	m_addr4.sin_family = af;
-	if (af == IPv4){
+	if (af == AddressFamily::IPv4){
 		inet_aton(host.c_str(), &m_addr4.sin_addr);
-	}else{
-#ifdef CU_OS_WIN
+	}
+	else{
+#ifdef _WIN32
 		struct addrinfo* info;
 		struct addrinfo hints;
 		std::memset(&hints, 0, sizeof(hints));
@@ -118,12 +135,12 @@ String SocketAddress::toString() const
 	buff[19] = 0;
 	inet_ntop(family(), (void*)&m_addr6, buff, 20);
 
-	if (family() == IPv6)
+	if (family() == AddressFamily::IPv6)
 		result.append("[");
 
 	result.append(buff);
 
-	if (family() == IPv6)
+	if (family() == AddressFamily::IPv6)
 		result.append("]");
 	result.append(":");
 	char buffer[10];
@@ -132,4 +149,4 @@ String SocketAddress::toString() const
 	return result;
 }
 
-CU_NS_END
+CUTE_NS_END

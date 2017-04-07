@@ -1,11 +1,8 @@
-#include "AABox.h"
-#include "Ray.h"
-#include "Plane.h"
-#include "Sphere.h"
-#include "Matrix4.h"
-#include "CMath.h"
+//! Math
+#include "Cute/AABox.h"
+#include "Cute/Matrix4.h"
 
-CU_NS_BEGIN
+CUTE_NS_BEGIN
 
 const AABox AABox::EMPTY;
 
@@ -13,7 +10,6 @@ AABox::AABox()
 	: m_min(-0.5f, -0.5f, -0.5f)
 	, m_max(0.5f, 0.5f, 0.5f)
 {
-
 }
 
 AABox::AABox(const Vector3& min, const Vector3& max)
@@ -64,7 +60,7 @@ Vector3 AABox::getCorner(CornerEnum corner) const
 	case NEAR_RIGHT_TOP:
 		return m_max;
 	default:
-		return Vector3();
+		return Vector3::ZERO;
 	}
 }
 
@@ -98,6 +94,14 @@ void AABox::merge(const Vector3& point)
 	m_min.floor(point);
 }
 
+/**
+* Transforms the bounding box by the given matrix.
+*
+* @note
+* As the resulting box will no longer be axis aligned, an axis align box
+* is instead created by encompassing the transformed oriented bounding box.
+* Retrieving the value as an actual OBB would provide a tighter fit.
+*/
 void AABox::transform(const Matrix4& matrix)
 {
 	Vector3 oldMin, oldMax, currentCorner;
@@ -147,6 +151,17 @@ void AABox::transform(const Matrix4& matrix)
 	merge(matrix.multiplyAffine(currentCorner));
 }
 
+/**
+* Transforms the bounding box by the given matrix.
+*
+* @note
+* As the resulting box will no longer be axis aligned, an axis align box
+* is instead created by encompassing the transformed oriented bounding box.
+* Retrieving the value as an actual OBB would provide a tighter fit.
+*
+* @note
+* Provided matrix must be affine.
+*/
 void AABox::transformAffine(const Matrix4& m)
 {
 	assert(m.isAffine());
@@ -161,6 +176,25 @@ void AABox::transformAffine(const Matrix4& m)
 		Math::abs(m[2][0]) * halfSize.x + Math::abs(m[2][1]) * halfSize.y + Math::abs(m[2][2]) * halfSize.z);
 
 	setExtents(newCentre - newHalfSize, newCentre + newHalfSize);
+}
+
+bool AABox::contains(const Vector3& v) const
+{
+	return
+		m_min.x <= v.x && v.x <= m_max.x &&
+		m_min.y <= v.y && v.y <= m_max.y &&
+		m_min.z <= v.z && v.z <= m_max.z;
+}
+
+bool AABox::contains(const AABox& other) const
+{
+	return
+		m_min.x <= other.m_min.x &&
+		m_min.y <= other.m_min.y &&
+		m_min.z <= other.m_min.z &&
+		m_max.x >= other.m_max.x &&
+		m_max.y >= other.m_max.y &&
+		m_max.z >= other.m_max.z;
 }
 
 bool AABox::intersects(const AABox& b2) const
@@ -184,263 +218,4 @@ bool AABox::intersects(const AABox& b2) const
 	return true;
 }
 
-bool AABox::intersects(const Sphere& sphere) const
-{
-	// Use splitting planes
-	const Vector3& center = sphere.getCenter();
-	float radius = sphere.getRadius();
-	const Vector3& min = getMin();
-	const Vector3& max = getMax();
-
-	// Arvo's algorithm
-	float s, d = 0;
-	for (int i = 0; i < 3; ++i)
-	{
-		if (center[i] < min[i])
-		{
-			s = center[i] - min[i];
-			d += s * s;
-		}
-		else if (center[i] > max[i])
-		{
-			s = center[i] - max[i];
-			d += s * s;
-		}
-	}
-	return d <= radius * radius;
-}
-
-bool AABox::intersects(const Plane& plane) const
-{
-	return (plane.getSide(*this) == Plane::BOTH_SIDE);
-}
-
-bool AABox::intersects(const Ray& ray) const
-{
-	float d1;
-	return intersects(ray, d1);
-}
-
-bool AABox::intersects(const Ray& ray, float& d1) const
-{
-	d1 = 0.0f;
-	float lowt = 0.0f;
-	float t;
-	bool hit = false;
-	Vector3 hitpoint;
-	const Vector3& min = getMin();
-	const Vector3& max = getMax();
-	const Vector3& rayorig = ray.getOrigin();
-	const Vector3& raydir = ray.getDirection();
-
-	// Check origin inside first
-	if ((rayorig.x > min.x && rayorig.y > min.y && rayorig.z > min.z) && (rayorig.x < max.x && rayorig.y < max.y && rayorig.z < max.z))
-	{
-		return true;
-	}
-
-	// Check each face in turn, only check closest 3
-	// Min x
-	if (rayorig.x <= min.x && raydir.x > 0)
-	{
-		t = (min.x - rayorig.x) / raydir.x;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
-				hitpoint.z >= min.z && hitpoint.z <= max.z &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-	// Max x
-	if (rayorig.x >= max.x && raydir.x < 0)
-	{
-		t = (max.x - rayorig.x) / raydir.x;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
-				hitpoint.z >= min.z && hitpoint.z <= max.z &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-	// Min y
-	if (rayorig.y <= min.y && raydir.y > 0)
-	{
-		t = (min.y - rayorig.y) / raydir.y;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-				hitpoint.z >= min.z && hitpoint.z <= max.z &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-	// Max y
-	if (rayorig.y >= max.y && raydir.y < 0)
-	{
-		t = (max.y - rayorig.y) / raydir.y;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-				hitpoint.z >= min.z && hitpoint.z <= max.z &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-	// Min z
-	if (rayorig.z <= min.z && raydir.z > 0)
-	{
-		t = (min.z - rayorig.z) / raydir.z;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-				hitpoint.y >= min.y && hitpoint.y <= max.y &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-	// Max z
-	if (rayorig.z >= max.z && raydir.z < 0)
-	{
-		t = (max.z - rayorig.z) / raydir.z;
-		if (t >= 0)
-		{
-			// Substitute t back into ray and check bounds and dist
-			hitpoint = rayorig + raydir * t;
-			if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-				hitpoint.y >= min.y && hitpoint.y <= max.y &&
-				(!hit || t < lowt))
-			{
-				hit = true;
-				lowt = t;
-			}
-		}
-	}
-
-	d1 = lowt;
-	return hit;
-}
-
-bool AABox::intersects(const Ray& ray, float& d1, float& d2) const
-{
-	const Vector3& min = getMin();
-	const Vector3& max = getMax();
-	const Vector3& rayorig = ray.getOrigin();
-	const Vector3& raydir = ray.getDirection();
-
-	Vector3 absDir;
-	absDir[0] = Math::abs(raydir[0]);
-	absDir[1] = Math::abs(raydir[1]);
-	absDir[2] = Math::abs(raydir[2]);
-
-	// Sort the axis, ensure check minimise floating error axis first
-	int imax = 0, imid = 1, imin = 2;
-	if (absDir[0] < absDir[2])
-	{
-		imax = 2;
-		imin = 0;
-	}
-	if (absDir[1] < absDir[imin])
-	{
-		imid = imin;
-		imin = 1;
-	}
-	else if (absDir[1] > absDir[imax])
-	{
-		imid = imax;
-		imax = 1;
-	}
-
-	float start = 0, end = Math::POS_INFINITY;
-
-#define _CALC_AXIS(i)                                       \
-	do {                                                    \
-	float denom = 1 / raydir[i];                         \
-	float newstart = (min[i] - rayorig[i]) * denom;      \
-	float newend = (max[i] - rayorig[i]) * denom;        \
-	if (newstart > newend) std::swap(newstart, newend); \
-	if (newstart > end || newend < start) return false; \
-	if (newstart > start) start = newstart;             \
-	if (newend < end) end = newend;                     \
-			} while(0)
-
-	// Check each axis in turn
-
-	_CALC_AXIS(imax);
-
-	if (absDir[imid] < std::numeric_limits<float>::epsilon())
-	{
-		// Parallel with middle and minimise axis, check bounds only
-		if (rayorig[imid] < min[imid] || rayorig[imid] > max[imid] ||
-			rayorig[imin] < min[imin] || rayorig[imin] > max[imin])
-			return false;
-	}
-	else
-	{
-		_CALC_AXIS(imid);
-
-		if (absDir[imin] < std::numeric_limits<float>::epsilon())
-		{
-			// Parallel with minimise axis, check bounds only
-			if (rayorig[imin] < min[imin] || rayorig[imin] > max[imin])
-				return false;
-		}
-		else
-		{
-			_CALC_AXIS(imin);
-		}
-	}
-#undef _CALC_AXIS
-
-	d1 = start;
-	d2 = end;
-
-	return true;
-}
-
-bool AABox::contains(const Vector3& v) const
-{
-	return 
-		m_min.x <= v.x && v.x <= m_max.x &&
-		m_min.y <= v.y && v.y <= m_max.y &&
-		m_min.z <= v.z && v.z <= m_max.z;
-}
-
-bool AABox::contains(const AABox& other) const
-{
-	return
-		m_min.x <= other.m_min.x &&
-		m_min.y <= other.m_min.y &&
-		m_min.z <= other.m_min.z &&
-		m_max.x >= other.m_max.x &&
-		m_max.y >= other.m_max.y &&
-		m_max.z >= other.m_max.z;
-}
-
-CU_NS_END
+CUTE_NS_END
