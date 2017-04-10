@@ -1,5 +1,6 @@
 #pragma once
-#include "Cute/Foundation.h"
+#include "Cute/Platform.h"
+#include "Cute/PreHeader.h"
 
 #if CUTE_OS == CUTE_OS_MAC_OS_X
 #include <libkern/OSAtomic.h>

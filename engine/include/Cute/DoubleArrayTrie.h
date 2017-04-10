@@ -3,16 +3,22 @@
 
 CUTE_NS_BEGIN
 
-// todo:Aho Corasick多模式匹配
 // deterministic finite automaton ，DFA
 // c:    https://linux.thai.net/~thep/datrie/datrie.html
 // c++:	 https://github.com/s-yata/darts-clone
 // java: https://github.com/komiya-atsushi/darts-java
 // java: http://www.cnblogs.com/zhangchaoyang/articles/4508266.html
-// 如何支持中文？ tail
+// todo:Aho Corasick多模式匹配
 /*
-array[0]:存储的root信息，base:可以为负数,但是这样就不能
-todo:尚未完成
+array[0]:存储的root信息，base:可以为负数,但是这样就不能动态添加key
+可以支持utf8，gb2312等编码，要求兼容ascii，字符中间不能出现0
+TODO:
+1:Aho Corasick多模式匹配
+2:tail压缩
+3:unit_t压缩
+4:动态添加字符
+5:代码优化，类型强转改成typedef等
+6:多字节优化支持
 */
 class CUTE_CORE_API DoubleArrayTrie
 {
@@ -22,6 +28,12 @@ public:
 		MATCH_STRICT,		// 严格匹配
 		MATCH_PREFIX_MIN,	// 最小前缀匹配
 		MATCH_PREFIX_MAX,	// 最大前缀匹配
+	};
+
+	enum Flag
+	{
+		FLAG_SORTED  = 0x01,	// 已经排序过
+		FLAG_DYNAMIC = 0x02,	// 需要动态插入
 	};
 
 	typedef char key_t;
@@ -35,7 +47,8 @@ public:
 
 	void clear();
 
-	void build(size_t num_keys, const key_t** keys);
+	//void bushifild(std::vector<String>& words, int flags);
+	void build(size_t num_keys, const key_t** keys, int flags = 0);
 	int  match(MatchMode mode,  const key_t* key, size_t length = 0, size_t* node_pos = 0) const;
 
 private:
@@ -44,10 +57,9 @@ private:
 protected:
 	struct unit_t
 	{
-		int32 root : 1;		// 标识日否根节点
-		int32 leaf : 1;		// 是否是叶节点，即词组结尾
-		int32 base : 22;	// 基址，改成相对自己位置偏移地址，可减少存储
-		int32 label: 8;		// 字符标识
+		uint32 word : 1;	// 是否是单词结尾,叶子节点\0
+		int32 base : 31;
+		int32 check;
 	};
 
 	size_t	m_size;

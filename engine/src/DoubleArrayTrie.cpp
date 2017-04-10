@@ -72,44 +72,73 @@ void DoubleArrayTrie::resize(size_t capacity)
 	m_size = capacity;
 }
 
-void DoubleArrayTrie::build(size_t num_keys, const key_t** keys)
+//void DoubleArrayTrie::build(std::vector<String>& words, int flags)
+//{
+//
+//}
+
+void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 {
+	struct SortCmp
+	{
+		int depth;
+		SortCmp(int depth) :depth(depth){}
+
+		bool operator () (const key_t* lhs, const key_t* rhs) const
+		{
+			return (uchar)(lhs[depth]) < (uchar)(rhs[depth]);
+		}
+	};
+
 	clear();
 
 	// 要求必须是有序
 	if (num_keys == 0)
 		return;
 
+	bool needSort = (flags & FLAG_SORTED) == 0;
+
 	resize(num_keys * 10);
 	m_array[0].base = 1;
 	size_t next_pos = 1;	// 用于标识下一次检测起始位置
 	size_t unit_num = 1;	// 记录非零字符个数
 
-	// 
-	std::vector<DATNode*> pools;
-	std::vector<DATNode*> siblings;
 	std::queue<DATNode*>  nodes;
+	std::vector<DATNode*> siblings;
+	std::vector<DATNode*> pools;
 
 	DATNode* root = new DATNode();
 	root->set(0, 0, 0, num_keys);
 	nodes.push(root);
 
+	int left, right, depth, index, code;
+
 	// 广度优先搜索
-	while (nodes.empty())
+	while (!nodes.empty())
 	{
+		siblings.clear();
 		DATNode* parent = nodes.front();
 		nodes.pop();
+		pools.push_back(parent);
 
-		siblings.clear();
+		left  = parent->left;
+		right = parent->right;
+		depth = parent->depth;
+		index = parent->index;
+		code  = parent->code;
+
+		// 首先排序子节点
+		if (needSort)
+			std::sort(keys + left, keys + right, SortCmp(depth));
 
 		// fetch
-		key_t prev_code = 0;
-		key_t curr_code;
-		for (int i = parent->left; i < parent->right; ++i)
+		uchar prev_code = 0;
+		uchar curr_code;
+		for (int i = left; i < right; ++i)
 		{
 			const key_t* str = keys[i];
-
-			curr_code = str[parent->depth];
+			// 偏移1，因为有0需要单独处理
+			curr_code = (uchar)str[depth];
 
 			if (prev_code > curr_code)
 			{// 发生错误,外部应该保证有序
@@ -118,77 +147,114 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys)
 
 			if (curr_code != prev_code || siblings.empty())
 			{
-				DATNode* tmp_node = new DATNode();
-				tmp_node->set(curr_code, parent->depth + 1, i, 0);
+				DATNode* temp;
+				if (!pools.empty())
+				{
+					temp = pools.back();
+					pools.pop_back();
+				}
+				else
+				{
+					temp = new DATNode();
+				}
+
+				temp->set(curr_code, depth + 1, i, 0);
 
 				if (!siblings.empty())
 					siblings[siblings.size() - 1]->right = i;
 
-				siblings.push_back(tmp_node);
+				siblings.push_back(temp);
 			}
 
 			prev_code = curr_code;
 		}
 
 		if (!siblings.empty())
-			siblings[siblings.size() - 1]->right = parent->right;
+			siblings[siblings.size() - 1]->right = right;
 
 		if (siblings.empty())
 			continue;
 
 		// insert
 		// 查找可用字符
+		// 先更新一下next_pos
+		for (size_t i = next_pos; i < m_size; ++i)
+		{
+			if (m_array[i].check == 0)
+			{
+				next_pos = i;
+				break;
+			}
+		}
+
 		int base_pos = next_pos - siblings[0]->code;
 		int back_code = siblings[siblings.size() - 1]->code;
 		// 查找一个可以插入的位置
 		for (;;++base_pos)
 		{
-			if (m_array[base_pos].label != 0)
-			{
-				continue;
-			}
+			//if (m_array[base_pos].check != 0)
+			//	continue;
 
 			// 校验是否越界
-			if (base_pos + back_code >= m_size)
+			size_t epos = size_t(base_pos + back_code);
+			if (epos >= m_size)
 			{
-				size_t new_size = 2 * m_size;
+				size_t new_size = 2 * std::max(epos, m_size);
 				resize(new_size);
 			}
 
+			bool isAll = true;
 			for (size_t i = 0; i < siblings.size(); ++i)
 			{
 				size_t hash_index = base_pos + siblings[i]->code;
-				if (m_array[hash_index].label != 0)
+				if (m_array[hash_index].check != 0)
 				{
+					isAll = false;
 					break;
 				}
 			}
+
+			if (isAll)
+				break;
 		}
 
+		bool isWord = false;
 		// 找到了，设置label即check
 		for (size_t i = 0; i < siblings.size(); ++i)
 		{
 			DATNode* node = siblings[i];
-			node->index = base_pos + node->code;
-			// 设置check
-			m_array[node->index].label = node->code;
-			nodes.push(node);
+			int32 next_index = base_pos + node->code;
+			node->index = next_index;
+
+			if (node->code != 0)
+			{
+				m_array[next_index].check = base_pos;
+				nodes.push(node);
+			}
+			else
+			{// 标识结束
+				isWord = true;
+				pools.push_back(node);
+			}
 		}
 
 		// 设置base值
-		m_array[parent->index].base = base_pos;
-		m_array[parent->index].leaf = 1;
+		m_array[index].base = base_pos;
+		if (isWord)
+			m_array[index].word = 1;
 	}
+
+	// 释放空间
+	for (size_t i = 0; i < pools.size(); ++i)
+	{
+		delete pools[i];
+	}
+
+	pools.clear();
 }
 
 int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 0 */, size_t* node_pos /* = 0 */) const
 {
-	// 
-	// 先校验来源是否是root
-	if (node_pos == 0)
-	{
-
-	}
 	// 返回值:0:表示没有匹配到，大于0:表示匹配到的长度
 	size_t curr_index = node_pos ? *node_pos : 0;
 	if (curr_index >= m_size)
@@ -205,25 +271,24 @@ int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 
 	size_t last_index = 0;
 	size_t last_match = 0;//上一次匹配到的个数
 	int32  next_index;
-	key_t ch;
+	uchar ch;
 	unit_t* unit;
 
 	for (size_t i = 0; i < length; ++i)
 	{
 		ch = key[i];
 		next_index = m_array[curr_index].base + ch;
-		assert(next_index > 0);
-		if (next_index >= m_size)
+		if (next_index <= 0 || next_index >= m_size)
 			break;
 
 		unit = &(m_array[next_index]);
 		// 不一致，说明没有匹配上
-		if (unit->label != ch)
+		if (unit->check != m_array[curr_index].base)
 			break;
 
 		// 匹配成功
 		// 判断是否是词组
-		if (unit->leaf != 0)
+		if (unit->word != 0)
 		{
 			last_index = next_index;
 			last_match = i + 1;

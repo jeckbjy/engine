@@ -1,5 +1,4 @@
 #pragma once
-#include "Cute/Foundation.h"
 #include "Cute/Atomic.h"
 
 CUTE_NS_BEGIN

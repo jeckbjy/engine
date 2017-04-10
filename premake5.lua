@@ -166,6 +166,13 @@ group "server"
 		dependson {"engine"}
 		files {"server/robot/**.*"}
 		vpaths ({["src"]="server/robot/**.*"})
+		
+	-- 一些测试代码
+	project("test")
+		kind 		("ConsoleApp")
+		dependson 	{"engine"}
+		files 		{"server/test/**.*"}
+		vpaths 		({["src"]="server/test/**.*"})
 
 group "tools"
 	-- 表格自动生成并校验工具

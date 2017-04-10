@@ -154,10 +154,10 @@ public:
 		return m_ptr == ptr.m_ptr;
 	}
 
-	bool operator == (const C* ptr) const
-	{
-		return m_ptr == ptr;
-	}
+	//bool operator == (const C* ptr) const
+	//{
+	//	return m_ptr == ptr;
+	//}
 
 	//bool operator == (C* ptr) const
 	//{
