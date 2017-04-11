@@ -4,36 +4,61 @@
 CUTE_NS_BEGIN
 
 FileStream::FileStream()
+	: m_file(NULL)
+	, m_canRead(false)
+	, m_canWrite(false)
 {
-
 }
 
-FileStream::FileStream(const String& path, int mode /* = 0 */)
+FileStream::FileStream(const String& path, const char* mode /* = "r" */)
+	: m_file(NULL)
+	, m_canRead(false)
+	, m_canWrite(false)
 {
+	open(path, mode);
 }
 
 FileStream::~FileStream()
 {
-
+	close();
 }
 
 bool FileStream::canRead() const
 {
-	return true;
+	return m_file != NULL && m_canRead;
 }
 
 bool FileStream::canWrite() const
 {
-	return true;
+	return m_file != NULL && m_canWrite;
 }
 
 bool FileStream::canSeek() const
 {
-	return true;
+	return m_file != NULL;
 }
 
-bool FileStream::open(const String& path)
+bool FileStream::open(const String& path, const char* mode)
 {
+	m_file = fopen(path.c_str(), mode);
+	if (m_file)
+	{
+		const char* s = mode;
+		while (s != NULL && *s != '\0')
+		{
+			if (*s == 'r')
+				m_canRead = true;
+			else if (*s == 'w')
+				m_canWrite = true;
+			//else if (*s == '+')
+			//{
+			//	m_canRead = true;
+			//	m_canWrite = true;
+			//}
+			++s;
+		}
+	}
+
 	return true;
 }
 
@@ -46,15 +71,28 @@ void FileStream::close()
 	}
 }
 
-void FileStream::flush()
+bool FileStream::flush()
 {
 	if (m_file)
-		fflush(m_file);
+		return fflush(m_file) == 0;
+
+	return false;
+}
+
+bool FileStream::rewind()
+{
+	if (m_file)
+	{
+		::rewind(m_file);
+		return true;
+	}
+
+	return false;
 }
 
 bool FileStream::seek(long offset, int origin)
 {
-	return fseek(m_file, offset, origin) != -1;
+	return fseek(m_file, offset, origin) == 0;
 }
 
 long FileStream::read(void* buffer, long count)

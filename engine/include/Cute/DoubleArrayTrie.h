@@ -34,6 +34,7 @@ public:
 	{
 		FLAG_SORTED  = 0x01,	// 已经排序过
 		FLAG_DYNAMIC = 0x02,	// 需要动态插入
+		FLAG_ROOT1	 = 0x04,	// array[0].base==1
 	};
 
 	typedef char key_t;
@@ -47,7 +48,7 @@ public:
 
 	void clear();
 
-	//void bushifild(std::vector<String>& words, int flags);
+	//void build(std::vector<String>& words, int flags);
 	void build(size_t num_keys, const key_t** keys, int flags = 0);
 	int  match(MatchMode mode,  const key_t* key, size_t length = 0, size_t* node_pos = 0) const;
 

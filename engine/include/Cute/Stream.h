@@ -6,31 +6,32 @@ CUTE_NS_BEGIN
 
 class CUTE_CORE_API Stream : public Object
 {
+	DECLARE_RTTI(Stream, Object, OID_ANY)
 public:
 	Stream();
 	virtual ~Stream();
 
-	virtual bool canRead() const = 0;
 	virtual bool canWrite() const = 0;
+	virtual bool canRead() const = 0;
 	virtual bool canSeek() const = 0;
 
-	virtual long read(void* buffer, long count) = 0;
-	virtual long write(const void* buffer, long count) = 0;
+	virtual long write(const void* data, long size) = 0;
+	virtual long read(void* data, long size) = 0;
 	virtual bool seek(long offset, int origin = SEEK_SET) = 0;
+
 	virtual void close() = 0;
-	virtual void flush() = 0;
+	virtual bool flush() = 0;
+	virtual bool rewind() = 0;
+	virtual bool eof() const = 0;
+
 	virtual long length() const = 0;
 	virtual long position() const = 0;
-	virtual void rewind();
-	virtual bool eof() const;
+
 	virtual bool readLine(String& data);
 	virtual bool skipLine();
 
-	bool read7Bit(uint64_t& data);
-	uint write7Bit(uint64_t data);
-
-	bool read8Bit(uint64_t& data, size_t count);
-	uint write8Bit(uint64_t data);
+	bool read7Bit(uint64& data);
+	uint write7Bit(uint64 data);
 
 	template<typename T>
 	bool read(T& t)
@@ -44,9 +45,26 @@ public:
 		return this->write(&t, sizeof(T)) == 0;
 	}
 
-	long size() const
+	template<typename T>
+	bool readBig(T& t)
 	{
-		return length();
+		bool result = read(t);
+
+#if CUTE_ENDIAN == CUTE_ENDIAN_LITTLE
+		t = ByteOrder::fromBigEndian(t);
+#endif
+		return result;
+	}
+
+	template<typename T>
+	bool readLittle(T& t)
+	{
+		bool result = read(t);
+
+#if CUTE_ENDIAN == CUTE_ENDIAN_BIG
+		t = ByteOrder::fromLittleEndian(t);
+#endif
+		return result;
 	}
 };
 

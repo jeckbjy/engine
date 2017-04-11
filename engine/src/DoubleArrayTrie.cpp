@@ -97,11 +97,23 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 		return;
 
 	bool needSort = (flags & FLAG_SORTED) == 0;
+	bool isDynamic = (flags & FLAG_DYNAMIC) != 0;
+	bool isRoot1 = isDynamic || ((flags & FLAG_ROOT1) != 0);
+
+	if (needSort)
+		std::sort(keys, keys + num_keys, SortCmp(0));
+
+	// 用于标识下一次检测起始位置
+	size_t next_pos;
+	if (isDynamic)
+		next_pos = 256;
+	else if (isRoot1)
+		next_pos = keys[0][0] + 1;
+	else
+		next_pos = 1;
 
 	resize(num_keys * 10);
 	m_array[0].base = 1;
-	size_t next_pos = 1;	// 用于标识下一次检测起始位置
-	size_t unit_num = 1;	// 记录非零字符个数
 
 	std::queue<DATNode*>  nodes;
 	std::vector<DATNode*> siblings;

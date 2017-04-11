@@ -3,31 +3,51 @@
 
 CUTE_NS_BEGIN
 
+enum class FileMode
+{
+	Append,
+	Create,
+	CreateNew,
+	Open,
+	OpenOrCreate,
+	Truncate,
+};
+
+enum class FileAccess
+{
+	Read,
+	Write,
+	ReadWrite,
+};
+
 class CUTE_CORE_API FileStream : public Stream
 {
 public:
 	FileStream();
-	FileStream(const String& path, int mode = 0);
+	FileStream(const String& path, const char* mode = "r");
 	~FileStream();
 
-	bool canRead() const;
 	bool canWrite() const;
+	bool canRead() const;
 	bool canSeek() const;
 
-	long read(void* buffer, long count);
-	long write(const void* buffer, long count);
-	bool seek(long offset, int origin);
+	long write(const void* data, long size);
+	long read(void* data, long size);
+	bool seek(long offset, int origin = SEEK_SET);
 
-	bool open(const String& path);
+	bool open(const String& path, const char* mode = "r");
 	void close();
-	void flush();
+	bool flush();
+	bool rewind();
+	bool eof() const;
 
 	long length() const;
 	long position() const;
-	bool eof() const;
 
 protected:
 	FILE* m_file;
+	bool  m_canRead;
+	bool  m_canWrite;
 };
 
 CUTE_NS_END
