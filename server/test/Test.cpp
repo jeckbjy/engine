@@ -3,13 +3,16 @@
 #include "Cute/RefPtr.h"
 #include "Cute/DoubleArrayTrie.h"
 #include "Cute/Object.h"
+#include "Cute/JConfig.h"
+#include "Cute/Json.h"
 
 using namespace Cute;
 
 void Test::run()
 {
 	//testRefPtr();
-	testDoubleArrayTrie();
+	//testDoubleArrayTrie();
+	testConfig();
 }
 
 void Test::testRefPtr()
@@ -44,4 +47,16 @@ void Test::testDoubleArrayTrie()
 	dat.build(CUTE_ARRAY_SIZE(words), words);
 
 	int result = dat.match(DoubleArrayTrie::MATCH_PREFIX_MAX, "asdf");
+}
+
+void Test::testConfig()
+{
+	const String path = "test.cfg";
+	Variant config = JConfig::load(path);
+}
+
+void Test::testJson()
+{
+	const String path = "test.json";
+	Variant json = Json::load(path);
 }

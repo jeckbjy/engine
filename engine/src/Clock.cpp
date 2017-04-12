@@ -59,6 +59,7 @@ void Clock::swap(Clock& timestamp)
 
 void Clock::update()
 {
+	m_clock = now();
 }
 
 bool Clock::monotonic()

@@ -8,4 +8,6 @@ public:
 private:
 	void testRefPtr();
 	void testDoubleArrayTrie();
+	void testConfig();
+	void testJson();
 };

@@ -68,8 +68,9 @@ private:
 class CUTE_CORE_API Json
 {
 public:
-	static bool	  parse(Variant& root, const Slice& doc);
-	static String format(const Variant& root, bool human);
+	static Variant load(const String& path);
+	static Variant parse(const Slice& doc);
+	static String  format(const Variant& root, bool human);
 };
 
 CUTE_NS_END

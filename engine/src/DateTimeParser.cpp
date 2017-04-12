@@ -27,7 +27,7 @@ CUTE_NS_BEGIN
 	{ int i = 0; while (i < n && it != end && Ascii::isDigit(*it)) { var = var*10 + ((*it++) - '0'); i++; } while (i++ < n) var *= 10; }
 
 
-void DateTimeParser::parse(const std::string& fmt, const std::string& str, DateTime& dateTime, int& timeZoneDifferential)
+void DateTimeParser::parse(const String& fmt, const String& str, DateTime& dateTime, int& timeZoneDifferential)
 {
 	if (fmt.empty() || str.empty())
 		throw SyntaxException("Empty string.");
@@ -42,10 +42,10 @@ void DateTimeParser::parse(const std::string& fmt, const std::string& str, DateT
 	int micros = 0;
 	int tzd    = 0;
 
-	std::string::const_iterator it   = str.begin();
-	std::string::const_iterator end  = str.end();
-	std::string::const_iterator itf  = fmt.begin();
-	std::string::const_iterator endf = fmt.end();
+	String::const_iterator it   = str.begin();
+	String::const_iterator end  = str.end();
+	String::const_iterator itf  = fmt.begin();
+	String::const_iterator endf = fmt.end();
 
 	while (itf != endf && it != end)
 	{
@@ -161,14 +161,14 @@ void DateTimeParser::parse(const std::string& fmt, const std::string& str, DateT
 	timeZoneDifferential = tzd;
 }
 
-DateTime DateTimeParser::parse(const std::string& fmt, const std::string& str, int& timeZoneDifferential)
+DateTime DateTimeParser::parse(const String& fmt, const String& str, int& timeZoneDifferential)
 {
 	DateTime result;
 	parse(fmt, str, result, timeZoneDifferential);
 	return result;
 }
 
-bool DateTimeParser::tryParse(const std::string& fmt, const std::string& str, DateTime& dateTime, int& timeZoneDifferential)
+bool DateTimeParser::tryParse(const String& fmt, const String& str, DateTime& dateTime, int& timeZoneDifferential)
 {
 	try
 	{
@@ -181,13 +181,13 @@ bool DateTimeParser::tryParse(const std::string& fmt, const std::string& str, Da
 	return true;
 }
 
-void DateTimeParser::parse(const std::string& str, DateTime& dateTime, int& timeZoneDifferential)
+void DateTimeParser::parse(const String& str, DateTime& dateTime, int& timeZoneDifferential)
 {
 	if (!tryParse(str, dateTime, timeZoneDifferential))
 		throw SyntaxException("Unsupported or invalid date/time format");
 }
 	
-DateTime DateTimeParser::parse(const std::string& str, int& timeZoneDifferential)
+DateTime DateTimeParser::parse(const String& str, int& timeZoneDifferential)
 {
 	DateTime result;
 	if (tryParse(str, result, timeZoneDifferential))
@@ -196,7 +196,7 @@ DateTime DateTimeParser::parse(const std::string& str, int& timeZoneDifferential
 		throw SyntaxException("Unsupported or invalid date/time format");
 }
 
-bool DateTimeParser::tryParse(const std::string& str, DateTime& dateTime, int& timeZoneDifferential)
+bool DateTimeParser::tryParse(const String& str, DateTime& dateTime, int& timeZoneDifferential)
 {
 	if (str.length() < 4) return false;
 	
@@ -208,9 +208,9 @@ bool DateTimeParser::tryParse(const std::string& str, DateTime& dateTime, int& t
 		return tryParse("%W, %e %b %r %H:%M:%S %Z", str, dateTime, timeZoneDifferential);
 	else if (Ascii::isDigit(str[0]))
 	{
-		if (str.find(' ') != std::string::npos || str.length() == 10)
+		if (str.find(' ') != String::npos || str.length() == 10)
 			return tryParse(DateTimeFormat::SORTABLE_FORMAT, str, dateTime, timeZoneDifferential);
-		else if (str.find('.') != std::string::npos || str.find(',') != std::string::npos)
+		else if (str.find('.') != String::npos || str.find(',') != String::npos)
 			return tryParse(DateTimeFormat::ISO8601_FRAC_FORMAT, str, dateTime, timeZoneDifferential);
 		else
 			return tryParse(DateTimeFormat::ISO8601_FORMAT, str, dateTime, timeZoneDifferential);
@@ -218,7 +218,7 @@ bool DateTimeParser::tryParse(const std::string& str, DateTime& dateTime, int& t
 	else return false;
 }
 
-int DateTimeParser::parseTZD(std::string::const_iterator& it, const std::string::const_iterator& end)
+int DateTimeParser::parseTZD(String::const_iterator& it, const String::const_iterator& end)
 {
 	struct Zone
 	{
@@ -270,7 +270,7 @@ int DateTimeParser::parseTZD(std::string::const_iterator& it, const std::string:
 	{
 		if (Ascii::isAlpha(*it))
 		{
-			std::string designator;
+			String designator;
 			designator += *it++;
 			if (it != end && Ascii::isAlpha(*it)) designator += *it++;
 			if (it != end && Ascii::isAlpha(*it)) designator += *it++;
@@ -299,9 +299,9 @@ int DateTimeParser::parseTZD(std::string::const_iterator& it, const std::string:
 	return tzd;
 }
 
-int DateTimeParser::parseMonth(std::string::const_iterator& it, const std::string::const_iterator& end)
+int DateTimeParser::parseMonth(String::const_iterator& it, const String::const_iterator& end)
 {
-	std::string month;
+	String month;
 	while (it != end && (Ascii::isSpace(*it) || Ascii::isPunct(*it))) ++it;
 	bool isFirst = true;
 	while (it != end && Ascii::isAlpha(*it)) 
@@ -319,9 +319,9 @@ int DateTimeParser::parseMonth(std::string::const_iterator& it, const std::strin
 	throw SyntaxException("Not a valid month name", month);
 }
 
-int DateTimeParser::parseDayOfWeek(std::string::const_iterator& it, const std::string::const_iterator& end)
+int DateTimeParser::parseDayOfWeek(String::const_iterator& it, const String::const_iterator& end)
 {
-	std::string dow;
+	String dow;
 	while (it != end && (Ascii::isSpace(*it) || Ascii::isPunct(*it))) ++it;
 	bool isFirst = true;
 	while (it != end && Ascii::isAlpha(*it)) 
@@ -339,9 +339,9 @@ int DateTimeParser::parseDayOfWeek(std::string::const_iterator& it, const std::s
 	throw SyntaxException("Not a valid weekday name", dow);
 }
 
-int DateTimeParser::parseAMPM(std::string::const_iterator& it, const std::string::const_iterator& end, int hour)
+int DateTimeParser::parseAMPM(String::const_iterator& it, const String::const_iterator& end, int hour)
 {
-	std::string ampm;
+	String ampm;
 	while (it != end && (Ascii::isSpace(*it) || Ascii::isPunct(*it))) ++it;
 	while (it != end && Ascii::isAlpha(*it)) 
 	{

@@ -6,10 +6,10 @@
 
 CUTE_NS_BEGIN
 
-void DateTimeFormatter::append(std::string& str, const DateTime& dateTime, const std::string& fmt, int timeZoneDifferential)
+void DateTimeFormatter::append(String& str, const DateTime& dateTime, const String& fmt, int timeZoneDifferential)
 {
-	std::string::const_iterator it = fmt.begin();
-	std::string::const_iterator end = fmt.end();
+	String::const_iterator it = fmt.begin();
+	String::const_iterator end = fmt.end();
 	while (it != end)
 	{
 		if (*it == '%')
@@ -54,10 +54,10 @@ void DateTimeFormatter::append(std::string& str, const DateTime& dateTime, const
 	}
 }
 
-void DateTimeFormatter::append(std::string& str, const Timespan& timespan, const std::string& fmt)
+void DateTimeFormatter::append(String& str, const Timespan& timespan, const String& fmt)
 {
-	std::string::const_iterator it = fmt.begin();
-	std::string::const_iterator end = fmt.end();
+	String::const_iterator it = fmt.begin();
+	String::const_iterator end = fmt.end();
 	while (it != end)
 	{
 		if (*it == '%')
@@ -85,7 +85,7 @@ void DateTimeFormatter::append(std::string& str, const Timespan& timespan, const
 	}
 }
 
-void DateTimeFormatter::tzdISO(std::string& str, int timeZoneDifferential)
+void DateTimeFormatter::tzdISO(String& str, int timeZoneDifferential)
 {
 	if (timeZoneDifferential != UTC)
 	{
@@ -107,7 +107,7 @@ void DateTimeFormatter::tzdISO(std::string& str, int timeZoneDifferential)
 	else str += 'Z';
 }
 
-void DateTimeFormatter::tzdRFC(std::string& str, int timeZoneDifferential)
+void DateTimeFormatter::tzdRFC(String& str, int timeZoneDifferential)
 {
 	if (timeZoneDifferential != UTC)
 	{

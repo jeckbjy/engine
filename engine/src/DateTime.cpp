@@ -220,9 +220,9 @@ DateTime DateTime::operator - (const Timespan& span) const
 	return DateTime(m_utcTime, -span.totalMicroseconds());
 }
 
-Timespan DateTime::operator - (const DateTime& dateTime) const
+Timespan DateTime::operator - (const DateTime& other) const
 {
-	return Timespan((m_utcTime - dateTime.m_utcTime) / 10);
+	return Timespan((m_utcTime - other.m_utcTime) / 10);
 }
 
 DateTime& DateTime::operator += (const Timespan& span)

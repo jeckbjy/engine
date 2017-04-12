@@ -152,7 +152,6 @@ public:
 	/// Resolution is 100 nanoseconds.
 	int64_t utcTime() const;
 
-
 	bool operator == (const DateTime& dateTime) const;
 	bool operator != (const DateTime& dateTime) const;
 	bool operator <  (const DateTime& dateTime) const;
@@ -160,9 +159,9 @@ public:
 	bool operator >  (const DateTime& dateTime) const;
 	bool operator >= (const DateTime& dateTime) const;
 
+	Timespan  operator -  (const DateTime& other) const;
 	DateTime  operator +  (const Timespan& span) const;
 	DateTime  operator -  (const Timespan& span) const;
-	Timespan  operator -  (const DateTime& dateTime) const;
 	DateTime& operator += (const Timespan& span);
 	DateTime& operator -= (const Timespan& span);
 
@@ -209,15 +208,15 @@ private:
 	void normalize();
 	///utility functions used to correct the overflow in computeGregorian
 
-	int64_t m_utcTime;
-	short	m_year;
-	short	m_month;
-	short	m_day;
-	short	m_hour;
-	short	m_minute;
-	short	m_second;
-	short	m_millisecond;
-	short	m_microsecond;
+	int64 m_utcTime;
+	short m_year;
+	short m_month;
+	short m_day;
+	short m_hour;
+	short m_minute;
+	short m_second;
+	short m_millisecond;
+	short m_microsecond;
 };
 
 //

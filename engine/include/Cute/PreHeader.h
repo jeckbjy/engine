@@ -37,6 +37,8 @@
 
 #endif
 
+#include <iostream>
+#include <iomanip>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>

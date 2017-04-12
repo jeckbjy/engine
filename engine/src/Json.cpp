@@ -1,8 +1,8 @@
 //! Config
 #include "Cute/Json.h"
 #include "Cute/Number.h"
-#include <iostream>
-#include <iomanip>
+#include "Cute/Exception.h"
+#include "Cute/File.h"
 
 CUTE_NS_BEGIN
 
@@ -642,10 +642,22 @@ void JsonWriter::writeHuman(String& doc, const Variant& value)
 //////////////////////////////////////////////////////////////////////////
 // json
 //////////////////////////////////////////////////////////////////////////
-bool Json::parse(Variant& root, const Slice& doc)
+Variant Json::load(const String& path)
 {
+	String data;
+	File::readAll(path, data);
+	return parse(data);
+}
+
+Variant Json::parse(const Slice& doc)
+{
+	Variant root;
 	JsonReader reader;
-	return reader.parse(root, doc.begin(), doc.end());
+	bool result = reader.parse(root, doc.begin(), doc.end());
+	if (!result)
+		throw Exception("parse json fail!");
+
+	return root;
 }
 
 String Json::format(const Variant& root, bool human)

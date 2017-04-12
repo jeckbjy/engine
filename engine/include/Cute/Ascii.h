@@ -64,6 +64,9 @@ public:
 
 	static int toLower(int ch);
 	static int toUpper(int ch);
+	static int toDigit(int ch);
+	static int toAlpha(int ch);
+
 private:
 	static const int CHARACTER_PROPERTIES[128];
 };
@@ -153,6 +156,19 @@ inline int Ascii::toUpper(int ch)
 		return ch - 32;
 	else
 		return ch;
+}
+
+inline int Ascii::toDigit(int ch)
+{
+	return ch - '0';
+}
+
+inline int Ascii::toAlpha(int ch)
+{
+	if (isLower(ch))
+		return ch - 'a';
+	else
+		return ch - 'A';
 }
 
 CUTE_NS_END
