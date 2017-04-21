@@ -3,39 +3,31 @@
 
 CUTE_NS_BEGIN
 
-CUTE_CORE_API void format(String& result, const char* fmt, va_list& va);
-CUTE_CORE_API void format(String& result, const char* fmt, ...);
-CUTE_CORE_API String format(const char* fmt, ...);
-
-class CUTE_CORE_API StringUtils
+class CUTE_CORE_API Strings
 {
 public:
-	static bool startsWith(const String& str, const String& prefix);
-	static bool endsWith(const String& str, const String& suffix);
+	enum Encoding
+	{
+		None,               // Unknown or binary
+		ANSI,               // 0-255
+		ASCII,              // 0-127
+		UTF8_BOM,           // UTF8 with BOM
+		UTF8_NOBOM,         // UTF8 without BOM
+		UTF16_LE_BOM,       // UTF16 LE with BOM
+		UTF16_LE_NOBOM,     // UTF16 LE without BOM
+		UTF16_BE_BOM,       // UTF16-BE with BOM
+		UTF16_BE_NOBOM      // UTF16-BE without BOM
+	};
 
-	static String trim(const String& str);
-	static String trimLeft(const String& str);
-	static String trimRight(const String& str);
+	static void toUTF8(const UTF16String& from, UTF8String& to);
+	static void toUTF8(const UTF32String& from, UTF8String& to);
 
-	static String toUpper(const String& str);
-	static String toLower(const String& str);
+	static void toUTF16(const UTF8String& from, UTF16String& to);
+	static void toUTF32(const UTF8String& from, UTF32String& to);
 
-	static String remove(const String& str, const String& key, size_t start = 0);
-	static String replace(const String& str, const String& from, const String& to, size_t start = 0);
-
-	static String cat(const String& s1, const String& s2);
-	static String cat(const String& s1, const String& s2, const String& s3);
-	static String cat(const String& s1, const String& s2, const String& s3, const String& s4);
-
-	static String& trimInPlace(String& str);
-	static String& trimLeftInPlace(String& str);
-	static String& trimRightInPlace(String& str);
-
-	static String& toUpperInPlace(String& str);
-	static String& toLowerInPlace(String& str);
-
-	static String& removeInPlace(String& str, const String& key, size_t start = 0);
-	static String& replaceInPlace(String& str, const String& from, const String& to, size_t start = 0);
+	static String format(const char* fmt, ...);
+	static void format(String& result, const char* fmt, ...);
+	static void format(String& result, const char* fmt, va_list& va);
 };
 
 /// Tests whether the string starts with the given prefix.
@@ -575,7 +567,7 @@ struct i_char_traits : public std::char_traits<charT>
 	}
 };
 
-/// Case-insensitive std::string counterpart.
+/// Case-insensitive String counterpart.
 typedef std::basic_string<char, i_char_traits<char> > istring;
 
 /// Case-insensitive substring; searches for a substring without regards to case.
@@ -591,11 +583,11 @@ std::size_t isubstr(const T& str, const T& sought)
 }
 
 /// Case-insensitive less-than functor; useful for standard maps
-/// and sets with std::strings keys and case-insensitive ordering
+/// and sets with Strings keys and case-insensitive ordering
 /// requirement.
 struct CILess
 {
-	inline bool operator() (const std::string& s1, const std::string& s2) const
+	inline bool operator() (const String& s1, const String& s2) const
 	{
 		return icompare(s1, s2) < 0;
 	}

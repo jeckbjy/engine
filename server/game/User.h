@@ -1,17 +1,16 @@
 #pragma once
-#include "Cute/TCPConnection.h"
+#include "Cute/Session.h"
 using namespace Cute;
 
 class Player;
-class User : public TCPConnection::Listener
+class User
 {
 public:
-	User(TCPConnection*	conn);
+	User();
 	~User();
 
 	void onError();
 
 private:
-	TCPConnection*	m_conn;
 	Player*			m_player;
 };

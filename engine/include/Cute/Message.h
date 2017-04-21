@@ -227,17 +227,18 @@ class Message
 public:
 	virtual ~Message(){}
 	virtual size_t msgid() const { return 0; }
+	//virtual size_t priority() const { return 0; }
 	virtual void encode(Encoder& stream) { }
 	virtual void decode(Decoder& stream) { }
 };
 
-template<int TMSGID>
-class TMessage : public Message
-{
-public:
-	enum { MSG_ID = TMSGID };
-	size_t msgid() const { return MSG_ID; }
-};
+//template<int TMSGID>
+//class TMessage : public Message
+//{
+//public:
+//	enum { MSG_ID = TMSGID };
+//	size_t msgid() const { return MSG_ID; }
+//};
 
 #define AUTO_CODEC(fields)								\
 	void encode(Encoder& stream) { stream & fields; }	\
@@ -248,58 +249,59 @@ Examples:
 
 enum MsgID
 {
-MSGID_REQ_LOGIN,
-MSGID_REQ_AUTH,
+	MSGID_REQ_LOGIN,
+	MSGID_REQ_AUTH,
 
-MSGID_RSP_LOGIN,
-MSGID_RSP_AUTH,
+	MSGID_RSP_LOGIN,
+	MSGID_RSP_AUTH,
 };
 
 struct LoginReq : public TMessage<MSGID_REQ_LOGIN>
 {
-pt_str account;
-pt_str password;
+	pt_str account;
+	pt_str password;
 
-void encode(Encoder& stream)
-{
-stream << account << password;
-}
+	void encode(Encoder& stream)
+	{
+	stream << account << password;
+	}
 
-void decode(Decoder& stream)
-{
-stream >> account >> password;
-}
+	void decode(Decoder& stream)
+	{
+	stream >> account >> password;
+	}
 };
 
 struct LoginRsp : public TMessage<MSGID_RSP_LOGIN>
 {
-pt_bool result;
+	pt_bool result;
 
-void encode(Encoder& stream)
-{
-stream << result;
-}
+	void encode(Encoder& stream)
+	{
+	stream << result;
+	}
 
-void decode(Decoder& stream)
-{
-stream >> result;
-}
+	void decode(Decoder& stream)
+	{
+	stream >> result;
+	}
 };
 
 struct AuthReq : public TMessage<MSGID_REQ_AUTH>
 {
-pt_u64 uid;
-pt_u64 secret;
+	pt_u64 uid;
+	pt_u64 secret;
 
-AUTO_CODEC( uid & secret);
+	AUTO_CODEC( uid & secret);
 };
 
 struct AuthRsp : public TMessage<MSGID_RSP_AUTH>
 {
-pt_bool result;
+	pt_bool result;
 
-AUTO_CODEC( result );
+	AUTO_CODEC( result );
 };
 */
 
 CUTE_NS_END
+

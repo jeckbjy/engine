@@ -958,6 +958,20 @@ String BufferList::toString() const
 	return str;
 }
 
+String BufferList::toString(size_t length) const
+{
+	String str;
+	if (m_size > 0)
+	{
+		if (length > m_size)
+			length = m_size;
+		str.resize(length);
+		get(m_head, 0, &str[0], length);
+	}
+
+	return str;
+}
+
 bool BufferList::read7Bit(uint64_t& data)
 {
 	data = 0;

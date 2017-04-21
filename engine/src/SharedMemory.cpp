@@ -32,13 +32,13 @@ SharedMemory::SharedMemory(const std::string& name, size_t size, AccessMode mode
 	{
 		DWORD dwRetVal = GetLastError();
 		if (pageMode != PAGE_READONLY || dwRetVal != 5)
-			throw SystemException(format("Cannot create shared memory object %s [Error %d: %s]", m_name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
+			throw SystemException(Strings::format("Cannot create shared memory object %s [Error %d: %s]", m_name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
 
 		m_handle = OpenFileMappingA(PAGE_READONLY, FALSE, m_name.c_str());
 		if (!m_handle)
 		{
 			dwRetVal = GetLastError();
-			throw SystemException(format("Cannot open shared memory object %s [Error %d: %s]", m_name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
+			throw SystemException(Strings::format("Cannot open shared memory object %s [Error %d: %s]", m_name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
 		}
 	}
 
@@ -111,7 +111,7 @@ SharedMemory::SharedMemory(const String& file, AccessMode mode, const void* addr
 		DWORD dwRetVal = GetLastError();
 		CloseHandle(m_file);
 		m_file = INVALID_HANDLE_VALUE;
-		throw SystemException(format("Cannot map file into shared memory %s [Error %d: %s]", m_name, (int)dwRetVal, Error::getMessage(dwRetVal)));
+		throw SystemException(Strings::format("Cannot map file into shared memory %s [Error %d: %s]", m_name, (int)dwRetVal, Error::getMessage(dwRetVal)));
 	}
 	map(addrHint);
 #else
@@ -143,7 +143,7 @@ void SharedMemory::map(const void* addrHint)
 	if (!addr)
 	{
 		DWORD dwRetVal = GetLastError();
-		throw SystemException(format("Cannot map shared memory object %s [Error %d: %s]", m_name, (int)dwRetVal, Error::getMessage(dwRetVal)));
+		throw SystemException(Strings::format("Cannot map shared memory object %s [Error %d: %s]", m_name, (int)dwRetVal, Error::getMessage(dwRetVal)));
 	}
 
 	m_address = static_cast<char*>(addr);

@@ -6,6 +6,11 @@ CUTE_NS_BEGIN
 class CUTE_CORE_API Bitwise
 {
 public:
+	static uint popcount(uint8 data);
+	static uint popcount(uint16 data);
+	static uint popcount(uint32 data);
+	static uint popcount(uint64 data);
+
 	/** Returns the most significant bit set in a value. */
 	static uint32 mostSignificantBitSet(uint value);
 

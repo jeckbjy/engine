@@ -9,6 +9,7 @@ public:
 	~GameServer();
 
 	bool setup();
+
 private:
 };
 

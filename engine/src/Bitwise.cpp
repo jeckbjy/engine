@@ -1,7 +1,10 @@
 //! Core
 #include "Cute/Bitwise.h"
+#include <intrin.h>   
 
 CUTE_NS_BEGIN
+
+#define EASTL_BITSET_COUNT_STRING "\0\1\1\2\1\2\2\3\1\2\2\3\2\3\3\4"
 
 /** Converts float in UINT32 format to a a half in UINT16 format. */
 static uint16 floatToHalfI(uint32 i)
@@ -84,6 +87,54 @@ static uint32 halfToFloatI(uint16 y)
 	m = m << 13;
 
 	return (s << 31) | (e << 23) | m;
+}
+
+uint Bitwise::popcount(uint8 data)
+{
+#if defined(__GNUC__) || defined(__clang__)
+	return (uint)__builtin_popcountl(data);
+#elif defined(_MSC_VER)
+	return (uint)__popcnt16(data);
+#else
+#error "popcount not support!"
+#endif
+}
+
+uint Bitwise::popcount(uint16 data)
+{
+#if defined(__GNUC__) || defined(__clang__)
+	return (uint)__builtin_popcountl(data);
+#elif defined(_MSC_VER)
+	return (uint)__popcnt16(data);
+#else
+#error "popcount not support!"
+#endif
+}
+
+uint Bitwise::popcount(uint32 data)
+{
+#if defined(__GNUC__) || defined(__clang__)
+	return (uint)__builtin_popcountl(data);
+#elif defined(_MSC_VER)
+	return (uint)__popcnt16(data);
+#else
+#error "popcount not support!"
+#endif
+}
+
+uint Bitwise::popcount(uint64 data)
+{
+#if defined(__GNUC__) || defined(__clang__)
+	return (uint)__builtin_popcountll(data);
+#elif defined(_MSC_VER) && defined(_WIN64)
+	return (uint)__popcnt(data);
+#else
+	int n = 0;
+	for (uint64 w = data; w; w >>= 4)
+		n += EASTL_BITSET_COUNT_STRING[w & 0xF];
+
+	return n;
+#endif
 }
 
 uint32 Bitwise::mostSignificantBitSet(uint value)

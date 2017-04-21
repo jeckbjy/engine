@@ -4,7 +4,7 @@
 
 CUTE_NS_BEGIN
 
-HandlerService& HandlerService::get()
+HandlerService& HandlerService::instance()
 {
 	static HandlerService service;
 	return service;
@@ -59,7 +59,7 @@ void HandlerService::regist(uint32 msgid, Handler* handler)
 		throw InvalidArgumentException("duplicate msg:" + msgid);
 	}
 
-	handler->setID(msgid);
+	//handler->setID(msgid);
 	if (msgid >= HANDLER_MAX)
 	{
 		m_handlerMap[msgid] = handler;

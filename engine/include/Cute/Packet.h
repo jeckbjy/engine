@@ -2,29 +2,62 @@
 #include "Cute/Foundation.h"
 #include "Cute/Message.h"
 #include "Cute/Ref.h"
+#include "Cute/BufferList.h"
 
 CUTE_NS_BEGIN
 
-class Packet : public Message, public Ref<Packet>
+// 消息包，包括通用消息头和消息体
+class CUTE_CORE_API Packet : public Message
 {
 public:
-	Packet() :m_parent(NULL){}
-	virtual ~Packet() {}
-	virtual uint32 msgID() const = 0;
+	enum Mask
+	{
+		MASK_TEXT		= 0x80,
+		MASK_TRANSFER	= 0x40,
+		MASK_STATUS		= 0x20,
+		MASK_GID		= 0x08,
+		MASK_UID		= 0x04,
+	};
+
+	Packet();
+
+	bool hasFlag(Mask mask) const { return (m_flag & mask) == mask; }
+	bool isText() const { return hasFlag(MASK_TEXT); }
+	bool isTransfer() const { return hasFlag(MASK_TRANSFER); }
+
+	void setMask(Mask mask) { m_flag |= mask; }
+	void setStatus(uint32 status);
+	void setGID(uint32 gid);
+	void setUID(uint64 uid);
+
+	void reset();
 
 protected:
-	Packet* m_parent;
-	Object* m_owner;	// session ??
-	//Buffer	m_head;
+	uint8  m_flag;
+	uint32 m_status;
+	uint32 m_gid;
+	uint64 m_uid;
 };
 
-// 服务器间中转消息
-class ServerPacket : public Packet
+template<typename TMSGID>
+class TPacket : public Packet
 {
 public:
-protected:
-	uint64		m_uid;
-	Message*	m_message;
+	enum { MSG_ID = TMSGID };
+	size_t msgid() const { return MSG_ID; }
+};
+
+// 中转消息
+struct TransferPacket : public Packet
+{
+	uint32 m_msgid;
+	BufferList msg;
+};
+
+// 文本消息，admin指令等
+struct TextPacket : public Packet
+{
+	String text;
 };
 
 CUTE_NS_END

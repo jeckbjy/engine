@@ -5,6 +5,7 @@
 CUTE_NS_BEGIN
 
 // 内存不连续，共享内存,写实拷贝
+// SEEK_CUR SEEK_SET SEEK_END
 class CUTE_CORE_API BufferList
 {
 	struct buff_t;
@@ -23,7 +24,6 @@ public:
 	bool write(const void* data, size_t len);
 	bool read(void* data, size_t len);
 	bool peek(void* data, size_t len);
-	// SEEK_CUR SEEK_SET SEEK_END
 	void seek(long length, int origin);
 
 	void insert(size_t length);
@@ -49,11 +49,26 @@ public:
 	size_t position() const;
 
 	String toString() const;
+	String toString(size_t length) const;
 
 	bool read7Bit(uint64_t& data);
 	uint write7Bit(uint64_t data);
 	bool read8Bit(uint64_t& data, size_t count);
 	uint write8Bit(uint64_t data);
+
+	template<typename T>
+	bool read7Bit(T& data)
+	{
+		uint64 temp;
+		if (!read7Bit(temp))
+			return false;
+
+		if (temp > (uint64)std::numeric_limits<T>::max())
+			return false;
+
+		data = (T)temp;
+		return true;
+	}
 
 	template<typename T>
 	bool read(T& data)

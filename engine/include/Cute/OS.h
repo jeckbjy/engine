@@ -11,6 +11,7 @@
 #	include <mswsock.h>
 #	include <io.h>
 #	include <tchar.h>
+#	include <intrin.h>
 
 #else
 #	include <stdio.h>

@@ -4,7 +4,7 @@
 #include <cstdio>
 
 #if defined(CUTE_OS_FAMILY_WINDOWS)
-#include "Cute/Unicode.h"
+#include "Cute/String.h"
 #elif defined(CUTE_OS_FAMILY_UNIX)
 #	include <unistd.h>
 #	include <signal.h>
@@ -62,7 +62,7 @@ void Debugger::message(const String& msg)
 	{
 #if defined(CUTE_WIN32_UTF8)
 		std::wstring umsg;
-		Unicode::toUTF16(msg, umsg);
+		Strings::toUTF16(msg, umsg);
 		umsg += '\n';
 		OutputDebugStringW(umsg.c_str());
 #else

@@ -60,26 +60,37 @@ void Server::process()
 	// 心跳检测,断线重连
 	reconnect();
 
-	// 处理新连接和关闭
-	m_mutex.lock();
-	Session* pending;
-	// 处理发生错误的socket
-	for (SessionMap::iterator itor = m_pending.begin(); itor != m_pending.end(); ++itor)
+	// 处理pending事件
+	m_pendingMutex.lock();
+	for (PendingMap::iterator itor = m_pending.begin(); itor != m_pending.end(); ++itor)
 	{
-		pending = itor->second;
-		if (pending->isClosing())
-		{// 删除
-			m_sessions.erase(pending->getID());
-			pending->close();
-			delete pending;
+		Pending& pending = itor->second;
+		Session* sess = pending.sess;
+		int events = pending.events;
+
+		if ((events & (PE_REMOVE || PE_ERROR)) != 0)
+			sess->close();
+
+		if ((events & PE_ERROR) != 0)
+		{
+			onError(sess);
 		}
 		else
-		{// 添加
-			m_sessions[pending->getID()] = pending;
+		{
+			if ((events & PE_ACCEPT) != 0)
+				onAccept(sess);
+
+			if ((events & PE_CONNECT) != 0)
+				onConnect(sess);
+
+			if ((events & PE_SEND) != 0)
+				onSend(sess);
 		}
+
+		m_sessions.erase(sess->getID());
 	}
 
-	m_mutex.unlock();
+	m_pendingMutex.unlock();
 }
 
 void Server::loop()
@@ -100,11 +111,9 @@ void Server::kick(Session* sess)
 	if (sess == NULL || sess->isClosing())
 		return;
 
-	Mutex::ScopedLock lock(m_mutex);
-
 	sess->shutdown();
 	sess->setClosing();
-	m_pending[sess->getID()] = sess;
+	addPending(sess, PE_REMOVE);
 }
 
 Session* Server::find(uint32 id)
@@ -130,7 +139,7 @@ void Server::listen(uint16 port, uint32 type)
 void Server::connect(const SocketAddress& addr, uint32 type)
 {
 	SocketChannel* channel = new TCPSocketChannel(m_loops.main());
-	Session* sess = new Session(channel, newID(), type);
+	Session* sess = new Session(&m_protocal, channel, newID(), type);
 	m_connectors[sess->getID()] = sess;
 	sess->connect(addr);
 }
@@ -171,11 +180,48 @@ void Server::schedule(Runnable* task)
 void Server::fireAccept(ServerChannel* listener, SocketChannel* channel)
 {
 	// 有新的连接
-	channel->setLoop(m_loops.next());
-	Session* sess = new Session(channel, newID(), listener->getType());
+	Session* sess = new Session(&m_protocal, channel, newID(), listener->getType());
 
-	Mutex::ScopedLock lock(m_mutex);
-	m_pending[sess->getID()] = sess;
+	addPending(sess, PE_ACCEPT);
+}
+
+void Server::addPending(Session* sess, int mask)
+{
+	Mutex::ScopedLock lock(m_pendingMutex);
+	Pending& pending = m_pending[sess->getID()];
+	if (pending.sess == 0)
+	{
+		pending.sess = sess;
+		pending.events = mask;
+	}
+	else if (pending.sess == sess)
+	{
+		pending.events |= mask;
+	}
+	else
+	{
+		assert(false);
+	}
+}
+
+void Server::onAccept(Session* sess)
+{
+	CUTE_UNUSED(sess);
+}
+
+void Server::onConnect(Session* sess)
+{
+	sess->getChannel()->setLoop(m_loops.next());
+}
+
+void Server::onSend(Session* sess)
+{
+	CUTE_UNUSED(sess);
+}
+
+void Server::onError(Session* sess)
+{
+	CUTE_UNUSED(sess);
 }
 
 CUTE_NS_END

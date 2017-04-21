@@ -1,85 +1,74 @@
 #pragma once
-#include "Cute/HandlerMgr.h"
+#include "Cute/HandlerRegister.h"
+using namespace Cute;
 
-struct LoginReq : public Packet
+class HandlerModule
 {
 
 };
 
-struct LoginRsp : public Packet
+// 不同模块的Handler
+class ModuleHandler
+{
+public:
+};
+
+class MiscHandler : public ModuleHandler
+{
+public:
+	void setup();
+
+private:
+	void onAdmin();
+};
+
+class ShipHandler : public ModuleHandler
 {
 
 };
 
-struct InitDataReq : public Packet
+class GuildBattleAllHandler : public ModuleHandler
 {
+public:
+
+private:
+	void onBattle();
+};
+
+// 注册客户端消息
+class ClientHandler : public HandlerRegister
+{
+public:
+	int type() { return 0; }
+	void setup()
+	{
+		regist(&ClientHandler::onAdmin);
+		regist(&ClientHandler::onTransfer);
+		regist(&ClientHandler::onLogin);
+		//add(&ClientHandler::onLogin);
+	}
+
+private:
+	int onAdmin(TextPacket* msg);
+	int onTransfer(TransferPacket* msg);
+	int onLogin();
+	int onLogout();
+};
+
+// 注册World返回的消息
+class WorldHandler : public HandlerRegister
+{
+public:
 
 };
 
-struct InitDataRsq : public Packet
-{
-};
-
-class GameHandlerMgr
+class WebHandler : public HandlerRegister
 {
 public:
 	void setup()
 	{
-		// 支持多个?
-		add(&onLogin);
-		add(&onInitData);
+		regist(&WebHandler::onAdmin);
 	}
-
-	void onLogin(LoginReq* msg, TCPConnection* conn)
-	{
-		if (getUser())
-		{
-			// 重新投递
-			post(msg);
-			return;
-		}
-
-		//
-	}
-
-	void onInitData(InitDataReq* msg, User* player)
-	{
-
-	}
-
-
 private:
-
+	int onAdmin(TextPacket* msg);
 };
-
-class Handler
-{
-public:
-	virtual void handle(PacketEvent* ev);
-};
-
-//// 每个模块
-//class HandlerBase
-//{
-//protected:
-//	virtual void setup();
-//	virtual void post(Message* msg);
-//};
-//
-//// 不同模块
-//class LoginHandler : public HandlerBase
-//{
-//public:
-//	void setup();
-//	void onLogin(LoginReq* req, );
-//	void onLogout(LogoutReq* req);
-//};
-//
-////
-//class ShipHandler : public HandlerBase
-//{
-//public:
-//	void setup();
-//	void onBuy();
-//};
-//

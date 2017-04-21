@@ -3,7 +3,7 @@
 #include "Cute/File.h"
 #include "Cute/Exception.h"
 #include "Cute/StringTokenizer.h"
-#include "Cute/Unicode.h"
+#include "Cute/String.h"
 #include "Cute/Environment.h"
 #include <algorithm>
 
@@ -1239,7 +1239,7 @@ String Path::transcode(const String& path)
 {
 #if defined(_WIN32) && defined(CUTE_WIN32_UTF8)
 	std::wstring uniPath;
-	Unicode::toUTF16(path, uniPath);
+	Strings::toUTF16(path, uniPath);
 	DWORD len = WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS, uniPath.c_str(), static_cast<int>(uniPath.length()), NULL, 0, NULL, NULL);
 	if (len > 0)
 	{

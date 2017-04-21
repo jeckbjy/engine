@@ -1,5 +1,4 @@
 #pragma once
-// rename OWL?? OTUS??
 
 #include "Cute/API.h"
 #include "Cute/Config.h"

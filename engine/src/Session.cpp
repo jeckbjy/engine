@@ -4,11 +4,12 @@
 
 CUTE_NS_BEGIN
 
-Session::Session(SocketChannel* socket, uint32 id, uint32 type)
+Session::Session(Protocal* protocal, SocketChannel* socket, uint32 id, uint32 type)
 	: m_socket(socket)
 	, m_id(id)
 	, m_type(type)
 	, m_data(NULL)
+	, m_protocal(protocal)
 {
 	if (m_socket)
 	{
@@ -65,28 +66,34 @@ void Session::close()
 	m_socket->close();
 }
 
+void Session::addPending(int pending)
+{
+	Server::get().addPending(this, pending);
+}
+
 void Session::fireRead(SocketChannel* channel)
 {
-	// packet ??
-	//BufferList& reader = channel->getReader();
-	// 先解析出一个Packet
-	// 放到队列里处理
-	// 校验 parse
-	//PacketEvent* ev = new PacketEvent();
+	// 先解析消息
+	BufferList& buffer = channel->getReader();
+	buffer.seek(0, SEEK_SET);
+
+	m_protocal->process(this, buffer);
 }
 
 void Session::fireWrite(SocketChannel* channel)
 {
+	addPending(Server::PE_SEND);
 }
 
 void Session::fireConnect(SocketChannel* channel)
 {
+	addPending(Server::PE_CONNECT);
 }
 
 void Session::fireError(SocketChannel* channel)
 {
-	Server::get().kick(this);
+	m_socket->close();
+	addPending(Server::PE_ERROR);
 }
 
 CUTE_NS_END
-

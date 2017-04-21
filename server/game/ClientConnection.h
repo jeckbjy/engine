@@ -1,7 +1,6 @@
-#include "Cute/TCPConnection.h"
 using namespace Cute;
 
-class ClientConnection : public TCPConnection
+class ClientConnection
 {
 public:
 	ClientConnection(socket_t sock);

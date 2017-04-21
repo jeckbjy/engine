@@ -173,34 +173,6 @@ public:
 
 	static int toLower(int ch);
 	static int toUpper(int ch);
-
-public:
-	//static void convert(const String& ascii, UTF8String& utf8);
-	//static void convert(const UTF8String& utf8, String& ascii);
-
-	static void convert(const UTF8String& from, UTF16String& to);
-	static void convert(const UTF8String& from, UTF32String& to);
-
-	static void convert(const UTF16String& from, UTF8String& to);
-	static void convert(const UTF32String& from, UTF8String& to);
-
-	template<typename F, typename T>
-	static void toUTF32(const F& f, T& t)
-	{
-		convert(f, t);
-	}
-
-	template<typename F, typename T>
-	static void toUTF16(const F& f, T& t)
-	{
-		convert(f, t);
-	}
-
-	template<typename F, typename T>
-	static void toUTF8(const F& f, T& t)
-	{
-		convert(f, t);
-	}
 };
 
 //

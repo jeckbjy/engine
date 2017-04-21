@@ -3,11 +3,11 @@
 
 CUTE_NS_BEGIN
 
-// HandlerRoute??
+// 管理所有Handler,低于HANDLER_MAX放入数组,高于的放入Map
 class CUTE_CORE_API HandlerService
 {
 public:
-	static HandlerService& get();
+	static HandlerService& instance();
 
 	HandlerService();
 	~HandlerService();
