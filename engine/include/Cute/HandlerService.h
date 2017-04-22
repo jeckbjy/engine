@@ -1,5 +1,5 @@
 #pragma once
-#include "Cute/Handler.h"
+#include "Cute/EventHandler.h"
 
 CUTE_NS_BEGIN
 
@@ -12,9 +12,9 @@ public:
 	HandlerService();
 	~HandlerService();
 
-	Handler* find(uint32 msgid) const;
+	EventHandler* find(uint32 msgid) const;
 	bool has(uint32 msgid) const;
-	void regist(uint32 msgid, Handler* handler);
+	void regist(uint32 msgid, EventHandler* handler);
 	void remove(uint32 msgid);
 
 private:
@@ -23,8 +23,8 @@ private:
 		HANDLER_MAX = 2048,
 	};
 
-	typedef std::vector<Handler*>		HandlerVec;
-	typedef std::map<uint32, Handler*>	HandlerMap;
+	typedef std::vector<EventHandler*>		HandlerVec;
+	typedef std::map<uint32, EventHandler*>	HandlerMap;
 	HandlerVec	m_handlerVec;
 	HandlerMap	m_handlerMap;
 };

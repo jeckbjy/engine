@@ -166,7 +166,7 @@ uint32 Server::newID()
 	return m_maxid++;
 }
 
-void Server::post(LogicEvent* ev, uint32 delay)
+void Server::post(EventBase* ev, uint32 delay)
 {
 	ev->setDelay(delay);
 	m_events.push(ev);
@@ -222,6 +222,18 @@ void Server::onSend(Session* sess)
 void Server::onError(Session* sess)
 {
 	CUTE_UNUSED(sess);
+}
+
+void Server::onText(Session* sess, String& text)
+{
+	CUTE_UNUSED(sess);
+	CUTE_UNUSED(text);
+}
+
+void Server::onTransfer(Session* sess, TransferPacket* msg)
+{
+	CUTE_UNUSED(sess);
+	CUTE_UNUSED(msg);
 }
 
 CUTE_NS_END

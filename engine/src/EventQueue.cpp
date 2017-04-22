@@ -1,5 +1,5 @@
 //! Server
-#include "Cute/LogicQueue.h"
+#include "Cute/EventQueue.h"
 
 CUTE_NS_BEGIN
 
@@ -20,9 +20,9 @@ CUTE_NS_BEGIN
 
 struct EventDelayFinder
 {
-	LogicEvent* ev1;
-	EventDelayFinder(LogicEvent* ev) :ev1(ev){}
-	bool operator()(LogicEvent* ev2)
+	EventBase* ev1;
+	EventDelayFinder(EventBase* ev) :ev1(ev){}
+	bool operator()(EventBase* ev2)
 	{
 		return ev1->getTime() >= ev2->getTime();
 	}
@@ -30,9 +30,9 @@ struct EventDelayFinder
 
 struct EventPrioFrontFinder
 {
-	LogicEvent* ev1;
-	EventPrioFrontFinder(LogicEvent* ev):ev1(ev){}
-	bool operator()(LogicEvent* ev2)
+	EventBase* ev1;
+	EventPrioFrontFinder(EventBase* ev):ev1(ev){}
+	bool operator()(EventBase* ev2)
 	{
 		return ev1->getPriority() >= ev2->getPriority();
 	}
@@ -40,9 +40,9 @@ struct EventPrioFrontFinder
 
 struct EventPrioBackFinder
 {
-	LogicEvent* ev1;
-	EventPrioBackFinder(LogicEvent* ev) :ev1(ev){}
-	bool operator()(LogicEvent* ev2)
+	EventBase* ev1;
+	EventPrioBackFinder(EventBase* ev) :ev1(ev){}
+	bool operator()(EventBase* ev2)
 	{
 		return ev1->getPriority() > ev2->getPriority();
 	}
@@ -51,20 +51,20 @@ struct EventPrioBackFinder
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-LogicQueue::LogicQueue()
+EventQueue::EventQueue()
 {
 }
 
-LogicQueue::~LogicQueue()
+EventQueue::~EventQueue()
 {
 }
 
-void LogicQueue::process()
+void EventQueue::process()
 {
 	EventList events;
 	pop(events);
 	// 遍历处理
-	LogicEvent* ev;
+	EventBase* ev;
 	for (EventList::Iterator itor = events.begin(); itor != events.end();)
 	{
 		ev = *itor;
@@ -74,7 +74,7 @@ void LogicQueue::process()
 	}
 }
 
-void LogicQueue::push(LogicEvent* ev)
+void EventQueue::push(EventBase* ev)
 {
 	Mutex::ScopedLock guard(m_mutex);
 	if (ev->getTime() > 0)
@@ -82,7 +82,7 @@ void LogicQueue::push(LogicEvent* ev)
 		//EventList::ReverseIterator itor = std::find_if(m_delay.rbegin(), m_delay.rend(), EventDelayFinder(ev));
 		//m_delay.insert(itor, ev);
 	}
-	else if (ev->getPriority() > LogicEvent::PRIO_NORMAL)
+	else if (ev->getPriority() > EventBase::PRIO_NORMAL)
 	{
 		EventList::Iterator itor = std::find_if(m_priority.begin(), m_priority.end(), EventPrioFrontFinder(ev));
 		m_priority.insert(itor, ev);
@@ -94,14 +94,14 @@ void LogicQueue::push(LogicEvent* ev)
 	}
 }
 
-void LogicQueue::pop(EventList& events)
+void EventQueue::pop(EventList& events)
 {
-	int64_t timestamp = LogicEvent::now();
+	int64_t timestamp = EventBase::now();
 
 	Mutex::ScopedLock guard(m_mutex);
 	events.swap(m_priority);
 	// 遍历到时间的
-	LogicEvent* ev;
+	EventBase* ev;
 	for (EventList::Iterator itor = m_delay.begin(); itor != m_delay.end(); )
 	{
 		ev = *itor;

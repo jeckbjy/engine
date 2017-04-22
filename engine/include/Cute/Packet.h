@@ -54,10 +54,4 @@ struct TransferPacket : public Packet
 	BufferList msg;
 };
 
-// 文本消息，admin指令等
-struct TextPacket : public Packet
-{
-	String text;
-};
-
 CUTE_NS_END

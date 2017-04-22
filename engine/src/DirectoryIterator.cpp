@@ -30,8 +30,8 @@ void DirectoryIterator::assign(const String& path)
 	String findPath = p.toString();
 	findPath.append("*");
 
-	WIN32_FIND_DATA	fd;
-	m_handle = FindFirstFile(findPath.c_str(), &fd);
+	WIN32_FIND_DATAA	fd;
+	m_handle = FindFirstFileA(findPath.c_str(), &fd);
 	if (m_handle == INVALID_HANDLE_VALUE)
 	{
 		if (GetLastError() != ERROR_NO_MORE_FILES)
@@ -62,10 +62,10 @@ void DirectoryIterator::assign(const String& path)
 void DirectoryIterator::next()
 {
 #if defined(CUTE_OS_FAMILY_WINDOWS)
-	WIN32_FIND_DATA	fd;
+	WIN32_FIND_DATAA	fd;
 	do
 	{
-		if (FindNextFile(m_handle, &fd) != 0)
+		if (FindNextFileA(m_handle, &fd) != 0)
 			m_current = fd.cFileName;
 		else
 			m_current.clear();

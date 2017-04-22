@@ -1,5 +1,5 @@
 //! Server
-#include "Cute/Handler.h"
+#include "Cute/EventHandler.h"
 #include "Cute/HandlerService.h"
 #include "Cute/HandlerProfiler.h"
 #include "Cute/Packet.h"
@@ -7,33 +7,16 @@
 
 CUTE_NS_BEGIN
 
-PacketEvent::PacketEvent(Session* sess, Packet* msg)
-	: m_sess(sess)
-	, m_msg(msg)
-{
-}
-
-PacketEvent::~PacketEvent()
-{
-}
-
-void PacketEvent::process()
-{
-	Handler* handler = HandlerService::instance().find(m_msg->msgid());
-	if (handler)
-		handler->process(this);
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-Handler::Handler()
+EventHandler::EventHandler()
 	: m_async(false)
 	, m_type(0)
 {
 }
 
-void Handler::process(PacketEvent* ev)
+void EventHandler::process(PacketEvent* ev)
 {
 	HandlerProfiler::Timer timer;
 	HandlerProfiler::instance().start(timer);

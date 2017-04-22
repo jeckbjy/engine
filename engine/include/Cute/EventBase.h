@@ -9,9 +9,9 @@ CUTE_NS_BEGIN
 2:带有延迟时间的最低优先级
 3:时间戳是单调clock时间戳，并不是utc等时间戳,仅做消息延迟调用使用，不能作为定时器使用
 */
-class CUTE_CORE_API LogicEvent : public Object
+class CUTE_CORE_API EventBase : public Object
 {
-	DECLARE_RTTI(LogicEvent, Object, OID_ANY);
+	DECLARE_RTTI(EventBase, Object, OID_ANY);
 public:
 	enum Priority
 	{
@@ -22,8 +22,8 @@ public:
 
 	static int64_t now();
 
-	LogicEvent();
-	virtual ~LogicEvent();
+	EventBase();
+	virtual ~EventBase();
 
 	virtual void process() = 0;
 	virtual void destroy();
@@ -36,7 +36,7 @@ public:
 	void	setPriority(int prio);
 
 protected:
-	friend class LogicQueue;
+	friend class EventQueue;
 	ListNode m_hook;
 	int		 m_prio;	// Priority
 	int64_t	 m_time;	// millisecond毫秒

@@ -30,7 +30,7 @@ HandlerService::~HandlerService()
 	m_handlerMap.clear();
 }
 
-Handler* HandlerService::find(uint32 msgid) const
+EventHandler* HandlerService::find(uint32 msgid) const
 {
 	if (msgid < m_handlerVec.size())
 	{
@@ -51,7 +51,7 @@ bool HandlerService::has(uint32 msgid) const
 	return find(msgid) != NULL;
 }
 
-void HandlerService::regist(uint32 msgid, Handler* handler)
+void HandlerService::regist(uint32 msgid, EventHandler* handler)
 {
 	if (has(msgid))
 	{
@@ -75,7 +75,7 @@ void HandlerService::regist(uint32 msgid, Handler* handler)
 
 void HandlerService::remove(uint32 msgid)
 {
-	Handler* handler = find(msgid);
+	EventHandler* handler = find(msgid);
 	if (handler == NULL)
 		return;
 

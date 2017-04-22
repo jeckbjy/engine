@@ -1,7 +1,7 @@
 #pragma once
 #include "Cute/RefPtr.h"
 #include "Cute/SocketChannel.h"
-#include "Cute/LogicEvent.h"
+#include "Cute/EventBase.h"
 #include "Cute/Protocal.h"
 
 CUTE_NS_BEGIN

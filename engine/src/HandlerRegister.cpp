@@ -12,7 +12,7 @@ HandlerRegister::~HandlerRegister()
 {
 }
 
-void HandlerRegister::regist(uint msgid, Handler* handler)
+void HandlerRegister::regist(uint msgid, EventHandler* handler)
 {
 	HandlerService::instance().regist(msgid, handler);
 }

@@ -4,7 +4,7 @@
 #include "Cute/IOLoopGroup.h"
 #include "Cute/ServerChannel.h"
 #include "Cute/Session.h"
-#include "Cute/LogicQueue.h"
+#include "Cute/EventQueue.h"
 #include "Cute/Thread.h"
 #include "Cute/ThreadPool.h"
 #include "Cute/Mutex.h"
@@ -54,16 +54,18 @@ public:
 	void	connect(const SocketAddress& addr, uint32 type = 0);
 	void	reconnect();
 
-	void	post(LogicEvent* ev, uint32 delay = 0);
+	void	post(EventBase* ev, uint32 delay = 0);
 	void	schedule(Runnable* task);
 	void	addPending(Session* sess, int mask);
 
-protected:
+public:
 	virtual void fireAccept(ServerChannel* listener, SocketChannel* channel);
 	virtual void onAccept(Session* sess);
 	virtual void onConnect(Session* sess);
 	virtual void onSend(Session* sess);
 	virtual void onError(Session* sess);
+	virtual void onText(Session* sess, String& text);
+	virtual void onTransfer(Session* sess, TransferPacket* msg);
 
 protected:
 	struct Pending
@@ -90,7 +92,7 @@ protected:
 	PendingMap	m_pending;			// 将要处理的事件
 	Mutex		m_pendingMutex;
 	AcceptMap	m_acceptors;
-	LogicQueue	m_events;
+	EventQueue	m_events;
 	Thread		m_logicThread;
 	ThreadPool	m_pools;
 	PacketProtocal m_protocal;

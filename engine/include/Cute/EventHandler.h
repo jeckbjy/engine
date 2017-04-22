@@ -1,28 +1,10 @@
 //! Server
 #pragma once
 #include "Cute/Foundation.h"
-#include "Cute/LogicEvent.h"
+#include "Cute/EventBase.h"
 #include "Cute/BufferList.h"
 
 CUTE_NS_BEGIN
-
-class Packet;
-class Session;
-class CUTE_CORE_API PacketEvent : public LogicEvent
-{
-public:
-	PacketEvent(Session* sess, Packet* msg);
-	~PacketEvent();
-
-	void process();
-
-	Session* getSession() { return m_sess; }
-	Packet*	 getPacket() { return m_msg; }
-
-protected:
-	Session* m_sess;
-	Packet*	 m_msg;
-};
 
 /*
 1:解码处理
@@ -31,11 +13,12 @@ protected:
 4:返回值处理:0表示成功，负数表示需要延迟处理，正数表示错误码
 5:性能统计,预警
 */
-class CUTE_CORE_API Handler
+class PacketEvent;
+class CUTE_CORE_API EventHandler
 {
 public:
-	Handler();
-	virtual ~Handler(){}
+	EventHandler();
+	virtual ~EventHandler(){}
 
 	void process(PacketEvent* ev);
 

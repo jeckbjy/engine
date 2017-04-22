@@ -58,7 +58,16 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 
 		bool isTransfer = bits.test(Packet::MASK_TRANSFER);
 
-		Handler* handler = HandlerService::instance().find(msgid);
+		if (isTransfer)
+		{
+			TransferEvent* ev = new TransferEvent(sess);
+		}
+		else
+		{
+
+		}
+
+		EventHandler* handler = HandlerService::instance().find(msgid);
 		if (handler == NULL || !handler->canAccept(sess->getType()))
 		{// 校验是否能处理该消息
 			buffer.seek(length, SEEK_SET);
@@ -135,11 +144,9 @@ void DelimiterProtocal::process(Session* sess, BufferList& buffer)
 			throw RuntimeException("delimiter out of maxSize");
 
 		// 生成消息
-		TextPacket* msg = new TextPacket();
-		msg->text = buffer.toString(pos);
-
-		PacketEvent* pe = new PacketEvent(sess, msg);
-		Server::get().post(pe);
+		String text = buffer.toString(pos);
+		TextEvent* ev = new TextEvent(sess, text);
+		Server::get().post(ev);
 	}
 }
 

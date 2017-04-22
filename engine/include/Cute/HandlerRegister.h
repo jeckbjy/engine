@@ -1,18 +1,18 @@
 #pragma once
-#include "Cute/Handler.h"
+#include "Cute/EventHandler.h"
 #include "Cute/FuncTraits.h"
 
 CUTE_NS_BEGIN
 
 template<class F, class Enable = void>
-class FuncHandler : public Handler
+class FuncHandler : public EventHandler
 {
 };
 
 // 没有额外参数
 template<class F>
 class FuncHandler<F, typename std::enable_if<func_traits<F>::length == 1>::type>
-	: Handler
+	: EventHandler
 {
 public:
 	FuncHandler(F fun){}
@@ -46,12 +46,12 @@ public:
 	{
 		typedef typename std::remove_pointer<typename func_traits<F>::param0_t>::type TMsg;
 		uint msgid = TMsg::MSG_ID;
-		Handler* handler = new FuncHandler<F>(fun, this);
+		EventHandler* handler = new FuncHandler<F>(fun, this);
 		regist(msgid, handler);
 	}
 
 private:
-	void regist(uint msgid, Handler* handler);
+	void regist(uint msgid, EventHandler* handler);
 };
 
 CUTE_NS_END

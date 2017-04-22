@@ -829,7 +829,7 @@ void Path::listRoots(std::vector<String>& roots)
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 	roots.clear();
 	char buffer[128];
-	DWORD n = GetLogicalDriveStrings(sizeof(buffer) - 1, buffer);
+	DWORD n = GetLogicalDriveStringsA(sizeof(buffer) - 1, buffer);
 	char* it = buffer;
 	char* end = buffer + (n > sizeof(buffer) ? sizeof(buffer) : n);
 	while (it < end)
