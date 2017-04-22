@@ -21,6 +21,9 @@ CUTE_NS_BEGIN
 * 不同的协议处理,Client:Packet格式，Admin:String格式
 * 使用全局的HandlerService处理消息，但对于不同Session需要做权限验证
 * 异常Hook，退出安全处理,DB数据安全写入
+* TODO:现在是只有一个主逻辑线程，
+* TODO:如何支持多线程，每个user分配到一个线程中执行并保证线程安全
+* TODO:如何支持安模块划分执行事件，将阻塞任务延迟执行
 */
 class CUTE_CORE_API Server : public Application, public ServerListener
 {
@@ -78,6 +81,7 @@ protected:
 	typedef std::map<uint32, ServerChannel*>	AcceptMap;
 	typedef std::map<uint32, Session*>			SessionMap;
 	typedef std::map<uint32, Pending>			PendingMap;
+	typedef PacketProtocal						Protocal;
 
 	bool		m_quit;
 	uint32		m_maxid;			// 唯一ID
@@ -95,7 +99,7 @@ protected:
 	EventQueue	m_events;
 	Thread		m_logicThread;
 	ThreadPool	m_pools;
-	PacketProtocal m_protocal;
+	Protocal	m_protocal;
 };
 
 CUTE_NS_END
