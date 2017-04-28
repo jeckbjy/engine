@@ -4,6 +4,7 @@
 #include "Cute/HandlerProfiler.h"
 #include "Cute/Packet.h"
 #include "Cute/Server.h"
+#include "Cute/SessionEvent.h"
 
 CUTE_NS_BEGIN
 

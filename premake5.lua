@@ -134,191 +134,295 @@ workspace "Cute"
 	
 -- 主工程
 group "core"
-project("engine")
-	defines {"CUTE_BUILD_DLL"}
-	kind (lib_kind)
-	-- add files
-	files({"engine/**.*"})
-	removefiles({"engine/src/conversion/**.*"})
-	removefiles({"engine/src/pcre/**.*"})
-	removefiles({"engine/backup/**.*"})
-	module_vpaths({"engine/**.*"}, "Core")
+	project("engine")
+		defines 		{ "CUTE_BUILD_CORE" }
+		kind 			( lib_kind )
+		
+		-- add files
+		files			{ "engine/**.*" }
+		removefiles		{ "engine/src/conversion/**.*" }
+		removefiles		{ "engine/src/pcre/**.*" }
+		removefiles		{ "engine/backup/**.*" }
+		module_vpaths	( { "engine/**.*" }, "Core"	)
+
+-- 测试项目
+group "samples"
+	project("demo")
+		src_dir			= "samples/demo/"
+		
+		kind			( "ConsoleApp" )
+		
+		files			{ src_dir .. "**.*" }
 	
 -- 服务器
 group "server"	
 	project("world")
-		kind ("ConsoleApp")
-		dependson {"engine"}
-		files {"server/world/**.*"}
-		module_vpaths({"server/world/**.*"}, "src")
+		kind 			( "ConsoleApp" )
+		dependson 		{ "engine" }
+		files 			{ "server/world/**.*" }
+		module_vpaths(  { "server/world/**.*"}, "src" )
 		--vpaths ({["src"]="server/world/**.*"})
 
 	project("game")
-		kind ("ConsoleApp")
-		dependson {"engine"}
-		files {"server/game/**.*"}
-		module_vpaths({"server/game/**.*"}, "src")
+		kind 			( "ConsoleApp" )
+		dependson 		{ "engine" }
+		files 			{ "server/game/**.*" }
+		module_vpaths( {"server/game/**.*"}, "src" )
 		--vpaths ({["src"]="server/game/**.*"})
 		
 	-- 机器人测试工具
 	project("robot")
-		kind ("ConsoleApp")
-		dependson {"engine"}
-		files {"server/robot/**.*"}
-		vpaths ({["src"]="server/robot/**.*"})
+		kind 		( "ConsoleApp" )
+		dependson 	{ "engine" }
+		files 		{ "server/robot/**.*" }
+		vpaths 		{ ["src"] = "server/robot/**.*" }
 		
 	-- 一些测试代码
 	project("test")
-		kind 		("ConsoleApp")
-		dependson 	{"engine"}
-		files 		{"server/test/**.*"}
-		vpaths 		({["src"]="server/test/**.*"})
+		kind 		( "ConsoleApp" )
+		dependson 	{ "engine" }
+		files 		{ "server/test/**.*" }
+		vpaths 		{ ["src"]="server/test/**.*" }
 
+-- 工具
 group "tools"
 	-- 表格自动生成并校验工具
 	project("tabgen")
-		kind ("ConsoleApp")
-		dependson {"engine"}
-		files {"tools/tabgen/**.*"}
+		kind 		( "ConsoleApp" )
+		dependson 	{ "engine" }
+		files 		{ "tools/tabgen/**.*" }
 
 	-- execel转csv工具
 	project("csvgen")
 		language("C#")
-		kind("ConsoleApp")
+		kind	("ConsoleApp")
 		--libdirs { "tools/csvgen/EPPlus"}
-		links {"Excel", "System", "System.Data", "System.XML"}
-		files {"tools/csvgen/src/**.*"}
-		vpaths({["src"] = "tools/csvgen/src/**.*"});
-	
---[[
-group "sql"
-	project("plugin_mysql")
-		
+		links 	{"Excel", "System", "System.Data", "System.XML"}
+		files 	{"tools/csvgen/src/**.*"}
+		vpaths	{ ["src"] = "tools/csvgen/src/**.*" }
+
+-- 渲染API		
 group "render"
 	project("plugin_ogl")
-		src_dir = "plugins/render_ogl/"
-		dependson {"engine"}
-		kind("SharedLib")
-		defines {"CU_OGL_BUILD", "GLEW_BUILD", "GLEW_NO_GLU"}
-		--includedirs {src_dir}
+		src_dir 	= "plugins/RenderOGL/"
+		glew_dir 	= src_dir .."/glew/"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_OGL"}
+		defines		{ "GLEW_BUILD", "GLEW_NO_GLU" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+		-- glew on windows
 		if os.is("windows") then
-			includedirs {src_dir.."glew/include"}
-			files { src_dir .. "**.*"}
-			vpaths{
-				["glew"] = {src_dir.."glew/**.*"},
-				["src"]  = {src_dir.."**.*"}
-			}
-		else
-			--不用递归
-			files { src_dir .. "/src/*.*"}
-			vpaths { ["src"] = {src_dir.. "**.*"} }
+			--includedirs { src_dir.."glew/include" }
+			--files 		{ glew_dir .. "**.*" }
+			--vpaths 		{ ["glew"] = glew_dir }
 		end
 				
 	project("plugin_vulkan")
-		src_dir = "plugins/render_vulkan/"
-		sdk_dir = "D:/Program Files/Vulkan/1.0.11.0/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_VULKAN_BUILD" }
-		--includedirs { src_dir}
+		src_dir 	= "plugins/RenderValkan/"
+		sdk_dir 	= "D:/Program Files/Vulkan/1.0.11.0/"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_VALKAN" }
+		
 		includedirs { sdk_dir.."Include" }
-		libdirs { sdk_dir.."Bin" }
-		links { "vulkan-1" }
-		files { src_dir .. "**.*" }
-		vpaths { ["src"] = {src_dir.. "**.*"} }
+		libdirs 	{ sdk_dir.."Bin" }
+		links 		{ "vulkan-1" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
 		
 	project("plugin_d3d11")
-		src_dir = "plugins/render_d3d11/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_D3D11_BUILD" }
-		--includedirs { src_dir}
-		--includedirs { "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/Include" }
-		libdirs	{"D:\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x64"}
-		files { src_dir .. "**.*" }
-		vpaths { ["src"] = {src_dir.. "**.*"} }
+		src_dir 	= "plugins/RenderD3D11/"
+		sdk_dir 	= "D:/Program Files (x86)/Microsoft DirectX SDK (August 2009)/"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_D3D11" }
+		
+		includedirs { sdk_dir .. "Include" 	}
+		libdirs		{ sdk_dir .. "/Lib/x64"	}
+		
+		files 		{ src_dir .. "**.*" 	}
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 		
 	project("plugin_d3d12")
-		src_dir = "plugins/render_d3d12/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_D3D12_BUILD" }
-		--includedirs { src_dir }
-		includedirs { "D:/Program Files (x86)/Windows Kits/10/Include/10.0.10069.0/um"}
-		libdirs { "D:/Program Files (x86)/Windows Kits/10/Lib/10.0.10069.0/um/x64"}
-		files { src_dir .. "**.*" }
-		vpaths { ["src"] = {src_dir.. "**.*"} }
-
-group "importer"
-	project("plugin_fbx")
-		src_dir = "plugins/fbx/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_FBX_BUILD" }
-		includedirs { src_dir .. "include" }
-		includedirs { "dependencies/fbx/include" }
-		libdirs {"dependencies/fbx/lib/x86/%{cfg.buildcfg}"}
-		links { "libfbxsdk-md.lib" }
-		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
+		src_dir = "plugins/RenderD3D12/"
+		sdk_dir = "D:/Program Files (x86)/Windows Kits/10/"
 		
-	project("plugin_assimp")
-		src_dir = "plugins/assimp/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_ASSIMP_BUILD" }
-		includedirs { src_dir .. "include" }
-		includedirs { "dependencies/assimp/include" }
-		libdirs {"dependencies/assimp/lib"}
-		links { "assimp.lib", "zlibd"}
-		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_D3D12" }
 		
-	project("plugin_freeimage")
-		src_dir = "plugins/freeimage/"
-		dependson { "engine" }
-		kind("SharedLib")
-		defines { "CU_FREEIMAGE_BUILD" }
-		includedirs { src_dir .. "include" }
-		includedirs { "dependencies/freeimage/include" }
-		libdirs {"dependencies/freeimage/lib/x86/%{cfg.buildcfg}"}
-		links { "FreeImage.lib" }
-		files { src_dir .. "**.*" }
-		vpaths{
-			["src"] = { src_dir .. "**.*" }
-		}
+		-- dependson
+		includedirs { sdk_dir .. "Include/10.0.10069.0/um/"}
+		libdirs		{ sdk_dir .. "Lib/10.0.10069.0/um/x64" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
+		
+-- 数据库
+group "database"
+	project("plugin_mysql")
+		src_dir 	= "plugins/DBMySQL/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_MYSQL" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+	project("plugin_postgre")
+		-- DBPostgreSQL
+		src_dir 	= "plugins/DBPostgreSQL/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_PTSQL" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+	project("plugin_sqlite")
+		src_dir 	= "plugins/DBSQLite/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_SQLITE" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+-- 脚本
+group "script"
+	project ("plugin_lua")
+		src_dir 	= "plugins/ScriptLua/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_LUA" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+	project ("plugin_python")
+		src_dir 	= "plugins/ScriptPython/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_PYTHON" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+	
+	project ("plugin_v8")
+		src_dir 	= "plugins/ScriptV8/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_V8" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+	
+-- 其他插件
+group "plugins"
+	project ("plugin_assimp")
+		src_dir 	= "plugins/PluginAssimp/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_ASSIMP" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 
-group "test"
-	project "test_engine"
-		src_dir = "sample/test_engine/"
-		--debugdir( bin_dir )
-		dependson {"engine"}
-		kind "WindowedApp"
-		links { "engine" }
-		--links {"Engine", "assimp", "zlibd" }
-		--includedirs { "dependencies/assimp/include" }
-		--includedirs { "sample/glm" }
-		--libdirs{ "dependencies/assimp/lib" }
-		files { src_dir.."**.h", src_dir.."**.cpp" }
-	project "test_cpp"
-		src_dir = "sample/test_cpp/"
-		kind "ConsoleApp"
-		includedirs {"."}
-		files { src_dir.."**.h", src_dir.."**.cpp" }
-	project "tnet_server"
-		src_dir = "sample/tnet_server/"
-		dependson {"engine"}
-		kind "ConsoleApp"
-		includedirs {"."}
-		files { src_dir.."**.h", src_dir.."**.cpp" }
-	project "tnet_client"
-		src_dir = "sample/tnet_client/"
-		dependson {"engine"}
-		kind "ConsoleApp"
-		includedirs {"."}
-		files { src_dir.."**.h", src_dir.."**.cpp" }
-]]
+	project ("plugin_fbx")
+		src_dir 	= "plugins/PluginFBX/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FBX" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+	project ("plugin_fmod")
+		src_dir 	= "plugins/PluginFMOD/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FMOD" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+		
+	project ("plugin_font")
+		src_dir 	= "plugins/PluginFont/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FONT" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+
+	project ("plugin_freeimage")
+		src_dir 	= "plugins/PluginFreeImage/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FREEIMAGE" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+
+	project ("plugin_ode")
+		src_dir 	= "plugins/PluginODE/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_ODE" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }			
+		
+	project ("plugin_openal")
+		src_dir 	= "plugins/PluginOpenAudio/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_OPENAL" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+		
+	project ("plugin_physx")
+		src_dir 	= "plugins/PluginPhysX/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_PHYSX" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }			

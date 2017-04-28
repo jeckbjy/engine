@@ -54,4 +54,27 @@ struct TransferPacket : public Packet
 	BufferList msg;
 };
 
+// 读取消息头
+class PacketReader
+{
+public:
+	PacketReader();
+	~PacketReader();
+
+protected:
+	BufferList	m_buffer;
+	uint8		m_flag;
+};
+
+class PacketWriter
+{
+public:
+	PacketWriter();
+	~PacketWriter();
+
+protected:
+	BufferList* m_buffer;
+	Packet*		m_msg;
+};
+
 CUTE_NS_END

@@ -1,29 +1,23 @@
 #pragma once
 
 // define CUTE_CORE_API
-#if defined (_WIN32) && defined(_DLL)
-#	if !defined(CUTE_DLL) && !defined(CUTE_STATIC)
-#	define CUTE_DLL
-#	endif
-#endif
-
-#if defined(CUTE_DLL)
-#	if defined(CUTE_BUILD_DLL)
-#	define CUTE_CORE_API CUTE_EXPORT
-#	else
-#	define CUTE_CORE_API CUTE_IMPORT
-#	endif
-#else
+// 默认使用DLL，如果使用LIB需要单独定义
+#if defined(CUTE_USE_LIB_CORE)
+// build or use lib
 #	define CUTE_CORE_API
+#elif defined(CUTE_BUILD_CORE)
+// build dynamic dll
+#	define CUTE_CORE_API CUTE_EXPORT
+#else
+// use static lib
+#	define CUTE_CORE_API CUTE_IMPORT
 #endif
 
 // Automatically link Foundation library.
-#if defined(_MSC_VER)
-#	if !defined(CUTE_NO_AUTO_LINK) && !defined(CUTE_BUILD_DLL)
+#if defined(_MSC_VER) && !defined(CUTE_BUILD_CORE) && !defined(CUTE_UNAUTOLINK_CORE)
 #	pragma comment(lib, "engine.lib")
-#	endif
 #endif
 
 #if defined(_MSC_VER)
-#pragma comment(lib, "ws2_32.lib")
+#	pragma comment(lib, "ws2_32.lib")
 #endif

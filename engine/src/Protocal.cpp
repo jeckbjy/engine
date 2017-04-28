@@ -6,6 +6,7 @@
 #include "Cute/Server.h"
 #include "Cute/HandlerService.h"
 #include "Cute/BitMask.h"
+#include "Cute/SessionEvent.h"
 
 CUTE_NS_BEGIN
 
@@ -60,7 +61,7 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 
 		if (isTransfer)
 		{
-			TransferEvent* ev = new TransferEvent(sess);
+			//TransferEvent* ev = new TransferEvent(sess);
 		}
 		else
 		{
@@ -113,8 +114,8 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 			break;
 		}
 
-		PacketEvent* pe = new PacketEvent(sess, packet);
-		Server::get().post(pe);
+		//PacketEvent* pe = new PacketEvent(sess, packet);
+		//Server::get().post(pe);
 	}
 }
 

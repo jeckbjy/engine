@@ -13,6 +13,7 @@ CUTE_NS_BEGIN
 4:返回值处理:0表示成功，负数表示需要延迟处理，正数表示错误码
 5:性能统计,预警
 */
+class Packet;
 class PacketEvent;
 class CUTE_CORE_API EventHandler
 {
