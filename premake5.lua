@@ -202,7 +202,7 @@ group "tools"
 		vpaths	{ ["src"] = "tools/csvgen/src/**.*" }
 
 -- 渲染API		
-group "render"
+group "plugin_render"
 	project("plugin_ogl")
 		src_dir 	= "plugins/RenderOGL/"
 		glew_dir 	= src_dir .."/glew/"
@@ -267,7 +267,7 @@ group "render"
 		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
 		
 -- 数据库
-group "database"
+group "plugin_db"
 	project("plugin_mysql")
 		src_dir 	= "plugins/DBMySQL/"
 		sdk_dir		= ""
@@ -303,7 +303,7 @@ group "database"
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 		
 -- 脚本
-group "script"
+group "plugin_script"
 	project ("plugin_lua")
 		src_dir 	= "plugins/ScriptLua/"
 		sdk_dir		= ""
@@ -337,10 +337,10 @@ group "script"
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 	
--- 其他插件
-group "plugins"
+-- 文件加载
+group "plugin_importer"
 	project ("plugin_assimp")
-		src_dir 	= "plugins/PluginAssimp/"
+		src_dir 	= "plugins/ImporterAssimp/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -351,7 +351,7 @@ group "plugins"
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 
 	project ("plugin_fbx")
-		src_dir 	= "plugins/PluginFBX/"
+		src_dir 	= "plugins/ImporterFBX/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -361,19 +361,8 @@ group "plugins"
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
 		
-	project ("plugin_fmod")
-		src_dir 	= "plugins/PluginFMOD/"
-		sdk_dir		= ""
-		
-		dependson 	{ "engine" }
-		kind		( "SharedLib" )
-		defines 	{ "CUTE_BUILD_FMOD" }
-		
-		files 		{ src_dir .. "**.*" }
-		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
-		
 	project ("plugin_font")
-		src_dir 	= "plugins/PluginFont/"
+		src_dir 	= "plugins/ImporterFont/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -384,7 +373,7 @@ group "plugins"
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 
 	project ("plugin_freeimage")
-		src_dir 	= "plugins/PluginFreeImage/"
+		src_dir 	= "plugins/ImporterFreeImage/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -394,19 +383,21 @@ group "plugins"
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 
-	project ("plugin_ode")
-		src_dir 	= "plugins/PluginODE/"
+-- 音频
+group "plugin_audio"		
+	project ("plugin_fmod")
+		src_dir 	= "plugins/AudioFMOD/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
 		kind		( "SharedLib" )
-		defines 	{ "CUTE_BUILD_ODE" }
+		defines 	{ "CUTE_BUILD_FMOD" }
 		
 		files 		{ src_dir .. "**.*" }
-		vpaths 		{ ["src"] = { src_dir.. "**.*" } }			
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 		
 	project ("plugin_openal")
-		src_dir 	= "plugins/PluginOpenAudio/"
+		src_dir 	= "plugins/AudioOpenAL/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -416,8 +407,24 @@ group "plugins"
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 		
+	
+-- 物理引擎
+group "plugin_physics"
+	project ("plugin_ode")
+		src_dir 	= "plugins/PhysicsODE/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_ODE" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }			
+		
+
+		
 	project ("plugin_physx")
-		src_dir 	= "plugins/PluginPhysX/"
+		src_dir 	= "plugins/PhysicsPhysX/"
 		sdk_dir		= ""
 		
 		dependson 	{ "engine" }
@@ -426,3 +433,16 @@ group "plugins"
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }			
+
+-- 输入输出
+group "plugin_input"
+	project ("plugin_ois")
+		src_dir 	= "plugins/InputOIS/"
+		sdk_dir		= ""
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_OIS" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }

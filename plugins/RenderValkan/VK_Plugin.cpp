@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-DEF_PLUGIN(CU_VK_API, VK_Plugin)
+DEF_PLUGIN(CUTE_VK_API, VK_Plugin)
 
 void VK_Plugin::install()
 {

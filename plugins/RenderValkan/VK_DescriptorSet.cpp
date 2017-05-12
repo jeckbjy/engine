@@ -1,23 +1,39 @@
 #include "VK_DescriptorSet.h"
+#include "VK_DescriptorSetLayout.h"
 #include "VK_Device.h"
 
 CUTE_NS_BEGIN
 
-VK_DescriptroSet::VK_DescriptroSet(VK_Device* device)
-	: m_device(device)
+VK_DescriptorSet::VK_DescriptorSet()
+	: m_device(NULL)
 	, m_descriptors(VK_NULL_HANDLE)
 {
-	VkDescriptorSetAllocateInfo info;
-	info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	info.descriptorPool = device->getDescriptorPool();
-	info.descriptorSetCount = 1;
-	info.pSetLayouts = &m_layout;
-	vkAllocateDescriptorSets(m_device->native(), &info, &m_descriptors);
 }
 
-VK_DescriptroSet::~VK_DescriptroSet()
+VK_DescriptorSet::~VK_DescriptorSet()
 {
-	vkDestroyDescriptorSetLayout(m_device->native(), m_layout, NULL);
+	term();
+}
+
+bool VK_DescriptorSet::init(VK_Device* device, VK_DescriptorSetLayout* layout)
+{
+	return true;
+}
+
+void VK_DescriptorSet::term()
+{
+	VkDevice device = m_device->getDevice();
+
+	if (m_descriptors != VK_NULL_HANDLE)
+	{
+		vkFreeDescriptorSets(device, NULL, 1, &m_descriptors);
+		m_descriptors = VK_NULL_HANDLE;
+	}
+}
+
+void VK_DescriptorSet::update()
+{
+	// 更新数据
 }
 
 CUTE_NS_END

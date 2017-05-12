@@ -21,12 +21,12 @@ void D3D12_FrameBuffer::bind(void* param)
 
 void D3D12_FrameBuffer::update()
 {
-	if (!m_dirty)
-		return;
+	//if (!m_dirty)
+	//	return;
 
-	m_dirty = false;
+	//m_dirty = false;
 
-	// 创建rtv
+	//// 创建rtv
 }
 
 CUTE_NS_END

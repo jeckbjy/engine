@@ -1,11 +1,12 @@
 #pragma once
-#include "Plugin.h"
+#include "D3D12_API.h"
+#include "Cute/Plugin.h"
 
 CUTE_NS_BEGIN
 
 #define D3D12_NAME "D3D12"
 // ²å¼þÈë¿Ú
-class D3D12_Plugin : public Plugin
+class CUTE_D3D12_API D3D12_Plugin : public Plugin
 {
 public:
 	D3D12_Plugin() : Plugin(D3D12_NAME){}

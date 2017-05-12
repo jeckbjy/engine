@@ -4,11 +4,14 @@
 CUTE_NS_BEGIN
 
 class VK_Device;
-class CU_VK_API VK_Shader : public ShaderStage
+class CUTE_VK_API VK_Shader : public IShaderModule
 {
 public:
-	VK_Shader(uint32_t id, VK_Device* device);
+	VK_Shader();
 	~VK_Shader();
+
+	bool init(VK_Device* device);
+	void term();
 
 	bool compile(const ShaderDesc& desc);
 

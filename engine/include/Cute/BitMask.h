@@ -19,7 +19,7 @@ public:
 	void reset();
 	void set();
 	void set(T mask, bool value);
-	bool test(T mask);
+	bool test(T mask) const;
 	bool any() const;
 	bool none() const;
 	size_t count() const;
@@ -28,6 +28,11 @@ public:
 	{
 		m_data = val;
 		return *this;
+	}
+
+	bool operator [] (T mask) const
+	{
+		return test(mask);
 	}
 
 	bool operator == (const this_type& other) const
@@ -75,7 +80,7 @@ void TBitMask<T>::reset()
 }
 
 template<typename T>
-bool TBitMask<T>::test(T mask)
+bool TBitMask<T>::test(T mask) const
 {
 	return (m_data & mask) != 0;
 }

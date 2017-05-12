@@ -54,7 +54,8 @@
 #define CUTE_OS_NACL	      0x000f
 #define CUTE_OS_UNKNOWN_UNIX  0x00ff
 #define CUTE_OS_WINDOWS_NT    0x1001
-#define CUTE_OS_WINDOWS_CE    0x1011
+#define CUTE_OS_WINDOWS_RT    0x1002
+#define CUTE_OS_WINDOWS_CE    0x1003
 #define CUTE_OS_VMS           0x2001
 
 #if defined(__ANDROID__)
@@ -529,6 +530,14 @@
 #define CUTE_CPP11
 #endif
 
+#ifndef OVERRIDE
+# if defined(CUTE_CPP11)
+#   define OVERRIDE override
+# else
+#   define OVERRIDE
+# endif
+#endif
+
 // ±ä³¤Ä£°å
 #ifdef CUTE_CPP11
 #define CUTE_VARIADIC
@@ -599,6 +608,8 @@
 #define CUTE_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 
 #define NPOS						((unsigned int)-1)
+
+#define ENGINE_NAME					"CuteEngine"
 
 #define CUTE_NS_BEGIN namespace Cute {
 #define CUTE_NS_END	}

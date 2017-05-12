@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_D3D12_API D3D12_FrameBuffer : public FrameBuffer
+class CUTE_D3D12_API D3D12_FrameBuffer : public IFrameBuffer
 {
 public:
 	D3D12_FrameBuffer();

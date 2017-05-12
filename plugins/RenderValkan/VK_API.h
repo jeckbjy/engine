@@ -17,12 +17,6 @@
 #	pragma comment(lib, "plugin_valkan.lib")
 #endif
 
-#include "API.h"
-#include "Graphics.h"
-#include <vulkan/vulkan.h>
-
-#define VK_CHECK(result, info) if(result != VK_SUCCESS) throw std::runtime_error(info)
-
 #ifdef _WIN32
 #define VK_USE_PLATFORM_WIN32_KHR
 #elif defined(__ANDROID__)
@@ -30,3 +24,11 @@
 #else
 #define VK_USE_PLATFORM_XCB_KHR
 #endif
+
+#include "Cute/API.h"
+#include "Cute/Graphics.h"
+#include <vulkan/vulkan.h>
+
+#define VK_CHECK(result, info) if(result != VK_SUCCESS) throw std::runtime_error(info)
+
+

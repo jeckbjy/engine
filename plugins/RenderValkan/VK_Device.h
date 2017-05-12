@@ -1,48 +1,74 @@
 #pragma once
 #include "VK_API.h"
+#include "Cute/DynamicArray.h"
+#include "Cute/BitMask.h"
 
 CUTE_NS_BEGIN
 
-class VK_Graphics;
-class CU_VK_API VK_Device : public Device
+class VK_CommandQueue;
+class CUTE_VK_API VK_Device : public IDevice
 {
-	CU_NONCOPYABLE(VK_Device);
 public:
+	enum EXTENSION
+	{
+		EXT_KHR_PUSH_DESCRIPTOR				= 0x01,	// VK_KHR_push_descriptor
+		EXT_KHR_DESCRIPTOR_UPDATE_TEMPLATE	= 0x02,	// VK_KHR_descriptor_upate_template
+		EXT_NVX_DEVICE_GENERATE_COMMAND		= 0x04,	// VK_NVX_device_generate_command
+		EXT_AMD_DRAW_INDIRECT_COUNT			= 0x08,	// VK_AMD_draw_indirect_count
+		EXT_DEBUG_MARKER					= 0x10,	// VK_EXT_debug_marker
+		EXT_HDR_METADATA					= 0x20,	// VK_EXT_hdr_metadata
+	};
+
 	VK_Device();
 	virtual ~VK_Device();
 
-	GpuBuffer*			newBuffer(const BufferDesc& desc);
-	Texture*			newTexture(const TextureDesc& desc);
-	VertexLayout*		newVertexLayout(const VertexElement* elements, size_t count);
-	ShaderStage*		newShader();
-	ShaderProgram*		newProgram();
-	Pipeline*			newPipeline(const PipelineDesc& desc);
-	DescriptorSet*		newDescriptorSet(Pipeline* pipeline);
-	CommandBuffer*		newCommandBuffer();
-	CommandQueue*		newCommandQueue();
-	FrameBuffer*		newFrameBuffer();
-	SwapChain*			newSwapChain(const SwapChainDesc& desc);
+	bool init(const DeviceDesc& desc);
+	void term();
 
-	void allocMemory(VkDeviceMemory& memory, uint32_t bytes, uint32_t typeBits, VkFlags properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+	//GpuBuffer*			newBuffer(const BufferDesc& desc);
+	//Texture*			newTexture(const TextureDesc& desc);
+	//VertexLayout*		newVertexLayout(const VertexElement* elements, size_t count);
+	//ShaderStage*		newShader();
+	//ShaderProgram*		newProgram();
+	//Pipeline*			newPipeline(const PipelineDesc& desc);
+	//DescriptorSet*		newDescriptorSet(Pipeline* pipeline);
+	//CommandBuffer*		newCommandBuffer();
+	//CommandQueue*		newCommandQueue();
+	//FrameBuffer*		newFrameBuffer();
+	//SwapChain*			newSwapChain(const SwapChainDesc& desc);
 
-	VkDevice& native() { return m_device; }
-	VkDescriptorPool& getDescriptorPool() { return m_descroptorPool; }
+	bool alloc(VkDeviceMemory& memory, const VkMemoryRequirements& requirements, VkMemoryPropertyFlags flags);
+	bool isSupportExtension(EXTENSION value) const;
+
+	VkDevice			getDevice() const;
+	size_t				getPhysicalDeviceCount() const;
+	VkPhysicalDevice	getPhysicalDevice(size_t index = 0) const;
+	VkPhysicalDeviceMemoryProperties getMemoryProperties(size_t index) const;
 
 private:
-	void createInstance();
-	void createPhysical();
-	void createDevice();
+	bool createInstance(bool enableDebug);
+	bool createPhysical();
+	bool createDevice(const DeviceDesc& desc);
+	bool createDebuger();
 
 private:
-	VkInstance			m_instance;
-	VkPhysicalDevice	m_physical;
-	VkDevice			m_device;
-	VkDescriptorPool	m_descroptorPool;
-	uint32_t			m_queueIndex;
-	VkPhysicalDeviceMemoryProperties m_memoryProps;
+	struct PhysicalInfo
+	{
+		VkPhysicalDevice					device;
+		VkPhysicalDeviceProperties			deviceProperties;
+		VkPhysicalDeviceMemoryProperties	memoryProperties;
+	};
+
+	typedef DynamicArray<PhysicalInfo> PhysicalArray;
+	DeviceInfo				m_info;
+	VkInstance				m_instance;
+	VkDevice				m_device;
+	PhysicalArray			m_physicals;
+	VkAllocationCallbacks	m_allocator;
+	BitMask32				m_supportExt;
+	VK_CommandQueue*		m_graphicsQueue;
+	VK_CommandQueue*		m_computeQueue;
+	VK_CommandQueue*		m_copyQueue;
 };
-
-extern CU_VK_API VK_Device*	gVKDevice();
-extern CU_VK_API VkDevice	gVKNativeDevice();
 
 CUTE_NS_END

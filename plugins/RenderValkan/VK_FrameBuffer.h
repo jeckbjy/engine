@@ -3,20 +3,27 @@
 
 CUTE_NS_BEGIN
 
-class CU_VK_API VK_FrameBuffer : public FrameBuffer
+class VK_Device;
+class CUTE_VK_API VK_FrameBuffer : public IFrameBuffer
 {
 public:
 	VK_FrameBuffer();
 	~VK_FrameBuffer();
 
-	void bind(void*);
+	bool init(VK_Device* device, const FrameBufferDesc& desc);
+	void term();
+
+	void bind(ICommandList* cmdList);
+	void clear(
+		ICommandList*					cmdList,
+		uint32_t						clearColorCount,
+		const ClearColorValue*			clearColors,
+		const ClearDepthStencilValue*	clearDepthStencil);
 
 private:
-	void destroy();
-	void update();
-
-private:
-	VkFramebuffer m_fbo;
+	VK_Device*		m_device;
+	VkFramebuffer	m_buffer;
+	VkRenderPass	m_pass;
 };
 
 CUTE_NS_END

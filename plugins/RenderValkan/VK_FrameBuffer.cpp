@@ -5,53 +5,41 @@
 CUTE_NS_BEGIN
 
 VK_FrameBuffer::VK_FrameBuffer()
-: m_fbo(VK_NULL_HANDLE)
+	: m_device(NULL)
+	, m_buffer(VK_NULL_HANDLE)
+	, m_pass(VK_NULL_HANDLE)
 {
-
 }
 
 VK_FrameBuffer::~VK_FrameBuffer()
 {
-	destroy();
+	term();
 }
 
-void VK_FrameBuffer::destroy()
+bool VK_FrameBuffer::init(VK_Device* device, const FrameBufferDesc& desc)
 {
-	if (m_fbo != VK_NULL_HANDLE)
+	m_device = device;
+
+	VkAttachmentDescription attachmentDesc[9] = {};
+    VkAttachmentReference   attachmentRefs[9] = {};
+    VkImageView             imageViews    [9] = {};
+    VkAttachmentReference*  pDepthAttachmentRef = NULL;
+
+	uint32_t attachmentCount = desc.colorCount;
+	uint32_t width = 0;
+	uint32_t height = 0;
+	uint32_t layers = 0;
+
+	for (size_t i = 0; i < desc.colorCount; ++i)
 	{
-		vkDestroyFramebuffer(gVKNativeDevice(), m_fbo, NULL);
-		m_fbo = VK_NULL_HANDLE;
+		VK_Texture* wrapTexture = static_cast<VK_TextureView>(desc.colorTargets[i]);
 	}
+	return true;
 }
 
-void VK_FrameBuffer::bind(void*)
+void VK_FrameBuffer::term()
 {
 
-}
-
-void VK_FrameBuffer::update()
-{
-	m_dirty = false;
-
-	VK_Texture* tex;
-	VkImageView attachments[9] = { 0 };
-	for (size_t i = 0; i < m_attachments.size(); ++i)
-	{
-		tex = (VK_Texture*)m_attachments[i].get();
-		attachments[i + 1] = tex ? tex->getView() : VK_NULL_HANDLE;
-	}
-
-	VkFramebufferCreateInfo info = {};
-	info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	info.pNext = NULL;
-	info.renderPass = VK_NULL_HANDLE;	// todo:create by framebuffer
-	info.pAttachments = attachments;
-	info.attachmentCount = m_attachments.size();
-	info.width = 0;
-	info.height = 0;
-	info.layers = 1;
-
-	vkCreateFramebuffer(gVKNativeDevice(), &info, NULL, &m_fbo);
 }
 
 CUTE_NS_END
