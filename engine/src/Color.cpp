@@ -1,4 +1,4 @@
-//! Graphics
+//! Render
 #include "Cute/Color.h"
 #include "Cute/Math.h"
 

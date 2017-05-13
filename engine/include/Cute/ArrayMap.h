@@ -1,3 +1,4 @@
+//! Collection
 #pragma once
 #include "Cute/Platform.h"
 #include <algorithm>

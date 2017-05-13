@@ -1,3 +1,4 @@
+//! Application
 #include "Cute/Window.h"
 
 CUTE_NS_BEGIN

@@ -1,4 +1,3 @@
-//! Render
 #pragma once
 #include "Cute/Foundation.h"
 
