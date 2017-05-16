@@ -217,6 +217,7 @@ group "plugin_render"
 		
 		-- glew on windows
 		if os.is("windows") then
+			includedirs { "./depends/glew/include"}
 			--includedirs { src_dir.."glew/include" }
 			--files 		{ glew_dir .. "**.*" }
 			--vpaths 		{ ["glew"] = glew_dir }
@@ -443,6 +444,8 @@ group "plugin_input"
 		dependson 	{ "engine" }
 		kind		( "SharedLib" )
 		defines 	{ "CUTE_BUILD_OIS" }
+		includedirs	{ "./depends/OIS/include" }
+		libdirs		{ "./depends/OIS/lib"}
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }

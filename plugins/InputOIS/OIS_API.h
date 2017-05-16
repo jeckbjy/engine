@@ -17,3 +17,5 @@
 #if defined(_MSC_VER) && !defined(CUTE_BUILD_OIS) && !defined(CUTE_UNAUTOLINK_OIS)
 #	pragma comment(lib, "plugin_ois.lib")
 #endif
+
+#include <OIS/OIS.h>
