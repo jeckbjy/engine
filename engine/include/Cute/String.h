@@ -19,6 +19,8 @@ public:
 		UTF16_BE_NOBOM      // UTF16-BE without BOM
 	};
 
+	static const String BLANK;
+
 	static void toUTF8(const UTF16String& from, UTF8String& to);
 	static void toUTF8(const UTF32String& from, UTF8String& to);
 

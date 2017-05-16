@@ -7,6 +7,8 @@
 
 CUTE_NS_BEGIN
 
+const String Strings::BLANK;
+
 String Strings::format(const char* fmt, ...)
 {
 	std::string result;

@@ -337,6 +337,9 @@ group "plugin_script"
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
+		
+-- 脚本绑定
+--group "plugin_binding"
 	
 -- 文件加载
 group "plugin_importer"
@@ -406,7 +409,8 @@ group "plugin_audio"
 		defines 	{ "CUTE_BUILD_OPENAL" }
 		
 		files 		{ src_dir .. "**.*" }
-		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+		vpaths		{ ["src/coder"] = { src_dir .. "*coder.*"} }
+		vpaths 		{ ["src"]       = { src_dir .. "**.*" } }	
 		
 	
 -- 物理引擎
