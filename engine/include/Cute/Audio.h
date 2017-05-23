@@ -26,12 +26,12 @@ public:
 	virtual void setPaused(bool paused) = 0;
 	virtual void setActiveDevice(const String& name) = 0;
 
-	virtual float getVulume() const = 0;
+	virtual float getVolume() const = 0;
 	virtual bool  isPaused() const = 0;
 
 	virtual String getActiveDevice() const = 0;
 	virtual String getDefaultDevice() const = 0;
-	virtual DeviceList& getAllDevices() const = 0;
+	virtual const DeviceList& getAllDevices() const = 0;
 
 protected:
 	virtual AudioClip*   createClip(Stream* samples, uint32 streamSize, uint32 sampleNum) = 0;

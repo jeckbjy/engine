@@ -17,3 +17,7 @@
 #if defined(_MSC_VER) && !defined(CUTE_BUILD_OPENAL) && !defined(CUTE_UNAUTOLINK_OPENAL)
 #	pragma comment(lib, "plugin_openal.lib")
 #endif
+
+#include "Cute/Foundation.h"
+#include "AL/alc.h"
+#include "AL/al.h"

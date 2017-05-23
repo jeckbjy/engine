@@ -10,17 +10,23 @@ OALImporter::~OALImporter()
 {
 }
 
-bool OALImporter::isExtensionSupported(const String& ext) const
+const char** OALImporter::getExtensionList() const
 {
-	String lowerExt = toLower(ext);
-	return lowerExt == "wav" || lowerExt == "flac" || lowerExt == "ogg";
+	static const char* exts[] = { "wav", "flac", "ogg", NULL };
+	return exts;
 }
 
-bool OALImporter::isMagicNumberSupported(uint32 magic) const
-{
-	// Don't check for magic number, rely on extension
-	return false;
-}
+//bool OALImporter::isExtensionSupported(const String& ext) const
+//{
+//	String lowerExt = toLower(ext);
+//	return lowerExt == "wav" || lowerExt == "flac" || lowerExt == "ogg";
+//}
+//
+//bool OALImporter::isMagicNumberSupported(uint32 magic) const
+//{
+//	// Don't check for magic number, rely on extension
+//	return false;
+//}
 
 ImportOptions* OALImporter::newOptions() const
 {

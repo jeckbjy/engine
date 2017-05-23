@@ -1,4 +1,3 @@
-//! Importer
 #pragma once
 #include "Cute/Foundation.h"
 
@@ -18,20 +17,23 @@ public:
 };
 
 // ImporterSpecific
-class CUTE_CORE_API ImporterBase : public Object
+class CUTE_CORE_API ImporterSpecific : public Object
 {
-	DECLARE_RTTI(ImporterBase, Object, OID_ANY)
+	DECLARE_RTTI(ImporterSpecific, Object, OID_ANY)
 public:
-	virtual ~ImporterBase(){}
+	virtual ~ImporterSpecific(){}
 
-	virtual bool isExtensionSupported(const String& ext) const = 0;
-	virtual bool isMagicNumberSupported(uint32 magic) const = 0;
+	//virtual bool isExtensionSupported(const String& ext) const = 0;
+	//virtual bool isMagicNumberSupported(uint32 magic) const = 0;
 
 	virtual Resource* import(const String& path, const ImportOptions* options = NULL) = 0;
 
 	virtual ImportOptions*			newOptions() const = 0;
 	virtual const ImportOptions*	getDefaultOptions() const = 0;
+	// 返回小写字符串数组,以NULL结尾
+	virtual const char**			getExtensionList() const = 0;
 
+	bool isExtensionSupported(const String& ext) const;
 private:
 };
 

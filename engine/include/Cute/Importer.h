@@ -2,7 +2,7 @@
 #include "Cute/Foundation.h"
 #include "Cute/Module.h"
 #include "Cute/String.h"
-#include "Cute/ImporterBase.h"
+#include "Cute/ImporterSpecific.h"
 
 CUTE_NS_BEGIN
 
@@ -15,10 +15,10 @@ public:
 	Resource* import(const String& filePath, const ImportOptions* options = NULL, const String& uuid = Strings::BLANK);
 
 private:
-	ImporterBase* getImporter(const String& ext);
+	ImporterSpecific* getImporter(const String& ext);
 	
 private:
-	typedef std::vector<ImporterBase*> ImporterList;
+	typedef std::vector<ImporterSpecific*> ImporterList;
 	ImporterList m_importers;
 
 };

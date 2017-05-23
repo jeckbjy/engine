@@ -23,7 +23,7 @@ Resource* Importer::import(const String& filePath, const ImportOptions* options 
 	Path path(filePath);
 	String ext = path.getExtension();
 
-	ImporterBase* importer = getImporter(ext);
+	ImporterSpecific* importer = getImporter(ext);
 	if (importer == NULL)
 		return NULL;
 
@@ -35,9 +35,9 @@ Resource* Importer::import(const String& filePath, const ImportOptions* options 
 	return result;
 }
 
-ImporterBase* Importer::getImporter(const String& ext)
+ImporterSpecific* Importer::getImporter(const String& ext)
 {
-	ImporterBase* importer;
+	ImporterSpecific* importer;
 	for (ImporterList::reverse_iterator itor = m_importers.rbegin(); itor != m_importers.rend(); ++itor)
 	{
 		importer = *itor;
