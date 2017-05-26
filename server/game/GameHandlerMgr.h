@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	int onAdmin(TextPacket* msg);
+	//int onAdmin(TextPacket* msg);
 	int onTransfer(TransferPacket* msg);
 	int onLogin();
 	int onLogout();
@@ -67,8 +67,8 @@ class WebHandler : public HandlerRegister
 public:
 	void setup()
 	{
-		regist(&WebHandler::onAdmin);
+		//regist(&WebHandler::onAdmin);
 	}
 private:
-	int onAdmin(TextPacket* msg);
+	//int onAdmin(TextPacket* msg);
 };

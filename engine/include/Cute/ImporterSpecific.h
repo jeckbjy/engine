@@ -28,12 +28,11 @@ public:
 
 	virtual Resource* import(const String& path, const ImportOptions* options = NULL) = 0;
 
-	virtual ImportOptions*			newOptions() const = 0;
 	virtual const ImportOptions*	getDefaultOptions() const = 0;
+	virtual ImportOptions* newOptions() const = 0;
 	// 返回小写字符串数组,以NULL结尾
-	virtual const char**			getExtensionList() const = 0;
-
-	bool isExtensionSupported(const String& ext) const;
+	virtual const char** getExtensionList() const = 0;
+	virtual bool isExtensionSupported(const String& ext) const;
 private:
 };
 

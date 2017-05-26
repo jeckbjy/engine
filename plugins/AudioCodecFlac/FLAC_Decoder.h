@@ -16,6 +16,8 @@ public:
 	void seek(uint offset) OVERRIDE;
 	void close();
 
+	Stream* getStream() { return m_stream; }
+
 private:
 	typedef FLAC__StreamDecoder Decoder;
 	Decoder*	m_decoder;

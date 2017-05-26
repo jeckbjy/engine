@@ -1,4 +1,5 @@
 #include "FLAC_Decoder.h"
+#include "Cute/Stream.h"
 
 CUTE_NS_BEGIN
 
@@ -7,42 +8,74 @@ CUTE_NS_BEGIN
 //////////////////////////////////////////////////////////////////////////
 FLAC__StreamDecoderReadStatus flac_read(const FLAC__StreamDecoder*, FLAC__byte buffer[], size_t* bytes, void* data)
 {
-	return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
+
+	bool result = stream->read(buffer, *bytes);
+	if (result)
+		return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+	else
+		return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
 }
 
-FLAC__StreamDecoderWriteStatus flac_write(const FLAC__StreamDecoder*, const FLAC__Frame* frame, const FLAC__int32* const buffer[], void* clientData)
+FLAC__StreamDecoderWriteStatus flac_write(const FLAC__StreamDecoder*, const FLAC__Frame* frame, const FLAC__int32* const buffer[], void* data)
 {
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
 
+	return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
 FLAC__StreamDecoderSeekStatus flac_seek(const FLAC__StreamDecoder*, FLAC__uint64 offset, void* data)
 {
-	return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
+
+	stream->seek(offset);
+	return FLAC__STREAM_DECODER_SEEK_STATUS_OK;
 }
 
 FLAC__StreamDecoderTellStatus flac_tell(const FLAC__StreamDecoder*, FLAC__uint64* offset, void* data)
 {
-	return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
+
+	*offset = stream->position();
+
+	return FLAC__STREAM_DECODER_TELL_STATUS_OK;
 }
 
-FLAC__StreamDecoderLengthStatus flac_length(const FLAC__StreamDecoder*, FLAC__uint64* streamLength, void* clientData)
+FLAC__StreamDecoderLengthStatus flac_length(const FLAC__StreamDecoder*, FLAC__uint64* length, void* data)
 {
-	return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
+
+	*length = stream->length();
+	return FLAC__STREAM_DECODER_LENGTH_STATUS_OK;
 }
 
-FLAC__bool flac_eof(const FLAC__StreamDecoder*, void* clientData)
+FLAC__bool flac_eof(const FLAC__StreamDecoder*, void* data)
 {
-	return true;
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	Stream* stream = decoder->getStream();
+
+	return stream->eof();
 }
 
-void flac_meta(const FLAC__StreamDecoder*, const FLAC__StreamMetadata* meta, void* clientData)
+void flac_meta(const FLAC__StreamDecoder*, const FLAC__StreamMetadata* meta, void* data)
 {
+	FLACDecoder* decoder = (FLACDecoder*)(data);
 
+	if (meta->type == FLAC__METADATA_TYPE_STREAMINFO)
+	{
+		// …Ë÷√
+	}
 }
 
-void flac_error(const FLAC__StreamDecoder*, FLAC__StreamDecoderErrorStatus, void* clientData)
+void flac_error(const FLAC__StreamDecoder*, FLAC__StreamDecoderErrorStatus, void* data)
 {
-
+	FLACDecoder* decoder = (FLACDecoder*)(data);
+	// set error
 }
 
 //////////////////////////////////////////////////////////////////////////
