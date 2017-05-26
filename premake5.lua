@@ -397,20 +397,65 @@ group "plugin_audio"
 		kind		( "SharedLib" )
 		defines 	{ "CUTE_BUILD_FMOD" }
 		
+		includedirs { "./depends/FMOD/include" }
+		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 		
 	project ("plugin_openal")
 		src_dir 	= "plugins/AudioOpenAL/"
-		sdk_dir		= ""
+		sdk_dir		= "./depends/OpenAL/"
 		
 		dependson 	{ "engine" }
 		kind		( "SharedLib" )
 		defines 	{ "CUTE_BUILD_OPENAL" }
 		
+		includedirs { sdk_dir .. "/include" 	}
+		
 		files 		{ src_dir .. "**.*" }
-		vpaths		{ ["src/coder"] = { src_dir .. "*coder.*"} }
-		vpaths 		{ ["src"]       = { src_dir .. "**.*" } }	
+		vpaths 		{ ["src"] = { src_dir .. "**.*" } }	
+		
+	project ("plugin_ogg")
+		src_dir 	= "plugins/AudioCodecOgg/"
+		sdk_ogg		= "./depends/libogg/"
+		sdk_vorbis	= "./depends/libvorbis/"
+		all_files	= src_dir .. "**.*"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_OGG" }
+		
+		includedirs { sdk_ogg .. "/include"}
+		includedirs { sdk_vorbis .. "/include"}
+		
+		files		{ all_files }
+		vpaths		{ ["src"] = { all_files } }
+		
+	project ("plugin_wave")
+		src_dir 	= "plugins/AudioCodecWave/"
+		sdk_dir		= ""
+		all_files	= src_dir .. "**.*"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_WAVE" }
+		
+		files		{ all_files }
+		vpaths		{ ["src"] = { all_files } }
+
+	project ("plugin_flac")
+		src_dir 	= "plugins/AudioCodecFlac/"
+		sdk_dir		= "./depends/libflac/"
+		all_files	= src_dir .. "**.*"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FLAC" }
+		
+		includedirs { sdk_dir .. "/include"}
+		
+		files		{ all_files }
+		vpaths		{ ["src"] = { all_files } }		
 		
 	
 -- 物理引擎
