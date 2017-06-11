@@ -3,11 +3,11 @@
 
 CUTE_NS_BEGIN
 
-enum AudioFormat
-{
-	AUDIO_FORMAT_PCM,		/**< Pulse code modulation audio ("raw" uncompressed audio). */
-	AUDIO_FORMAT_VORBIS,	/**< Vorbis compressed audio. */
-};
+//enum AudioFormat
+//{
+//	AUDIO_FORMAT_PCM,		/**< Pulse code modulation audio ("raw" uncompressed audio). */
+//	AUDIO_FORMAT_VORBIS,	/**< Vorbis compressed audio. */
+//};
 
 enum AudioReadMode
 {
@@ -29,7 +29,7 @@ enum AudioReadMode
 struct CUTE_CORE_API AudioClipDesc
 {
 	AudioReadMode	readMode;
-	AudioFormat		format;
+	//AudioFormat		format;
 	uint32			frequency;
 	uint32			bitDepth;
 	uint32			numChannels;
@@ -65,7 +65,7 @@ class CUTE_CORE_API AudioClip : public Object
 public:
 	~AudioClip();
 
-	AudioFormat		getFormat() const { return m_desc.format; }
+	//AudioFormat		getFormat() const { return m_desc.format; }
 	AudioReadMode	getReadMode() const { return m_desc.readMode; }
 
 	uint32 getBitDepth() const { return m_desc.bitDepth; }
