@@ -66,6 +66,11 @@ bool Stream::skipLine()
 	return true;
 }
 
+bool Stream::skip(long bytes)
+{
+	return seek(bytes, SEEK_CUR);
+}
+
 bool Stream::read7Bit(uint64& data)
 {
 	data = 0;

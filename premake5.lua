@@ -93,7 +93,7 @@ function module_vpaths(dirs, base_module)
 	
 end
 
-workspace "Cute"
+workspace "cute"
 	location("solution")
 	--toolset "v140"
 	--basedir("solution")
@@ -414,7 +414,9 @@ group "plugin_audio"
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir .. "**.*" } }	
-		
+
+--音频格式
+group "plugin_audiodecoder"	
 	project ("plugin_ogg")
 		src_dir 	= "plugins/AudioCodecOgg/"
 		sdk_ogg		= "./depends/libogg/"
@@ -430,7 +432,7 @@ group "plugin_audio"
 		
 		files		{ all_files }
 		vpaths		{ ["src"] = { all_files } }
-		
+
 	project ("plugin_wave")
 		src_dir 	= "plugins/AudioCodecWave/"
 		sdk_dir		= ""

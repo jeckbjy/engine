@@ -20,8 +20,10 @@ public:
 
 private:
 	typedef FLAC__StreamDecoder Decoder;
+	typedef std::vector<uint8> SampleList;
 	Decoder*	m_decoder;
 	Stream*		m_stream;
+	SampleList	m_overflow;	//  £”‡Œ¥¥¶¿Ìµƒ
 };
 
 CUTE_NS_END

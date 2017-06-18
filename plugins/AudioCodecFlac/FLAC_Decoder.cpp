@@ -121,7 +121,7 @@ bool FLACDecoder::open(const Stream* stream)
 	return true;
 }
 
-uint FLACDecoder::read(uint8* buffer, uint length)
+uint FLACDecoder::read(uint8* samples, uint length)
 {
 	return 0;
 }

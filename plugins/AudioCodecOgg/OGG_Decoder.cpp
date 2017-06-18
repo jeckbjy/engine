@@ -51,31 +51,34 @@ bool OGGDecoder::open(Stream* stream)
 	}
 
 	vorbis_info* info = ov_info(&m_file, -1);
-	
+	m_info.samples = (uint)ov_pcm_total(&m_file, -1);
+	m_info.channels = info->channels;
+	m_info.rate = info->rate;
+	m_info.bits = 16;
 	return true;
 }
 
-uint OGGDecoder::read(uint8* buffer, uint length)
+uint OGGDecoder::read(uint8* samples, uint count)
 {
-	//uint 
-	//uint numReadSamples = 0;
-	//while (numReadSamples < length)
-	//{
-	//	int byteToRead = (int)(length - numReadSamples) * sizeof(int16_t);
-	//	long bytesRead = ov_read(&m_file, (char*)buffer, byteToRead, 0, 2, 1, NULL);
-	//	if (bytesRead <= 0)
-	//		break;
+	uint numReadSamples = 0;
+	while (numReadSamples < count)
+	{
+		int bytesToRead = (count - numReadSamples) * sizeof(int16);
+		uint bytesRead = ov_read(&m_file, (char*)samples, bytesToRead, 0, 2, 1, NULL);
+		if(bytesToRead <= 0)
+			break;
 
-	//	numReadSamples += 1;
-	//	samples += 
-	//}
+		uint32 samplesRead = bytesRead / sizeof(int16);
+		numReadSamples += samplesRead;
+		samples += samplesRead * sizeof(int16);
+	}
 
-	return 0;
+	return numReadSamples;
 }
 
 void OGGDecoder::seek(uint offset)
 {
-	ov_pcm_seek(&m_file, offset / m_channels);
+	ov_pcm_seek(&m_file, offset / m_info.channels);
 }
 
 CUTE_NS_END

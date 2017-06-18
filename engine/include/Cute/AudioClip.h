@@ -46,7 +46,7 @@ struct CUTE_CORE_API AudioClipDesc
 
 	AudioClipDesc()
 		: readMode(AUDIO_READ_DECOMPRESSED)
-		, format(AUDIO_FORMAT_PCM)
+		//, format(AUDIO_FORMAT_PCM)
 		, frequency(44100)
 		, bitDepth(16)
 		, numChannels(2)

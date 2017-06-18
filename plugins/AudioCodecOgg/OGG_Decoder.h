@@ -12,7 +12,7 @@ public:
 	~OGGDecoder();
 
 	bool open(Stream* stream) OVERRIDE;
-	uint read(uint8* buffer, uint length) OVERRIDE;
+	uint read(uint8* samples, uint count) OVERRIDE;
 	void seek(uint offset) OVERRIDE;
 
 	Stream* getStream() { return m_stream; }
@@ -21,7 +21,6 @@ public:
 private:
 	Stream*			m_stream;
 	OggVorbis_File	m_file;
-	size_t			m_channels;
 	size_t			m_offset;
 };
 

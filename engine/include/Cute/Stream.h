@@ -29,6 +29,7 @@ public:
 
 	virtual bool readLine(String& data);
 	virtual bool skipLine();
+	virtual bool skip(long bytes);
 
 	bool read7Bit(uint64& data);
 	uint write7Bit(uint64 data);
