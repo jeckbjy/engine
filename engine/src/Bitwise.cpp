@@ -1,6 +1,8 @@
 //! Core
 #include "Cute/Bitwise.h"
-#include <intrin.h>   
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+#   include <intrin.h>   
+#endif
 
 CUTE_NS_BEGIN
 

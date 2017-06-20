@@ -153,7 +153,7 @@ inline TVector2<T> TVector2<T>::reflect(const TVector2& v, const TVector2& n)
 template<typename T>
 inline T TVector2<T>::manhattanDistance(const TVector2& a, const TVector2& b)
 {
-	return Math::abs(other.x - x) + Math::abs(other.y - y);
+	return Math::abs(a.x - b.x) + Math::abs(a.y - b.OS_MAC_OS_Xy);
 }
 
 template<typename T>
@@ -477,18 +477,18 @@ inline TVector2<T> operator+ (T lhs, const TVector2<T>& rhs)
 template<typename T>
 inline TVector2<T> operator- (T lhs, const TVector2<T>& rhs)
 {
-	return TVector2(lhs - rhs.x, lhs - rhs.y);
+	return TVector2<T>(lhs - rhs.x, lhs - rhs.y);
 }
 template<typename T>
 inline TVector2<T> operator* (T lhs, const TVector2<T>& rhs)
 {
-	return TVector2(lhs * rhs.x, lhs * rhs.y);
+	return TVector2<T>(lhs * rhs.x, lhs * rhs.y);
 }
 
 template<typename T>
 inline TVector2<T> operator/ (T lhs, const TVector2<T>& rhs)
 {
-	return TVector2(lhs / rhs.x, lhs / rhs.y);
+	return TVector2<T>(lhs / rhs.x, lhs / rhs.y);
 }
 
 CUTE_NS_END

@@ -2,11 +2,11 @@
 #include "Cute/Foundation.h"
 #include "Cute/Vector2.h"
 
-#if defined(CUTE_OS_WINDOWS_NT)
+#if (CUTE_OS == CUTE_OS_WINDOWS_NT)
 #	include <Windows.h>
-#elif defined(CUTE_OS_WINDOWS_RT)
+#elif (CUTE_OS == CUTE_OS_WINDOWS_RT)
 #	include <agile.h>
-#elif defined(CUTE_OS_ANDROID)
+#elif (CUTE_OS == CUTE_OS_ANDROID)
 #	include <android/native_window.h>
 #elif defined(CUTE_USE_X11)
 #	include <X11/X.h>
@@ -20,12 +20,15 @@
 CUTE_NS_BEGIN
 
 // 定义不同类型窗体指针
-#if defined(CUTE_OS_WINDOWS_NT)
+#if (CUTE_OS == CUTE_OS_WINDOWS_NT)
 typedef HWND window_t;
-#elif defined(CUTE_OS_WINDOWS_RT)
+#elif (CUTE_OS == CUTE_OS_WINDOWS_RT)
 typedef Platform::Agile<Windows::UI::Core::CoreWindow> window_t;
-#elif defined(CU_OS_ANDROID)
+#elif (CUTE_OS == CU_OS_ANDROID)
 typedef ::ANativeWindow*	window_t;
+#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+// todo:mac
+typedef void*               window_t;
 #elif defined(CUTE_USE_X11)
 typedef ::Window			window_t;
 typedef ::Display			display_t;

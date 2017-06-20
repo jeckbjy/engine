@@ -90,7 +90,7 @@ void Console::setColor(Color color /* = DEFAULT */)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, COLOR_FOREGROUND[color]);
 #else
-	fprintf(stdout, "\x1b[%d%sm", COLOR_FOREGROUND[color], (color > CC_YELLOW ? ";1" : ""));
+//	fprintf(stdout, "\x1b[%d%sm", COLOR_FOREGROUND[color], (color > CC_YELLOW ? ";1" : ""));
 #endif
 }
 

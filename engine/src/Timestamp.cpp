@@ -1,5 +1,6 @@
 // module DateTime
 #include "Cute/Timestamp.h"
+#include "Cute/Exception.h"
 
 CUTE_NS_BEGIN
 

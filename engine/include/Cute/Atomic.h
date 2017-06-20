@@ -10,7 +10,7 @@ CUTE_NS_BEGIN
 
 #ifdef CUTE_OS_FAMILY_WINDOWS
 typedef LONG	atomic_t;
-#elif defined(CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
 typedef int32_t atomic_t;
 #else
 typedef int		atomic_t;
@@ -55,7 +55,7 @@ private:
 #define CUTE_ATOMIC_DEC(ptr)				InterlockedDecrement(ptr)
 #define CUTE_ATOMIC_TEST_AND_SET(ptr, v)	InterlockedCompareExchange(ptr, v, *ptr)
 
-#elif defined(CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
 
 #define CUTE_ATOMIC_SET(ptr, v)				OSAtomicTestAndSet(v, ptr)
 #define CUTE_ATOMIC_INC(ptr)				OSAtomicIncrement32(ptr)

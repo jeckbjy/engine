@@ -13,7 +13,7 @@ CUTE_NS_BEGIN
 
 enum ErrorCode
 {
-	ERR_SUCCESS				= 0,
+	ERR_SUCCESSED			= 0,
 	ERR_ALREADY_OPEN		= 1,
 	ERR_EOF					= 2,	// 连接正常关闭
 	ERR_ACCESS				= CUTE_ERROR(EACCES),

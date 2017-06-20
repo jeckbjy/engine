@@ -46,7 +46,7 @@ private:
 #ifdef CUTE_OS_FAMILY_WINDOWS
 	typedef WIN32_FILE_ATTRIBUTE_DATA FileData;
 #else
-	typedef stat FileData;
+	typedef struct stat FileData;
 #endif
 	TString	 m_path;
 	FileData m_data;

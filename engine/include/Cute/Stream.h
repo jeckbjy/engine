@@ -1,6 +1,7 @@
 #pragma once
 #include "Cute/Foundation.h"
 #include "Cute/Object.h"
+#include "Cute/ByteOrder.h"
 
 CUTE_NS_BEGIN
 

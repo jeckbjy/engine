@@ -90,10 +90,10 @@ public:
 
 		U key;
 		V value;
-		for (auto itor = fields.begin(); itor != fields.end(); ++itor)
+        for (StringTokenizer::Iterator itor = fields.begin(); itor != fields.end(); ++itor)
 		{
-			std::string& field = *itor;
-			trim(field);
+			const String& field = *itor;
+//			trim(field);
 			if (field.empty())
 				continue;
 

@@ -26,6 +26,12 @@
 #include <atomic>
 #include <unordered_map>
 #include <unordered_set>
+#elif defined __GNUC__ || defined __APPLE__
+#include <ext/hash_map>
+#include <ext/hash_set>
+namespace std{
+    using namespace __gnu_cxx;
+}
 #else
 #include <hash_map>
 #include <hash_set>
@@ -133,18 +139,18 @@ class Queue : public std::queue<T, std::deque<T, A> >{};
 template<typename T, typename P = std::less<T>, typename A = std::allocator<T> >
 class Set : public std::set<T, P, A> {};
 
-template<typename K, typename V, typename P = std::less<T>, typename A = std::allocator<T> >
+template<typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V> > >
 class Map : public std::map<K, V, P, A> {};
 
 /** An associative container containing an ordered set of key-value pairs where multiple elements can have the same key. */
-template <typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V>>>
+template <typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V> > >
 class MultiMap : public std::multimap<K, V, P, A> { };
 
 template<typename T, typename H = std::hash<T>, typename A = std::allocator<T> >
 class HashSet : public std::hash_set<T, H, A> { };
 
 /** An associative container containing an ordered set of key-value pairs. Usually faster than Map for larger data sets. */
-template <typename K, typename V, typename H = std::hash<K>, typename A = std::allocator<std::pair<const K, V>>>
+template <typename K, typename V, typename H = std::hash<K>, typename A = std::allocator<std::pair<const K, V> > >
 class HashMap : public std::hash_map<K, V, H, A> { };
 
 #endif

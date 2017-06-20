@@ -321,7 +321,7 @@ uint32 Math::solveCubic(T A, T B, T C, T D, T* roots)
 	T cbp = p * p * p;
 	D = q * q + cbp;
 
-	UINT32 numRoots = 0;
+	uint32 numRoots = 0;
 	if (!equals(D, (T)0))
 	{
 		if (D < 0.0)
@@ -366,7 +366,7 @@ uint32 Math::solveCubic(T A, T B, T C, T D, T* roots)
 	}
 
 	T sub = THIRD * A;
-	for (UINT32 i = 0; i < numRoots; i++)
+	for (uint32 i = 0; i < numRoots; i++)
 		roots[i] -= sub;
 
 	return numRoots;
@@ -386,7 +386,7 @@ uint32 Math::solveQuartic(T A, T B, T C, T D, T E, T* roots)
 	T q = (1 / (T)8) * sqA * A - (T)0.5 * A * B + C;
 	T r = -(3 / (T)256) * sqA * sqA + (1 / (T)16) * sqA * B - (1 / (T)4) * A * C + D;
 
-	UINT32 numRoots = 0;
+	uint32 numRoots = 0;
 	if (!equals(r, (T)0))
 	{
 		T cubicA = 1;
@@ -433,7 +433,7 @@ uint32 Math::solveQuartic(T A, T B, T C, T D, T E, T* roots)
 	}
 
 	T sub = (1 / (T)4) * A;
-	for (UINT32 i = 0; i < numRoots; i++)
+	for (uint32 i = 0; i < numRoots; i++)
 		roots[i] -= sub;
 
 	return numRoots;

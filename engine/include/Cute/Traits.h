@@ -27,11 +27,12 @@ struct TypeTraitBase<T*>
 template<typename T>
 struct TypeTrait : public TypeTraitBase<typename std::remove_cv<T>::type>
 {
+    typedef T                   type_t;
 	typedef type_t*				pointer_t;
 	typedef type_t&				reference_t;
 	typedef const type_t		const_type_t;
 	typedef const pointer_t		const_pointer_t;
-	typedef const reference_t	const_reference_t;
+	typedef const type_t&       const_reference_t;
 };
 
 // 对于没有实现c++11的编译器

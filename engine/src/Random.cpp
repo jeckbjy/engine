@@ -184,8 +184,6 @@ void Random::seed()
 	else
 		len = m_randDeg * sizeof(m_state[0]);
 
-	int n = 0;
-
 	char* buffer = (char*)m_state;
 	size_t length = len;
 
