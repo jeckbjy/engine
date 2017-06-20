@@ -114,7 +114,7 @@ template <typename K, typename V, typename H = std::hash<K>, typename C = std::e
 using HashMap = std::unordered_map<K, V, H, C, A>;
 
 #else
-// ¼Ì³ĞÊµÏÖ
+// ç»§æ‰¿å®ç°
 //template<typename T, typename A = std::allocator<T> >
 //class List : public std::list<T, A>{};
 

@@ -272,7 +272,7 @@ void TCPSocketChannel::completed(IORequest* req)
 		throw InvalidArgumentException("TCPSocketChannel null operation!!");
 
 	if (!req->isSuccess())
-	{// ·¢Éú´íÎó
+	{// å‘ç”Ÿé”™è¯¯
 		if (isConnecting())
 			setFlag(MASK_CONNECTING, false);
 
@@ -282,18 +282,18 @@ void TCPSocketChannel::completed(IORequest* req)
 	}
 
 	if (req->isKindOf<ConnectReq>())
-	{// Á¬½Ó³É¹¦
+	{// è¿žæŽ¥æˆåŠŸ
 		setFlag(MASK_CONNECTING, false);
 		setFlag(MASK_ACTIVE, true);
 		m_listener->fireConnect(this);
 	}
 	else if (req->isKindOf<WriteReq>())
-	{// ¿ÉÐ´
+	{// å¯å†™
 		doSend();
 	}
 	else if (req->isKindOf<ReadReq>())
-	{// ¿É¶Á
-		// ÎªÁãÊ±¶Ô·½¹Ø±ÕÁ¬½Ó??
+	{// å¯è¯»
+		// ä¸ºé›¶æ—¶å¯¹æ–¹å…³é—­è¿žæŽ¥??
 		bool result = m_reader.recv(socket());
 		if (result)
 			m_listener->fireRead(this);

@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-// Ôª×é
+// å…ƒç»„
 template<typename T0 = void, typename T1 = void, typename T2 = void, typename T3 = void, typename T4 = void, typename T5 = void>
 struct Tuple
 {

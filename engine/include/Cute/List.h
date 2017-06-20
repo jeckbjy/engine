@@ -180,7 +180,7 @@ public:
 		ListNode* node = m_head->m_next;
 		ListNode* temp;
 
-		// ¶Ï¿ªÁ¬½Ó,Çå¿ÕÎª0
+		// æ–­å¼€è¿æ¥,æ¸…ç©ºä¸º0
 		m_head->m_prev->m_next = NULL;
 
 		while (node)
@@ -191,7 +191,7 @@ public:
 			temp->m_next = NULL;
 		}
 
-		// ÖØÖÃhead
+		// é‡ç½®head
 		m_head->m_prev = m_head;
 		m_head->m_next = m_head;
 	}
@@ -250,10 +250,10 @@ private:
 
 	ListNode* insert(ListNode* curr, T* data)
 	{
-		// ÔÚ½ÚµãµÄÇ°±ß²åÈë½Úµã
+		// åœ¨èŠ‚ç‚¹çš„å‰è¾¹æ’å…¥èŠ‚ç‚¹
 		ListNode* node = get_node(data);
 		assert(curr->m_next != 0);
-		assert(node->m_prev == 0);	// ²»ÄÜÊôÓÚÄ³Ò»¸öÁ´±í
+		assert(node->m_prev == 0);	// ä¸èƒ½å±äºæŸä¸€ä¸ªé“¾è¡¨
 
 		node->m_next = curr;
 		node->m_prev = curr->m_prev;

@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-// ·ÀÖ¹Ä£°åÅòÕÍ
+// é˜²æ­¢æ¨¡æ¿è†¨èƒ€
 template<class T>
 class RefBase
 {

@@ -14,7 +14,7 @@ class DelegateBase
 };
 
 #ifdef CUTE_VARIADIC
-// Ö§³Ö±ä³¤²ÎÊı
+// æ”¯æŒå˜é•¿å‚æ•°
 template<class R, class... Args>
 class DelegateBase<R(Args...)>
 {
@@ -69,7 +69,7 @@ protected:
 };
 
 #else
-// ²»Ö§³Ö±ä³¤²ÎÊı
+// ä¸æ”¯æŒå˜é•¿å‚æ•°
 #define CUTE_DELEGATE(N, P)																			\
 template<class R CUTE_COMMA_IF(N) CUTE_LIST_TYPENAME(N)>											\
 class DelegateBase<R(CUTE_LIST_TYPE(N))>															\
@@ -149,7 +149,7 @@ public:
 		return *this;
 	}
 
-	// ÔİÊ±²»Ö§³ÖÉ¾³ı
+	// æš‚æ—¶ä¸æ”¯æŒåˆ é™¤
 	//template<typename F>
 	//Delegate& operator-=(F fun)
 	//{

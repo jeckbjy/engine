@@ -87,7 +87,7 @@ template<typename T> struct pt_is_stl<pt_hset<T> > : pt_true_type{};
 template<typename U, typename V> struct pt_is_stl<pt_map<U, V> > : pt_true_type{};
 template<typename U, typename V> struct pt_is_stl<pt_hmap<U, V> > : pt_true_type{};
 
-// traits 萃取
+// traits 钀冨彇
 template<bool _Test, class T = void>
 struct pt_enable_if{};
 
@@ -128,7 +128,7 @@ inline void pt_push(pt_hmap<U, V>& stl, typename pt_hmap<U, V>::value_type& t)
 	stl.insert(t);
 }
 
-// 自动释放的ptr,谨慎使用
+// 鑷姩閲婃斁鐨刾tr,璋ㄦ厧浣跨敤
 template<typename T>
 struct pt_ptr
 {
@@ -179,7 +179,7 @@ private:
 	T* m_ptr;
 };
 
-// 默认初始化为0
+// 榛樿鍒濆鍖栦负0
 template<typename T>
 struct pt_num
 {
@@ -221,7 +221,7 @@ typedef String						pt_str;
 
 class Encoder;
 class Decoder;
-// 可以指定一个非零唯一ID
+// 鍙互鎸囧畾涓�涓潪闆跺敮涓�ID
 class Message
 {
 public:

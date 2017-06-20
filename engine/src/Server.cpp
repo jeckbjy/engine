@@ -37,7 +37,7 @@ bool Server::setup()
 	if (!Application::setup())
 		return false;
 
-	// Æô¶¯Âß¼­Ïß³Ì
+	// å¯åŠ¨é€»è¾‘çº¿ç¨‹
 	m_logicThread.start(&ServerLogicThread, this);
 	return true;
 }
@@ -49,18 +49,18 @@ void Server::quit()
 
 void Server::tick()
 {
-	// ÐÄÌø¼ì²â,¶ÏÏßÖØÁ¬
+	// å¿ƒè·³æ£€æµ‹,æ–­çº¿é‡è¿ž
 }
 
 void Server::process()
 {
-	// ´¦ÀíÏûÏ¢
+	// å¤„ç†æ¶ˆæ¯
 	m_events.process();
 	
-	// ÐÄÌø¼ì²â,¶ÏÏßÖØÁ¬
+	// å¿ƒè·³æ£€æµ‹,æ–­çº¿é‡è¿ž
 	reconnect();
 
-	// ´¦ÀípendingÊÂ¼þ
+	// å¤„ç†pendingäº‹ä»¶
 	m_pendingMutex.lock();
 	for (PendingMap::iterator itor = m_pending.begin(); itor != m_pending.end(); ++itor)
 	{
@@ -98,9 +98,9 @@ void Server::loop()
 	m_quit = 0;
 	while (!m_quit)
 	{
-		// ´¦ÀíÊÂ¼þ
+		// å¤„ç†äº‹ä»¶
 		process();
-		// µÈ´ý
+		// ç­‰å¾…
 		tick();
 		Thread::sleep(m_frame);
 	}
@@ -179,7 +179,7 @@ void Server::schedule(Runnable* task)
 
 void Server::fireAccept(ServerChannel* listener, SocketChannel* channel)
 {
-	// ÓÐÐÂµÄÁ¬½Ó
+	// æœ‰æ–°çš„è¿žæŽ¥
 	Session* sess = new Session(&m_protocal, channel, newID(), listener->getType());
 
 	addPending(sess, PE_ACCEPT);

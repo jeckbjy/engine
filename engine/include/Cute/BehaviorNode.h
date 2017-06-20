@@ -38,8 +38,8 @@ public:
 	virtual Status exec(BehaviorAgent* agent) = 0;
 };
 
-// 四种基础类型
-// 符合节点
+// 鍥涚鍩虹绫诲瀷
+// 绗﹀悎鑺傜偣
 class CUTE_CORE_API BTComposite : public BehaviorNode
 {
 public:
@@ -57,7 +57,7 @@ protected:
 	Container m_children;
 };
 
-// 装饰节点
+// 瑁呴グ鑺傜偣
 class CUTE_CORE_API BTDecorator : public BehaviorNode
 {
 	DECLARE_RTTI(BTDecorator, BehaviorNode, OID_ANY)
@@ -70,7 +70,7 @@ protected:
 	Ptr m_node;
 };
 
-// 条件
+// 鏉′欢
 class CUTE_CORE_API BTCondition : public BehaviorNode
 {
 	DECLARE_RTTI(BTCondition, BehaviorNode, OID_ANY)
@@ -79,7 +79,7 @@ public:
 	Kind kind() const { return BehaviorNode::CONDITION; }
 };
 
-// 事件
+// 浜嬩欢
 class CUTE_CORE_API BTAction : public BehaviorNode
 {
 	DECLARE_RTTI(BTAction, BehaviorNode, OID_ANY)

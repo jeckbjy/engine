@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-// ´óÄÚ´æ¿é
+// å¤§å†…å­˜å—
 class CUTE_CORE_API ChunkPool
 {
 public:

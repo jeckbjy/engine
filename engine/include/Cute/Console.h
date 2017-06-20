@@ -24,9 +24,9 @@ public:
 		LIGHTMAGENTA,
 		LIGHTCYAN,
 		WHITE,
-		COLOR_MAX,		// ×î´óÑÕÉ«
+		COLOR_MAX,		// æœ€å¤§é¢œè‰²
 
-		DEFAULT = GRAY,	// Ä¬ÈÏÔ­Ê¼ÑÕÉ«
+		DEFAULT = GRAY,	// é»˜è®¤åŽŸå§‹é¢œè‰²
 	};
 
 	static void setColor(Color color = DEFAULT);

@@ -88,7 +88,7 @@ void TCPServerChannel::completed(IORequest* req)
 		m_listener->fireAccept(this, new_socket);
 	}
 
-	// iocpÖØĞÂÍ¶µİ
+	// iocpé‡æ–°æŠ•é€’
 	accept();
 }
 

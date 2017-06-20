@@ -130,12 +130,12 @@ public:
 		struct
 		{
 #ifndef COL_MAJOR
-			// �д洢
+			// 行存储
 			float m00, m01, m02, m03;
 			float m10, m11, m12, m13;
 			float m20, m21, m22, m23;
 #else
-			// �д洢
+			// 列存储
 			float m00, m10, m20;
 			float m01, m11, m21;
 			float m02, m12, m22;

@@ -19,13 +19,13 @@ void Input::setHandler(InputHandler* handler)
 
 void Input::update()
 {
-	// ¸üĞÂ×´Ì¬
+	// æ›´æ–°çŠ¶æ€
 	for (size_t i = 0; i < m_dirties.size(); ++i)
 	{
 		ButtonData* data = m_dirties[i];
 		data->dirty = false;
 
-		// ÖØÖÃ×´Ì¬
+		// é‡ç½®çŠ¶æ€
 		if (data->state == STATE_DOWN)
 			data->state = STATE_HELD;
 		else if (data->state == STATE_UP)
@@ -34,7 +34,7 @@ void Input::update()
 
 	m_dirties.clear();
 
-	// ÉèÖÃ
+	// è®¾ç½®
 	if (m_handler)
 		m_handler->update();
 }

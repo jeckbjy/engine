@@ -268,7 +268,7 @@ CUTE_NS_BEGIN
 //	return result;
 //}
 
-//–Œ Ω»Á:key1=value1\0key2=value2\0...\0
+//ÂΩ¢ÂºèÂ¶Ç:key1=value1\0key2=value2\0...\0
 static std::vector<char> GetEnvironmentBuffer(const std::map<String, String>& env)
 {
 	std::vector<char> envbuf;

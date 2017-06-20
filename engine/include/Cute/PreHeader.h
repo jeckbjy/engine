@@ -26,7 +26,7 @@
 #	include <netinet/tcp.h>
 #	include <netdb.h>
 #	include <stdarg.h>
-// ¶àÏß³Ì
+// å¤šçº¿ç¨‹
 #	include<pthread.h>
 
 #if defined(__MACH__)

@@ -30,7 +30,7 @@
 #	include <netinet/tcp.h>
 #	include <netdb.h>
 #	include <stdarg.h>
-// ¶àÏß³Ì
+// å¤šçº¿ç¨‹
 #	include<pthread.h>
 
 #if defined(__MACH__)
@@ -89,7 +89,7 @@ typedef String		TString;
 
 #ifdef CUTE_OS_FAMILY_WINDOWS
 
-// ×Ô¶¯¹Ø±Õ
+// è‡ªåŠ¨å…³é—­
 class HandleScope
 {
 public:
@@ -103,7 +103,7 @@ private:
 	HANDLE m_handle;
 };
 
-// Local±àÂëÓëSystem±àÂëÏà»¥×ª»¯
+// Localç¼–ç ä¸Systemç¼–ç ç›¸äº’è½¬åŒ–
 void CUTE_CORE_API ConvertToSystem(const String& src, TString& dst);
 void CUTE_CORE_API ConvertToLocal(const TCHAR* src, String& dst);
 
@@ -154,8 +154,8 @@ void CUTE_CORE_API ConvertTimeToSystem(uint64_t timestamp, DWORD& timeLow, DWORD
 #else
 #	define CLOCK_REALTIME				0 
 #	define CLOCK_MONOTONIC				1 
-#	define CLOCK_PROCESS_CPUTIME_ID     2	// ±¾½ø³Ìµ½µ±Ç°´úÂëÏµÍ³CPU»¨·ÑµÄÊ±¼ä
-#	define CLOCK_THREAD_CPUTIME_ID      3	// ±¾Ïß³Ìµ½µ±Ç°´úÂëÏµÍ³CPU»¨·ÑµÄÊ±¼ä
+#	define CLOCK_PROCESS_CPUTIME_ID     2	// æœ¬è¿›ç¨‹åˆ°å½“å‰ä»£ç ç³»ç»ŸCPUèŠ±è´¹çš„æ—¶é—´
+#	define CLOCK_THREAD_CPUTIME_ID      3	// æœ¬çº¿ç¨‹åˆ°å½“å‰ä»£ç ç³»ç»ŸCPUèŠ±è´¹çš„æ—¶é—´
 #	define CLOCK_REALTIME_HR			4
 #	define CLOCK_MONOTONIC_HR			5
 #endif

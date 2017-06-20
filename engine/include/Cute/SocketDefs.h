@@ -63,7 +63,7 @@ struct sockaddr_un
 
 #endif
 
-// ÒòÎªlinux»á±»´ò¶Ï£¬·â×°Ò»²ã
+// å› ä¸ºlinuxä¼šè¢«æ‰“æ–­ï¼Œå°è£…ä¸€å±‚
 socket_t CUTE_CORE_API sock_create(int af /* = AF_INET */, int type /* = SOCK_STREAM */, int proto /* = IPPROTO_IP */);
 socket_t CUTE_CORE_API sock_accept(socket_t listener, sockaddr* addr, socklen_t* len);
 

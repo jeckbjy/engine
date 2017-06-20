@@ -54,7 +54,7 @@ protected:
 	bool		m_loop;
 	int			m_priority;
 	float		m_minDistance;
-	float		m_attenuation;	// Ï¡±¡
+	float		m_attenuation;	// æ´æƒ…
 };
 
 //////////////////////////////////////////////////////////////////////////

@@ -450,7 +450,7 @@ void floatToStr(char* buffer, int size, double value, bool single, int precision
 	int flags = DoubleToStringConverter::UNIQUE_ZERO | DoubleToStringConverter::EMIT_POSITIVE_EXPONENT_SIGN;
 	DoubleToStringConverter dc(flags, CUTE_FLT_INF, CUTE_FLT_NAN, CUTE_FLT_EXP, lowDec, highDec, 0, 0);
 
-	// ’˚ ˝
+	// Êï¥Êï∞
 	if (precision == 0)
 		value = std::floor(value);
 
@@ -496,7 +496,7 @@ bool strToFloat(const String& str, double& result, char decSep, char thSep)
 	if (str.empty())
 		return false;
 
-	// ª·”–“ª¥ŒøΩ±¥?
+	// ‰ºöÊúâ‰∏ÄÊ¨°Êã∑Ë¥ù?
 	String tmp(str);
 	trimInPlace(tmp);
 	removeInPlace(tmp, thSep);

@@ -5,9 +5,9 @@
 CUTE_NS_BEGIN
 
 /*
-1:Ö»ÓÐÈý¸öÓÅÏÈ¼¶,Í¨³£ÎªÆÕÍ¨£¬·½±ã¿ìËÙÅÅÐò
-2:´øÓÐÑÓ³ÙÊ±¼äµÄ×îµÍÓÅÏÈ¼¶
-3:Ê±¼ä´ÁÊÇµ¥µ÷clockÊ±¼ä´Á£¬²¢²»ÊÇutcµÈÊ±¼ä´Á,½ö×öÏûÏ¢ÑÓ³Ùµ÷ÓÃÊ¹ÓÃ£¬²»ÄÜ×÷Îª¶¨Ê±Æ÷Ê¹ÓÃ
+1:åªæœ‰ä¸‰ä¸ªä¼˜å…ˆçº§,é€šå¸¸ä¸ºæ™®é€šï¼Œæ–¹ä¾¿å¿«é€ŸæŽ’åº
+2:å¸¦æœ‰å»¶è¿Ÿæ—¶é—´çš„æœ€ä½Žä¼˜å…ˆçº§
+3:æ—¶é—´æˆ³æ˜¯å•è°ƒclockæ—¶é—´æˆ³ï¼Œå¹¶ä¸æ˜¯utcç­‰æ—¶é—´æˆ³,ä»…åšæ¶ˆæ¯å»¶è¿Ÿè°ƒç”¨ä½¿ç”¨ï¼Œä¸èƒ½ä½œä¸ºå®šæ—¶å™¨ä½¿ç”¨
 */
 class CUTE_CORE_API EventBase : public Object
 {
@@ -39,7 +39,7 @@ protected:
 	friend class EventQueue;
 	ListNode m_hook;
 	int		 m_prio;	// Priority
-	int64_t	 m_time;	// millisecondºÁÃë
+	int64_t	 m_time;	// millisecondæ¯«ç§’
 };
 
 CUTE_NS_END

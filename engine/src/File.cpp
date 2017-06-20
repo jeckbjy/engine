@@ -798,7 +798,7 @@ void File::remove(const String& path, bool recursive /* = false */)
 {
 	if (recursive && !isLink(path) && isDirectory(path))
 	{
-		// ±éÀú²¢É¾³ı
+		// éå†å¹¶åˆ é™¤
 		DirectoryIterator it(path);
 		DirectoryIterator end;
 		while (it != end)

@@ -16,7 +16,7 @@ typedef int32_t atomic_t;
 typedef int		atomic_t;
 #endif
 
-// Ô­×Ó²Ù×÷
+// åŸå­æ“ä½œ
 class CUTE_CORE_API Atomic
 {
 public:

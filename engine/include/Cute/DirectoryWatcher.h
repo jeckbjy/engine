@@ -36,7 +36,7 @@ struct NotifyEvent
 
 class DirectoryWatcherStrategy;
 typedef Delegate<void(NotifyEvent*)> DirectoryWatcherDelegate;
-// Ä¿Â¼ÎÄ¼ş¼à¿Ø,
+// ç›®å½•æ–‡ä»¶ç›‘æ§,
 // ReadDirectoryChanges
 // http://www.cnblogs.com/guomeiran/p/4056876.html
 // http://blog.csdn.net/zhoushuaiyin/article/details/42639053
@@ -63,7 +63,7 @@ private:
 	Thread		m_thread;
 	Strategy*	m_strategy;
 	//IOLoop		m_loop;
-	// ¶ÔÓÚwindowºÍbsdÃ¿¸öÎÄ¼ş¶ÔÓ¦Ò»¸ö¼àÌı
+	// å¯¹äºwindowå’Œbsdæ¯ä¸ªæ–‡ä»¶å¯¹åº”ä¸€ä¸ªç›‘å¬
 };
 
 CUTE_NS_END

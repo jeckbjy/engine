@@ -13,11 +13,11 @@ struct Network
 {
 	Network()
 	{
-		// ×¢²á
+		// æ³¨å†Œ
 		WSADATA wsa_data;
 		::WSAStartup(MAKEWORD(2, 2), &wsa_data);
 
-		// »ñµÃº¯ÊıÖ¸Õë
+		// è·å¾—å‡½æ•°æŒ‡é’ˆ
 		socket_t sock = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, 0, 0, WSA_FLAG_OVERLAPPED);
 		assert(sock != INVALID_SOCKET);
 
@@ -59,7 +59,7 @@ socket_t sock_create(int af, int type, int proto)
 	sock = ::socket(af, type, proto);
 #endif
 
-	// Ä¬ÈÏÊÇÒì²½µÄ£¬Í¬²½µÄĞèÒªÍâ±ßµ¥¶ÀÉèÖÃÒ»´Î
+	// é»˜è®¤æ˜¯å¼‚æ­¥çš„ï¼ŒåŒæ­¥çš„éœ€è¦å¤–è¾¹å•ç‹¬è®¾ç½®ä¸€æ¬¡
 	sock_setblocking(sock, false);
 	return sock;
 }

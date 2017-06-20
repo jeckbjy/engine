@@ -52,11 +52,11 @@ void HandlerProfiler::clear()
 
 void HandlerProfiler::report()
 {
-	// ¸ñÊ½»¯Êä³öµ½ÎÄ¼ş
+	// æ ¼å¼åŒ–è¾“å‡ºåˆ°æ–‡ä»¶
 	std::ofstream outfile("profile.log", std::ofstream::binary);
-	int64 totalTime = 0;	// ×ÜÊ±¼ä
-	int64 totalHit = 0;		// ×ÜÊÂ¼ş´ÎÊı
-	// Í³¼Æ×î´óÖµ
+	int64 totalTime = 0;	// æ€»æ—¶é—´
+	int64 totalHit = 0;		// æ€»äº‹ä»¶æ¬¡æ•°
+	// ç»Ÿè®¡æœ€å¤§å€¼
 	Item* maxAll = 0;
 	Item* maxAvg = 0;
 
@@ -74,7 +74,7 @@ void HandlerProfiler::report()
 			maxAvg = &item;
 	}
 
-	// Êä³ö
+	// è¾“å‡º
 	outfile << "Event\t\tHit\t\tTime\t\tMax\t\tAvg\t\tTime%" << std::endl;
 	for (ItemMap::iterator itor = m_events.begin(); itor != m_events.end(); ++itor)
 	{
@@ -99,7 +99,7 @@ void HandlerProfiler::report()
 	// sum
 	outfile << "SUM:" << totalHit << "," << totalTime << "\t\tAvg:" << (100.0*totalTime / totalHit) << std::endl;
 
-	// Æ½¾ùÖµ
+	// å¹³å‡å€¼
 	outfile.close();
 }
 

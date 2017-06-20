@@ -83,7 +83,7 @@ void IOLoop::once(long msec)
 	LPOVERLAPPED overlapped = NULL;
 	SetLastError(0);
 	BOOL result = ::GetQueuedCompletionStatus(m_handle, &bytes, &completion_key, &overlapped, (DWORD)msec);
-	// »½ĞÑ´¦Àí
+	// å”¤é†’å¤„ç†
 	if (completion_key == KEY_WAKEUP || overlapped == NULL)
 		return;
 

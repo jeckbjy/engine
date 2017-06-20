@@ -56,7 +56,7 @@ void SharedLibrary::load(const String& path, int flags /* = SHLIB_DEFAULT */)
 		throw LibraryAlreadyLoadedException(path);
 
 #if defined (CUTE_OS_FAMILY_WINDOWS)
-	// 需要转换成Unicode字符
+	// 闇�瑕佽浆鎹㈡垚Unicode瀛楃
 	DWORD readFlag(0);
 	Path p(path);
 	if (p.isAbsolute())

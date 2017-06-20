@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-// 管理所有Handler,低于HANDLER_MAX放入数组,高于的放入Map
+// 绠＄悊鎵�鏈塇andler,浣庝簬HANDLER_MAX鏀惧叆鏁扮粍,楂樹簬鐨勬斁鍏ap
 class CUTE_CORE_API HandlerService
 {
 public:

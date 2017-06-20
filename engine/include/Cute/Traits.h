@@ -34,7 +34,7 @@ struct TypeTrait : public TypeTraitBase<typename std::remove_cv<T>::type>
 	typedef const reference_t	const_reference_t;
 };
 
-// ¶ÔÓÚÃ»ÓĞÊµÏÖc++11µÄ±àÒëÆ÷
+// å¯¹äºæ²¡æœ‰å®ç°c++11çš„ç¼–è¯‘å™¨
 template<bool _Test, class T = void>
 struct EnableIf { };
 
@@ -125,10 +125,10 @@ struct IsInteger : public _IsInteger<typename std::remove_cv<T>::type>
 };
 
 //////////////////////////////////////////////////////////////////////////
-// »ñµÃµØÖ·
+// è·å¾—åœ°å€
 //////////////////////////////////////////////////////////////////////////
 
-// »ñµÃÕæÊµµÄµØÖ·,±ÜÃâTÖØÔØÁË&²Ù×÷·û
+// è·å¾—çœŸå®çš„åœ°å€,é¿å…Té‡è½½äº†&æ“ä½œç¬¦
 // Get an object address without triggering operator & overloading
 template<typename T>
 inline T* getAddress(T& obj)
@@ -136,7 +136,7 @@ inline T* getAddress(T& obj)
 	return reinterpret_cast<T*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(obj)));
 }
 
-// Í¨¹ıÈ«¾ÖÖ¸Õë»ò³ÉÔ±Ö¸Õë»ñÈ¡ÕæÊµÖ¸Õë Address<>::get
+// é€šè¿‡å…¨å±€æŒ‡é’ˆæˆ–æˆå‘˜æŒ‡é’ˆè·å–çœŸå®æŒ‡é’ˆ Address<>::get
 template<typename T>
 struct FieldAddress{};
 
@@ -147,7 +147,7 @@ template<typename O, typename T>
 struct FieldAddress<T O::*> { static inline T* get(T* field, void* obj){ return &(static_cast<O*>(obj)->*(field)); } };
 
 //////////////////////////////////////////////////////////////////////////
-// ³ÉÔ±Ö¸Õë×ª»¯(µØÖ·Æ«ÒÆ)×ª»¯ÎªÆ«ÒÆ
+// æˆå‘˜æŒ‡é’ˆè½¬åŒ–(åœ°å€åç§»)è½¬åŒ–ä¸ºåç§»
 //////////////////////////////////////////////////////////////////////////
 template<class Parent, class Member>
 inline std::ptrdiff_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)

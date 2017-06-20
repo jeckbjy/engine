@@ -6,7 +6,7 @@
 
 CUTE_NS_BEGIN
 
-// ÏûÏ¢°ü£¬°üÀ¨Í¨ÓÃÏûÏ¢Í·ºÍÏûÏ¢Ìå
+// æ¶ˆæ¯åŒ…ï¼ŒåŒ…æ‹¬é€šç”¨æ¶ˆæ¯å¤´å’Œæ¶ˆæ¯ä½“
 class CUTE_CORE_API Packet : public Message
 {
 public:
@@ -47,14 +47,14 @@ public:
 	size_t msgid() const { return MSG_ID; }
 };
 
-// ÖĞ×ªÏûÏ¢
+// ä¸­è½¬æ¶ˆæ¯
 struct TransferPacket : public Packet
 {
 	uint32 m_msgid;
 	BufferList msg;
 };
 
-// ¶ÁÈ¡ÏûÏ¢Í·
+// è¯»å–æ¶ˆæ¯å¤´
 class PacketReader
 {
 public:

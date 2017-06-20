@@ -10,11 +10,11 @@ public:
 	static Chunk* create(char* data, uint32_t size);
 
 private:
-	uint32_t	gather : 1;	// ÊÇ·ñÊÇÒ»¿éÄÚ´æ
-	uint32_t	free : 1;	// ÊÇ·ñĞèÒªÊÍ·Å
-	uint32_t	refs : 30;	// ÒıÓÃ¼ÆÊı
-	uint32_t	size;		// Êı¾İ´óĞ¡,²»º¬Í·Êı¾İ
-	char*		base;		// Êı¾İ»ùÖ·
+	uint32_t	gather : 1;	// æ˜¯å¦æ˜¯ä¸€å—å†…å­˜
+	uint32_t	free : 1;	// æ˜¯å¦éœ€è¦é‡Šæ”¾
+	uint32_t	refs : 30;	// å¼•ç”¨è®¡æ•°
+	uint32_t	size;		// æ•°æ®å¤§å°,ä¸å«å¤´æ•°æ®
+	char*		base;		// æ•°æ®åŸºå€
 };
 
 CUTE_NS_END

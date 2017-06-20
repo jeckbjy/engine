@@ -1,7 +1,7 @@
 #pragma once
 
 // define CUTE_CORE_API
-// Ä¬ÈÏÊ¹ÓÃDLL£¬Èç¹ûÊ¹ÓÃLIBĞèÒªµ¥¶À¶¨Òå
+// é»˜è®¤ä½¿ç”¨DLLï¼Œå¦‚æœä½¿ç”¨LIBéœ€è¦å•ç‹¬å®šä¹‰
 #if defined(CUTE_USE_LIB_CORE)
 // build or use lib
 #	define CUTE_CORE_API

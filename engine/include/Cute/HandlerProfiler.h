@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-// ĞÔÄÜ¼ì²â
+// æ€§èƒ½æ£€æµ‹
 class CUTE_CORE_API HandlerProfiler
 {
 public:
@@ -32,10 +32,10 @@ private:
 	struct Item
 	{
 		int		cmdid;
-		uint64 elapsedAll;	// ×ÜÖµ
-		uint64 elapsedMax;	// ×î´óÖµ
-		uint64 elapsedAvg;	// Æ½¾ùÖµ
-		uint64 hitNum;		// ´ÎÊı
+		uint64 elapsedAll;	// æ€»å€¼
+		uint64 elapsedMax;	// æœ€å¤§å€¼
+		uint64 elapsedAvg;	// å¹³å‡å€¼
+		uint64 hitNum;		// æ¬¡æ•°
 		Item() :cmdid(0),elapsedAll(0), elapsedMax(0), hitNum(0){}
 	};
 

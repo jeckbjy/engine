@@ -19,7 +19,7 @@
 
 CUTE_NS_BEGIN
 
-// ���岻ͬ���ʹ���ָ��
+// 定义不同类型窗体指针
 #if defined(CUTE_OS_WINDOWS_NT)
 typedef HWND window_t;
 #elif defined(CUTE_OS_WINDOWS_RT)
@@ -39,11 +39,11 @@ typedef Vector2I Size;
 
 enum WindowFlag
 {
-	WF_VISIBLE = 0x01,		// �Ƿ�ɼ�
-	WF_RESIZABLE = 0x02,		// �Ƿ�ɸı��С
-	WF_FULLSCREEN = 0x04,		// �Ƿ�ȫ��
-	WF_CAPTION = 0x08,		// �Ƿ�ɼ�����
-	WF_FREE = 0x10,		// �Ƿ���Ҫ�ͷ�
+	WF_VISIBLE = 0x01,		// 是否可见
+	WF_RESIZABLE = 0x02,		// 是否可改变大小
+	WF_FULLSCREEN = 0x04,		// 是否全屏
+	WF_CAPTION = 0x08,		// 是否可见标题
+	WF_FREE = 0x10,		// 是否需要释放
 
 	WF_DEFAULT = WF_RESIZABLE,
 };

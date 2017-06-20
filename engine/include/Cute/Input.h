@@ -9,10 +9,10 @@
 CUTE_NS_BEGIN
 
 /*
-1:Ö§³Ö¼üÅÌ£¬Êó±ê£¬°´ÏÂºÍÌ§ÆğÊÂ¼ş
-2:Ò¡¸Ë¿ÉÒÔÖ§³Ö¶à¸ö,Ö§³ÖÌ§Æğ°´ÏÂÊÂ¼ş£¬¸÷ÖÖmoveÊÂ¼ş£¬axisMoved,sliderMoved,povMove,vector3Move
-3:TODO:ÒÆ¶¯Æ½Ì¨ĞèÒªÖ§³Ö¶àÖ¸´¥¿Ø
-4:TODO:ÍÓÂİÒÇ£¬¼ÓËÙÆ÷Ö§³Ö
+1:æ”¯æŒé”®ç›˜ï¼Œé¼ æ ‡ï¼ŒæŒ‰ä¸‹å’ŒæŠ¬èµ·äº‹ä»¶
+2:æ‘‡æ†å¯ä»¥æ”¯æŒå¤šä¸ª,æ”¯æŒæŠ¬èµ·æŒ‰ä¸‹äº‹ä»¶ï¼Œå„ç§moveäº‹ä»¶ï¼ŒaxisMoved,sliderMoved,povMove,vector3Move
+3:TODO:ç§»åŠ¨å¹³å°éœ€è¦æ”¯æŒå¤šæŒ‡è§¦æ§
+4:TODO:é™€èºä»ªï¼ŒåŠ é€Ÿå™¨æ”¯æŒ
 */
 class CUTE_CORE_API Input : public Singleton<Input>
 {
@@ -23,7 +23,7 @@ public:
 	~Input();
 
 	void setHandler(InputHandler* handler);
-	// ¸üĞÂÃ¿Ò»Ö¡×´Ì¬
+	// æ›´æ–°æ¯ä¸€å¸§çŠ¶æ€
 	void update();
 
 	size_t			getTouchCount();
@@ -45,16 +45,16 @@ private:
 	friend class InputHandler;
 	enum State
 	{
-		STATE_NONE,		// ¿ÕÏĞ×´Ì¬
-		STATE_DOWN,		// ´ËÖ¡°´ÏÂ
-		STATE_HELD,		// ³ÖĞø°´ÏÂ
-		STATE_UP,		// ´ËÖ¡Ì§Æğ
+		STATE_NONE,		// ç©ºé—²çŠ¶æ€
+		STATE_DOWN,		// æ­¤å¸§æŒ‰ä¸‹
+		STATE_HELD,		// æŒç»­æŒ‰ä¸‹
+		STATE_UP,		// æ­¤å¸§æŠ¬èµ·
 	};
 
 	struct ButtonData
 	{
-		State	state;	// µ±Ç°×´Ì¬
-		bool	dirty;	// ´ËÖ¡·¢Éú¹ı±ä»¯
+		State	state;	// å½“å‰çŠ¶æ€
+		bool	dirty;	// æ­¤å¸§å‘ç”Ÿè¿‡å˜åŒ–
 	};
 
 	typedef DynamicArray<ButtonData>	ButtonArray;

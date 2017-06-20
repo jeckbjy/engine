@@ -11,13 +11,13 @@
 CUTE_NS_BEGIN
 
 /*
-1¡¢listen fd£¬ÓÐÐÂÁ¬½ÓÇëÇó£¬´¥·¢EPOLLIN¡£
-2¡¢¶Ô¶Ë·¢ËÍÆÕÍ¨Êý¾Ý£¬´¥·¢EPOLLIN¡£
-3¡¢´øÍâÊý¾Ý£¬Ö»´¥·¢EPOLLPRI¡£
-4¡¢¶Ô¶ËÕý³£¹Ø±Õ£¨³ÌÐòÀïclose()£¬shellÏÂkill»òctr+c£©£¬´¥·¢EPOLLINºÍEPOLLRDHUP£¬µ«ÊÇ²»´¥·¢EPOLLERRºÍEPOLLHUP¡£
-¹ØÓÚÕâµã£¬ÒÔÇ°Ò»Ö±ÒÔÎª»á´¥·¢EPOLLERR»òÕßEPOLLHUP¡£
-ÔÙman epoll_ctl¿´ÏÂºóÁ½¸öÊÂ¼þµÄËµÃ÷£¬ÕâÁ½¸öÓ¦¸ÃÊÇ±¾¶Ë£¨server¶Ë£©³ö´í²Å´¥·¢µÄ¡£
-5¡¢¶Ô¶ËÒì³£¶Ï¿ªÁ¬½Ó£¨Ö»²âÁË°ÎÍøÏß£©£¬Ã»´¥·¢ÈÎºÎÊÂ¼þ¡£
+1ã€listen fdï¼Œæœ‰æ–°è¿žæŽ¥è¯·æ±‚ï¼Œè§¦å‘EPOLLINã€‚
+2ã€å¯¹ç«¯å‘é€æ™®é€šæ•°æ®ï¼Œè§¦å‘EPOLLINã€‚
+3ã€å¸¦å¤–æ•°æ®ï¼Œåªè§¦å‘EPOLLPRIã€‚
+4ã€å¯¹ç«¯æ­£å¸¸å…³é—­ï¼ˆç¨‹åºé‡Œclose()ï¼Œshellä¸‹killæˆ–ctr+cï¼‰ï¼Œè§¦å‘EPOLLINå’ŒEPOLLRDHUPï¼Œä½†æ˜¯ä¸è§¦å‘EPOLLERRå’ŒEPOLLHUPã€‚
+å…³äºŽè¿™ç‚¹ï¼Œä»¥å‰ä¸€ç›´ä»¥ä¸ºä¼šè§¦å‘EPOLLERRæˆ–è€…EPOLLHUPã€‚
+å†man epoll_ctlçœ‹ä¸‹åŽä¸¤ä¸ªäº‹ä»¶çš„è¯´æ˜Žï¼Œè¿™ä¸¤ä¸ªåº”è¯¥æ˜¯æœ¬ç«¯ï¼ˆserverç«¯ï¼‰å‡ºé”™æ‰è§¦å‘çš„ã€‚
+5ã€å¯¹ç«¯å¼‚å¸¸æ–­å¼€è¿žæŽ¥ï¼ˆåªæµ‹äº†æ‹”ç½‘çº¿ï¼‰ï¼Œæ²¡è§¦å‘ä»»ä½•äº‹ä»¶ã€‚
 */
 
 #if defined(CUTE_OS_FAMILY_LINUX)
@@ -36,7 +36,7 @@ CUTE_NS_BEGIN
 //#define ev_is_pri(ev)			ev.filter == 
 #endif
 
-// ²Ù×÷Âë¶¨Òå
+// æ“ä½œç å®šä¹‰
 #if defined(CUTE_OS_FAMILY_LINUX)
 #	define EV_CTL_ADD		EPOLL_CTL_ADD
 #	define EV_CTL_DEL		EPOLL_CTL_DEL

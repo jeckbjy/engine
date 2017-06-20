@@ -4,7 +4,7 @@
 
 CUTE_NS_BEGIN
 
-// ÒôÆµ±àÂëÆ÷
+// ç¼–ç å™¨
 class AudioEncoder : public Object
 {
 	DECLARE_RTTI(AudioEncoder, Object, OID_ANY)

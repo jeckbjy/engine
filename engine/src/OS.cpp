@@ -116,7 +116,7 @@ static uint64_t mt_timestart = 0;
 
 #endif
 
-// ģ��ʵ�֣�clock_gettime
+// 模拟实现：clock_gettime
 long clock_gettime(int clk_id, struct timespec* tp)
 {
 #ifdef _WIN32

@@ -15,11 +15,11 @@ public:
 	static const TVector2 UNIT_Y;
 
 	static T		manhattanDistance(const TVector2& a, const TVector2& b);
-	// µã³Ë:v1*v2 = |v1|*|v2|*cos<v1,v2>
+	// ç‚¹ä¹˜:v1*v2 = |v1|*|v2|*cos<v1,v2>
 	static T		dot(const TVector2& v1, const TVector2& v2);
-	// ¿ÉÓÃÓÚ¼ÆËãµãÔÚÖ±Ïß×óÓÒ
+	// å¯ç”¨äºè®¡ç®—ç‚¹åœ¨ç›´çº¿å·¦å³
 	static T		cross(const TVector2& v1, const TVector2& v2);
-	// ¼ÆËãµãpÔÚÖ±Ïßp1p2µÄ×óÓÒ
+	// è®¡ç®—ç‚¹påœ¨ç›´çº¿p1p2çš„å·¦å³
 	static T		cross(const TVector2& p, const TVector2& p1, const TVector2& p2);
 	static T		distance(const TVector2& v1, const TVector2& v2);
 	static T		distanceSquared(const TVector2& v1, const TVector2& v2);

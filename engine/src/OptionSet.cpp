@@ -36,7 +36,7 @@ void OptionSet::parse(int argc, char* argv[])
 	/// option, delimited with a space, as in "--option value" or "-o value".
 	/// The latter only works for required option arguments, not optional ones.
 
-	// 0ÊÇÆô¶¯³ÌÐòÃû,1¿ªÊ¼ÊÇ²ÎÊý
+	// 0æ˜¯å¯åŠ¨ç¨‹åºå,1å¼€å§‹æ˜¯å‚æ•°
 	for (int i = 1; i < argc; ++i)
 	{
 		char* cmd = argv[i];
@@ -78,7 +78,7 @@ void OptionSet::parse(int argc, char* argv[])
 			String key(ptr, end_ptr);
 			String val(hasValue ? end_ptr + 1 : "");
 
-			// Èç¹ûÃ»ÓÐÖµ£¬¼ì²âÏÂÒ»¸ö×Ö¶ÎÊÇ·ñÊÇÖµvalue
+			// å¦‚æžœæ²¡æœ‰å€¼ï¼Œæ£€æµ‹ä¸‹ä¸€ä¸ªå­—æ®µæ˜¯å¦æ˜¯å€¼value
 			if (!hasValue && (i + 1) < argc)
 			{
 				cmd = argv[1];

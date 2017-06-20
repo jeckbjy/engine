@@ -20,8 +20,8 @@ public:
 
 private:
 	Mutex		m_mutex;
-	EventList	m_priority;		// 带有优先级的
-	EventList	m_delay;		// 需要延迟处理的消息
+	EventList	m_priority;		// 甯︽湁浼樺厛绾х殑
+	EventList	m_delay;		// 闇�瑕佸欢杩熷鐞嗙殑娑堟伅
 };
 
 CUTE_NS_END

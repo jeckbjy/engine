@@ -58,7 +58,7 @@ struct CUTE_CORE_API AudioClipDesc
 
 class Stream;
 class AudioDecoder;
-// 分成两种方式：立即解码，Stream必须是MemoryStream，和延迟解码
+// 鍒嗘垚涓ょ鏂瑰紡锛氱珛鍗宠В鐮侊紝Stream蹇呴』鏄疢emoryStream锛屽拰寤惰繜瑙ｇ爜
 class CUTE_CORE_API AudioClip : public Object
 {
 	DECLARE_RTTI(AudioClip, Object, OID_ANY)

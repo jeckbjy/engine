@@ -24,9 +24,9 @@ inline const String& Plugin::name() const
 	return m_name;
 }
 
-// Íâ²¿Í³Ò»Ê¹ÓÃ´ËÃû×Ö
+// å¤–éƒ¨ç»Ÿä¸€ä½¿ç”¨æ­¤åå­—
 #define PLUGIN_MAIN_NAME "PluginMain"
-// ÔÚCPPÖĞ×Ô¶¯¶¨Òå
+// åœ¨CPPä¸­è‡ªåŠ¨å®šä¹‰
 #define DEF_PLUGIN(API, NewPlugin)\
 	extern "C" API Plugin* PluginMain() { return new NewPlugin(); }
 

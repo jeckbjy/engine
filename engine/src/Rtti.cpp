@@ -57,10 +57,10 @@ bool RTTI::isKindOf(const RTTI* other) const
 {
 	if (other == this)
 		return true;
-	// ×ÔÉíÉî¶È±ØĞë´ó
+	// è‡ªèº«æ·±åº¦å¿…é¡»å¤§
 	if (m_depth <= other->m_depth)
 		return false;
-	// ¸¸ÀàÖĞ£¬²éÕÒÉî¶È,±ØÈ»ÄÜ²éµ½
+	// çˆ¶ç±»ä¸­ï¼ŒæŸ¥æ‰¾æ·±åº¦,å¿…ç„¶èƒ½æŸ¥åˆ°
 	const RTTI* cur = m_parent;
 	while (cur->m_depth != other->m_depth)
 		cur = cur->m_parent;

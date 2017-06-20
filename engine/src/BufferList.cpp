@@ -6,9 +6,9 @@ CUTE_NS_BEGIN
 
 struct BufferList::buff_t
 {
-	size_t refs;	// ÒıÓÃ¼ÆÊı
-	size_t size;	// ÄÚ´æ´óĞ¡
-	char*  base;	// Êı¾İ»ùÖ·
+	size_t refs;	// å¼•ç”¨è®¡æ•°
+	size_t size;	// å†…å­˜å¤§å°
+	char*  base;	// æ•°æ®åŸºå€
 };
 
 struct BufferList::node_t
@@ -59,7 +59,7 @@ void BufferList::merge(const BufferList& other)
 {
 	node_t* head = other.m_head;
 
-	// ¿½±´
+	// æ‹·è´
 	if (head)
 	{
 		node_t* node = head;
@@ -80,7 +80,7 @@ void BufferList::split(BufferList& other)
 	node_t* head = m_curr;
 	node_t* tail = m_head->prev;
 
-	// ·Ö²ğ³ÉÁ½¸ö
+	// åˆ†æ‹†æˆä¸¤ä¸ª
 	node_t* node = m_head;
 	do
 	{
@@ -88,7 +88,7 @@ void BufferList::split(BufferList& other)
 		{
 			other.new_node(node->buff, m_offs, node->data);
 
-			// »Ö¸´Á´±í
+			// æ¢å¤é“¾è¡¨
 			m_curr->data += m_offs;
 			m_head = m_curr;
 			m_head->prev = tail;
@@ -113,7 +113,7 @@ bool BufferList::write(const void* buf, size_t len)
 		return true;
 	size_t epos = m_cpos + len;
 	if (epos > m_size)
-	{// À©³äÈİÁ¿
+	{// æ‰©å……å®¹é‡
 		if (!expand(epos - m_size))
 			return false;
 	}
@@ -173,10 +173,10 @@ void BufferList::insert(size_t length)
 	}
 	else
 	{
-		// ÖØĞÂ´´½¨¸ö£¬²¢¿½±´
+		// é‡æ–°åˆ›å»ºä¸ªï¼Œå¹¶æ‹·è´
 		buff_t* buff = new_buff(calc_size(m_curr->size + length));
 
-		// Ê£ÓàÊı¾İ
+		// å‰©ä½™æ•°æ®
 		char*  ptr = m_curr->data + m_offs;
 		size_t len = m_curr->size - m_offs;
 
@@ -189,7 +189,7 @@ void BufferList::insert(size_t length)
 
 	m_size += length;
 
-	//// Ìî³äÊı¾İ
+	//// å¡«å……æ•°æ®
 	//if (data)
 	//	memcpy(ptr, data, length);
 }
@@ -230,7 +230,7 @@ bool BufferList::erase(size_t length)
 			m_offs = 0;
 		}
 
-		// É¾³ıÎªÁãµÄ
+		// åˆ é™¤ä¸ºé›¶çš„
 		if (curr->size == 0)
 		{
 			curr->prev->next = curr->next;
@@ -249,9 +249,9 @@ void BufferList::release()
 {
 	if (m_head != 0)
 	{
-		// ¶Ï¿ªÁ´
+		// æ–­å¼€é“¾
 		m_head->prev->next = 0;
-		// ÊÍ·Å
+		// é‡Šæ”¾
 		node_t* temp;
 		node_t* node = m_head;
 		while (node)
@@ -271,7 +271,7 @@ void BufferList::release()
 
 void BufferList::discard()
 {
-	// É¾³ı0-cposÖ®¼äµÄÊı¾İ
+	// åˆ é™¤0-cposä¹‹é—´çš„æ•°æ®
 	if (m_cpos == 0)
 		return;
 
@@ -300,7 +300,7 @@ void BufferList::discard()
 		}
 	}
 
-	// ĞŞÕıÊı¾İ
+	// ä¿®æ­£æ•°æ®
 	assert(m_cpos == 0);
 	m_head->prev = tail;
 	tail->prev = m_head;
@@ -310,7 +310,7 @@ void BufferList::discard()
 
 void BufferList::compact()
 {
-	// Ñ¹Ëõ£¬½«Êı¾İÒÆ¶¯µ½buffÍ·²¿
+	// å‹ç¼©ï¼Œå°†æ•°æ®ç§»åŠ¨åˆ°buffå¤´éƒ¨
 	if (empty())
 		return;
 	concat();
@@ -323,14 +323,14 @@ void BufferList::compact()
 
 void BufferList::concat()
 {
-	// Ö»ÓĞÒ»¸ö£¬ÎŞĞèºÏ²¢
+	// åªæœ‰ä¸€ä¸ªï¼Œæ— éœ€åˆå¹¶
 	if (!m_head || m_head->prev == m_head)
 		return;
 
 	size_t size = m_size;
 	size_t cpos = m_cpos;
 
-	// ´´½¨²¢¿½±´µ½Ò»Æğ
+	// åˆ›å»ºå¹¶æ‹·è´åˆ°ä¸€èµ·
 	buff_t* buff = new_buff(calc_size(size));
 	seek(0, SEEK_SET);
 	peek(buff->base, size);
@@ -347,7 +347,7 @@ bool BufferList::recv(socket_t sock)
 	if (m_head == NULL)
 		new_node(m_alloc);
 
-	// ·ÖÅäÄÚ´æÊ§°Ü
+	// åˆ†é…å†…å­˜å¤±è´¥
 	if (m_head == NULL)
 		return false;
 
@@ -373,7 +373,7 @@ bool BufferList::recv(socket_t sock)
 			size = tail->writable();
 		}
 
-		// Ğ´Èë
+		// å†™å…¥
 		ret = sock_recv(sock, buff, size);
 		if (ret < 0)
 		{
@@ -394,7 +394,7 @@ bool BufferList::send(socket_t sock)
 	if (m_size == 0)
 		return true;
 
-	// ´Óµ±Ç°·¢ËÍ
+	// ä»å½“å‰å‘é€
 	char*  buf;
 	size_t len;
 	while (m_cpos < m_size)
@@ -429,7 +429,7 @@ size_t BufferList::find(char data, size_t offset /* = 0 */)
 	if (node == NULL)
 		return NPOS;
 
-	// cposÏà¶ÔÓÚnodeÆğµã
+	// cposç›¸å¯¹äºnodeèµ·ç‚¹
 	cpos -= offs;
 
 	do
@@ -460,7 +460,7 @@ size_t BufferList::find(char* data, size_t offset /* = 0 */)
 	if (node == NULL)
 		return NPOS;
 
-	// cposÏà¶ÔÓÚnodeÆğµã
+	// cposç›¸å¯¹äºnodeèµ·ç‚¹
 	cpos -= offs;
 
 	size_t src_len = strlen(data);
@@ -493,11 +493,11 @@ size_t BufferList::rfind(char data, size_t offset /* = 0 */)
 	if (node == NULL)
 		return NPOS;
 
-	// Ïà¶ÔÓÚnodeÆğµã
+	// ç›¸å¯¹äºnodeèµ·ç‚¹
 	cpos -= offs;
 
 	node_t* tail = m_head->prev;
-	// ÄæÏò±éÀú
+	// é€†å‘éå†
 	do
 	{
 		for (size_t i = offs - 1; i >= 0; --i)
@@ -525,7 +525,7 @@ size_t BufferList::rfind(char* data, size_t offset /* = 0 */)
 	if (node == NULL)
 		return NPOS;
 
-	// Ïà¶ÔÓÚnodeÆğÊ¼Î»ÖÃ
+	// ç›¸å¯¹äºnodeèµ·å§‹ä½ç½®
 	cpos -= offs;
 	node_t* tail = m_head->prev;
 
@@ -550,7 +550,7 @@ size_t BufferList::rfind(char* data, size_t offset /* = 0 */)
 
 bool BufferList::expand(size_t len)
 {
-	// À©Èİµ«²¢²»ĞŞ¸Äµ±Ç°ÓÎ±ê
+	// æ‰©å®¹ä½†å¹¶ä¸ä¿®æ”¹å½“å‰æ¸¸æ ‡
 	if (len == 0)
 		return true;
 
@@ -571,10 +571,10 @@ bool BufferList::expand(size_t len)
 		return true;
 	}
 
-	// ĞèÒªÖØĞÂ·ÖÅäÄÚ´æ
+	// éœ€è¦é‡æ–°åˆ†é…å†…å­˜
 	if (m_alloc == 0)
 	{
-		// È«²¿ÖØĞÂ·ÖÅärealloc
+		// å…¨éƒ¨é‡æ–°åˆ†é…realloc
 		buff_t* buff = new_buff(m_size + len);
 		memcpy(buff->base, tail->data, tail->size);
 		free_buff(tail->buff);
@@ -777,7 +777,7 @@ void BufferList::free_buff(buff_t* buff)
 
 void BufferList::free_node(node_t* node)
 {
-	// ×¢:Íâ²¿»áĞŞ¸ÄnodeË÷ÒıºÍcurrµÈÊı¾İ
+	// æ³¨:å¤–éƒ¨ä¼šä¿®æ”¹nodeç´¢å¼•å’Œcurrç­‰æ•°æ®
 	free_buff(node->buff);
 	delete node;
 }
@@ -807,7 +807,7 @@ void BufferList::push_node(node_t* node)
 
 void BufferList::check_copy(node_t* node)
 {
-	// Î¨Ò»³ÖÓĞ,È«¿½±´»¹ÊÇ²¿·Ö¿½±´£¿£¿
+	// å”¯ä¸€æŒæœ‰,å…¨æ‹·è´è¿˜æ˜¯éƒ¨åˆ†æ‹·è´ï¼Ÿï¼Ÿ
 	buff_t* buff = node->buff;
 	if (buff->refs < 2)
 		return;
@@ -875,17 +875,17 @@ BufferList::node_t* BufferList::get_node(size_t& ret_offs, size_t& cpos, long le
 	node_t* tail = m_head->prev;
 
 	if (cpos <= m_head->size)
-	{// Í·²¿
+	{// å¤´éƒ¨
 		ret_node = m_head;
 		ret_offs = cpos;
 	}
 	else if (cpos >= (m_size - tail->size))
-	{// Î²²¿
+	{// å°¾éƒ¨
 		ret_node = tail;
 		ret_offs = m_size - cpos;
 	}
 	else
-	{// ´Óµ±Ç°Î»ÖÃ²éÕÒ
+	{// ä»å½“å‰ä½ç½®æŸ¥æ‰¾
 		if (!m_curr)
 		{
 			m_curr = m_head;
@@ -895,7 +895,7 @@ BufferList::node_t* BufferList::get_node(size_t& ret_offs, size_t& cpos, long le
 		// find
 		if (m_cpos < cpos)
 		{
-			// ´ÓÇ°Ïòºó:---m_cpos---cpos---
+			// ä»å‰å‘å:---m_cpos---cpos---
 			node_t* node = m_curr;
 			size_t  offs = m_offs;
 			size_t  nums = cpos - m_cpos;
@@ -920,7 +920,7 @@ BufferList::node_t* BufferList::get_node(size_t& ret_offs, size_t& cpos, long le
 		}
 		else
 		{
-			// ´ÓºóÏòÇ°
+			// ä»åå‘å‰
 			node_t* node = m_curr;
 			size_t  leng = m_offs;
 			size_t  nums = m_cpos - cpos;
@@ -928,7 +928,7 @@ BufferList::node_t* BufferList::get_node(size_t& ret_offs, size_t& cpos, long le
 			{
 				if (leng > nums)
 				{
-					// ½á¹û
+					// ç»“æœ
 					ret_node = node;
 					ret_offs = leng - nums;
 					break;
@@ -993,7 +993,7 @@ bool BufferList::read7Bit(uint64_t& data)
 uint BufferList::write7Bit(uint64_t data)
 {
 	char buff[10];
-	//¸ßÎ»±êÊ¶£º0±íÊ¾½áÎ²,1±íÊ¾ºó±ß»¹ÓĞÊı¾İ
+	//é«˜ä½æ ‡è¯†ï¼š0è¡¨ç¤ºç»“å°¾,1è¡¨ç¤ºåè¾¹è¿˜æœ‰æ•°æ®
 	size_t count = 0;
 	while (data > 0x7F)
 	{
@@ -1008,7 +1008,7 @@ uint BufferList::write7Bit(uint64_t data)
 
 bool BufferList::read8Bit(uint64_t& data, size_t count)
 {
-	// Í¨¹ı¸öÊı¶ÁÈ¡int,µÍ×Ö½Ú·ÅÔÚÇ°±ß,¸ß×Ö½ÚÔÚºó±ß
+	// é€šè¿‡ä¸ªæ•°è¯»å–int,ä½å­—èŠ‚æ”¾åœ¨å‰è¾¹,é«˜å­—èŠ‚åœ¨åè¾¹
 	data = 0;
 	if (count == 0)
 		return true;

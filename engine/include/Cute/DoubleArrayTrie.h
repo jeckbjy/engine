@@ -3,37 +3,37 @@
 
 CUTE_NS_BEGIN
 
-// deterministic finite automaton £¬DFA
+// deterministic finite automaton ï¼ŒDFA
 // c:    https://linux.thai.net/~thep/datrie/datrie.html
 // c++:	 https://github.com/s-yata/darts-clone
 // java: https://github.com/komiya-atsushi/darts-java
 // java: http://www.cnblogs.com/zhangchaoyang/articles/4508266.html
-// todo:Aho Corasick¶àÄ£Ê½Æ¥Åä
+// todo:Aho Corasickå¤šæ¨¡å¼åŒ¹é…
 /*
-array[0]:´æ´¢µÄrootĞÅÏ¢£¬base:¿ÉÒÔÎª¸ºÊı,µ«ÊÇÕâÑù¾Í²»ÄÜ¶¯Ì¬Ìí¼Ókey
-¿ÉÒÔÖ§³Öutf8£¬gb2312µÈ±àÂë£¬ÒªÇó¼æÈİascii£¬×Ö·ûÖĞ¼ä²»ÄÜ³öÏÖ0
+array[0]:å­˜å‚¨çš„rootä¿¡æ¯ï¼Œbase:å¯ä»¥ä¸ºè´Ÿæ•°,ä½†æ˜¯è¿™æ ·å°±ä¸èƒ½åŠ¨æ€æ·»åŠ key
+å¯ä»¥æ”¯æŒutf8ï¼Œgb2312ç­‰ç¼–ç ï¼Œè¦æ±‚å…¼å®¹asciiï¼Œå­—ç¬¦ä¸­é—´ä¸èƒ½å‡ºç°0
 TODO:
-1:Aho Corasick¶àÄ£Ê½Æ¥Åä
-2:tailÑ¹Ëõ
-3:unit_tÑ¹Ëõ
-4:¶¯Ì¬Ìí¼Ó×Ö·û
-5:´úÂëÓÅ»¯£¬ÀàĞÍÇ¿×ª¸Ä³ÉtypedefµÈ
-6:¶à×Ö½ÚÓÅ»¯Ö§³Ö
+1:Aho Corasickå¤šæ¨¡å¼åŒ¹é…
+2:tailå‹ç¼©
+3:unit_tå‹ç¼©
+4:åŠ¨æ€æ·»åŠ å­—ç¬¦
+5:ä»£ç ä¼˜åŒ–ï¼Œç±»å‹å¼ºè½¬æ”¹æˆtypedefç­‰
+6:å¤šå­—èŠ‚ä¼˜åŒ–æ”¯æŒ
 */
 class CUTE_CORE_API DoubleArrayTrie
 {
 public:
 	enum MatchMode
 	{
-		MATCH_STRICT,		// ÑÏ¸ñÆ¥Åä
-		MATCH_PREFIX_MIN,	// ×îĞ¡Ç°×ºÆ¥Åä
-		MATCH_PREFIX_MAX,	// ×î´óÇ°×ºÆ¥Åä
+		MATCH_STRICT,		// ä¸¥æ ¼åŒ¹é…
+		MATCH_PREFIX_MIN,	// æœ€å°å‰ç¼€åŒ¹é…
+		MATCH_PREFIX_MAX,	// æœ€å¤§å‰ç¼€åŒ¹é…
 	};
 
 	enum Flag
 	{
-		FLAG_SORTED  = 0x01,	// ÒÑ¾­ÅÅĞò¹ı
-		FLAG_DYNAMIC = 0x02,	// ĞèÒª¶¯Ì¬²åÈë
+		FLAG_SORTED  = 0x01,	// å·²ç»æ’åºè¿‡
+		FLAG_DYNAMIC = 0x02,	// éœ€è¦åŠ¨æ€æ’å…¥
 		FLAG_ROOT1	 = 0x04,	// array[0].base==1
 	};
 
@@ -58,7 +58,7 @@ private:
 protected:
 	struct unit_t
 	{
-		uint32 word : 1;	// ÊÇ·ñÊÇµ¥´Ê½áÎ²,Ò¶×Ó½Úµã\0
+		uint32 word : 1;	// æ˜¯å¦æ˜¯å•è¯ç»“å°¾,å¶å­èŠ‚ç‚¹\0
 		int32 base : 31;
 		int32 check;
 	};

@@ -247,7 +247,7 @@ enum class TouchPhase
 	Canceled,
 };
 
-// ÊÖÖ¸´¥Ãş
+// æ‰‹æŒ‡è§¦æ‘¸
 struct CUTE_CORE_API Touch
 {
 	uint32		fingerId;
@@ -258,16 +258,16 @@ struct CUTE_CORE_API Touch
 	TouchPhase	phase;
 };
 
-// ÍÓÂİÒÇ
+// é™€èºä»ª
 struct CUTE_CORE_API Gyroscope
 {
-	Vector3		rotationRate;			//Ğı×ªËÙÂÊ
-	Vector3		rotationRateUnbiased;	//ÎŞÆ«Ğı×ªËÙÂÊ
-	Vector3		gravity;				//ÖØÁ¦¼ÓËÙ¶È
-	Vector3		userAcceleration;		//ÓÃ»§¼ÓËÙ¶È
-	Quaternion	attitude;				//×ËÌ¬
-	bool		enabled;				//ÆôÓÃ×´Ì¬
-	float		updateInterval;			//ÉèÖÃ»ò¼ìË÷¸ÃÍÓÂİÒÇµÄ¼ä¸ô£¬ÒÔÃëÎªµ¥Î»;
+	Vector3		rotationRate;			//æ—‹è½¬é€Ÿç‡
+	Vector3		rotationRateUnbiased;	//æ— åæ—‹è½¬é€Ÿç‡
+	Vector3		gravity;				//é‡åŠ›åŠ é€Ÿåº¦
+	Vector3		userAcceleration;		//ç”¨æˆ·åŠ é€Ÿåº¦
+	Quaternion	attitude;				//å§¿æ€
+	bool		enabled;				//å¯ç”¨çŠ¶æ€
+	float		updateInterval;			//è®¾ç½®æˆ–æ£€ç´¢è¯¥é™€èºä»ªçš„é—´éš”ï¼Œä»¥ç§’ä¸ºå•ä½;
 };
 
 CUTE_NS_END

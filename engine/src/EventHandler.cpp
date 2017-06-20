@@ -25,13 +25,13 @@ void EventHandler::process(PacketEvent* ev)
 	int cmdid = ev->getPacket()->msgid();
 	int result = handle(ev);
 	if (result != 0)
-	{// ·µ»ØÖµ´¦Àí
+	{// è¿”å›å€¼å¤„ç†
 		if (result < 0)
 		{
 			Server::get().post(ev, 1);
 		}
 		else
-		{// ±¨´íÔ¤¾¯
+		{// æŠ¥é”™é¢„è­¦
 
 		}
 	}

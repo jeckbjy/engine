@@ -3,6 +3,7 @@
 
 CUTE_NS_BEGIN
 
+// ç®¡é“
 class CUTE_CORE_API Pipe
 {
 public:
@@ -24,7 +25,7 @@ public:
 	inline handle_t getReader() const { return m_reader; }
 	inline handle_t getWriter() const { return m_writer; }
 
-private:// ½ûÖ¹¿½±´
+private:
 	Pipe(const Pipe& pipe);
 	Pipe& operator = (const Pipe& pipe);
 

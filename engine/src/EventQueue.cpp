@@ -63,7 +63,7 @@ void EventQueue::process()
 {
 	EventList events;
 	pop(events);
-	// ±éÀú´¦Àí
+	// éå†å¤„ç†
 	EventBase* ev;
 	for (EventList::Iterator itor = events.begin(); itor != events.end();)
 	{
@@ -100,7 +100,7 @@ void EventQueue::pop(EventList& events)
 
 	Mutex::ScopedLock guard(m_mutex);
 	events.swap(m_priority);
-	// ±éÀúµ½Ê±¼äµÄ
+	// éå†åˆ°æ—¶é—´çš„
 	EventBase* ev;
 	for (EventList::Iterator itor = m_delay.begin(); itor != m_delay.end(); )
 	{
@@ -110,7 +110,7 @@ void EventQueue::pop(EventList& events)
 			break;
 		}
 
-		// É¾³ıÎŞĞ§µÄ
+		// åˆ é™¤æ— æ•ˆçš„
 
 		itor = m_delay.erase(itor);
 		events.push_back(ev);

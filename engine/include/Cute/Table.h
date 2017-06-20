@@ -34,7 +34,7 @@ public:
 	CellVector& operator>>(uint64_t& cell)	{ return convert(next(), cell); }
 	CellVector& operator>>(float& cell)		{ return convert(next(), cell); }
 	CellVector& operator>>(double& cell)	{ return convert(next(), cell); }
-	// ÒªÇóÍâ²¿ÀàĞÍ¶¼±ØĞëÄÜ¹»stringstreamÁ÷´¦Àí
+	// è¦æ±‚å¤–éƒ¨ç±»å‹éƒ½å¿…é¡»èƒ½å¤Ÿstringstreamæµå¤„ç†
 	template<typename T>
 	CellVector& operator>>(T& cell)
 	{
@@ -43,7 +43,7 @@ public:
 		return *this;
 	}
 
-	// Êı×éÀàĞÍ,Ã¿¸öÔªËØ¶ÔÓ¦Ò»¸öcell
+	// æ•°ç»„ç±»å‹,æ¯ä¸ªå…ƒç´ å¯¹åº”ä¸€ä¸ªcell
 	template<typename T, std::size_t N>
 	CellVector& operator>>(T(&data)[N])
 	{
@@ -53,14 +53,14 @@ public:
 		return *this;
 	}
 
-	// Ä¬ÈÏÒÔ','·Ö¸î
+	// é»˜è®¤ä»¥','åˆ†å‰²
 	template<typename U, typename V>
 	CellVector& operator>>(std::pair<U, V>& cells)
 	{
 		sscanf(next().c_str(), "%d , %d", &cells.first, &cells.second);
 	}
 
-	// ¶ººÅ·Ö¸îµÄcells
+	// é€—å·åˆ†å‰²çš„cells
 	template<class T>
 	CellVector& operator>>(std::vector<T>& cells)
 	{
@@ -78,7 +78,7 @@ public:
 		return *this;
 	}
 
-	// mapÀàĞÍ
+	// mapç±»å‹
 	template<class U, class V>
 	CellVector& operator>>(std::map<U, V>& cells)
 	{
@@ -136,17 +136,17 @@ public:
 protected:
 	friend class ITable;
 	uint32_t m_tabID;
-	bool	 m_expired;	// Êı¾İÊÇ·ñÒÑ¾­¹ıÆÚ
+	bool	 m_expired;	// æ•°æ®æ˜¯å¦å·²ç»è¿‡æœŸ
 };
 
 /************************************************************************/
 /*
-¶şÎ¬±í¸ñ£¬×î¶àÖ§³ÖÁ½ÁĞË÷Òı,Ö§³Ö\tºÍ','(csv)¸ñÊ½½âÎö
-ÒªÇóµÚÒ»ÁĞ±ØĞëÊÇÎ¨Ò»ID²¢ÇÒÇ°ÈıĞĞÊÇ×¢ÊÍÉÏ£¬·Ö±ğÊÇÀàĞÍ£¬Ãû×Ö£¬×¢ÊÍ
-#¿ªÊ¼±íÊ¾×¢ÊÍĞĞ
-Ö§³Ö¶ÁÈ¡bom±êÊ¶,²¢×Ô¶¯¹ıÂË
-Ö§³ÖÖØ¸´¼ÓÔØ£¬ÏàÍ¬idµÄÖ¸Õë²»»á·¢Éú±ä»¯
-Íâ±ßÊ¹ÓÃÈõÒıÓÃ·ÀÖ¹Êı¾İ¹ıÆÚ
+äºŒç»´è¡¨æ ¼ï¼Œæœ€å¤šæ”¯æŒä¸¤åˆ—ç´¢å¼•,æ”¯æŒ\tå’Œ','(csv)æ ¼å¼è§£æ
+è¦æ±‚ç¬¬ä¸€åˆ—å¿…é¡»æ˜¯å”¯ä¸€IDå¹¶ä¸”å‰ä¸‰è¡Œæ˜¯æ³¨é‡Šä¸Šï¼Œåˆ†åˆ«æ˜¯ç±»å‹ï¼Œåå­—ï¼Œæ³¨é‡Š
+#å¼€å§‹è¡¨ç¤ºæ³¨é‡Šè¡Œ
+æ”¯æŒè¯»å–bomæ ‡è¯†,å¹¶è‡ªåŠ¨è¿‡æ»¤
+æ”¯æŒé‡å¤åŠ è½½ï¼Œç›¸åŒidçš„æŒ‡é’ˆä¸ä¼šå‘ç”Ÿå˜åŒ–
+å¤–è¾¹ä½¿ç”¨å¼±å¼•ç”¨é˜²æ­¢æ•°æ®è¿‡æœŸ
 */
 /************************************************************************/
 class CUTE_CORE_API ITable
@@ -184,7 +184,7 @@ protected:
 	char	m_delimiter;
 };
 
-// »ùÓÚWeakPtrµÄÖ¸Õë¼ì²â
+// åŸºäºWeakPtrçš„æŒ‡é’ˆæ£€æµ‹
 template<typename T>
 class Table : public ITable
 {
@@ -286,7 +286,7 @@ class ItemTab : public Table<ItemCfg>
 {
 };
 */
-// ¹Ì¶¨Ãû×Ö XxxCfg->XxxTab
+// å›ºå®šåå­— XxxCfg->XxxTab
 #define AUTO_DEF_TAB(Name)			\
 	typedef Table<Name##Cfg>	Name##Tab;
 

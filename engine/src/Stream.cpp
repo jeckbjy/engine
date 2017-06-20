@@ -41,7 +41,7 @@ bool Stream::readLine(String& data)
 		offset = 0;
 	}
 
-	// ºöÂÔ'\r'
+	// å¿½ç•¥'\r'
 	if (!data.empty() && data.back() == '\r')
 	{
 		data.erase(data.size() - 1);
@@ -92,8 +92,8 @@ bool Stream::read7Bit(uint64& data)
 uint Stream::write7Bit(uint64 value)
 {
 	char buffer[10];
-	//Íâ²¿È·±£buff×ã¹»£¬int32×î¶à5Î»£¬int64×î¶à10Î»
-	//¸ßÎ»±êÊ¶£º0±íÊ¾½áÎ²,1±íÊ¾ºó±ß»¹ÓÐÊý¾Ý
+	//å¤–éƒ¨ç¡®ä¿buffè¶³å¤Ÿï¼Œint32æœ€å¤š5ä½ï¼Œint64æœ€å¤š10ä½
+	//é«˜ä½æ ‡è¯†ï¼š0è¡¨ç¤ºç»“å°¾,1è¡¨ç¤ºåŽè¾¹è¿˜æœ‰æ•°æ®
 	size_t count = 0;
 	while (value > 0x7F)
 	{

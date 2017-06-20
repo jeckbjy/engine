@@ -4,7 +4,7 @@
 
 CUTE_NS_BEGIN
 
-// ÄÚ´æ²»Á¬Ğø£¬¹²ÏíÄÚ´æ,Ğ´Êµ¿½±´
+// å†…å­˜ä¸è¿ç»­ï¼Œå…±äº«å†…å­˜,å†™å®æ‹·è´
 // SEEK_CUR SEEK_SET SEEK_END
 class CUTE_CORE_API BufferList
 {
@@ -18,7 +18,7 @@ public:
 	BufferList& operator = (const BufferList& other);
 
 	void merge(const BufferList& other);
-	// ´Óµ±Ç°Î»ÖÃ·Ö²ğ³ÉÁ½¸ö,²¢·Åµ½other½áÎ²
+	// ä»å½“å‰ä½ç½®åˆ†æ‹†æˆä¸¤ä¸ª,å¹¶æ”¾åˆ°otherç»“å°¾
 	void split(BufferList& other);
 
 	bool write(const void* data, size_t len);
@@ -132,12 +132,12 @@ private:
 	bool compare(node_t* node, size_t offs, const char* data, size_t length);
 
 private:
-	node_t* m_head;		// Á´±íÍ·
-	node_t* m_curr;		// µ±Ç°Î»ÖÃ
-	size_t	m_offs;		// µ±Ç°Æ«ÒÆ
-	size_t	m_cpos;		// µ±Ç°Î»ÖÃ,Ïà¶ÔÓÚÆğµã
-	size_t	m_size;		// ×Ü´óĞ¡
-	size_t	m_alloc;	// ·ÖÅäÄÚ´æ´óĞ¡,0±íÊ¾ÄÚ´æÁ¬Ğø,2±¶·ÖÅä
+	node_t* m_head;		// é“¾è¡¨å¤´
+	node_t* m_curr;		// å½“å‰ä½ç½®
+	size_t	m_offs;		// å½“å‰åç§»
+	size_t	m_cpos;		// å½“å‰ä½ç½®,ç›¸å¯¹äºèµ·ç‚¹
+	size_t	m_size;		// æ€»å¤§å°
+	size_t	m_alloc;	// åˆ†é…å†…å­˜å¤§å°,0è¡¨ç¤ºå†…å­˜è¿ç»­,2å€åˆ†é…
 };
 
 //

@@ -4,7 +4,7 @@
 
 CUTE_NS_BEGIN
 
-// 暂时不考虑引用计数
+// 鏆傛椂涓嶈�冭檻寮曠敤璁℃暟
 IORequest::IORequest(IOChannel* channel)
 	: m_next(0)
 	, m_proxy(channel->getProxy())

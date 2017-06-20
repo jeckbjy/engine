@@ -65,7 +65,7 @@ private:
 	long		m_pid;
 	const char*	m_file;
 	int			m_line;
-	mutable String m_message;	// 最终序列化后的数据
+	mutable String m_message;	// 鏈�缁堝簭鍒楀寲鍚庣殑鏁版嵁
 };
 
 // inlines

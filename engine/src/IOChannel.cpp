@@ -35,7 +35,7 @@ void IOChannel::close()
 #endif
 		detach();
 		m_handle = INVALID_HANDLE_VALUE;
-		// ���״̬
+		// 清空状态
 		m_flag &= ~MASK_STATUS;
 	}
 }

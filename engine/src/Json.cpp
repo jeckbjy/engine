@@ -152,7 +152,7 @@ bool JsonReader::readArray(Variant& arr)
 
 bool JsonReader::readNumber(Variant& value)
 {
-	// ½âÎödouble»òÕßint
+	// è§£æždoubleæˆ–è€…int
 	Number::Real result;
 	Location pos = Number::parseNumber(result, m_cur);
 	if (result.type == Number::TYPE_NONE)
@@ -186,7 +186,7 @@ bool JsonReader::readString(String& value)
 		if (c == '"')
 			break;
 
-		// ·¢Éú¹ý´íÎó£¬ºöÂÔ´íÎó
+		// å‘ç”Ÿè¿‡é”™è¯¯ï¼Œå¿½ç•¥é”™è¯¯
 		if (!ok)
 		{
 			if (c == '\\')
@@ -434,7 +434,7 @@ uint JsonReader::readToken()
 	case '8':
 	case '9':
 	case '-':
-		// »ØÍË
+		// å›žé€€
 		--m_cur;
 		return TOKEN_NUM;
 	default:

@@ -1,10 +1,10 @@
 #pragma once
 #include "Cute/Tuple.h"
-// º¯ÊıİÍÈ¡
+// å‡½æ•°èƒå–
 
 CUTE_NS_BEGIN
 //////////////////////////////////////////////////////////////////////////
-// signature İÍÈ¡
+// signature èƒå–
 //////////////////////////////////////////////////////////////////////////
 template<typename S>
 struct signature_traits
@@ -153,7 +153,7 @@ struct signature_traits<R(T0, T1, T2, T3, T4, T5)>
 };
 
 //////////////////////////////////////////////////////////////////////////
-// ³ÉÔ±º¯ÊıİÍÈ¡
+// æˆå‘˜å‡½æ•°èƒå–
 //////////////////////////////////////////////////////////////////////////
 template<class F>
 struct mem_func_traits
@@ -260,13 +260,13 @@ struct mem_func_traits<R(C::*)(T0, T1, T2, T3, T4, T5) const>
 };
 
 //////////////////////////////////////////////////////////////////////////
-// ³ÉÔ±º¯ÊıÖ¸Õë×ª»¯ÎªÆÕÍ¨º¯ÊıÖ¸Õë
+// æˆå‘˜å‡½æ•°æŒ‡é’ˆè½¬åŒ–ä¸ºæ™®é€šå‡½æ•°æŒ‡é’ˆ
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 // function traits
 //////////////////////////////////////////////////////////////////////////
-// º¯ÊıÇ©Ãû£¿
+// å‡½æ•°ç­¾åï¼Ÿ
 template<class F, class Enable = void>
 struct func_traits : signature_traits<F>
 {
@@ -294,7 +294,7 @@ struct func_traits<F, typename std::enable_if<std::is_member_function_pointer<F>
 	typedef F func_t;
 	typedef typename mem_func_traits<F>::class_t class_t;
 
-	// todo:³ÉÔ±º¯ÊıÖ¸Õë×ª»¯Îªvoid*
+	// todo:æˆå‘˜å‡½æ•°æŒ‡é’ˆè½¬åŒ–ä¸ºvoid*
 	static void* getAddress(F fun)
 	{
 		return NULL;

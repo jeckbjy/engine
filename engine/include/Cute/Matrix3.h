@@ -5,8 +5,8 @@
 
 CUTE_NS_BEGIN
 
-#define MATRIX_MAJOR_ROW	1	// ––÷˜–Ú,dx
-#define MATRIX_MAJOR_COL	2	// ¡–÷˜–Ú,gl
+#define MATRIX_MAJOR_ROW	1	// Ë°å‰∏ªÂ∫è,dx
+#define MATRIX_MAJOR_COL	2	// Âàó‰∏ªÂ∫è,gl
 #define MATRIX_MAJOR		MATRIX_MAJOR_ROW
 
 /** A 3x3 matrix. Can be used for non-homogenous transformations of three dimensional vectors and points. */

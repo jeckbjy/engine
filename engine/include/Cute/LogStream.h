@@ -4,7 +4,7 @@
 
 CUTE_NS_BEGIN
 
-// 可以有一个分隔符
+// 鍙互鏈変竴涓垎闅旂
 class CUTE_CORE_API LogStream
 {
 public:

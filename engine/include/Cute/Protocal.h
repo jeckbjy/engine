@@ -5,7 +5,7 @@ CUTE_NS_BEGIN
 
 class BufferList;
 class Session;
-// ÏûÏ¢Ğ­Òé´¦Àí
+// æ¶ˆæ¯åè®®å¤„ç†
 class CUTE_CORE_API Protocal : public Ref<Protocal>
 {
 public:
@@ -14,7 +14,7 @@ public:
 	virtual void process(Session* sess, BufferList& buffer) = 0;
 };
 
-// ÏûÏ¢°ü
+// æ¶ˆæ¯åŒ…
 class CUTE_CORE_API PacketProtocal : public Protocal
 {
 public:
@@ -25,7 +25,7 @@ private:
 	size_t m_maxSize;
 };
 
-// ÎÄ±¾¸ñÊ½,\n½áÊø
+// æ–‡æœ¬æ ¼å¼,\nç»“æŸ
 class CUTE_CORE_API DelimiterProtocal : public Protocal
 {
 public:

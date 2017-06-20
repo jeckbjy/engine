@@ -30,7 +30,7 @@ public:
 
 	virtual const ImportOptions*	getDefaultOptions() const = 0;
 	virtual ImportOptions* newOptions() const = 0;
-	// ·µ»ØĞ¡Ğ´×Ö·û´®Êı×é,ÒÔNULL½áÎ²
+	// è¿”å›å°å†™å­—ç¬¦ä¸²æ•°ç»„,ä»¥NULLç»“å°¾
 	virtual const char** getExtensionList() const = 0;
 	virtual bool isExtensionSupported(const String& ext) const;
 private:

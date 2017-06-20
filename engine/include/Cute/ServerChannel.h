@@ -33,8 +33,8 @@ public:
 
 protected:
 	ServerListener* m_listener;
-	uint32		m_id;		// 唯一id
-	uint32		m_type;		// 类型标识
+	uint32		m_id;		// 鍞竴id
+	uint32		m_type;		// 绫诲瀷鏍囪瘑
 };
 
 CUTE_NS_END

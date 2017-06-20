@@ -9,7 +9,7 @@ class FuncHandler : public EventHandler
 {
 };
 
-// Ã»ÓĞ¶îÍâ²ÎÊı
+// æ²¡æœ‰é¢å¤–å‚æ•°
 template<class F>
 class FuncHandler<F, typename std::enable_if<func_traits<F>::length == 1>::type>
 	: EventHandler
@@ -23,7 +23,7 @@ public:
 	F m_fun;
 };
 
-// Ä¿Ç°½öÖ§³Ö×¢²á£¬²»Ö§³ÖÉ¾³ı
+// ç›®å‰ä»…æ”¯æŒæ³¨å†Œï¼Œä¸æ”¯æŒåˆ é™¤
 class CUTE_CORE_API HandlerRegister
 {
 public:
@@ -38,7 +38,7 @@ public:
 	virtual ~HandlerRegister();
 
 	virtual void setup() = 0;
-	// Ö§³ÖµÄÀàĞÍ,0±íÊ¾È«²¿Ö§³Ö
+	// æ”¯æŒçš„ç±»å‹,0è¡¨ç¤ºå…¨éƒ¨æ”¯æŒ
 	virtual int  type() = 0;
 
 	template<typename F>

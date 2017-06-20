@@ -8,7 +8,7 @@ CUTE_NS_BEGIN
 class CUTE_CORE_API RTTI
 {
 public:
-	// Ä¬ÈÏ¹¹Ôìº¯Êı
+	// é»˜è®¤æ„é€ å‡½æ•°
 	typedef void*(*Creator)();
 
 	RTTI(const RTTI* parent, const char* name, FourCC type, Creator fun);
@@ -33,13 +33,13 @@ private:
 	Creator		m_creator;
 };
 
-// Root¸ù½Úµã
+// Rootæ ¹èŠ‚ç‚¹
 struct RTTIRoot
 {
 	static RTTI* getStaticRTTI() { return NULL; }
 };
 
-// İÍÈ¡Ä¬ÈÏ¹¹Ôìº¯Êı
+// èƒå–é»˜è®¤æ„é€ å‡½æ•°
 template<typename T, typename Enable = void>
 struct ConstructTraits
 {
@@ -58,7 +58,7 @@ struct ConstructTraits<T, typename std::enable_if<!std::is_abstract<T>::value &&
 	}
 };
 
-// Èç¹ûÃ»ÓĞ»ùÀà£¬BaseÊ¹ÓÃRootRtti
+// å¦‚æœæ²¡æœ‰åŸºç±»ï¼ŒBaseä½¿ç”¨RootRtti
 #define __DECLARE_RTTI(CLS, BASE, FOUR_CC)						\
 public:															\
 	static RTTI* getStaticRTTI(){								\

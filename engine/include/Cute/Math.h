@@ -19,7 +19,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// Evaluates trigonometric functions using polynomial approximations.
 	// Trig Approximations 
-	// xxx0:¸ü¿ìÐ©£¬xxx1:¸üºÃÐ©£¬¶¼ÊÇ»¡¶È¼ÆËã fast sin cos tan asin acos atan
+	// xxx0:æ›´å¿«äº›ï¼Œxxx1:æ›´å¥½äº›ï¼Œéƒ½æ˜¯å¼§åº¦è®¡ç®— fast sin cos tan asin acos atan
 	//////////////////////////////////////////////////////////////////////////
 	static float fsin0(float val);
 	static float fsin1(float val);
@@ -134,7 +134,7 @@ public:
 		return clamp01((val - min) / std::max(max - min, 0.0001F));
 	}
 
-	// Æ½·½ºÍ
+	// å¹³æ–¹å’Œ
 	template<typename T>
 	static T sumsq(T t1, T t2){ return t1*t1 + t2*t2; }
 

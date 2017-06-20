@@ -162,7 +162,7 @@ bool ITable::parse(CellVector& tokens, const String& line)
 
 	std::stringstream cell;
 
-	// ºöÂÔ½áÎ²»»ĞĞ·ûºÅ
+	// å¿½ç•¥ç»“å°¾æ¢è¡Œç¬¦å·
 	size_t endPos = line.size() - 1;
 	if (line[endPos] == '\r')
 		endPos--;
@@ -175,9 +175,9 @@ bool ITable::parse(CellVector& tokens, const String& line)
 			endPos--;
 	}
 
-	bool startquote = false;	// ÊÇ·ñ°üº¬ÆğÊ¼ÒıºÅ
-	size_t start = 0;			// ÆğÊ¼Î»ÖÃ
-	char ch;					// µ±Ç°×Ö·û
+	bool startquote = false;	// æ˜¯å¦åŒ…å«èµ·å§‹å¼•å·
+	size_t start = 0;			// èµ·å§‹ä½ç½®
+	char ch;					// å½“å‰å­—ç¬¦
 	for (size_t i = 0; i <= endPos; ++i)
 	{
 		ch = line[i];
@@ -188,7 +188,7 @@ bool ITable::parse(CellVector& tokens, const String& line)
 				cell << ch;
 				continue;
 			}
-			// ÕÒµ½Ò»¸ö
+			// æ‰¾åˆ°ä¸€ä¸ª
 			tokens.push(cell.str());
 			cell.str("");
 			continue;
@@ -212,7 +212,7 @@ bool ITable::parse(CellVector& tokens, const String& line)
 			//find , and move i to it
 			if (!startquote)
 			{
-				// ½áÎ²ÁË£¬ºó±ß±ØĞëÊÇÒ»¸ö·Ö¸ô·û£¬·ñÔò¾ÍÓĞ´íÎó
+				// ç»“å°¾äº†ï¼Œåè¾¹å¿…é¡»æ˜¯ä¸€ä¸ªåˆ†éš”ç¬¦ï¼Œå¦åˆ™å°±æœ‰é”™è¯¯
 				for (unsigned int x = i + 1; x < endPos; x++)
 				{
 					if (line[x] == delimiter)
@@ -224,12 +224,12 @@ bool ITable::parse(CellVector& tokens, const String& line)
 			}
 		}
 		else
-		{// ÊäÈëÆÕÍ¨×Ö·û
+		{// è¾“å…¥æ™®é€šå­—ç¬¦
 			cell << ch;
 		}
 	}
 
-	// ½áÊøÁË£¬¼ÓÈë×îºóÒ»¸ö
+	// ç»“æŸäº†ï¼ŒåŠ å…¥æœ€åä¸€ä¸ª
 	tokens.push(cell.str());
 
 	return true;

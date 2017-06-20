@@ -62,11 +62,11 @@ void DoubleArrayTrie::resize(size_t capacity)
 			new_array[i] = m_array[i];
 	}
 
-	// ³õÊ¼»¯
+	// åˆå§‹åŒ–
 	for (size_t i = m_size; i < capacity; ++i)
 		memset(&(new_array[i]), 0, sizeof(unit_t));
 
-	// ¸³Öµ
+	// èµ‹å€¼
 	delete m_array;
 	m_array = new_array;
 	m_size = capacity;
@@ -92,7 +92,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 
 	clear();
 
-	// ÒªÇó±ØĞëÊÇÓĞĞò
+	// è¦æ±‚å¿…é¡»æ˜¯æœ‰åº
 	if (num_keys == 0)
 		return;
 
@@ -103,7 +103,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 	if (needSort)
 		std::sort(keys, keys + num_keys, SortCmp(0));
 
-	// ÓÃÓÚ±êÊ¶ÏÂÒ»´Î¼ì²âÆğÊ¼Î»ÖÃ
+	// ç”¨äºæ ‡è¯†ä¸‹ä¸€æ¬¡æ£€æµ‹èµ·å§‹ä½ç½®
 	size_t next_pos;
 	if (isDynamic)
 		next_pos = 256;
@@ -125,7 +125,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 
 	int left, right, depth, index, code;
 
-	// ¹ã¶ÈÓÅÏÈËÑË÷
+	// å¹¿åº¦ä¼˜å…ˆæœç´¢
 	while (!nodes.empty())
 	{
 		siblings.clear();
@@ -139,7 +139,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 		index = parent->index;
 		code  = parent->code;
 
-		// Ê×ÏÈÅÅĞò×Ó½Úµã
+		// é¦–å…ˆæ’åºå­èŠ‚ç‚¹
 		if (needSort)
 			std::sort(keys + left, keys + right, SortCmp(depth));
 
@@ -149,11 +149,11 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 		for (int i = left; i < right; ++i)
 		{
 			const key_t* str = keys[i];
-			// Æ«ÒÆ1£¬ÒòÎªÓĞ0ĞèÒªµ¥¶À´¦Àí
+			// åç§»1ï¼Œå› ä¸ºæœ‰0éœ€è¦å•ç‹¬å¤„ç†
 			curr_code = (uchar)str[depth];
 
 			if (prev_code > curr_code)
-			{// ·¢Éú´íÎó,Íâ²¿Ó¦¸Ã±£Ö¤ÓĞĞò
+			{// å‘ç”Ÿé”™è¯¯,å¤–éƒ¨åº”è¯¥ä¿è¯æœ‰åº
 				return;
 			}
 
@@ -188,8 +188,8 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 			continue;
 
 		// insert
-		// ²éÕÒ¿ÉÓÃ×Ö·û
-		// ÏÈ¸üĞÂÒ»ÏÂnext_pos
+		// æŸ¥æ‰¾å¯ç”¨å­—ç¬¦
+		// å…ˆæ›´æ–°ä¸€ä¸‹next_pos
 		for (size_t i = next_pos; i < m_size; ++i)
 		{
 			if (m_array[i].check == 0)
@@ -201,13 +201,13 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 
 		int base_pos = next_pos - siblings[0]->code;
 		int back_code = siblings[siblings.size() - 1]->code;
-		// ²éÕÒÒ»¸ö¿ÉÒÔ²åÈëµÄÎ»ÖÃ
+		// æŸ¥æ‰¾ä¸€ä¸ªå¯ä»¥æ’å…¥çš„ä½ç½®
 		for (;;++base_pos)
 		{
 			//if (m_array[base_pos].check != 0)
 			//	continue;
 
-			// Ğ£ÑéÊÇ·ñÔ½½ç
+			// æ ¡éªŒæ˜¯å¦è¶Šç•Œ
 			size_t epos = size_t(base_pos + back_code);
 			if (epos >= m_size)
 			{
@@ -231,7 +231,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 		}
 
 		bool isWord = false;
-		// ÕÒµ½ÁË£¬ÉèÖÃlabel¼´check
+		// æ‰¾åˆ°äº†ï¼Œè®¾ç½®labelå³check
 		for (size_t i = 0; i < siblings.size(); ++i)
 		{
 			DATNode* node = siblings[i];
@@ -244,19 +244,19 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 				nodes.push(node);
 			}
 			else
-			{// ±êÊ¶½áÊø
+			{// æ ‡è¯†ç»“æŸ
 				isWord = true;
 				pools.push_back(node);
 			}
 		}
 
-		// ÉèÖÃbaseÖµ
+		// è®¾ç½®baseå€¼
 		m_array[index].base = base_pos;
 		if (isWord)
 			m_array[index].word = 1;
 	}
 
-	// ÊÍ·Å¿Õ¼ä
+	// é‡Šæ”¾ç©ºé—´
 	for (size_t i = 0; i < pools.size(); ++i)
 	{
 		delete pools[i];
@@ -267,21 +267,21 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 
 int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 0 */, size_t* node_pos /* = 0 */) const
 {
-	// ·µ»ØÖµ:0:±íÊ¾Ã»ÓĞÆ¥Åäµ½£¬´óÓÚ0:±íÊ¾Æ¥Åäµ½µÄ³¤¶È
+	// è¿”å›å€¼:0:è¡¨ç¤ºæ²¡æœ‰åŒ¹é…åˆ°ï¼Œå¤§äº0:è¡¨ç¤ºåŒ¹é…åˆ°çš„é•¿åº¦
 	size_t curr_index = node_pos ? *node_pos : 0;
 	if (curr_index >= m_size)
 		return -1;
 
-	// Ã»ÓĞÊı¾İ
+	// æ²¡æœ‰æ•°æ®
 	if (curr_index >= m_size)
 		return -1;
 
 	if (length == 0)
 		length = std::char_traits<key_t>::length(key);
 
-	// ¿ªÊ¼¼ÆËã
+	// å¼€å§‹è®¡ç®—
 	size_t last_index = 0;
-	size_t last_match = 0;//ÉÏÒ»´ÎÆ¥Åäµ½µÄ¸öÊı
+	size_t last_match = 0;//ä¸Šä¸€æ¬¡åŒ¹é…åˆ°çš„ä¸ªæ•°
 	int32  next_index;
 	uchar ch;
 	unit_t* unit;
@@ -294,12 +294,12 @@ int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 
 			break;
 
 		unit = &(m_array[next_index]);
-		// ²»Ò»ÖÂ£¬ËµÃ÷Ã»ÓĞÆ¥ÅäÉÏ
+		// ä¸ä¸€è‡´ï¼Œè¯´æ˜æ²¡æœ‰åŒ¹é…ä¸Š
 		if (unit->check != m_array[curr_index].base)
 			break;
 
-		// Æ¥Åä³É¹¦
-		// ÅĞ¶ÏÊÇ·ñÊÇ´Ê×é
+		// åŒ¹é…æˆåŠŸ
+		// åˆ¤æ–­æ˜¯å¦æ˜¯è¯ç»„
 		if (unit->word != 0)
 		{
 			last_index = next_index;
@@ -308,14 +308,14 @@ int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 
 				break;
 		}
 
-		// ÏÂÒ»ÂÖ
+		// ä¸‹ä¸€è½®
 		curr_index = next_index;
 	}
 
 	if (node_pos != 0)
 		*node_pos = last_index;
 
-	// ·µ»Ø½á¹û
+	// è¿”å›ç»“æœ
 	if (mode == MATCH_STRICT)
 	{
 		return last_match == length ? last_match : 0;

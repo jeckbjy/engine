@@ -26,13 +26,13 @@
 #define CUTE_DEC(N)					PPI_DEC(N)
 #define CUTE_BOOL(N)				PPI_BOOL(N)
 
-#define CUTE_IF(N, T, F)			PPI_IF(N, T, F)						//N==0:Ö´ĞĞF,ÆäËûÖ´ĞĞT
-#define CUTE_DONE_IF(N, D)			PPI_DONE_IF(N, D)					//N!=0:Ö´ĞĞD
-#define CUTE_COMMA_IF(N)			PPI_COMMA_IF(N)						//N!=0Ê±Ìí¼Ó,
-#define CUTE_COMMA_PARAM(N, P)		PPI_COMMA_PARAM(N, P)				//N!=0Ê±Ìí¼Ó,²¢ÔÚºó±ß×·¼ÓP##N
+#define CUTE_IF(N, T, F)			PPI_IF(N, T, F)						//N==0:æ‰§è¡ŒF,å…¶ä»–æ‰§è¡ŒT
+#define CUTE_DONE_IF(N, D)			PPI_DONE_IF(N, D)					//N!=0:æ‰§è¡ŒD
+#define CUTE_COMMA_IF(N)			PPI_COMMA_IF(N)						//N!=0æ—¶æ·»åŠ ,
+#define CUTE_COMMA_PARAM(N, P)		PPI_COMMA_PARAM(N, P)				//N!=0æ—¶æ·»åŠ ,å¹¶åœ¨åè¾¹è¿½åŠ P##N
 
 // N - repeat count, M - macro to execute M(N, P), P - extra parameter to be passed to M
-// 1ºÍ2²î±ğ²»´ó£¬¿ÉÒÔÇ¶Ì×ÓÃ
+// 1å’Œ2å·®åˆ«ä¸å¤§ï¼Œå¯ä»¥åµŒå¥—ç”¨
 #define CUTE_REPEAT(N, M)			PPI_REPEAT(N, M, CUTE_EMPTY)
 #define CUTE_REPEAT_P(N, M, P)		PPI_REPEAT(N, M, P)
 
@@ -67,7 +67,7 @@
 //////////////////////////////////////////////////////////////////////////
 #define PPI_EMPTY()
 #define PPI_COMMA()					,
-#define PPI_DONE(s)					s					// Ö´ĞĞs
+#define PPI_DONE(s)					s					// æ‰§è¡Œs
 
 #define PPI_STRINGIZE(s)			PPI_STRINGIZE_DO(s)
 #define PPI_STRINGIZE_DO(s)			#s
@@ -84,16 +84,16 @@
 //#define PPI_REPEAT(N, M, P)		PPI_REPEAT_1_ ## N(M, P)
 //#define PPI_REPEAT2(N,M, P)		PPI_REPEAT_2_ ## N(M, P)
 
-#define PPI_IF(N, T, F)				PPI_IF_DO1(PPI_BOOL(N), T, F)		// ½«N×ª»¯³É0»ò1
-#define PPI_IF_DO1(B, T, F)			PPI_IF_DO2(B, T, F)					// ·â×°Ò»²ãµ÷ÓÃ
-#define PPI_IF_DO2(B, T, F)			PPI_IF_DO3(PPI_IF_ ## B (T, F))		// Æ´½ÓPPI_IF_X(T, F)µÄĞÎÊ½
-#define PPI_IF_DO3(M)				M									// µ÷ÓÃPPI_IF_X(T, F)
-#define PPI_IF_1(T, F)				T									// Ö´ĞĞT
-#define PPI_IF_0(T, F)				F									// Ö´ĞĞF
+#define PPI_IF(N, T, F)				PPI_IF_DO1(PPI_BOOL(N), T, F)		// å°†Nè½¬åŒ–æˆ0æˆ–1
+#define PPI_IF_DO1(B, T, F)			PPI_IF_DO2(B, T, F)					// å°è£…ä¸€å±‚è°ƒç”¨
+#define PPI_IF_DO2(B, T, F)			PPI_IF_DO3(PPI_IF_ ## B (T, F))		// æ‹¼æ¥PPI_IF_X(T, F)çš„å½¢å¼
+#define PPI_IF_DO3(M)				M									// è°ƒç”¨PPI_IF_X(T, F)
+#define PPI_IF_1(T, F)				T									// æ‰§è¡ŒT
+#define PPI_IF_0(T, F)				F									// æ‰§è¡ŒF
 
-#define PPI_DONE_IF(N, D)			PPI_IF(N, D, PPI_EMPTY)()			// N!=0Ê±Ö´ĞĞD
-#define PPI_COMMA_IF(N)				PPI_DONE_IF(N, PPI_COMMA)			// N!=0Ê±Ìí¼Ó¶ººÅ','
-#define PPI_COMMA_PARAM(N,P)		PPI_COMMA_IF(N) P##N				// N!=0Ê±Ìí¼Ó,²¢ÔÚºó±ß×·¼ÓP##N
+#define PPI_DONE_IF(N, D)			PPI_IF(N, D, PPI_EMPTY)()			// N!=0æ—¶æ‰§è¡ŒD
+#define PPI_COMMA_IF(N)				PPI_DONE_IF(N, PPI_COMMA)			// N!=0æ—¶æ·»åŠ é€—å·','
+#define PPI_COMMA_PARAM(N,P)		PPI_COMMA_IF(N) P##N				// N!=0æ—¶æ·»åŠ ,å¹¶åœ¨åè¾¹è¿½åŠ P##N
 
 //////////////////////////////////////////////////////////////////////////
 // repeat1
@@ -122,7 +122,7 @@
 #define PPI_REPEAT_1_21(M, P)	PPI_REPEAT_1_20(M, P) M(20, P)
 
 //////////////////////////////////////////////////////////////////////////
-// repeat2, ÓÃÓÚÇ¶Ì×Ê¹ÓÃ
+// repeat2, ç”¨äºåµŒå¥—ä½¿ç”¨
 //////////////////////////////////////////////////////////////////////////
 #define PPI_REPEAT_2_0(M, P)
 #define PPI_REPEAT_2_1(M, P)	M(0, P)

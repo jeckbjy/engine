@@ -80,8 +80,8 @@ protected:
 	ProxyPtr	m_proxy;
 	IOLoop*		m_loop;
 	handle_t	m_handle;
-	uint32		m_flag;		// ±êÖ¾Î»
-	error_t		m_error;	// ×îºóÒ»´Î´íÎóÂë
+	uint32		m_flag;		// æ ‡å¿—ä½
+	error_t		m_error;	// æœ€åä¸€æ¬¡é”™è¯¯ç 
 #ifdef CUTE_OS_FAMILY_POSIX
 	int			m_events;
 #endif
@@ -152,7 +152,7 @@ inline void IOChannel::setClosing(bool flag)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// IOProxy:ÒıÓÃ¼ÆÊı£¬ÈõÒıÓÃChannel,perform»áĞ£ÑéchannelÓĞĞ§ĞÔ
+// IOProxy:å¼•ç”¨è®¡æ•°ï¼Œå¼±å¼•ç”¨Channel,performä¼šæ ¡éªŒchannelæœ‰æ•ˆæ€§
 //////////////////////////////////////////////////////////////////////////
 class CUTE_CORE_API IOProxy : public SafeRef<IOProxy>
 {

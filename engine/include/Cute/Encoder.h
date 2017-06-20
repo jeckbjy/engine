@@ -8,10 +8,10 @@ CUTE_NS_BEGIN
 // like TLV(type-length-value) encode
 // field = head + body
 // head = flag(1byte) + (tag extend) + (data extend)
-// flag:1bit±êÊ¶ÊÇ·ñº¬ÓĞ¶îÍâÊı¾İ,2bit±êÊ¶tag offset£¬5bit±êÊ¶Ğ¡µÄdata
-// Packet:´¦Àí,
-// ÏŞÖÆÒªÇó£ºtag±ØĞëµİÔö£¬¿É²»Á¬Ğø
-// ±ä³¤field´¦Àí:
+// flag:1bitæ ‡è¯†æ˜¯å¦å«æœ‰é¢å¤–æ•°æ®,2bitæ ‡è¯†tag offsetï¼Œ5bitæ ‡è¯†å°çš„data
+// Packet:å¤„ç†,
+// é™åˆ¶è¦æ±‚ï¼štagå¿…é¡»é€’å¢ï¼Œå¯ä¸è¿ç»­
+// å˜é•¿fieldå¤„ç†:
 class Message;
 class CUTE_CORE_API Encoder
 {
@@ -22,19 +22,19 @@ public:
 
 	size_t encode(Message* msg);
 
-	// Í¨¹ıtagĞ´Èë
+	// é€šè¿‡tagå†™å…¥
 	template<typename T>
 	Encoder& write(const T& data, size_t tag);
 
-	// Í¨¹ıtagĞ´Èë
+	// é€šè¿‡tagå†™å…¥
 	template<typename T>
 	Encoder& write2(const T& data, size_t off);
 
-	// Á÷·½Ê½Ğ´Èë£¬Æ«ÒÆÎª1
+	// æµæ–¹å¼å†™å…¥ï¼Œåç§»ä¸º1
 	template<typename T>
 	Encoder& operator << (const T& data);
 
-	// Á÷·½Ê½Ğ´Èë£¬Æ«ÒÆÎª1
+	// æµæ–¹å¼å†™å…¥ï¼Œåç§»ä¸º1
 	template<typename T>
 	Encoder& operator &  (const T& data);
 
@@ -93,9 +93,9 @@ private:
 
 private:
 	Stream* m_stream;
-	size_t	m_spos;		// ÆğÊ¼µã
-	size_t	m_tag;		// µ±Ç°Ó¦Ğ´Èë±êÊ¶
-	size_t	m_off;		// Ïà¶ÔÓÚÉÏ´ÎĞ´ÈëÆ«ÒÆ
+	size_t	m_spos;		// èµ·å§‹ç‚¹
+	size_t	m_tag;		// å½“å‰åº”å†™å…¥æ ‡è¯†
+	size_t	m_off;		// ç›¸å¯¹äºä¸Šæ¬¡å†™å…¥åç§»
 };
 
 //////////////////////////////////////////////////////////////////////////

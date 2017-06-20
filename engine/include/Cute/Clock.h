@@ -29,7 +29,7 @@ public:
 	/// Returns true iff the system's clock is monotonic.
 	static bool monotonic();
 
-	/// Returns the system's clock accuracy in microseconds.ʱ�侫�ȣ�
+	/// Returns the system's clock accuracy in microseconds.时间精度？
 	static int64_t accuracy();
 
 	/// Return the current time

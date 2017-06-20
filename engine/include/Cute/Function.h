@@ -114,11 +114,11 @@ public:
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// Function:È«¾Öº¯ÊıÖ¸Õë»òÕß³ÉÔ±º¯ÊıÖ¸Õë»òÕß·Âº¯Êı,½ö´ú±íº¯ÊıÖ¸Õë
-//1£ºÔÚ³õÊ¼»¯Ê±±ØĞëÈ·¶¨£¬²»ÄÜ¶¯Ì¬¸Ä±ä
-//2£ºÓëDelegateÇø±ğ:DelegateÖ»Ğè¸ø¶¨º¯ÊıÇ©Ãû¼´¿É°ó¶¨ÈÎÒâÈ«¾Öº¯Êı£¬¾²Ì¬º¯Êı£¬³ÉÔ±º¯Êı
+// Function:å…¨å±€å‡½æ•°æŒ‡é’ˆæˆ–è€…æˆå‘˜å‡½æ•°æŒ‡é’ˆæˆ–è€…ä»¿å‡½æ•°,ä»…ä»£è¡¨å‡½æ•°æŒ‡é’ˆ
+//1ï¼šåœ¨åˆå§‹åŒ–æ—¶å¿…é¡»ç¡®å®šï¼Œä¸èƒ½åŠ¨æ€æ”¹å˜
+//2ï¼šä¸DelegateåŒºåˆ«:Delegateåªéœ€ç»™å®šå‡½æ•°ç­¾åå³å¯ç»‘å®šä»»æ„å…¨å±€å‡½æ•°ï¼Œé™æ€å‡½æ•°ï¼Œæˆå‘˜å‡½æ•°
 //////////////////////////////////////////////////////////////////////////
-// ·Âº¯Êı:equal:²»Çø·ÖµØÖ·£¬Ö»ÒªtypeinfoÒ»ÖÂ¼´¿É
+// ä»¿å‡½æ•°:equal:ä¸åŒºåˆ†åœ°å€ï¼Œåªè¦typeinfoä¸€è‡´å³å¯
 template<typename F, typename E = void>
 class Function
 {
@@ -135,14 +135,14 @@ public:
 	inline bool operator!() const { return false; }
 	inline bool operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
 	inline bool operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
-	// µ÷ÓÃ
+	// è°ƒç”¨
 	inline operator F() const { return m_fun; }
 
 protected:
 	F m_fun;
 };
 
-// ÆÕÍ¨º¯ÊıÖ¸Õë
+// æ™®é€šå‡½æ•°æŒ‡é’ˆ
 template<typename F>
 class Function<F, typename std::enable_if<std::is_pointer<F>::value>::type>
 {
@@ -160,13 +160,13 @@ public:
 	inline bool operator ==(const Function& rhs) const { return m_fun == rhs.m_fun; }
 	inline bool operator !=(const Function& rhs) const { return m_fun != rhs.m_fun; }
 
-	// µ÷ÓÃ
+	// è°ƒç”¨
 	inline operator F() const { return m_fun; }
 private:
 	F m_fun;
 };
 
-// ³ÉÔ±º¯ÊıÖ¸Õë
+// æˆå‘˜å‡½æ•°æŒ‡é’ˆ
 template<typename F>
 class Function<F, typename std::enable_if<std::is_member_function_pointer<F>::value>::type>
 	: public mem_func<F, typename func_traits<F>::signature_t>

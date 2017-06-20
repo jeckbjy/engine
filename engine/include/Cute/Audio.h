@@ -8,9 +8,9 @@
 
 CUTE_NS_BEGIN
 
-//Audio:ĞèÒª·Ö³ÉÁ½²¿·Ö£¬1£ºÓ²¼şµÄ²¥·Å£¬2£ºÒôÆµ¸ñÊ½µÄ½âÎö,3:3DĞ§¹û
-//Ó²¼şÒôÆµ²¥·Å:openal,fmod,libao,portaudio,
-//ÒôÆµ¸ñÊ½½âÎö£ºlibogg,libflac,libwave
+//Audio:éœ€è¦åˆ†æˆä¸¤éƒ¨åˆ†ï¼Œ1ï¼šç¡¬ä»¶çš„æ’­æ”¾ï¼Œ2ï¼šéŸ³é¢‘æ ¼å¼çš„è§£æ,3:3Dæ•ˆæœ
+//ç¡¬ä»¶éŸ³é¢‘æ’­æ”¾:openal,fmod,libao,portaudio,
+//éŸ³é¢‘æ ¼å¼è§£æï¼šlibogg,libflac,libwave
 
 class Stream;
 class AudioClip;

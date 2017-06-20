@@ -53,7 +53,7 @@ void Buffer::put(const void* buf, size_t len, size_t off /* = 0 */)
 
 void Buffer::append(const void* buf, size_t len)
 {
-	// Á½±¶Ôö³¤
+	// ä¸¤å€å¢žé•¿
 	size_t newSize = m_size + len;
 	if (newSize > m_capacity)
 	{

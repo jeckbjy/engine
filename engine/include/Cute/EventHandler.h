@@ -7,11 +7,11 @@
 CUTE_NS_BEGIN
 
 /*
-1:½âÂë´¦Àí
-2:È¨ÏÞÐ£Ñé:ÏàÍ¬ÀàÐÍSession»òÕßAnyÀàÐÍµÄSession²ÅÄÜÖ´ÐÐ
-3:ÊÇ·ñÔÊÐíÒì²½Ö´ÐÐ
-4:·µ»ØÖµ´¦Àí:0±íÊ¾³É¹¦£¬¸ºÊý±íÊ¾ÐèÒªÑÓ³Ù´¦Àí£¬ÕýÊý±íÊ¾´íÎóÂë
-5:ÐÔÄÜÍ³¼Æ,Ô¤¾¯
+1:è§£ç å¤„ç†
+2:æƒé™æ ¡éªŒ:ç›¸åŒç±»åž‹Sessionæˆ–è€…Anyç±»åž‹çš„Sessionæ‰èƒ½æ‰§è¡Œ
+3:æ˜¯å¦å…è®¸å¼‚æ­¥æ‰§è¡Œ
+4:è¿”å›žå€¼å¤„ç†:0è¡¨ç¤ºæˆåŠŸï¼Œè´Ÿæ•°è¡¨ç¤ºéœ€è¦å»¶è¿Ÿå¤„ç†ï¼Œæ­£æ•°è¡¨ç¤ºé”™è¯¯ç 
+5:æ€§èƒ½ç»Ÿè®¡,é¢„è­¦
 */
 class Packet;
 class PacketEvent;
@@ -34,7 +34,7 @@ public:
 
 protected:
 	bool m_async;
-	int  m_type;	// ÔÊÐíÖ´ÐÐµÄsessionÀàÐÍ,0±íÊ¾ÎÞÏÞÖÆ
+	int  m_type;	// å…è®¸æ‰§è¡Œçš„sessionç±»åž‹,0è¡¨ç¤ºæ— é™åˆ¶
 };
 
 CUTE_NS_END

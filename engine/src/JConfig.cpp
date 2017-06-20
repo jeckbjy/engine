@@ -34,12 +34,12 @@ void JConfigReader::readObject(Variant& object, bool startWithBrace)
 	{
 		skipSpaceAndComment();
 		
-		// Õı³£½áÊø
+		// æ­£å¸¸ç»“æŸ
 		ch = readChar();
 		if (ch == '}')
 			break;
 
-		// ½áÊøÊ±²¢Ã»ÓĞÆ¥Åäµ½}
+		// ç»“æŸæ—¶å¹¶æ²¡æœ‰åŒ¹é…åˆ°}
 		if (ch == 0)
 		{
 			if (startWithBrace)
@@ -47,7 +47,7 @@ void JConfigReader::readObject(Variant& object, bool startWithBrace)
 			break;
 		}
 
-		// ¶ÁÈ¡key:¿ÉÒÔÊÇ´øË«ÒıºÅµÄ×Ö·û»òÕßÒÔ¿Õ¸ñ,:ºÍ=½áÊø
+		// è¯»å–key:å¯ä»¥æ˜¯å¸¦åŒå¼•å·çš„å­—ç¬¦æˆ–è€…ä»¥ç©ºæ ¼,:å’Œ=ç»“æŸ
 		String key;
 		readKey(key);
 
@@ -62,7 +62,7 @@ void JConfigReader::readObject(Variant& object, bool startWithBrace)
 		readValue(value);
 		object[key] = value;
 
-		// read comma,¿ÉÒÔÃ»ÓĞ
+		// read comma,å¯ä»¥æ²¡æœ‰
 		skipSpaceAndComment();
 		ch = *m_cur;
 		if (ch == ',')
@@ -126,18 +126,18 @@ void JConfigReader::readValue(Variant& value)
 void JConfigReader::readDynamic(Variant& value)
 {
 	char ch = *m_cur;
-	// ×Ô¶¯¼ì²âÀàĞÍ:¸ºÊı,ÕûÊı£¬¸¡µãÊı£¬null,true,false,datetime(ISO8601),ipµØÖ·£¬×Ö·û´®
+	// è‡ªåŠ¨æ£€æµ‹ç±»å‹:è´Ÿæ•°,æ•´æ•°ï¼Œæµ®ç‚¹æ•°ï¼Œnull,true,false,datetime(ISO8601),ipåœ°å€ï¼Œå­—ç¬¦ä¸²
 	if (Ascii::isDigit(ch))
 	{
-		// ÏÈÅĞ¶ÏÊÇ·ñÊÇip:192.168.1.1,
+		// å…ˆåˆ¤æ–­æ˜¯å¦æ˜¯ip:192.168.1.1,
 		if (readIP(value))
 			return;
 
-		// ÅĞ¶ÏÊÇ·ñÊÇdatetime
+		// åˆ¤æ–­æ˜¯å¦æ˜¯datetime
 		if (readDateTime(value))
 			return;
 
-		// ¶ÁÈ¡Êı×Ö
+		// è¯»å–æ•°å­—
 		if (readNumber(value))
 			return;
 	}
@@ -162,7 +162,7 @@ void JConfigReader::readDynamic(Variant& value)
 		}
 	}
 
-	// ÆÕÍ¨×Ö·û´®
+	// æ™®é€šå­—ç¬¦ä¸²
 	Location ptr = m_cur;
 	while (!isSeparatorKey(*m_cur))
 	{
@@ -179,7 +179,7 @@ void JConfigReader::readDynamic(Variant& value)
 
 bool JConfigReader::readNumber(Variant& value)
 {
-	// ½âÎödouble»òÕßint
+	// è§£ædoubleæˆ–è€…int
 	Number::Real result;
 	Location pos = Number::parseNumber(result, m_cur);
 	if (result.type == Number::TYPE_NONE)
@@ -208,7 +208,7 @@ bool JConfigReader::readNumber(Variant& value)
 bool JConfigReader::readIP(Variant& value)
 {
 	bool isOverflow = false;
-	int dot = 0; // µãµÄ¸öÊı£¬±ØĞëÊÇ192.168.1.1
+	int dot = 0; // ç‚¹çš„ä¸ªæ•°ï¼Œå¿…é¡»æ˜¯192.168.1.1
 	Location ptr = m_cur;
 	char ch;
 	int data = 0;
@@ -285,7 +285,7 @@ void JConfigReader::readString(Variant& value)
 			error("readKey:donnot match end char!!");
 		}
 
-		// ½øĞĞ×ªÒå
+		// è¿›è¡Œè½¬ä¹‰
 		if (ch == '\\')
 		{
 			ch = readChar();
@@ -316,7 +316,7 @@ void JConfigReader::readKey(String& key)
 
 	char ch = readChar();
 	if (ch == '"' || ch == '\'')
-	{// ²»×ªÒå
+	{// ä¸è½¬ä¹‰
 		char endCh = ch;
 		for (;;)
 		{
@@ -479,7 +479,7 @@ bool JConfigReader::match(const char* pattern, int length)
 			return false;
 	}
 
-	// ×îºóÒ»¸ö×Ö·ûĞèÒªÊÇ·Ö¸ô·û
+	// æœ€åä¸€ä¸ªå­—ç¬¦éœ€è¦æ˜¯åˆ†éš”ç¬¦
 	return isSeparatorKey(*(m_cur + length));
 }
 

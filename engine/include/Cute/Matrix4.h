@@ -6,10 +6,10 @@
 
 CUTE_NS_BEGIN
 
-// ×¢Òâ£ºMatrixÄ¬ÈÏ¹¹Ôìº¯Êı²¢Ã»ÓĞ³õÊ¼»¯Êı¾İ,Èç¹ûÏë³õÊ¼»¯ÎªÁãĞèÒªÓÃ,Matrix(0.0f)³õÊ¼»¯£¬»òÕßset(0.0f)
-// dx×óÊÖ×ø±êÏµ£¬glÓÒÊÖ×ø±êÏµ
-// unity:×óÊÖ×ø±êÏµ, ogre:ÓÒÊÖ×ø±êÏµ
-// projectionÍÆµ¼ http://www.nshen.net/article/2014-10-16/stage3d-projection-matrix/
+// æ³¨æ„ï¼šMatrixé»˜è®¤æ„é€ å‡½æ•°å¹¶æ²¡æœ‰åˆå§‹åŒ–æ•°æ®,å¦‚æœæƒ³åˆå§‹åŒ–ä¸ºé›¶éœ€è¦ç”¨,Matrix(0.0f)åˆå§‹åŒ–ï¼Œæˆ–è€…set(0.0f)
+// dxå·¦æ‰‹åæ ‡ç³»ï¼Œglå³æ‰‹åæ ‡ç³»
+// unity:å·¦æ‰‹åæ ‡ç³», ogre:å³æ‰‹åæ ‡ç³»
+// projectionæ¨å¯¼ http://www.nshen.net/article/2014-10-16/stage3d-projection-matrix/
 class CUTE_CORE_API Matrix4
 {
 public:
@@ -70,11 +70,11 @@ public:
 	void setRow(size_t row, const Vector4& v);
 	void getMatrix3(Matrix3& mat) const;
 
-	void	negate();				// È¡·´
-	float   determinant() const;	// ĞĞÁĞÊ½
-	Matrix4 inverse() const;		// Äæ¾ØÕó
-	Matrix4 adjoint() const;		// ¹²éî¾ØÕó£¬°éËæ¾ØÕó
-	Matrix4 transpose() const;		// ×ªÖÃ¾ØÕó
+	void	negate();				// å–å
+	float   determinant() const;	// è¡Œåˆ—å¼
+	Matrix4 inverse() const;		// é€†çŸ©é˜µ
+	Matrix4 adjoint() const;		// å…±è½­çŸ©é˜µï¼Œä¼´éšçŸ©é˜µ
+	Matrix4 transpose() const;		// è½¬ç½®çŸ©é˜µ
 
 	Vector3 multiply(const Vector3& v) const;
 	Vector4 multiply(const Vector4& v) const;

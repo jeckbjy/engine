@@ -21,7 +21,7 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 	bool result = true;
 	for (;;)
 	{
-		// ¶ÁÈ¡head
+		// è¯»å–head
 		BitMask8 bits;
 
 		uint8 flag;
@@ -36,7 +36,7 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 			break;
 		}
 
-		// ÏÈ¶ÁÈ¡³¤¶È
+		// å…ˆè¯»å–é•¿åº¦
 		uint32 length;
 		uint32 msgid;
 		if (!buffer.read7Bit(length))
@@ -51,7 +51,7 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 			break;
 		}
 
-		// ³¤¶È²»×ã,µÈ´ıÏÂÒ»´Î½âÎö
+		// é•¿åº¦ä¸è¶³,ç­‰å¾…ä¸‹ä¸€æ¬¡è§£æ
 		if (length < buffer.size())
 		{
 			break;
@@ -70,13 +70,13 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 
 		EventHandler* handler = HandlerService::instance().find(msgid);
 		if (handler == NULL || !handler->canAccept(sess->getType()))
-		{// Ğ£ÑéÊÇ·ñÄÜ´¦Àí¸ÃÏûÏ¢
+		{// æ ¡éªŒæ˜¯å¦èƒ½å¤„ç†è¯¥æ¶ˆæ¯
 			buffer.seek(length, SEEK_SET);
 			buffer.discard();
 			continue;
 		}
 
-		// ½âÎöÍ·ĞÅÏ¢
+		// è§£æå¤´ä¿¡æ¯
 		uint32 status;
 		uint32 gid;
 		uint64 uid;
@@ -107,10 +107,10 @@ void PacketProtocal::process(Session* sess, BufferList& buffer)
 			}
 		}
 
-		// ½âÎöÏûÏ¢
+		// è§£ææ¶ˆæ¯
 		Packet* packet = handler->decode(buffer);
 		if (packet == NULL)
-		{// Ìø³ö
+		{// è·³å‡º
 			break;
 		}
 
@@ -133,18 +133,18 @@ void DelimiterProtocal::process(Session* sess, BufferList& buffer)
 	{
 		size_t pos = buffer.find(m_delimiter);
 		if (pos == NPOS)
-		{// Ã»ÓĞÕÒµ½
+		{// æ²¡æœ‰æ‰¾åˆ°
 			if (buffer.size() > m_maxSize)
 				throw RuntimeException("delimiter out of maxSize");
 
-			// ½áÊøÑ­»·
+			// ç»“æŸå¾ªç¯
 			break;
 		}
 
 		if (pos > m_maxSize)
 			throw RuntimeException("delimiter out of maxSize");
 
-		// Éú³ÉÏûÏ¢
+		// ç”Ÿæˆæ¶ˆæ¯
 		String text = buffer.toString(pos);
 		TextEvent* ev = new TextEvent(sess, text);
 		Server::get().post(ev);

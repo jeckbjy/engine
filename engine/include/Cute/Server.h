@@ -14,16 +14,16 @@
 CUTE_NS_BEGIN
 
 /**
-* ÍøÂçÏß³Ì
-* µ¥ÒµÎñÏß³Ì£¬Èç¹ûÒµÎñÏß³Ì¹ÒµôĞèÒªÖØÆô
-* Í¬²½´¦ÀíSessionµÄConnect,Accept, ErrorÏûÏ¢
-* Ïß³Ì³Ø,ºÄÊ±²Ù×÷ĞèÒªµ¥¶ÀÏß³ÌÖĞ²Ù×÷
-* ²»Í¬µÄĞ­Òé´¦Àí,Client:Packet¸ñÊ½£¬Admin:String¸ñÊ½
-* Ê¹ÓÃÈ«¾ÖµÄHandlerService´¦ÀíÏûÏ¢£¬µ«¶ÔÓÚ²»Í¬SessionĞèÒª×öÈ¨ÏŞÑéÖ¤
-* Òì³£Hook£¬ÍË³ö°²È«´¦Àí,DBÊı¾İ°²È«Ğ´Èë
-* TODO:ÏÖÔÚÊÇÖ»ÓĞÒ»¸öÖ÷Âß¼­Ïß³Ì£¬
-* TODO:ÈçºÎÖ§³Ö¶àÏß³Ì£¬Ã¿¸öuser·ÖÅäµ½Ò»¸öÏß³ÌÖĞÖ´ĞĞ²¢±£Ö¤Ïß³Ì°²È«
-* TODO:ÈçºÎÖ§³Ö°²Ä£¿é»®·ÖÖ´ĞĞÊÂ¼ş£¬½«×èÈûÈÎÎñÑÓ³ÙÖ´ĞĞ
+* ç½‘ç»œçº¿ç¨‹
+* å•ä¸šåŠ¡çº¿ç¨‹ï¼Œå¦‚æœä¸šåŠ¡çº¿ç¨‹æŒ‚æ‰éœ€è¦é‡å¯
+* åŒæ­¥å¤„ç†Sessionçš„Connect,Accept, Erroræ¶ˆæ¯
+* çº¿ç¨‹æ± ,è€—æ—¶æ“ä½œéœ€è¦å•ç‹¬çº¿ç¨‹ä¸­æ“ä½œ
+* ä¸åŒçš„åè®®å¤„ç†,Client:Packetæ ¼å¼ï¼ŒAdmin:Stringæ ¼å¼
+* ä½¿ç”¨å…¨å±€çš„HandlerServiceå¤„ç†æ¶ˆæ¯ï¼Œä½†å¯¹äºä¸åŒSessionéœ€è¦åšæƒé™éªŒè¯
+* å¼‚å¸¸Hookï¼Œé€€å‡ºå®‰å…¨å¤„ç†,DBæ•°æ®å®‰å…¨å†™å…¥
+* TODO:ç°åœ¨æ˜¯åªæœ‰ä¸€ä¸ªä¸»é€»è¾‘çº¿ç¨‹ï¼Œ
+* TODO:å¦‚ä½•æ”¯æŒå¤šçº¿ç¨‹ï¼Œæ¯ä¸ªuseråˆ†é…åˆ°ä¸€ä¸ªçº¿ç¨‹ä¸­æ‰§è¡Œå¹¶ä¿è¯çº¿ç¨‹å®‰å…¨
+* TODO:å¦‚ä½•æ”¯æŒå®‰æ¨¡å—åˆ’åˆ†æ‰§è¡Œäº‹ä»¶ï¼Œå°†é˜»å¡ä»»åŠ¡å»¶è¿Ÿæ‰§è¡Œ
 */
 class CUTE_CORE_API Server : public Application, public ServerListener
 {
@@ -84,16 +84,16 @@ protected:
 	typedef PacketProtocal						Protocal;
 
 	bool		m_quit;
-	uint32		m_maxid;			// Î¨Ò»ID
-	uint32		m_frame;			// Ö¡Æµ
-	uint32		m_maxConnection;	// ×î´óÁ¬½ÓÊı
-	uint32		m_connectInterval;	// ÖØÁ¬¼ä¸ô
-	uint32		m_connectTime;		// ÖØÁ¬Ê±¼ä´Á
+	uint32		m_maxid;			// å”¯ä¸€ID
+	uint32		m_frame;			// å¸§é¢‘
+	uint32		m_maxConnection;	// æœ€å¤§è¿æ¥æ•°
+	uint32		m_connectInterval;	// é‡è¿é—´éš”
+	uint32		m_connectTime;		// é‡è¿æ—¶é—´æˆ³
 	Mutex		m_mutex;
 	IOLoopGroup	m_loops;
 	SessionMap	m_sessions;
 	SessionMap	m_connectors;
-	PendingMap	m_pending;			// ½«Òª´¦ÀíµÄÊÂ¼ş
+	PendingMap	m_pending;			// å°†è¦å¤„ç†çš„äº‹ä»¶
 	Mutex		m_pendingMutex;
 	AcceptMap	m_acceptors;
 	EventQueue	m_events;

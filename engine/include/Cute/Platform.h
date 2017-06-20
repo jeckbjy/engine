@@ -3,7 +3,7 @@
 #include "Cute/API.h"
 
 //////////////////////////////////////////////////////////////////////////
-// ºê¶¨Òå¼ì²â
+// å®å®šä¹‰æ£€æµ‹
 //////////////////////////////////////////////////////////////////////////
 ///* ==== PLATFORM handles OS, operating environment, graphics API, and
 //CPU. This macro will be phased out in favor of platform adaptation
@@ -327,7 +327,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// string±àÂëÀàĞÍ,windowÄ¬ÈÏascii, linux utf8
+// stringç¼–ç ç±»å‹,windowé»˜è®¤ascii, linux utf8
 //////////////////////////////////////////////////////////////////////////
 //#define CUTE_STRING_ASCII	0
 //#define CUTE_STRING_WIDE	1
@@ -338,7 +338,7 @@
 //#endif
 
 //////////////////////////////////////////////////////////////////////////
-// ²»Í¬Æ½Ì¨³£¼ûÉèÖÃ
+// ä¸åŒå¹³å°å¸¸è§è®¾ç½®
 //////////////////////////////////////////////////////////////////////////
 #if defined(_WIN32)
 #	define WIN32_LEAN_AND_MEAN
@@ -418,7 +418,7 @@
 #if (_MSC_VER < 1900) && !defined(snprintf)
 #	define snprintf				sprintf_s
 #endif
-#	define strcasecmp			stricmp		// ºöÂÔ×Ö·û´óĞ¡Ğ´£¬strncasecmp±È½ÏÇ°n¸ö×Ö·û
+#	define strcasecmp			stricmp		// å¿½ç•¥å­—ç¬¦å¤§å°å†™ï¼Œstrncasecmpæ¯”è¾ƒå‰nä¸ªå­—ç¬¦
 #	define strncasecmp			strnicmp 
 
 #	define CUTE_CLOSE_SOCKET(s)	::closesocket(s)
@@ -500,14 +500,14 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// µ¼³ölib
+// å¯¼å‡ºlib
 //////////////////////////////////////////////////////////////////////////
 /*
-Ö»ÓĞmicrosoftµÄ±àÒëÆ÷ĞèÒª
-ÓÃÍ¾£º
-1£º±àÒëÆ÷¿ÉÒÔÓÅ»¯º¯Êıµ÷ÓÃ
-2£º¾²Ì¬³ÉÔ±±äÁ¿ºÍ³ÉÔ±º¯Êı±ØĞëÊ¹ÓÃ
-3£ºÈ«¾Ö±äÁ¿µÄµ¼³ö
+åªæœ‰microsoftçš„ç¼–è¯‘å™¨éœ€è¦
+ç”¨é€”ï¼š
+1ï¼šç¼–è¯‘å™¨å¯ä»¥ä¼˜åŒ–å‡½æ•°è°ƒç”¨
+2ï¼šé™æ€æˆå‘˜å˜é‡å’Œæˆå‘˜å‡½æ•°å¿…é¡»ä½¿ç”¨
+3ï¼šå…¨å±€å˜é‡çš„å¯¼å‡º
 */
 #ifdef _MSC_VER
 #	define CUTE_EXPORT __declspec(dllexport)
@@ -518,7 +518,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// ÆäËûÒ»Ğ©ÌØĞÔ¼ì²â
+// å…¶ä»–ä¸€äº›ç‰¹æ€§æ£€æµ‹
 //////////////////////////////////////////////////////////////////////////
 
 #if (__cplusplus > 199711L) || (defined(__STDCXX_VERSION__) && (__STDCXX_VERSION__ >= 201001L))
@@ -538,7 +538,7 @@
 # endif
 #endif
 
-// ±ä³¤Ä£°å
+// å˜é•¿æ¨¡æ¿
 #ifdef CUTE_CPP11
 #define CUTE_VARIADIC
 #endif
@@ -549,7 +549,7 @@
 #define CUTE_ENUM_TYPE(type)
 #endif
 
-// __PRETTY_FUNCTION__:»á´øÓĞº¯Êı²ÎÊı
+// __PRETTY_FUNCTION__:ä¼šå¸¦æœ‰å‡½æ•°å‚æ•°
 #if defined(_MSC_VER) && !defined(__PRETTY_FUNCTION__)
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif

@@ -5,7 +5,7 @@
 CUTE_NS_BEGIN
 
 #if defined(_WIN32)
-// FOREGROUND_INTENSITY:ǰ��������ʾ,BACKGROUND_INTENSITY ����������ʾ
+// FOREGROUND_INTENSITY:前景高亮显示,BACKGROUND_INTENSITY 背景高亮显示
 static WORD COLOR_FOREGROUND[Console::COLOR_MAX] =
 {
 	// BLACK
@@ -49,20 +49,20 @@ enum AnsiTextAttr
 	TA_BLINK = 5,
 	TA_REVERSE = 7
 };
-// ǰ��ɫ
+// 前景色
 enum AnsiFGTextAttr
 {
 	FG_BLACK = 30, FG_RED, FG_GREEN, FG_BROWN, FG_BLUE,
 	FG_MAGENTA, FG_CYAN, FG_WHITE, FG_YELLOW
 };
-// ����ɫ
+// 背景色
 enum AnsiBGTextAttr
 {
 	BG_BLACK = 40, BG_RED, BG_GREEN, BG_BROWN, BG_BLUE,
 	BG_MAGENTA, BG_CYAN, BG_WHITE, BG_YELLOW
 };
 
-// ǰ��ɫ��Ӧ����
+// 前景色对应数组
 static int COLOR_FOREGROUND[Console::COLOR_MAX] =
 {
 	0x0000,

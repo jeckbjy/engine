@@ -15,8 +15,8 @@ enum EulerAngleOrder
 
 class Matrix3;
 
-// ËÄÔªÊý q=w+xi+yj+zk() »òÕßq = [w,v]
-// ×ÊÁÏ http://blog.csdn.net/hany3000/article/details/9248081#
+// å››å…ƒæ•° q=w+xi+yj+zk() æˆ–è€…q = [w,v]
+// èµ„æ–™ http://blog.csdn.net/hany3000/article/details/9248081#
 // http://www.cnblogs.com/dragon2012/p/3924929.html
 // http://zh.wikipedia.org/wiki/%E5%9B%9B%E5%85%83%E6%95%B8
 class CUTE_CORE_API Quaternion
@@ -55,8 +55,8 @@ public:
 
 	void swap(Quaternion& other);
 
-	Quaternion inverse() const;		// Äæ
-	Quaternion conjugate() const;	// ¹²éî
+	Quaternion inverse() const;		// é€†
+	Quaternion conjugate() const;	// å…±è½­
 
 	float normalize();
 	float dot(const Quaternion& other) const;

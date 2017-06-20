@@ -5,7 +5,7 @@
 
 CUTE_NS_BEGIN
 
-// ÏûÏ¢½âÎö
+// æ¶ˆæ¯è§£æ
 class CUTE_CORE_API Decoder
 {
 	typedef BufferList Stream;
@@ -16,19 +16,19 @@ public:
 
 	bool decode(Message* msg);
 
-	// Í¨¹ıtag¶ÁÈ¡
+	// é€šè¿‡tagè¯»å–
 	template<typename T>
 	Decoder& read(T& data, size_t tag);
 
-	// Í¨¹ıoff¶ÁÈ¡
+	// é€šè¿‡offè¯»å–
 	template<typename T>
 	Decoder& read2(T& data, size_t off);
 
-	// Á÷·½Ê½¶ÁÈ¡£¬Æ«ÒÆÎª1
+	// æµæ–¹å¼è¯»å–ï¼Œåç§»ä¸º1
 	template<typename T>
 	Decoder& operator >> (T& data);
 
-	// Á÷·½Ê½¶ÁÈ¡£¬Æ«ÒÆÎª1
+	// æµæ–¹å¼è¯»å–ï¼Œåç§»ä¸º1
 	template<typename T>
 	Decoder& operator &  (T& data);
 
@@ -40,7 +40,7 @@ public:
 	bool readTag();
 	bool read7Bit(uint64& data);
 	bool readData(char* buffer, size_t length);
-	// Í¨¹ıtag¶ÁÈ¡fieldµÄÍ·²¿ĞÅÏ¢
+	// é€šè¿‡tagè¯»å–fieldçš„å¤´éƒ¨ä¿¡æ¯
 	bool readHead(size_t tag);
 
 	void readField(Message& msg);
@@ -89,11 +89,11 @@ private:
 	Stream*		m_stream;
 	size_t		m_spos;
 	size_t		m_epos;
-	size_t		m_hint;		// Æ«ÒÆ·½Ê½¼ÆËãtag
+	size_t		m_hint;		// åç§»æ–¹å¼è®¡ç®—tag
 	// head data
-	size_t		m_tag;		// tagÖµ>0(field tag£º²»ÊÇÆ«ÒÆÖµ)
+	size_t		m_tag;		// tagå€¼>0(field tagï¼šä¸æ˜¯åç§»å€¼)
 	uint64		m_value;
-	bool		m_extra;	// ÊÇ·ñº¬ÓĞ¶îÍâÊı¾İ
+	bool		m_extra;	// æ˜¯å¦å«æœ‰é¢å¤–æ•°æ®
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ Decoder& Decoder::read(T& data, size_t tag)
 
 		readField(data);
 
-		// È·±£Ã¿¸öfield¶¼ÕıÈ¡¶ÁÈ¡Íê
+		// ç¡®ä¿æ¯ä¸ªfieldéƒ½æ­£å–è¯»å–å®Œ
 		if (m_extra)
 		{
 			m_stream->seek(epos, SEEK_SET);

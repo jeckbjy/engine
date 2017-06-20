@@ -63,7 +63,7 @@ template <typename T> class SupportsWeakPtr;
 template <typename T> class WeakPtr;
 template <typename T> class WeakPtrFactory;
 
-// ¿ÉÒÔÓÅ»¯³ÉFlagÖĞº¬ÓĞÖ¸Õë,WeakPtrÎŞĞëµ¥¶À³ÖÓĞÖ¸Õë£¬¸ü¼Ó½ÚÊ¡ÄÚ´æ
+// å¯ä»¥ä¼˜åŒ–æˆFlagä¸­å«æœ‰æŒ‡é’ˆ,WeakPtræ— é¡»å•ç‹¬æŒæœ‰æŒ‡é’ˆï¼Œæ›´åŠ èŠ‚çœå†…å­˜
 class CUTE_CORE_API WeakRef
 {
 	class Flag;
@@ -92,7 +92,7 @@ private:
 	FlagPtr m_flag;
 };
 
-// ÓÃÓÚ´´½¨Flag
+// ç”¨äºåˆ›å»ºFlag
 class CUTE_CORE_API WeakRefOwner
 {
 public:

@@ -44,7 +44,7 @@ void Encoder::writeTag(size_t tagOff, uint64 value, bool extra)
 	char	buffer[20];
 	size_t	length = encodeTag(buffer, tagOff, value, extra);
 
-	// Ğ´ÈëÊı¾İ
+	// å†™å…¥æ•°æ®
 	writeData(buffer, length);
 }
 
@@ -208,7 +208,7 @@ void Encoder::writeItem(Message& msg)
 {
 	const size_t cHeadMax = 5;
 	size_t spos = m_stream->position();
-	// ¿Õ³ö¿Õ¼ä
+	// ç©ºå‡ºç©ºé—´
 	m_stream->write(NULL, cHeadMax);
 	Encoder coder(m_stream);
 	size_t msg_size = coder.encode(&msg);
@@ -217,7 +217,7 @@ void Encoder::writeItem(Message& msg)
 	size_t left_size = cHeadMax - head_size;
 	m_stream->seek(spos, SEEK_SET);
 	m_stream->write(head_data, head_size);
-	m_stream->erase(left_size);		// É¾³ı¶àÓàÊı¾İ
+	m_stream->erase(left_size);		// åˆ é™¤å¤šä½™æ•°æ®
 	m_stream->seek(0, SEEK_END);
 }
 
@@ -281,8 +281,8 @@ void Encoder::writeItem(double data)
 
 size_t Encoder::encode7Bit(char* buffer, uint64 value)
 {
-	//Íâ²¿È·±£buff×ã¹»£¬int32×î¶à5Î»£¬int64×î¶à10Î»
-	//¸ßÎ»±êÊ¶£º0±íÊ¾½áÎ²,1±íÊ¾ºó±ß»¹ÓĞÊı¾İ
+	//å¤–éƒ¨ç¡®ä¿buffè¶³å¤Ÿï¼Œint32æœ€å¤š5ä½ï¼Œint64æœ€å¤š10ä½
+	//é«˜ä½æ ‡è¯†ï¼š0è¡¨ç¤ºç»“å°¾,1è¡¨ç¤ºåè¾¹è¿˜æœ‰æ•°æ®
 	size_t count = 0;
 	while (value > 0x7F)
 	{
@@ -295,10 +295,10 @@ size_t Encoder::encode7Bit(char* buffer, uint64 value)
 
 size_t Encoder::encodeTag(char* buffer, size_t tagOff, uint64 value, bool extra)
 {
-	// Í·±àÂë:head+body: type(1bit)|tag(2bit)|data(5bit) + [tag]+[data]
+	// å¤´ç¼–ç :head+body: type(1bit)|tag(2bit)|data(5bit) + [tag]+[data]
 	// ext(1bit): 0:uint64,1:length+body
-	// tag(2bit): 3:±íÊ¾»¹ÓĞºó±ß»¹ÓĞÊı¾İ
-	// val(5bit): ´æ´¢Êı¾İµÄµÍ4Î»£¬¸ßÎ»0±êÊ¶½áÊø£¬1±êÊ¶»¹ÓĞÊı¾İ
+	// tag(2bit): 3:è¡¨ç¤ºè¿˜æœ‰åè¾¹è¿˜æœ‰æ•°æ®
+	// val(5bit): å­˜å‚¨æ•°æ®çš„ä½4ä½ï¼Œé«˜ä½0æ ‡è¯†ç»“æŸï¼Œ1æ ‡è¯†è¿˜æœ‰æ•°æ®
 
 	assert(tagOff > 0);
 	char flag = extra ? 0x80 : 0;
@@ -322,7 +322,7 @@ size_t Encoder::encodeTag(char* buffer, size_t tagOff, uint64 value, bool extra)
 	if (value > 0)
 		flag |= 0x10;
 
-	// Ğ´ÈëÊı¾İ
+	// å†™å…¥æ•°æ®
 	size_t length = 1;
 	buffer[0] = flag;
 

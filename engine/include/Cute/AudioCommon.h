@@ -14,15 +14,15 @@ enum SoundFormat
 	SOUND_FORMAT_BITSTREAM,
 };
 
-// PCM:·Ö8,16,24,32,float¸ñÊ½£¬ºÍµ¥ÉùµÀ£¬¶àÉùµÀ
-// Ò»¸ö²ÉÑù°üÀ¨£º¶à¸öÉùµÀÊı¾İ
+// PCM:åˆ†8,16,24,32,floatæ ¼å¼ï¼Œå’Œå•å£°é“ï¼Œå¤šå£°é“
+// ä¸€ä¸ªé‡‡æ ·åŒ…æ‹¬ï¼šå¤šä¸ªå£°é“æ•°æ®
 struct AudioInfo
 {
 	uint format;	// soundformat
-	uint samples;	// Ò»¹²ÓĞ¶àÉÙ²ÉÓÃnum of samples
-	uint channels;	// º¬ÓĞ¶àÉÙÉùµÀ,num of channels
-	uint rate;		// ²ÉÑùÂÊ£¬Ò»ÃëÖÓsamples´ÎÊı(HZ) samples per second
-	uint bits;		// Ã¿¸ösampleÕ¼ÓĞ¶àÉÙ±ÈÌØÎ» bit of one sample
+	uint samples;	// ä¸€å…±æœ‰å¤šå°‘é‡‡ç”¨num of samples
+	uint channels;	// å«æœ‰å¤šå°‘å£°é“,num of channels
+	uint rate;		// é‡‡æ ·ç‡ï¼Œä¸€ç§’é’Ÿsamplesæ¬¡æ•°(HZ) samples per second
+	uint bits;		// æ¯ä¸ªsampleå æœ‰å¤šå°‘æ¯”ç‰¹ä½ bit of one sample
 };
 
 //struct AudioInfo

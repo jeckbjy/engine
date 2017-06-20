@@ -6,7 +6,7 @@
 CUTE_NS_BEGIN
 
 class Stream;
-// ÒôÆµ½âÂëÆ÷,×¢£ºreadºÍseek¶¼ÊÇÏà¶ÔÓÚsampleµÄ£¬¶ø²»ÊÇbyte
+// éŸ³é¢‘è§£ç å™¨,æ³¨ï¼šreadå’Œseekéƒ½æ˜¯ç›¸å¯¹äºsampleçš„ï¼Œè€Œä¸æ˜¯byte
 class AudioDecoder : public Object
 {
 	DECLARE_RTTI(AudioDecoder, Object, OID_ANY)

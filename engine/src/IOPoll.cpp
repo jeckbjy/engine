@@ -36,7 +36,7 @@ IOPoll::IOPoll()
 #endif
 	if (m_fd == -1)
 		throw std::runtime_error("create reactor poll fd error");
-	// pipe方式创建
+	// pipe鏂瑰紡鍒涘缓
 	if (m_reader == -1)
 	{
 		int fds[2];
@@ -45,12 +45,12 @@ IOPoll::IOPoll()
 		m_reader = fds[0];
 		m_writer = fds[1];
 	}
-	// 设置
+	// 璁剧疆
 	::fcntl(m_reader, F_SETFL, O_NONBLOCK);
 	::fcntl(m_reader, F_SETFD, FD_CLOEXEC);
 	::fcntl(m_writer, F_SETFL, O_NONBLOCK);
 	::fcntl(m_writer, F_SETFD, FD_CLOEXEC);
-	// 添加监听interupt
+	// 娣诲姞鐩戝惉interupt
 	modify(m_reader, EV_CTL_ADD, EV_IN, this);
 }
 
@@ -58,7 +58,7 @@ IOPoll::~IOPoll()
 {
 	if (m_reader != -1)
 	{
-		// 注销
+		// 娉ㄩ攢
 		modify(m_reader, EV_CTL_DEL, EV_IN, NULL);
 		::close(m_reader);
 		if (m_reader != m_writer)
@@ -86,7 +86,7 @@ int IOPoll::wait(event_t* events, int counts, int msec)
 		if (nums >= 0)
 			break;
 		if (nums == -1)
-		{// 是否发生错误
+		{// 鏄惁鍙戠敓閿欒
 			if (errno != EINTR && errno != EAGAIN)
 				throw std::runtime_error("poll wait error.");
 		}
@@ -106,7 +106,7 @@ int IOPoll::modify(int fd, int op, int events, void* udata)
 	int num = 0;
 	op |= EV_CLEAR;
 	if ((events & EV_IN) != 0)
-	{// 添加
+	{// 娣诲姞
 		EV_SET(&ev[num], fd, EVFILT_READ, op, 0, 0, (KQ_UTYPE)udata);
 		++num;
 	}

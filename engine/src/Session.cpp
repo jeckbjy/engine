@@ -73,7 +73,7 @@ void Session::addPending(int pending)
 
 void Session::fireRead(SocketChannel* channel)
 {
-	// ÏÈ½âÎöÏûÏ¢
+	// å…ˆè§£æžæ¶ˆæ¯
 	BufferList& buffer = channel->getReader();
 	buffer.seek(0, SEEK_SET);
 
