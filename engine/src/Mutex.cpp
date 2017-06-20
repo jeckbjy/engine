@@ -25,7 +25,7 @@ Mutex::Mutex(MutexType type /* = MUTEX_RECURSIVE */)
 #elif !defined(CUTE_VXWORKS)
 	pthread_mutexattr_settype(&attr, type == MUTEX_RECURSIVE ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
 #endif
-	if (pthread_mutex_init(&_mutex, &attr))
+	if (pthread_mutex_init(&m_mutex, &attr))
 	{
 		pthread_mutexattr_destroy(&attr);
 		throw SystemException("cannot create mutex");

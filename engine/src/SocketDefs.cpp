@@ -117,7 +117,7 @@ int sock_send(socket_t sock, const void* buff, int size, int flags /* = 0 */)
 	return rc;
 }
 
-int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, int fromlen)
+int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen)
 {
 	int rc;
 	do

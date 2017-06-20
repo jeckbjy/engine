@@ -7,6 +7,15 @@
 #include "Cute/Environment.h"
 #include <algorithm>
 
+#if defined(CUTE_OS_FAMILY_POSIX)
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+//#if !defined(POCO_VXWORKS)
+#include <pwd.h>
+//#endif
+#endif
+
 CUTE_NS_BEGIN
 
 #ifdef CUTE_OS_FAMILY_WINDOWS
@@ -793,7 +802,7 @@ String Path::expand(const String& path)
 			}
 			else
 			{
-				result += homeImpl();
+				result += home();
 			}
 			++it;
 		}

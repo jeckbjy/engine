@@ -3,9 +3,11 @@
 
 #include "Cute/Foundation.h"
 
-#ifdef CUTE_OS_LINUX
-#include <sys/epoll.h>
-#include <sys/eventfd.h>
+#if defined(CUTE_OS_FAMILY_LINUX)
+#  include <sys/epoll.h>
+#  include <sys/eventfd.h>
+#elif defined(CUTE_OS_FAMILY_BSD)
+#  include <sys/event.h>
 #endif
 
 CUTE_NS_BEGIN
@@ -29,7 +31,7 @@ CUTE_NS_BEGIN
 
 #elif defined(CUTE_OS_FAMILY_BSD)
 
-#	define event_t				kevent
+#	define event_t				struct kevent
 #	define ev_get_udata(ev)		ev.udata
 #	define ev_is_input(ev)		ev.filter == EVFILT_READ
 #	define ev_is_output(ev)		ev.filter == EVFILT_WRITE

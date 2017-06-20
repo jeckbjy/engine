@@ -60,6 +60,10 @@ private:
 	int m_inotify;
 };
 #elif defined(CUTE_OS_FAMILY_BSD)
+class DirectoryWatcherStrategy
+{
+    
+};
 #else
 #error "not support!!"
 #endif

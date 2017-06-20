@@ -61,7 +61,7 @@ typedef int			handle_t;
 typedef void*		module_t;
 typedef int			error_t;
 typedef int			socket_t;
-typedef int			socklen_t;
+//typedef int			socklen_t;
 #	if defined(CUTE_OS_FAMILY_BSD)
 typedef unsigned long	ioctl_req_t;
 #	else

@@ -60,7 +60,7 @@ void TCPSocketChannel::connect(const SocketAddress& addr)
 	modify(EVENT_OUT);
 	if (sock_connect(socket(), addr.address(), addr.length()) != 0)
 	{
-		bool blocking = code == EINPROGRESS || code == EWOULDBLOCK;
+		bool blocking = (errno == EINPROGRESS || errno == EWOULDBLOCK);
 		if (!blocking)
 		{//fire error
 			m_listener->fireError(this);

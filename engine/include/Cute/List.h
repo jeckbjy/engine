@@ -20,6 +20,49 @@ private:
 
 	template<class T, ListNode T::*, bool>
 	friend class List;
+    template<bool>
+    friend class TSizeHolder;
+};
+
+template<bool hasSize>
+struct TSizeHolder
+{
+    void inc(size_t count);
+    void dec(size_t count);
+    void reset();
+    size_t get(ListNode* head) const;
+};
+
+template<>
+struct TSizeHolder<true>
+{
+    TSizeHolder() :m_count(0){}
+    inline void inc(size_t count) { m_count += count; }
+    inline void dec(size_t count) { m_count -= count; }
+    inline void reset() { m_count = 0; }
+    inline size_t get(ListNode*) const { return m_count; }
+    size_t m_count;
+};
+
+template<>
+struct TSizeHolder<false>
+{
+    TSizeHolder() {}
+    inline void inc(size_t) { }
+    inline void dec(size_t) { }
+    inline void reset(){}
+    inline size_t get(ListNode* head) const
+    {
+        size_t count = 0;
+        ListNode* node = head->m_next;
+        while (node != head)
+        {
+            ++count;
+            node = node->m_next;
+        }
+        
+        return count;
+    }
 };
 
 struct Tag1 {};
@@ -284,46 +327,6 @@ private:
 	}
 
 private:
-	template<bool hasSize>
-	struct TSizeHolder
-	{
-		void inc(size_t count);
-		void dec(size_t count);
-		void reset();
-		size_t get(ListNode* head) const;
-	};
-
-	template<>
-	struct TSizeHolder<true>
-	{
-		TSizeHolder() :m_count(0){}
-		inline void inc(size_t count) { m_count += count; }
-		inline void dec(size_t count) { m_count -= count; }
-		inline void reset() { m_count = 0; }
-		inline size_t get(ListNode*) const { return m_count; }
-		size_t m_count;
-	};
-
-	template<>
-	struct TSizeHolder<false>
-	{
-		inline void inc(size_t) { }
-		inline void dec(size_t) { }
-		inline void reset(){}
-		inline size_t get(ListNode* head) const
-		{
-			size_t count = 0;
-			ListNode* node = head->m_next;
-			while (node != head)
-			{
-				++count;
-				node = node->m_next;
-			}
-
-			return count;
-		}
-	};
-
 	typedef TSizeHolder<HasSize> SizeHolder;
 
 	ListNode*	m_head;

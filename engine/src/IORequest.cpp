@@ -34,6 +34,7 @@ bool IORequest::isSuccess() const
 //////////////////////////////////////////////////////////////////////////
 void AcceptReq::perform()
 {
+#if defined(CUTE_OS_FAMILY_WINDOWS)
 	if (isSuccess())
 	{
 		SOCKET update_ctx = (SOCKET)m_proxy->handle();
@@ -44,6 +45,7 @@ void AcceptReq::perform()
 		::closesocket(m_sock);
 		m_sock = INVALID_SOCKET;
 	}
+#endif
 }
 
 CUTE_NS_END

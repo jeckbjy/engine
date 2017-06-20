@@ -69,63 +69,121 @@ protected:
 };
 
 #else
-// 不支持变长参数
-#define CUTE_DELEGATE(N, P)																			\
-template<class R CUTE_COMMA_IF(N) CUTE_LIST_TYPENAME(N)>											\
-class DelegateBase<R(CUTE_LIST_TYPE(N))>															\
-{																									\
-public:																								\
-	R operator()(CUTE_LIST_DEFS(N)){ return call<R>(CUTE_LIST_ARGS(N)); }							\
-																									\
-protected:																							\
-	struct ICallable;																				\
-	typedef List<ICallable> FuncList;																\
-																									\
-	struct ICallable : public ListHook																\
-	{																								\
-		virtual ~ICallable(){}																		\
-		virtual R call(CUTE_LIST_DEFS(N)) = 0;														\
-		virtual void set(void*) = 0;																\
-		virtual bool empty() const = 0;																\
-		virtual bool equal(void* ptr) const = 0;													\
-		virtual const type_info& type() const = 0;													\
-	};																								\
-																									\
-	template<class F>																				\
-	struct TCallable : public ICallable																\
-	{																								\
-		TCallable(F fun, void* owner){}																\
-		TCallable(Function<F> fun) : m_fun(fun){}													\
-		R call(CUTE_LIST_DEFS(N)) { return m_fun(CUTE_LIST_ARGS(N)); }								\
-		void set(void* owner) { m_fun.setOwner(owner); }											\
-		bool empty() const { return !m_fun; }														\
-		bool equal(void* ptr) const { return m_fun.equal(ptr); }									\
-		const type_info& type() const { return m_fun.type(); }										\
-																									\
-		Function<F> m_fun;																			\
-	};																								\
-																									\
-	R call(CUTE_LIST_DEFS(N))																		\
-	{																								\
-		if (!m_funs.empty())																		\
-		{																							\
-			FuncList::Iterator last = m_funs.back();												\
-			for (FuncList::Iterator itor = m_funs.begin(); itor != last; ++itor)					\
-			{																						\
-				itor->call(CUTE_LIST_ARGS(N));														\
-			}																						\
-																									\
-			return last->call(CUTE_LIST_ARGS(N));													\
-		}																							\
-																									\
-		return R();																					\
-	}																								\
-																									\
-	FuncList m_funs;																				\
-};
 
-CUTE_REPEAT(CUTE_PARAM_MAX, CUTE_DELEGATE)
-#undef CUTE_DELEGATE
+template<class R>
+class DelegateBase<R()>
+{
+public:
+    R operator()(){ return call(); }
+    
+    template<typename F>
+    inline void add(Function<F> fun)
+    {
+        this->m_funs.push_back(new TCallable<F>(fun));
+    }
+    
+protected:
+    struct ICallable;
+    typedef List<ICallable> FuncList;
+    struct ICallable : public ListHook
+    {
+        virtual ~ICallable(){}						
+        virtual R       call() = 0;
+        virtual void    set(void*) = 0;
+        virtual bool    empty() const = 0;
+        virtual bool    equal(void* ptr) const = 0;
+        virtual const std::type_info& type() const = 0;
+    };
+    
+    template<class F>															
+    struct TCallable : public ICallable											
+    {																			
+    	TCallable(F fun, void* owner){}											
+    	TCallable(Function<F> fun) : m_fun(fun){}								
+    	R    call() { return m_fun(); }
+    	void set(void* owner) { m_fun.setObject(owner); }
+    	bool equal(void* ptr) const { return m_fun.equal(ptr); }
+        bool empty() const { return !m_fun; }
+        const std::type_info& type() const { return m_fun.type(); }
+    																			
+    	Function<F> m_fun;														
+    };																			
+    																			
+    R call()
+    {																			
+    	if (!m_funs.empty())													
+    	{																		
+    		typename FuncList::Iterator last = m_funs.back();
+    		for (typename FuncList::Iterator itor = m_funs.begin(); itor != last; ++itor)
+    		{																	
+    			itor->call();
+    		}																	
+    																			
+    		return last->call();
+    	}																		
+    																			
+    	return R();																
+    }																			
+    
+    FuncList m_funs;
+};
+// 不支持变长参数
+//#define CUTE_DELEGATE(N, P)																			\
+//template<class R CUTE_COMMA_IF(N) CUTE_LIST_TYPENAME(N)>											\
+//class DelegateBase<R(CUTE_LIST_TYPE(N))>															\
+//{																									\
+//public:																								\
+//	R operator()(CUTE_LIST_DEFS(N)){ return call<R>(CUTE_LIST_ARGS(N)); }							\
+//																									\
+//protected:																							\
+//	struct ICallable;																				\
+//	typedef List<ICallable> FuncList;																\
+//																									\
+//	struct ICallable : public ListHook																\
+//	{																								\
+//		virtual ~ICallable(){}																		\
+//		virtual R call(CUTE_LIST_DEFS(N)) = 0;														\
+//		virtual void set(void*) = 0;																\
+//		virtual bool empty() const = 0;																\
+//		virtual bool equal(void* ptr) const = 0;													\
+//		virtual const type_info& type() const = 0;													\
+//	};																								\
+//																									\
+//	template<class F>																				\
+//	struct TCallable : public ICallable																\
+//	{																								\
+//		TCallable(F fun, void* owner){}																\
+//		TCallable(Function<F> fun) : m_fun(fun){}													\
+//		R call(CUTE_LIST_DEFS(N)) { return m_fun(CUTE_LIST_ARGS(N)); }								\
+//		void set(void* owner) { m_fun.setOwner(owner); }											\
+//		bool empty() const { return !m_fun; }														\
+//		bool equal(void* ptr) const { return m_fun.equal(ptr); }									\
+//		const type_info& type() const { return m_fun.type(); }										\
+//																									\
+//		Function<F> m_fun;																			\
+//	};																								\
+//																									\
+//	R call(CUTE_LIST_DEFS(N))																		\
+//	{																								\
+//		if (!m_funs.empty())																		\
+//		{																							\
+//			FuncList::Iterator last = m_funs.back();												\
+//			for (FuncList::Iterator itor = m_funs.begin(); itor != last; ++itor)					\
+//			{																						\
+//				itor->call(CUTE_LIST_ARGS(N));														\
+//			}																						\
+//																									\
+//			return last->call(CUTE_LIST_ARGS(N));													\
+//		}																							\
+//																									\
+//		return R();																					\
+//	}																								\
+//																									\
+//	FuncList m_funs;																				\
+//};
+//
+//CUTE_REPEAT(CUTE_PARAM_MAX, CUTE_DELEGATE)
+//#undef CUTE_DELEGATE
 #endif
 
 template<class S>
@@ -185,31 +243,26 @@ public:
 		return *this;
 	}
 
-	template<typename F>
-	inline void add(Function<F> fun)
-	{
-		m_funs.push_back(new TCallable<F>(fun));
-	}
-
+    //??
 	void setOwner(void* obj)
 	{
-		if (!m_funs.empty())
-			m_funs.begin()->set(obj);
+		if (!this->m_funs.empty())
+			this->m_funs.begin()->set(obj);
 	}
 
 	void reset()
 	{
-		for (FuncList::iterator itor = m_funs.begin(); itor != m_funs.end(); ++itor)
+        for (auto itor = this->m_funs.begin(); itor != this->m_funs.end(); ++itor)
 		{
 			delete (*itor);
 		}
 
-		m_funs.clear();
+		this->m_funs.clear();
 	}
 
 	bool empty() const
 	{
-		return m_funs.empty();
+		return this->m_funs.empty();
 	}
 
 	bool operator!() const

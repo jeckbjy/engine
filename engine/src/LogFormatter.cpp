@@ -51,7 +51,7 @@ void LogFormatter::format(const LogMessage& msg)
 		case 'l': Number::append(text, (int)msg.getLevel()); break;
 		case 'p': text.append(getPriorityName((int)msg.getLevel())); break;
 		case 'q': text += getPriorityName((int)msg.getLevel()).at(0); break;
-		case 'P': Number::append(text, msg.getPid()); break;
+		case 'P': Number::append(text, (int)msg.getPid()); break;
 		case 'T': text.append(msg.getThread()); break;
 		case 'I': Number::append(text, msg.getTid()); break;
 		case 'O': Number::append(text, msg.getTid()); break;
@@ -81,7 +81,7 @@ void LogFormatter::format(const LogMessage& msg)
 		case 'F': Number::append0(text, dateTime.millisecond() * 1000 + dateTime.microsecond(), 6); break;
 		case 'z': text.append(DateTimeFormatter::tzdISO(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
 		case 'Z': text.append(DateTimeFormatter::tzdRFC(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
-		case 'E': Number::append(text, msg.getTime().epochTime()); break;
+		case 'E': Number::append(text, (int64)msg.getTime().epochTime()); break;
 		case 'v':
 			if (ip->length > msg.getSource().length())	//append spaces
 				text.append(msg.getSource()).append(ip->length - msg.getSource().length(), ' ');

@@ -17,6 +17,7 @@ typedef DWORD			thread_id;
 typedef pid_t			thread_id;
 #elif (CUTE_OS == CUTE_OS_MAC_OS_X)
 typedef mach_port_t		thread_id;
+//typedef pthread_t		thread_id;
 #else
 typedef pthread_t		thread_id;
 #endif

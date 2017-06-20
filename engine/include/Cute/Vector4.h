@@ -420,24 +420,24 @@ inline TVector4<T> TVector4<T>::operator/(T t) const
 template<typename T>
 inline TVector4<T> operator+ (T lhs, const TVector4<T>& rhs)
 {
-	return TVector4(lhs + rhs.x, lhs + rhs.y, lhs + rhs.z, lhs + rhs.w);
+	return TVector4<T>(lhs + rhs.x, lhs + rhs.y, lhs + rhs.z, lhs + rhs.w);
 }
 
 template<typename T>
 inline TVector4<T> operator- (T lhs, const TVector4<T>& rhs)
 {
-	return TVector4(lhs - rhs.x, lhs - rhs.y, lhs - rhs.z, lhs - rhs.w);
+	return TVector4<T>(lhs - rhs.x, lhs - rhs.y, lhs - rhs.z, lhs - rhs.w);
 }
 template<typename T>
 inline TVector4<T> operator* (T lhs, const TVector4<T>& rhs)
 {
-	return TVector4(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z, lhs * rhs.w);
+	return TVector4<T>(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z, lhs * rhs.w);
 }
 
 template<typename T>
 inline TVector4<T> operator/ (T lhs, const TVector4<T>& rhs)
 {
-	return TVector4(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z, lhs / rhs.w);
+	return TVector4<T>(lhs / rhs.x, lhs / rhs.y, lhs / rhs.z, lhs / rhs.w);
 }
 
 CUTE_NS_END

@@ -67,7 +67,7 @@ void SharedLibrary::load(const String& path, int flags /* = SHLIB_DEFAULT */)
 	m_handle = shl_load(path.c_str(), BIND_DEFERRED, 0);
 #else
 	int realFlags = RTLD_LAZY;
-	if (flags & SHLIB_LOCAL_IMPL)
+	if (flags & SHLIB_LOCAL)
 		realFlags |= RTLD_LOCAL;
 	else
 		realFlags |= RTLD_GLOBAL;

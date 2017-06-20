@@ -756,7 +756,7 @@ handle_t Process::launch(const String& command, const Args& args, const String& 
 
 bool Process::open(const String& file, const String& mode)
 {
-#ifdef(__APPLE__)
+#if defined(__APPLE__)
 	const char* cmd = "/usr/bin/open";
 #else
 	const char* cmd = "/usr/bin/xdg-open";

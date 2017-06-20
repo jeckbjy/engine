@@ -5,7 +5,36 @@
 #include "Cute/Path.h"
 #include "Cute/DirectoryIterator.h"
 
+#if defined(CUTE_OS_FAMILY_POSIX)
+#include <algorithm>
+#include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <cstring>
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+
+#if defined(CUTE_OS_FAMILY_BSD)
+#include <sys/param.h>
+#include <sys/mount.h>
+#else
+#include <sys/statfs.h>
+#endif
+
+#endif
+
+
 CUTE_NS_BEGIN
+
+namespace{
+    // Convert timespec structures (seconds and remaining nano secs) to TimeVal (microseconds)
+    int64 timespec2Microsecs(const struct timespec &ts) {
+        return ts.tv_sec * 1000000L + ts.tv_nsec / 1000L;
+    }
+} // namespace
 
 bool File::readAll(const String& path, String& data, bool tryRemoveBom)
 {
@@ -654,8 +683,8 @@ uint64 File::usableSpace(const String& path)
 uint64_t File::freeSpace(const String& path)
 {
 	struct statfs stats;
-	if (statfs(const_cast<char*>(src.c_str()), &stats) != 0)
-		error(src);
+	if (statfs(const_cast<char*>(path.c_str()), &stats) != 0)
+		error(path);
 
 	return (uint64)stats.f_bfree * (uint64)stats.f_bsize;
 }
@@ -683,9 +712,9 @@ void File::copy(const String& src, const String& dst)
 	try
 	{
 		int n;
-		while ((n = read(sd, buffer.begin(), blockSize)) > 0)
+        while ((n = read(sd, &buffer[0], blockSize)) > 0)
 		{
-			if (write(dd, buffer.begin(), n) != n)
+			if (write(dd, &buffer[0], n) != n)
 				error(dst);
 		}
 		if (n < 0)
@@ -709,13 +738,13 @@ void File::copy(const String& src, const String& dst)
 
 void File::move(const String& src, const String& dst)
 {
-	if (rename(src.c_str(), dst.c_str()) != 0)
+    if (::rename(src.c_str(), dst.c_str()) != 0)
 		error(src);
 }
 
 void File::rename(const String& src, const String& dst)
 {
-	if (rename(src.c_str(), dst.c_str()) != 0)
+    if (::rename(src.c_str(), dst.c_str()) != 0)
 		error(src);
 }
 

@@ -39,7 +39,7 @@ protected:
 	uint64 m_uid;
 };
 
-template<typename TMSGID>
+template<int TMSGID>
 class TPacket : public Packet
 {
 public:

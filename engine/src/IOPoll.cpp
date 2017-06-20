@@ -81,7 +81,7 @@ int IOPoll::wait(event_t* events, int counts, int msec)
 		nums = ::epoll_wait(m_fd, events, counts, msec);
 #elif defined(CUTE_OS_FAMILY_BSD)
 		timespec timeout = { msec, 0 };
-		nums = ::kevent(m_fd, 0, 0, events, counts, timeout);
+		nums = ::kevent(m_fd, 0, 0, events, counts, &timeout);
 #endif
 		if (nums >= 0)
 			break;

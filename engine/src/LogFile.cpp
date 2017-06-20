@@ -18,7 +18,7 @@ LogFile::LogFile(const String& filePath)
 	SetFilePointer(m_file, 0, 0, FILE_END);
 
 #else
-	m_file = fopen(path.c_str(), "a");
+	m_file = fopen(m_path.c_str(), "a");
 	if (!m_file) 
 		throw OpenFileException(m_path);
 #endif
@@ -69,7 +69,7 @@ void LogFile::write(const String& text, bool flush /* = true */)
 		throw WriteFileException(m_path);
 	if (flush)
 	{
-		rc = fflush(_file);
+		rc = fflush(m_file);
 		if (rc == EOF)
 			throw WriteFileException(m_path);
 	}

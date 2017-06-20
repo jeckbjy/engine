@@ -2,6 +2,7 @@
 #include "Cute/Foundation.h"
 #include "Cute/Mutex.h"
 #include "Cute/Event.h"
+#include "Cute/ScopedUnlock.h"
 
 CUTE_NS_BEGIN
 

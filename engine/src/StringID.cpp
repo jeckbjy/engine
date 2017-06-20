@@ -41,8 +41,8 @@ public:
 			node = node->next2;
 
 			// free node
-			free(node->name);
-			delete node;
+			free(temp->name);
+			delete temp;
 		}
 	}
 
@@ -65,7 +65,7 @@ public:
 		Data* node = m_table[hash];
 		while (node != NULL)
 		{
-			if (size == node->size && (name, node->name) == 0)
+			if (size == node->size && strcmp(name, node->name) == 0)
 				return node;
 
 			node = node->next1;

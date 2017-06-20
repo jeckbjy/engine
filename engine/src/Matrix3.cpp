@@ -147,9 +147,9 @@ Matrix3 Matrix3::scaled(const Vector3& scale) const
 Matrix3 Matrix3::transpose() const
 {
 	Matrix3 mat;
-	for (UINT32 row = 0; row < 3; row++)
+	for (int row = 0; row < 3; row++)
 	{
-		for (UINT32 col = 0; col < 3; col++)
+		for (int col = 0; col < 3; col++)
 			mat[row][col] = m[col][row];
 	}
 
@@ -159,7 +159,7 @@ Matrix3 Matrix3::transpose() const
 Vector3 Matrix3::transform(const Vector3& vec) const
 {
 	Vector3 prod;
-	for (UINT32 row = 0; row < 3; row++)
+	for (int row = 0; row < 3; row++)
 	{
 		prod[row] =
 			m[row][0] * vec[0] +
@@ -253,8 +253,8 @@ void Matrix3::QDUDecomposition(Matrix3& matQ, Vector3& vecD, Vector3& vecU) cons
 
 	if (fDet < 0.0f)
 	{
-		for (UINT32 row = 0; row < 3; row++)
-			for (UINT32 col = 0; col < 3; col++)
+		for (int row = 0; row < 3; row++)
+			for (int col = 0; col < 3; col++)
 				matQ[row][col] = -matQ[row][col];
 	}
 
@@ -423,7 +423,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	matA[1][0] = -sin*matA[1][1];
 	matA[1][1] *= cos;
 
-	UINT32 row;
+	int row;
 	for (row = 0; row < 3; row++)
 	{
 		tmp0 = matR[0][row];
@@ -447,7 +447,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 	matA[0][2] = -sin*matA[1][2];
 	matA[1][2] *= cos;
 
-	UINT32 col;
+	int col;
 	for (col = 0; col < 3; col++)
 	{
 		tmp0 = matL[col][0];
@@ -503,7 +503,7 @@ void Matrix3::golubKahanStep(Matrix3& matA, Matrix3& matL, Matrix3& matR)
 
 void Matrix3::singularValueDecomposition(Matrix3& matL, Vector3& matS, Matrix3& matR) const
 {
-	UINT32 row, col;
+	int row, col;
 
 	Matrix3 mat = *this;
 	bidiagonalize(mat, matL, matR);
@@ -763,7 +763,7 @@ void Matrix3::eigenSolveSymmetric(float eigenValues[3], Vector3 eigenVectors[3])
 	mat.tridiagonal(eigenValues, subDiag);
 	mat.QLAlgorithm(eigenValues, subDiag);
 
-	for (UINT32 i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		eigenVectors[i][0] = mat[0][i];
 		eigenVectors[i][1] = mat[1][i];

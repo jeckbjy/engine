@@ -170,6 +170,13 @@ Thread::TID Thread::currentTID()
 {
 #ifdef _WIN32
 	return ::GetCurrentThreadId();
+#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+    return pthread_mach_thread_np(pthread_self());
+#elif defined(CUTE_OS_FAMILY_LINUX)
+#ifndef SYS_gettid
+#define SYS_gettid __NR_gettid
+#endif
+    return static_cast<Thread::TID>( syscall (SYS_gettid) );
 #else
 	return pthread_self();
 #endif
@@ -379,10 +386,10 @@ void Thread::startInternal(Runnable* target)
 	}
 	else
 	{
-		struct sched_param par;
-		par.sched_priority = m_osPrio;
-		if (pthread_setschedparam(m_thread, m_policy, &par))
-			throw SystemException("cannot set thread priority");
+//		struct sched_param par;
+//		par.sched_priority = m_osPrio;
+//		if (pthread_setschedparam(m_thread, m_policy, &par))
+//			throw SystemException("cannot set thread priority");
 	}
 
 #endif
@@ -440,12 +447,12 @@ bool Thread::join(long milliseconds)
 	}
 #else
 	// todo: pthread_timedjoin_np
-	void* result;
-	struct timespec abstime;
-	abstime.tv_sec = milliseconds / 1000;
-	abstime.tv_nsec = (milliseconds % 1000) * 1000000;
-	if (pthread_timedjoin(m_thread, &result, &abstime))
-		throw SystemException("cannot join thread");
+//	void* result;
+//	struct timespec abstime;
+//	abstime.tv_sec = milliseconds / 1000;
+//	abstime.tv_nsec = (milliseconds % 1000) * 1000000;
+//	if (pthread_timedjoin(m_thread, &result, &abstime))
+//		throw SystemException("cannot join thread");
 #endif
 }
 
@@ -587,9 +594,9 @@ void Thread::setOSPriority(int prio, int policy /* = POLICY_DEFAULT */)
 				throw SystemException("cannot set thread priority");
 		}
 
-		m_prio = reverseMapPrio(prio, policy);
-		m_prioOS = prio;
-		m_policy = policy;
+//		m_prio = reverseMapPrio(prio, policy);
+//		m_prioOS = prio;
+//		m_policy = policy;
 	}
 #endif
 }
