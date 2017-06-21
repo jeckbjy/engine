@@ -99,7 +99,7 @@ workspace "cute"
 	--basedir("solution")
 	startproject "game"
 	startproject "unit"
-	configurations {"Debug", "Release"}
+	configurations {"debug", "release"}
 	language "c++"
 	
 	-- 全局配置
@@ -125,7 +125,8 @@ workspace "cute"
 		targetdir(lib_dir)
 	filter {"action:vs*", "kind:SharedLib"}
 		implibdir(lib_dir)
-	filter {"action:gmake"}
+		disablewarnings {'4819'}
+	filter {"action:gmake", "action:xcode4"}
 		buildoptions {"-std=c++11", "-fpermissive", "-g -ggdb -Wall"}
 		links { "pthread", "dl"}
 	filter {"action:gmake","kind:SharedLib"}

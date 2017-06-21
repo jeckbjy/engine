@@ -21,7 +21,7 @@ private:
 	template<class T, ListNode T::*, bool>
 	friend class List;
     template<bool>
-    friend class TSizeHolder;
+    friend struct TSizeHolder;
 };
 
 template<bool hasSize>
