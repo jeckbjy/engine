@@ -19,7 +19,7 @@ template<class R, class... Args>
 class DelegateBase<R(Args...)>
 {
 public:
-	R operator()(Args... args){ return call<R>(args...); }
+	R operator()(Args... args){ return call(args...); }
 
 protected:
 	struct ICallable;
@@ -32,7 +32,7 @@ protected:
 		virtual void set(void*) = 0;
 		virtual bool empty() const = 0;
 		virtual bool equal(void* ptr) const = 0;
-		virtual const type_info& type() const = 0;
+        virtual const std::type_info& type() const = 0;
 	};
 
 	template<class F>
@@ -44,7 +44,7 @@ protected:
 		void set(void* owner) { m_fun.setOwner(owner); }
 		bool empty() const { return !m_fun; }
 		bool equal(void* ptr) const { return m_fun.equal(ptr); }
-		const type_info& type() const { return m_fun.type(); }
+        const std::type_info& type() const { return m_fun.type(); }
 
 		Function<F> m_fun;
 	};
@@ -53,8 +53,8 @@ protected:
 	{
 		if (!m_funs.empty())
 		{
-			FuncList::Iterator last = m_funs.back();
-			for (FuncList::Iterator itor = m_funs.begin(); itor != last; ++itor)
+			typename FuncList::Iterator last = m_funs.back();
+			for (typename FuncList::Iterator itor = m_funs.begin(); itor != last; ++itor)
 			{
 				itor->call(args...);
 			}

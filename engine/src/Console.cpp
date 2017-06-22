@@ -6,48 +6,31 @@ CUTE_NS_BEGIN
 
 #if defined(_WIN32)
 // FOREGROUND_INTENSITY:前景高亮显示,BACKGROUND_INTENSITY 背景高亮显示
-static WORD COLOR_FOREGROUND[Console::COLOR_MAX] =
+static WORD WIN_COLOR_FOREGROUND[Console::COLOR_MAX] =
 {
-	// BLACK
-	0,                                            
-	// RED
-	FOREGROUND_RED,
-	// GREEN
-	FOREGROUND_GREEN,
-	// BROWN
-	FOREGROUND_RED | FOREGROUND_GREEN,
-	// BLUE
-	FOREGROUND_BLUE,
-	// MAGENTA
-	FOREGROUND_RED | FOREGROUND_BLUE,
-	// CYAN
-	FOREGROUND_GREEN | FOREGROUND_BLUE,
-	// GREY
-	FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE, 
-	// DARKGRAY
-	FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-	// RED_BOLD
-	FOREGROUND_RED | FOREGROUND_INTENSITY,
-	// GREEN_BOLD
-	FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-	// YELLOW
-	FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-	// BLUE_BOLD
-	FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-	// MAGENTA_BOLD
-	FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-	// CYAN_BOLD
-	FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
-	// WHITE_BOLD
-	FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY
+    0,                                                          // BLACK
+    FOREGROUND_RED,                                             // RED
+    FOREGROUND_GREEN,                                           // GREEN
+    FOREGROUND_RED | FOREGROUND_GREEN,                          // BROWN
+    FOREGROUND_BLUE,                                            // BLUE
+    FOREGROUND_RED | FOREGROUND_BLUE,                           // MAGENTA
+    FOREGROUND_GREEN | FOREGROUND_BLUE,                         // CYAN
+    FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,        // WHITE
+    FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN,   // YELLOW
+    FOREGROUND_INTENSITY | FOREGROUND_RED,                      // RED_BOLD
+    FOREGROUND_INTENSITY | FOREGROUND_GREEN,                    // GREEN_BOLD
+    FOREGROUND_INTENSITY | FOREGROUND_BLUE,                     // BLUE_BOLD
+    FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE,    // MAGENTA_BOLD
+    FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE,  // CYAN_BOLD
+    FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE     // WHITE_BOLD
 };
 #else
 enum AnsiTextAttr
 {
-	TA_NORMAL = 0,
-	TA_BOLD = 1,
-	TA_BLINK = 5,
-	TA_REVERSE = 7
+	TA_NORMAL   = 0,
+	TA_BOLD     = 1,
+	TA_BLINK    = 5,
+	TA_REVERSE  = 7
 };
 // 前景色
 enum AnsiFGTextAttr
@@ -63,41 +46,44 @@ enum AnsiBGTextAttr
 };
 
 // 前景色对应数组
-static int COLOR_FOREGROUND[Console::COLOR_MAX] =
+static int UNIX_COLOR_FOREGROUND[Console::COLOR_MAX] =
 {
-	0x0000,
-	0x0004,
-	0x0002,
-	0x0006,
-	0x0001,
-	0x0005,
-	0x0003,
-	0x0007,
-	0x0008,
-	0x000C,
-	0x000A,
-	0x000E,
-	0x0009,
-	0x000D,
-	0x000B,
-	0x000F
+    FG_BLACK,                                           // BLACK
+    FG_RED,                                             // RED
+    FG_GREEN,                                           // GREEN
+    FG_BROWN,                                           // BROWN
+    FG_BLUE,                                            // BLUE
+    FG_MAGENTA,                                         // MAGENTA
+    FG_CYAN,                                            // CYAN
+    FG_WHITE,                                           // WHITE
+    FG_YELLOW,                                          // YELLOW
+    FG_RED,                                             // LRED
+    FG_GREEN,                                           // LGREEN
+    FG_BLUE,                                            // LBLUE
+    FG_MAGENTA,                                         // LMAGENTA
+    FG_CYAN,                                            // LCYAN
+    FG_WHITE                                            // LWHITE
 };
 #endif
 
-void Console::setColor(Color color /* = DEFAULT */)
+void Console::setColor(Color color, bool stdout_stream)
 {
 #ifdef _WIN32
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, COLOR_FOREGROUND[color]);
+    HANDLE hConsole = GetStdHandle(stdout_stream ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+	SetConsoleTextAttribute(hConsole, WIN_COLOR_FOREGROUND[color]);
 #else
-//	fprintf(stdout, "\x1b[%d%sm", COLOR_FOREGROUND[color], (color > CC_YELLOW ? ";1" : ""));
+    fprintf(stdout_stream ? stdout : stderr, "\x1b[%d%sm", UNIX_COLOR_FOREGROUND[color], (color >= YELLOW ? ";1" : ""));
 #endif
 }
 
-void Console::resetColor()
+void Console::resetColor(bool stdout_stream)
 {
-	//
-	setColor(GRAY);
+#if defined(_WIN32)
+    HANDLE hConsole = GetStdHandle(stdout_stream ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+#else
+    fprintf((stdout_stream ? stdout : stderr), "\x1b[0m");
+#endif
 }
 
 Console::Color Console::parseColor(const String& color)
@@ -120,20 +106,20 @@ Console::Color Console::parseColor(const String& color)
 		return CYAN;
 	else if (icompare(color, "gray") == 0)
 		return GRAY;
-	else if (icompare(color, "darkGray") == 0)
-		return DARKGRAY;
-	else if (icompare(color, "lightRed") == 0)
-		return LIGHTRED;
-	else if (icompare(color, "lightGreen") == 0)
-		return LIGHTGREEN;
+//	else if (icompare(color, "darkGray") == 0)
+//		return DARKGRAY;
+	else if (icompare(color, "lred") == 0)
+		return LRED;
+	else if (icompare(color, "lgreen") == 0)
+		return LGREEN;
 	else if (icompare(color, "yellow") == 0)
 		return YELLOW;
-	else if (icompare(color, "lightBlue") == 0)
-		return LIGHTBLUE;
-	else if (icompare(color, "lightMagenta") == 0)
-		return LIGHTMAGENTA;
-	else if (icompare(color, "lightCyan") == 0)
-		return LIGHTCYAN;
+	else if (icompare(color, "lblue") == 0)
+		return LBLUE;
+	else if (icompare(color, "lmagenta") == 0)
+		return LMAGENTA;
+	else if (icompare(color, "lcyan") == 0)
+		return LCYAN;
 	else if (icompare(color, "white") == 0)
 		return WHITE;
 	else throw InvalidArgumentException("Invalid color value", color);
@@ -143,23 +129,23 @@ String Console::formatColor(Color color)
 {
 	switch (color)
 	{
-	case BLACK:        return "black";
-	case RED:          return "red";
-	case GREEN:        return "green";
-	case BROWN:        return "brown";
-	case BLUE:         return "blue";
-	case MAGENTA:      return "magenta";
-	case CYAN:         return "cyan";
-	case GRAY:         return "gray";
-	case DARKGRAY:     return "darkGray";
-	case LIGHTRED:     return "lightRed";
-	case LIGHTGREEN:   return "lightGreen";
-	case YELLOW:       return "yellow";
-	case LIGHTBLUE:    return "lightBlue";
-	case LIGHTMAGENTA: return "lightMagenta";
-	case LIGHTCYAN:    return "lightCyan";
-	case WHITE:        return "white";
-	default:           return "invalid";
+	case BLACK:    return "black";
+	case RED:      return "red";
+	case GREEN:    return "green";
+	case BROWN:    return "brown";
+	case BLUE:     return "blue";
+	case MAGENTA:  return "magenta";
+	case CYAN:     return "cyan";
+//	case GRAY:     return "gray";
+//	case DARKGRAY: return "darkGray";
+	case LRED:     return "lred";
+	case LGREEN:   return "lgreen";
+	case YELLOW:   return "yellow";
+	case LBLUE:    return "lblue";
+	case LMAGENTA: return "lmagenta";
+	case LCYAN:    return "lcyan";
+	case WHITE:    return "white";
+	default:       return "invalid";
 	}
 }
 

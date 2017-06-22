@@ -176,7 +176,7 @@ bool ITable::parse(CellVector& tokens, const String& line)
 	}
 
 	bool startquote = false;	// 是否包含起始引号
-	size_t start = 0;			// 起始位置
+//	size_t start = 0;			// 起始位置
 	char ch;					// 当前字符
 	for (size_t i = 0; i <= endPos; ++i)
 	{
@@ -213,7 +213,7 @@ bool ITable::parse(CellVector& tokens, const String& line)
 			if (!startquote)
 			{
 				// 结尾了，后边必须是一个分隔符，否则就有错误
-				for (unsigned int x = i + 1; x < endPos; x++)
+				for (size_t x = i + 1; x < endPos; x++)
 				{
 					if (line[x] == delimiter)
 					{

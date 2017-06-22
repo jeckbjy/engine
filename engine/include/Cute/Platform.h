@@ -365,9 +365,9 @@
 
 #if defined(_MSC_VER)
 // Turn off some annoying warnings
-#	pragma warning(disable:4018)	// signed/unsigned comparison
-#	pragma warning(disable:4250)	// VC++ 11.0: inheriting from std stream classes produces C4250 warning;
 // see <http://connect.microsoft.com/VisualStudio/feedback/details/733720/inheriting-from-std-fstream-produces-c4250-warning>
+#	pragma warning(disable:4250)	// VC++ 11.0: inheriting from std stream classes produces C4250 warning;
+#	pragma warning(disable:4018)	// signed/unsigned comparison
 #	pragma warning(disable:4251)	// ... needs to have dll-interface warning
 #	pragma warning(disable:4275)	// non dll-interface class 'std::exception' used as base for dll-interface class 'Poco::Exception'
 #	pragma warning(disable:4344)	// behavior change: use of explicit template arguments results in call to '...' but '...' is a better match
@@ -521,13 +521,12 @@
 //////////////////////////////////////////////////////////////////////////
 // 其他一些特性检测
 //////////////////////////////////////////////////////////////////////////
-
 #if (__cplusplus > 199711L) || (defined(__STDCXX_VERSION__) && (__STDCXX_VERSION__ >= 201001L))
 #	define CUTE_CPP0X
 #endif
 
 // Enable C++11 support for VS 2014 and newer
-#if (_MSC_VER >= 1900)
+#if (_MSC_VER >= 1900) ||  (__cplusplus >= 201103L)
 #define CUTE_CPP11
 #endif
 

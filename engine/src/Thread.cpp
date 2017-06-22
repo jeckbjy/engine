@@ -9,6 +9,51 @@
 CUTE_NS_BEGIN
 
 //////////////////////////////////////////////////////////////////////////
+// Block SIGPIPE in main thread
+//////////////////////////////////////////////////////////////////////////
+#if defined(CUTE_OS_FAMILY_POSIX) && !defined(CUTE_VXWORKS)
+namespace
+{
+    class SignalBlocker
+    {
+    public:
+        SignalBlocker()
+        {
+            sigset_t sset;
+            sigemptyset(&sset);
+            sigaddset(&sset, SIGPIPE);
+            pthread_sigmask(SIG_BLOCK, &sset, 0);
+        }
+        ~SignalBlocker()
+        {
+        }
+    };
+    
+    static SignalBlocker signalBlocker;
+}
+#endif
+
+#if defined(CUTE_POSIX_DEBUGGER_THREAD_NAMES)
+namespace {
+    void setThreadName(pthread_t thread, const String& threadName)
+    {
+#if (CUTE_OS == POCO_OS_MAC_OS_X)
+        pthread_setname_np(threadName.c_str()); // __OSX_AVAILABLE_STARTING(__MAC_10_6, __IPHONE_3_2)
+#else
+        if (pthread_setname_np(thread, threadName.c_str()) == ERANGE && threadName.size() > 15)
+        {
+            std::string truncName(threadName, 0, 7);
+            truncName.append("~");
+            truncName.append(threadName, threadName.size() - 7, 7);
+            pthread_setname_np(thread, truncName.c_str());
+        }
+#endif
+    }
+}
+
+#endif // CUTE_POSIX_DEBUGGER_THREAD_NAMES
+
+//////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
 #ifdef _WIN32
@@ -38,6 +83,9 @@ __RET __API RunnableEntry(void* args)
 
 	Thread* pThread = (Thread*)(args);
 
+#if defined(CUTE_POSIX_DEBUGGER_THREAD_NAMES)
+    setThreadName(pThread->m_thread, pThread->getName());
+#endif
 #if CUTE_OS == CUTE_OS_LINUX
 	pThread->m_tid = (thread_id)syscall(SYS_gettid);
 #endif
@@ -57,6 +105,10 @@ __RET __API RunnableEntry(void* args)
 	{
 		ErrorHandler::handle();
 	}
+    
+#if defined(CUTE_OS_FAMILY_POSIX)
+    pThread->m_done.set();
+#endif
 
 	return 0;
 }
@@ -386,10 +438,10 @@ void Thread::startInternal(Runnable* target)
 	}
 	else
 	{
-//		struct sched_param par;
-//		par.sched_priority = m_osPrio;
-//		if (pthread_setschedparam(m_thread, m_policy, &par))
-//			throw SystemException("cannot set thread priority");
+		struct sched_param par;
+		par.sched_priority = m_prioOS;
+		if (pthread_setschedparam(m_thread, m_policy, &par))
+			throw SystemException("cannot set thread priority");
 	}
 
 #endif
@@ -423,6 +475,7 @@ void Thread::join()
 		throw SystemException("cannot join thread");
 	}
 #else
+    m_done.wait();
 	void* result;
 	if (pthread_join(m_thread, &result))
 		throw SystemException("cannot join thread");
@@ -434,7 +487,7 @@ bool Thread::join(long milliseconds)
 	if (!isRunning())
 		return true;
 
-#ifdef CUTE_OS_FAMILY_WINDOWS
+#if defined(CUTE_OS_FAMILY_WINDOWS)
 	switch (WaitForSingleObject(m_thread, milliseconds + 1))
 	{
 	case WAIT_TIMEOUT:
@@ -445,14 +498,26 @@ bool Thread::join(long milliseconds)
 	default:
 		throw SystemException("cannot join thread");
 	}
-#else
-	// todo: pthread_timedjoin_np
+//#elif defined(__GLIBC__) || defined(__GNU_LIBRARY__)
+//	// todo: pthread_timedjoin_np
 //	void* result;
 //	struct timespec abstime;
 //	abstime.tv_sec = milliseconds / 1000;
 //	abstime.tv_nsec = (milliseconds % 1000) * 1000000;
 //	if (pthread_timedjoin(m_thread, &result, &abstime))
 //		throw SystemException("cannot join thread");
+#else
+    void* result;
+    if(m_done.tryWait(milliseconds))
+    {
+        if(pthread_join(m_thread, &result))
+            throw SystemException("cannot join thread");
+        return true;
+    }
+    else
+    {
+        return true;
+    }
 #endif
 }
 
@@ -594,9 +659,9 @@ void Thread::setOSPriority(int prio, int policy /* = POLICY_DEFAULT */)
 				throw SystemException("cannot set thread priority");
 		}
 
-//		m_prio = reverseMapPrio(prio, policy);
-//		m_prioOS = prio;
-//		m_policy = policy;
+		m_prio = (Priority)reverseMapPrio(prio, policy);
+		m_prioOS = prio;
+		m_policy = policy;
 	}
 #endif
 }

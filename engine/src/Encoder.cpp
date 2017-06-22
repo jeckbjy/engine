@@ -77,7 +77,7 @@ bool Encoder::writeField(Message& msg)
 	writeBeg(spos);
 
 	Encoder coder(m_stream);
-	size_t size = coder.encode(&msg);
+	coder.encode(&msg);
 
 	writeEnd(spos);
 	return true;

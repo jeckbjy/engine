@@ -56,7 +56,7 @@ void HandlerService::regist(uint32 msgid, EventHandler* handler)
 	if (has(msgid))
 	{
 		delete handler;
-		throw InvalidArgumentException("duplicate msg:" + msgid);
+		throw InvalidArgumentException("duplicate msg:");
 	}
 
 	//handler->setID(msgid);

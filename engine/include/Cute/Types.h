@@ -105,11 +105,11 @@ using Queue = std::queue<T, std::deque<T, A> >;
 template<typename T, typename P = std::less<T>, typename A = std::allocator<T> >
 using Set = std::set<T, P, A>;
 
-template<typename K, typename V, typename P = std::less<T>, typename A = std::allocator<T> >
+template<typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V>> >
 using Map = std::map<K, V, P, A>;
 
 /** An associative container containing an ordered set of key-value pairs where multiple elements can have the same key. */
-template <typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V>>>
+template <typename K, typename V, typename P = std::less<K>, typename A = std::allocator<std::pair<const K, V> > >
 using MultiMap = std::multimap<K, V, P, A>;
 
 template<typename T, typename H = std::hash<T>, typename C = std::equal_to<T>, typename A = std::allocator<T> >

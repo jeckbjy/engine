@@ -36,7 +36,7 @@ int EventBase::getPriority() const
 
 void EventBase::setDelay(uint32_t delay)
 {
-	if (delay = 0)
+	if (delay == 0)
 		m_time = 0;
 	else
 		m_time = now() + delay;

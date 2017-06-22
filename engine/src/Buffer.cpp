@@ -101,7 +101,7 @@ size_t Buffer::find(char data, size_t offset /* = 0 */)
 	assert(offset <= m_size);
 	for (size_t i = offset; i < m_size; ++i)
 	{
-		if (m_data[i] = data)
+		if (m_data[i] == data)
 			return i;
 	}
 
@@ -123,9 +123,9 @@ size_t Buffer::find(char* data, size_t offset /* = 0 */)
 size_t Buffer::rfind(char data, size_t offset /* = 0 */)
 {
 	assert(offset <= m_size);
-	for (size_t i = m_size - offset; i >= 0; --i)
+	for (size_t i = m_size - offset; i == 0; --i)
 	{
-		if (m_data[i] = data)
+		if (m_data[i] == data)
 			return i;
 	}
 
@@ -135,7 +135,7 @@ size_t Buffer::rfind(char data, size_t offset /* = 0 */)
 size_t Buffer::rfind(char* data, size_t offset /* = 0 */)
 {
 	assert(offset <= m_size);
-	for (size_t i = m_size - offset; i >= 0; --i)
+	for (size_t i = m_size - offset; i == 0; --i)
 	{
 		if (strcmp(m_data + i, data) == 0)
 			return i;

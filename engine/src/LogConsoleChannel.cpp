@@ -92,9 +92,9 @@ String LogConsoleChannel::getProperty(const String& name) const
 void LogConsoleChannel::initColors()
 {
 	m_colors[0]	= Console::DEFAULT; // unused
-	m_colors[LOG_LEVEL_FATAL]		= Console::LIGHTRED;
-	m_colors[LOG_LEVEL_CRITICAL]	= Console::LIGHTRED;
-	m_colors[LOG_LEVEL_ERROR]		= Console::LIGHTRED;
+	m_colors[LOG_LEVEL_FATAL]		= Console::RED;
+	m_colors[LOG_LEVEL_CRITICAL]	= Console::RED;
+	m_colors[LOG_LEVEL_ERROR]		= Console::RED;
 	m_colors[LOG_LEVEL_WARNING]		= Console::YELLOW;
 	m_colors[LOG_LEVEL_NOTICE]		= Console::DEFAULT;
 	m_colors[LOG_LEVEL_INFORMATION] = Console::DEFAULT;

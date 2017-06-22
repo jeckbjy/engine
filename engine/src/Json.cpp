@@ -636,6 +636,8 @@ void JsonWriter::writeHuman(String& doc, const Variant& value)
 		break;
 	case Variant::VAR_OBJ:
 		break;
+    case Variant::VAR_ANY:
+        break;
 	}
 }
 

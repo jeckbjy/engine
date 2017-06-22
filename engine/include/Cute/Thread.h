@@ -17,7 +17,6 @@ typedef DWORD			thread_id;
 typedef pid_t			thread_id;
 #elif (CUTE_OS == CUTE_OS_MAC_OS_X)
 typedef mach_port_t		thread_id;
-//typedef pthread_t		thread_id;
 #else
 typedef pthread_t		thread_id;
 #endif
@@ -35,7 +34,7 @@ typedef pthread_t		thread_id;
 #	define __API
 #endif
 
-#ifdef CUTE_OS_FAMILY_UNIX
+#ifdef CUTE_OS_FAMILY_POSIX
 #	define THREAD_PRIORITY_LOWEST			0
 #	define THREAD_PRIORITY_BELOW_NORMAL		1
 #	define THREAD_PRIORITY_NORMAL			2
@@ -139,6 +138,9 @@ private:
 	int					m_cpu;
 	String		        m_name;
 	ThreadLocalStorage* m_pTLS;
+#if defined(CUTE_OS_FAMILY_POSIX)
+    Event               m_done;
+#endif
 
 	friend class ThreadLocalStorage;
 	friend class PooledThread;

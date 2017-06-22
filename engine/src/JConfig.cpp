@@ -207,7 +207,6 @@ bool JConfigReader::readNumber(Variant& value)
 
 bool JConfigReader::readIP(Variant& value)
 {
-	bool isOverflow = false;
 	int dot = 0; // 点的个数，必须是192.168.1.1
 	Location ptr = m_cur;
 	char ch;

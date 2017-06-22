@@ -56,7 +56,7 @@ class CUTE_CORE_API Window : public Object
 	DECLARE_RTTI(Window, Object, OID_ANY);
 public:
 	Window(window_t hwnd);
-	Window(Window* parent, const String& title = "", size_t width = 1024, size_t height = 768, long style = WF_DEFAULT);
+	Window(Window* parent, const String& title = "", size_t width = 1024, size_t height = 768, uint32 style = WF_DEFAULT);
 	virtual ~Window();
 
 	void show(bool showFlag = true);

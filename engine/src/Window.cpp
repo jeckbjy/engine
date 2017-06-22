@@ -10,7 +10,7 @@ Window::Window(window_t hwnd)
 	//fillRect();
 }
 
-Window::Window(Window* parent, const String& title /* = "" */, size_t width, size_t height, long flags /* = 0 */)
+Window::Window(Window* parent, const String& title /* = "" */, size_t width, size_t height, uint32 flags /* = 0 */)
 	: m_handle((window_t)INVALID_HANDLE_VALUE)
 	, m_flags(flags)
 {

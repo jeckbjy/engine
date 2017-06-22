@@ -73,7 +73,7 @@ void CUTE_CORE_API sock_listen(socket_t sock, int backlog);
 int CUTE_CORE_API sock_close(socket_t sock);
 int CUTE_CORE_API sock_recv(socket_t sock, void* buff, int size, int flags = 0);
 int CUTE_CORE_API sock_send(socket_t sock, const void* buff, int size, int flags = 0);
-int CUTE_CORE_API sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, int fromlen);
+int CUTE_CORE_API sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen);
 int CUTE_CORE_API sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen);
 int CUTE_CORE_API sock_connect(socket_t sock, const struct sockaddr* addr, int len);
 int CUTE_CORE_API sock_ioctl(socket_t sock, ioctl_req_t request, void* arg);

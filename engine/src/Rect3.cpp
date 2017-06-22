@@ -28,7 +28,7 @@ void Rect3::getNearestPoint(const Ray& ray, Vector3 nearestPoints[2], float& dis
 	const Vector3& org = ray.getOrigin();
 	const Vector3& dir = ray.getDirection();
 
-	bool foundNearest = false;
+//	bool foundNearest = false;
 	float t = 0.0f;
 
 	bool result = intersects(ray, &t);

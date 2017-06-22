@@ -77,7 +77,7 @@ void BufferList::split(BufferList& other)
 	if (!m_head)
 		return;
 
-	node_t* head = m_curr;
+//	node_t* head = m_curr;
 	node_t* tail = m_head->prev;
 
 	// 分拆成两个
@@ -374,7 +374,7 @@ bool BufferList::recv(socket_t sock)
 		}
 
 		// 写入
-		ret = sock_recv(sock, buff, size);
+		ret = sock_recv(sock, buff, (int)size);
 		if (ret < 0)
 		{
 			result = false;
@@ -401,7 +401,7 @@ bool BufferList::send(socket_t sock)
 	{
 		buf = m_curr->data + m_offs;
 		len = m_curr->size - m_offs;
-		int ret = sock_send(sock, buf, len);
+		int ret = sock_send(sock, buf, (int)len);
 		if (ret < 0)
 			return false;
 
@@ -436,7 +436,7 @@ size_t BufferList::find(char data, size_t offset /* = 0 */)
 	{
 		for (size_t i = offs; i < node->size; ++i)
 		{
-			if (*(node->data + i) = data)
+			if (*(node->data + i) == data)
 				return (cpos + i);
 		}
 
@@ -500,7 +500,7 @@ size_t BufferList::rfind(char data, size_t offset /* = 0 */)
 	// 逆向遍历
 	do
 	{
-		for (size_t i = offs - 1; i >= 0; --i)
+		for (size_t i = offs - 1; i == 0; --i)
 		{
 			if (*(node->data + i) == data)
 				return (cpos + i);
@@ -533,7 +533,7 @@ size_t BufferList::rfind(char* data, size_t offset /* = 0 */)
 
 	do
 	{
-		for (size_t i = offs - 1; i >= 0; --i)
+		for (size_t i = offs - 1; i == 0; --i)
 		{
 			if (compare(node, i, data, src_len))
 				return (cpos + i);
@@ -715,7 +715,7 @@ bool BufferList::compare(node_t* node, size_t offs, const char* data, size_t len
 
 BufferList::buff_t* BufferList::new_buff(size_t length, const char* data)
 {
-	if (length == NULL)
+	if (length == 0)
 		return NULL;
 
 	char* chunk = (char*)malloc(sizeof(buff_t) + length);
@@ -994,7 +994,7 @@ uint BufferList::write7Bit(uint64_t data)
 {
 	char buff[10];
 	//高位标识：0表示结尾,1表示后边还有数据
-	size_t count = 0;
+	uint count = 0;
 	while (data > 0x7F)
 	{
 		buff[count++] = ((uint8_t)(data)& 0x7F) | 0x80;

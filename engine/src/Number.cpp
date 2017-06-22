@@ -782,7 +782,7 @@ void Number::append(String& str, const void* ptr)
 {
 	char buffer[24];
 #if defined(CUTE_BIT64)
-	std::sprintf(buffer, "%016" I64_FMT "X", (unsigned long)ptr);
+	std::sprintf(buffer, "%016lX", (unsigned long)ptr);
 #else
 	std::sprintf(buffer, "%08lX", (unsigned long)ptr);
 #endif
