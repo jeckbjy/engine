@@ -77,19 +77,19 @@ void DoubleArrayTrie::resize(size_t capacity)
 //
 //}
 
+struct SortCmp
+{
+    int depth;
+    SortCmp(int depth) :depth(depth){}
+    
+    bool operator () (const char* lhs, const char* rhs) const
+    {
+        return (uchar)(lhs[depth]) < (uchar)(rhs[depth]);
+    }
+};
+
 void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 {
-	struct SortCmp
-	{
-		int depth;
-		SortCmp(int depth) :depth(depth){}
-
-		bool operator () (const key_t* lhs, const key_t* rhs) const
-		{
-			return (uchar)(lhs[depth]) < (uchar)(rhs[depth]);
-		}
-	};
-
 	clear();
 
 	// 要求必须是有序
