@@ -316,26 +316,26 @@ bool strToInt(const char* pStr, I& result, short base, char thSep = ',')
 /// Pads the string with prefix space and postfix 0.
 /// Alternative prefix (e.g. zero instead of space) can be supplied by caller.
 /// Used only internally.
-void pad(std::string& str, int precision, int width, char prefix = ' ', char decSep = '.')
+void pad(String& str, int precision, int width, char prefix = ' ', char decSep = '.')
 {
 	// these cases should never happen, if they do, it's a library bug
 	cute_assert_dbg(precision > 0);
 	cute_assert_dbg(str.length());
 
-	std::string::size_type decSepPos = str.find(decSep);
-	if (decSepPos == std::string::npos)
+	size_t decSepPos = str.find(decSep);
+	if (decSepPos == String::npos)
 	{
 		str.append(1, '.');
 		decSepPos = str.size() - 1;
 	}
 
-	std::string::size_type frac = str.length() - decSepPos - 1;
+	size_t frac = str.length() - decSepPos - 1;
 
-	std::string::size_type ePos = str.find_first_of("eE");
-	std::auto_ptr<std::string> eStr;
-	if (ePos != std::string::npos)
+	size_t ePos = str.find_first_of("eE");
+	std::auto_ptr<String> eStr;
+	if (ePos != String::npos)
 	{
-		eStr.reset(new std::string(str.substr(ePos, std::string::npos)));
+		eStr.reset(new String(str.substr(ePos, std::string::npos)));
 		frac -= eStr->length();
 		str = str.substr(0, str.length() - eStr->length());
 	}
@@ -348,7 +348,7 @@ void pad(std::string& str, int precision, int width, char prefix = ' ', char dec
 		}
 		else if ((frac > precision) && (decSepPos != std::string::npos))
 		{
-			int pos = decSepPos + 1 + precision;
+			int pos = (int)decSepPos + 1 + precision;
 			if (str[pos] >= '5') // we must round up
 			{
 				char carry = 0;
@@ -479,7 +479,7 @@ void floatToStr(String& str, double value, bool single, int precision, int width
 		decSep = '.';
 
 	if (decSep != '.')
-		replaceInPlace(str, '.', decSep);
+        str.replace('.', decSep);
 
 	if (thSep)
 		insertThousandSep(str, thSep, decSep);
@@ -498,10 +498,10 @@ bool strToFloat(const String& str, double& result, char decSep, char thSep)
 
 	// 会有一次拷贝?
 	String tmp(str);
-	trimInPlace(tmp);
-	removeInPlace(tmp, thSep);
-	replaceInPlace(tmp, decSep, '.');
-	removeInPlace(tmp, 'f');
+    tmp.trim();
+    tmp.remove(thSep);
+    tmp.replace(decSep, '.');
+    tmp.remove('f');
 
 	using namespace double_conversion;
 	int processed;
@@ -933,33 +933,33 @@ bool Number::tryParseBool(const String& s, bool& value)
 		return true;
 	}
 
-	if (icompare(s, "true") == 0)
+	if (s == "true")
 	{
 		value = true;
 		return true;
 	}
-	else if (icompare(s, "yes") == 0)
+	else if (s == "yes")
 	{
 		value = true;
 		return true;
 	}
-	else if (icompare(s, "on") == 0)
+	else if (s == "on")
 	{
 		value = true;
 		return true;
 	}
 
-	if (icompare(s, "false") == 0)
+	if (s == "false")
 	{
 		value = false;
 		return true;
 	}
-	else if (icompare(s, "no") == 0)
+	else if (s == "no")
 	{
 		value = false;
 		return true;
 	}
-	else if (icompare(s, "off") == 0)
+	else if (s == "off")
 	{
 		value = false;
 		return true;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Cute/Foundation.h"
+#include "Cute/Platform.h"
 
 CUTE_NS_BEGIN
 
@@ -24,7 +24,7 @@ public:
 	{
 		ACP_CONTROL = 0x0001,
 		ACP_SPACE	= 0x0002,
-		ACP_PUNCT	= 0x0004,
+		ACP_PUNCT	= 0x0004,   // 标点符号
 		ACP_DIGIT	= 0x0008,
 		ACP_HEXDIGIT= 0x0010,
 		ACP_ALPHA	= 0x0020,
@@ -66,6 +66,10 @@ public:
 	static int toUpper(int ch);
 	static int toDigit(int ch);
 	static int toAlpha(int ch);
+
+	static int compare(int ch1, int ch2);
+    static int icompare(int ch1, int ch2);
+	static bool iequals(int ch1, int ch2);
 
 private:
 	static const int CHARACTER_PROPERTIES[128];
@@ -169,6 +173,26 @@ inline int Ascii::toAlpha(int ch)
 		return ch - 'a';
 	else
 		return ch - 'A';
+}
+
+inline int Ascii::compare(int ch1, int ch2)
+{
+	if(ch1 == ch2)
+		return 0;
+	else if(ch1 < ch2)
+		return -1;
+	else
+		return 1;
+}
+
+inline int Ascii::icompare(int ch1, int ch2)
+{
+	return ch1 != ch2 ? compare(toUpper(ch1), toUpper(ch2)) : 0;
+}
+
+inline bool Ascii::iequals(int ch1, int ch2)
+{
+	return ch1 == ch2 || toUpper(ch1) == toUpper(ch2);
 }
 
 CUTE_NS_END

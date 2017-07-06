@@ -1,7 +1,140 @@
 //! FileSystem
 #include "Cute/FileInfo.h"
+#include "FileHelper.h"
 
 CUTE_NS_BEGIN
+
+FileInfo::FileInfo()
+{
+    memset(&m_data, 0, sizeof(m_data));
+}
+
+FileInfo::FileInfo(const String& path)
+{
+    memset(&m_data, 0, sizeof(m_data));
+    this->assign(path);
+}
+
+FileInfo::~FileInfo()
+{
+}
+
+bool FileInfo::assign(const String &path)
+{
+    m_path = path;
+    return FileHelper::getFileData(m_path, m_data);
+}
+
+bool FileInfo::exists() const
+{
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+    return m_data.dwFileAttributes != INVALID_FILE_ATTRIBUTES;
+#else
+    return m_data.st_mode != 0;
+#endif
+}
+
+bool FileInfo::isFile() const
+{
+    return FileHelper::isFile(getAttr());
+}
+
+bool FileInfo::isDirectory() const
+{
+    return FileHelper::isDirectory(getAttr());
+}
+
+bool FileInfo::isDevice() const
+{
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+    return FileHelper::isDevice(m_path);
+#else
+    return FileHelper::isDevice(getAttr());
+#endif
+}
+
+bool FileInfo::isHidden() const
+{
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+    return FileHelper::isHidden(getAttr());
+#else
+    return FileHelper::isHidden(m_path);
+#endif
+}
+
+bool FileInfo::isLink() const
+{
+    return FileHelper::isLink(getAttr());
+}
+
+bool FileInfo::isOnCDRomDrive() const
+{
+    return true;
+}
+
+bool FileInfo::isOnHardDisk() const
+{
+    return true;
+}
+
+bool FileInfo::isOnRemovableDrive() const
+{
+    return true;
+}
+
+bool FileInfo::isReadable() const
+{
+    return FileHelper::isReadable(getAttr());
+}
+
+bool FileInfo::isWritable() const
+{
+    return FileHelper::isWritable(getAttr());
+}
+
+bool FileInfo::isExecutable() const
+{
+    return FileHelper::isExecutable(getAttr());
+}
+
+int64 FileInfo::getCreationTime() const
+{
+    return FileHelper::getCreationTime(m_data);
+}
+
+int64 FileInfo::getLastAccessTime() const
+{
+    return FileHelper::getLastAccessTime(m_data);
+}
+
+int64 FileInfo::getLastModificationTime() const
+{
+    return FileHelper::getLastAccessTime(m_data);
+}
+
+int64 FileInfo::getSize() const
+{
+    return FileHelper::getSize(m_data);
+}
+
+int64 FileInfo::getTotalSpace() const
+{
+    return FileHelper::getTotalSpace(m_path);
+}
+
+int64 FileInfo::getUsableSpace() const
+{
+    return FileHelper::getUsableSpace(m_path);
+}
+
+int64 FileInfo::getFreeSpace() const
+{
+    return FileHelper::getFreeSpace(m_path);
+}
+
+//bool FileInfo::rename(const String& dest) const
+//{
+//}
 
 //#ifdef CUTE_OS_FAMILY_WINDOWS
 //#undef GetFileAttributes

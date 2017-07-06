@@ -1,12 +1,12 @@
 // module SharedLibrary
 #include "Cute/SharedLibrary.h"
 #include "Cute/Unicode.h"
-#include "Cute/Path.h"
+#include "Cute/Paths.h"
 
-#ifdef CUTE_OS_FAMILY_WINDOWS
+#if defined(CUTE_OS_FAMILY_WINDOWS)
 #	define DYNLIB_UNLOAD(a)			FreeLibrary(a)
 #	define DYNLIB_GETSYM(a, b)		GetProcAddress(a,b)
-#elif (CUTE_OS == CUTE_OS_HPUX)
+#elif defined(CUTE_OS_HPUX)
 #	define DYNLIB_UNLOAD(a)			shl_unload(a)
 #	define DYNLIB_GETSYM(a, b)		shl_findsym(a,b)
 #else
@@ -15,7 +15,7 @@
 #	define DYNLIB_GETSYM( a, b)		dlsym( a, b )
 #endif
 
-#if CUTE_OS == CUTE_OS_CYGWIN && !defined(RTLD_LOCAL)
+#if defined(CUTE_OS_CYGWIN) && !defined(RTLD_LOCAL)
 #define RTLD_LOCAL 0
 #endif
 
@@ -58,12 +58,12 @@ void SharedLibrary::load(const String& path, int flags /* = SHLIB_DEFAULT */)
 #if defined (CUTE_OS_FAMILY_WINDOWS)
 	// 需要转换成Unicode字符
 	DWORD readFlag(0);
-	Path p(path);
-	if (p.isAbsolute())
+//	Path p(path);
+    if (Paths::isAbsolute(path))
 		flags |= LOAD_WITH_ALTERED_SEARCH_PATH;
 	m_handle = LoadLibraryExA(path.c_str(), 0, flags);
 
-#elif (CUTE_OS == CUTE_OS_HPUX)
+#elif defined(CUTE_OS_HPUX)
 	m_handle = shl_load(path.c_str(), BIND_DEFERRED, 0);
 #else
 	int realFlags = RTLD_LAZY;
@@ -75,7 +75,7 @@ void SharedLibrary::load(const String& path, int flags /* = SHLIB_DEFAULT */)
 	if (!m_handle)
 	{
 		const char* err = dlerror();
-		throw LibraryLoadException(err ? std::string(err) : path);
+		throw LibraryLoadException(err ? String(err) : path);
 	}
 #endif
 
@@ -122,7 +122,7 @@ const String& SharedLibrary::prefix()
 {
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 	static const String pre = "";
-#elif (CUTE_OS == CUTE_OS_CYGWIN)
+#elif defined(CUTE_OS_CYGWIN)
 	static const String pre = "cyg";
 #else
 	static const String pre = "lib";
@@ -133,11 +133,11 @@ const String& SharedLibrary::prefix()
 
 const String& SharedLibrary::suffix()
 {
-#if defined(CUTE_OS_FAMILY_WINDOWS) || (CUTE_OS == CUTE_OS_CYGWIN)
+#if defined(CUTE_OS_FAMILY_WINDOWS) || defined(CUTE_OS_CYGWIN)
 	static const String suf = ".dll";
-#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif defined(CUTE_OS_MAC)
 	static const String suf = ".dylib";
-#elif (CUTE_OS == CUTE_OS_HPUX)
+#elif defined(CUTE_OS_HPUX)
 	static const String suf = ".sl";
 #else
 	static const String suf = ".so";

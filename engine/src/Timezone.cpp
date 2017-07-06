@@ -5,7 +5,7 @@
 
 CUTE_NS_BEGIN
 
-#ifdef CUTE_OS_FAMILY_UNIX
+#ifdef CUTE_OS_FAMILY_POSIX
 class TZInfo
 {
 public:
@@ -22,7 +22,7 @@ public:
 		struct std::tm t;
 		gmtime_r(&now, &t);
 		std::time_t utc = std::mktime(&t);
-		return now - utc;
+		return (int)(now - utc);
 #elif defined(__CYGWIN__)
 		tzset();
 		return -_timezone;

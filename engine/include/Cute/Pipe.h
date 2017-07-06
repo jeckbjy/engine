@@ -18,8 +18,8 @@ public:
 	Pipe();
 	~Pipe();
 
-	int write(const void* buffer, int length);
-	int read(void* buffer, int length);
+	long write(const void* buffer, int length);
+	long read(void* buffer, int length);
 	void close(CloseMode mode = CLOSE_BOTH);
 
 	inline handle_t getReader() const { return m_reader; }

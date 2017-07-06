@@ -105,8 +105,8 @@ void IOLoop::once(long msec)
 	IOPoll* poll = (IOPoll*)m_handle;
 	static const int kEventMax = 128;
 	event_t events[kEventMax];
-	int nums = poll->wait(events, kEventMax, msec);
-	for (int i = 0; i < nums; ++i)
+	long nums = poll->wait(events, kEventMax, (int)msec);
+	for (long i = 0; i < nums; ++i)
 	{
 		event_t& ev = events[i];
 		void* udata = ev_get_udata(ev);

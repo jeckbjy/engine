@@ -61,7 +61,7 @@ protected:
 };
 
 template<class T>
-class SafeRef : public RefBase<Atomic>
+class SafeRef : public RefBase<Atomic32>
 {
 public:
 	void decRef() const

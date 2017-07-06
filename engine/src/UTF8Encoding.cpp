@@ -48,7 +48,7 @@ bool UTF8Encoding::isA(const String& encodingName) const
 {
 	for (const char** name = m_names; *name; ++name)
 	{
-		if (icompare(encodingName, *name) == 0)
+		if (encodingName.iequals(*name))
 			return true;
 	}
 	return false;

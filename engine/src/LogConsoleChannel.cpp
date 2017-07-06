@@ -52,13 +52,13 @@ void LogConsoleChannel::setProperty(const String& name, const String& value)
 {
 	if (name == "enableColors")
 	{
-		m_enableColors = icompare(value, "true") == 0;
+		m_enableColors = (value == "true");
 	}
 	else
 	{
 		for (int i = 1; i < LOG_LEVEL_MAX; ++i)
 		{
-			if (icompare(name, LOG_COLOR_NAME[i]) == 0)
+			if (name == LOG_COLOR_NAME[i])
 			{
 				m_colors[i] = Console::parseColor(value);
 				return;
@@ -79,7 +79,7 @@ String LogConsoleChannel::getProperty(const String& name) const
 	{
 		for (int i = 1; i < LOG_LEVEL_MAX; ++i)
 		{
-			if (icompare(name, LOG_COLOR_NAME[i]) == 0)
+			if (name == LOG_COLOR_NAME[i])
 			{
 				return Console::formatColor((Console::Color)m_colors[i]);
 			}

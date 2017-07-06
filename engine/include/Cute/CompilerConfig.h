@@ -1,3 +1,4 @@
+//! API
 #pragma once
 
 // Windows CE has no locale support
@@ -144,3 +145,4 @@
 // Define to prevent changing the suffix for shared libraries
 // to "d.so", "d.dll", etc. for _DEBUG builds in Cute::SharedLibrary.
 // #define CUTE_NO_SHARED_LIBRARY_DEBUG_SUFFIX
+

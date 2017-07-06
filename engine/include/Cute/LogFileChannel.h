@@ -143,15 +143,15 @@ class ArchiveStrategy;
 class CUTE_CORE_API LogFileChannel : public LogChannel
 {
 public:
-	static const std::string PROP_PATH;
-	static const std::string PROP_ROTATION;
-	static const std::string PROP_ARCHIVE;
-	static const std::string PROP_TIMES;
-	static const std::string PROP_COMPRESS;
-	static const std::string PROP_PURGEAGE;
-	static const std::string PROP_PURGECOUNT;
-	static const std::string PROP_FLUSH;
-	static const std::string PROP_ROTATEONOPEN;
+	static const String PROP_PATH;
+	static const String PROP_ROTATION;
+	static const String PROP_ARCHIVE;
+	static const String PROP_TIMES;
+	static const String PROP_COMPRESS;
+	static const String PROP_PURGEAGE;
+	static const String PROP_PURGECOUNT;
+	static const String PROP_FLUSH;
+	static const String PROP_ROTATEONOPEN;
 
 public:
 	LogFileChannel(const String& path = "");
@@ -168,20 +168,20 @@ public:
 	const String& path() const;
 
 protected:
-	void setRotation(const std::string& rotation);
-	void setArchive(const std::string& archive);
-	void setCompress(const std::string& compress);
-	void setPurgeAge(const std::string& age);
-	void setPurgeCount(const std::string& count);
-	void setFlush(const std::string& flush);
-	void setRotateOnOpen(const std::string& rotateOnOpen);
+	void setRotation(const String& rotation);
+	void setArchive(const String& archive);
+	void setCompress(const String& compress);
+	void setPurgeAge(const String& age);
+	void setPurgeCount(const String& count);
+	void setFlush(const String& flush);
+	void setRotateOnOpen(const String& rotateOnOpen);
 	void purge();
 
 private:
-	bool	 setNoPurge(const std::string& value);
-	int		 extractDigit(const std::string& value, std::string::const_iterator* nextToDigit = NULL) const;
+	bool	 setNoPurge(const String& value);
+	int		 extractDigit(const String& value, String::const_iterator* nextToDigit = NULL) const;
 	void	 setPurgeStrategy(PurgeStrategy* strategy);
-	uint64_t extractFactor(const std::string& value, std::string::const_iterator start) const;
+	uint64_t extractFactor(const String& value, String::const_iterator start) const;
 
 private:
 	String			m_path;

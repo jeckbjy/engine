@@ -26,6 +26,9 @@ public:
 	{
 		MAX_ADDRESS_LENGTH = sizeof(in6_addr)
 	};
+    
+    /** Populates a list of all the IP addresses that this machine is using. */
+    static void findAllAddresses(Vector<IPAddress>& results, bool includeIPv6 = false);
 
 	IPAddress();
 	IPAddress(const String& addr);
@@ -53,7 +56,14 @@ public:
 	IPAddress operator ~ () const;
 
 private:
-
+    union ByteUnion
+    {
+        uint16 combined;
+        uint8  split[2];
+    };
+    
+    uint8 m_address[16];
+    bool  m_isIPv6;
 };
 
 CUTE_NS_END

@@ -1,6 +1,7 @@
+//! API
 #pragma once
 #include "Cute/Platform.h"
-#include "Cute/Config.h"
+#include "Cute/CompilerConfig.h"
 #include "Cute/Types.h"
 #include "Cute/API.h"
 
@@ -67,24 +68,6 @@ typedef unsigned long	ioctl_req_t;
 #	else
 typedef int			ioctl_req_t;
 #	endif
-#endif
-
-//////////////////////////////////////////////////////////////////////////
-// Windows Utf8 support
-//////////////////////////////////////////////////////////////////////////
-#if defined(CUTE_OS_FAMILY_WINDOWS)
-#ifdef CUTE_WIN32_UTF8
-typedef WCHAR		TCHAR;
-typedef WCHAR*		LPTSTR;
-typedef WString		TString;
-#else
-typedef CHAR		TCHAR;
-typedef CHAR*		LPTSTR;
-typedef String		TString;
-#endif
-#else
-typedef char		TCHAR;
-typedef String		TString;
 #endif
 
 #ifdef CUTE_OS_FAMILY_WINDOWS

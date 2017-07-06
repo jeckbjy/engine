@@ -1,6 +1,6 @@
 // module FileSystem
 #include "Cute/Path.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 #include "Cute/Exception.h"
 #include "Cute/StringTokenizer.h"
 #include "Cute/String.h"
@@ -593,7 +593,7 @@ String Path::configHome()
 		result.append("\\");
 	return result;
 
-#elif defined(CUTE_VXWORKS)
+#elif defined(CUTE_OS_VXWORKS)
 	return home();
 
 #else
@@ -601,7 +601,7 @@ String Path::configHome()
 	String path = home();
 	String::size_type n = path.size();
 	if (n > 0 && path[n - 1] == '/')
-#if CUTE_OS == CUTE_OS_MAC_OS_X
+#if defined(CUTE_OS_MAC)
 		path.append("Library/Preferences/");
 #else
 		path.append(".config/");
@@ -631,13 +631,13 @@ String Path::dataHome()
 		result.append("\\");
 	return result;
 
-#elif defined(CUTE_VXWORKS)
+#elif defined(CUTE_OS_VXWORKS)
 	return home();
 #else
 	String path = home();
 	String::size_type n = path.size();
 	if (n > 0 && path[n - 1] == '/')
-#if CUTE_OS == CUTE_OS_MAC_OS_X
+#if defined(CUTE_OS_MAC)
 		path.append("Library/Application Support/");
 #else
 		path.append(".local/share/");
@@ -652,14 +652,14 @@ String Path::tempHome()
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 	return temp();
 
-#elif defined(CUTE_VXWORKS)
+#elif defined(CUTE_OS_VXWORKS)
 	return temp();
 
 #else
 	String path = home();
 	String::size_type n = path.size();
 	if (n > 0 && path[n - 1] == '/')
-#if CUTE_OS == CUTE_OS_MAC_OS_X
+#if defined(CUTE_OS_MAC)
 		path.append("Library/Caches/");
 #else
 		path.append(".local/tmp/");
@@ -682,7 +682,7 @@ String Path::cacheHome()
 	String path = home();
 	String::size_type n = path.size();
 	if (n > 0 && path[n - 1] == '/')
-#if CUTE_OS == CUTE_OS_MAC_OS_X
+#if  defined(CUTE_OS_MAC)
 		path.append("Library/Caches/");
 #else
 		path.append(".cache/");
@@ -752,7 +752,7 @@ String Path::config()
 
 	String path;
 
-#if CUTE_OS == CUTE_OS_MAC_OS_X
+#if defined(CUTE_OS_MAC)
 	path = "/Library/Preferences/";
 #else
 	path = "/etc/";
@@ -870,7 +870,7 @@ bool Path::find(StringVec::const_iterator it, StringVec::const_iterator end, con
 #endif
 		p.makeDirectory();
 		p.resolve(Path(name));
-		if (File::exists(p.toString()))
+		if (Files::exists(p.toString()))
 		{
 			path = p;
 			return true;

@@ -1,8 +1,6 @@
 //! Logging
 #include "Cute/LogFormatter.h"
 #include "Cute/Number.h"
-#include "Cute/DateTimeFormat.h"
-#include "Cute/DateTimeFormatter.h"
 #include "Cute/DateTime.h"
 #include "Cute/Timestamp.h"
 #include "Cute/Timezone.h"
@@ -58,10 +56,10 @@ void LogFormatter::format(const LogMessage& msg)
 		case 'N': text.append(Environment::nodeName()); break;
 		case 'U': text.append(msg.getFile() ? msg.getFile() : ""); break;
 		case 'u': Number::append(text, msg.getLine()); break;
-		case 'w': text.append(DateTimeFormat::WEEKDAY_NAMES[dateTime.dayOfWeek()], 0, 3); break;
-		case 'W': text.append(DateTimeFormat::WEEKDAY_NAMES[dateTime.dayOfWeek()]); break;
-		case 'b': text.append(DateTimeFormat::MONTH_NAMES[dateTime.month() - 1], 0, 3); break;
-		case 'B': text.append(DateTimeFormat::MONTH_NAMES[dateTime.month() - 1]); break;
+		case 'w': text.append(DateTime::WEEKDAY_NAMES[dateTime.dayOfWeek()], 0, 3); break;
+		case 'W': text.append(DateTime::WEEKDAY_NAMES[dateTime.dayOfWeek()]); break;
+		case 'b': text.append(DateTime::MONTH_NAMES[dateTime.month() - 1], 0, 3); break;
+		case 'B': text.append(DateTime::MONTH_NAMES[dateTime.month() - 1]); break;
 		case 'd': Number::append0(text, dateTime.day(), 2); break;
 		case 'e': Number::append(text, dateTime.day()); break;
 		case 'f': Number::append(text, dateTime.day(), 2); break;
@@ -79,8 +77,8 @@ void LogFormatter::format(const LogMessage& msg)
 		case 'i': Number::append0(text, dateTime.millisecond(), 3); break;
 		case 'c': Number::append(text, dateTime.millisecond() / 100); break;
 		case 'F': Number::append0(text, dateTime.millisecond() * 1000 + dateTime.microsecond(), 6); break;
-		case 'z': text.append(DateTimeFormatter::tzdISO(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
-		case 'Z': text.append(DateTimeFormatter::tzdRFC(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
+        case 'z': DateTime::tzdISO(text, localTime ? Timezone::tzd() : DateTime::UTC_ZONE_DIFF); break;
+		case 'Z': DateTime::tzdRFC(text, localTime ? Timezone::tzd() : DateTime::UTC_ZONE_DIFF); break;
 		case 'E': Number::append(text, (int64)msg.getTime().epochTime()); break;
 		case 'v':
 			if (ip->length > msg.getSource().length())	//append spaces
@@ -226,7 +224,7 @@ void LogFormatter::parsePriorityNames()
 	}
 }
 
-const std::string& LogFormatter::getPriorityName(int prio)
+const String& LogFormatter::getPriorityName(int prio)
 {
 	cute_assert(1 <= prio && prio <= 8);
 	return m_priorities[prio];

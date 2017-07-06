@@ -103,25 +103,15 @@ namespace{
 
 int Logger::parseLevel(const String& level)
 {
-	if (icompare(level, "none") == 0)
-		return 0;
-	else if (icompare(level, "fatal") == 0)
-		return LOG_LEVEL_FATAL;
-	else if (icompare(level, "critical") == 0)
-		return LOG_LEVEL_CRITICAL;
-	else if (icompare(level, "error") == 0)
-		return LOG_LEVEL_ERROR;
-	else if (icompare(level, "warning") == 0)
-		return LOG_LEVEL_WARNING;
-	else if (icompare(level, "notice") == 0)
-		return LOG_LEVEL_NOTICE;
-	else if (icompare(level, "information") == 0)
-		return LOG_LEVEL_INFORMATION;
-	else if (icompare(level, "debug") == 0)
-		return LOG_LEVEL_DEBUG;
-	else if (icompare(level, "trace") == 0)
-		return LOG_LEVEL_TRACE;
-	else
+    const char* level_name[LOG_LEVEL_MAX] = { "none", "fatal", "critical", "error", "warning", "notice", "information", "debug", "trace"};
+    for(int i = 0; i < LOG_LEVEL_MAX; ++i)
+    {
+        if(level.iequals(level_name[i]))
+        {
+            return i;
+        }
+    }
+    // not find,parse by integer
 	{
 		int numLevel;
 		if (Number::tryParse(level, numLevel))

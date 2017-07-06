@@ -30,12 +30,12 @@ public:
 	void update(const String& data);
 	void update(char data);
 
-	uint32_t checksum() const;
+	uint32 checksum() const;
 	Type type() const;
 
 private:
-	Type     m_type;
-	uint32_t m_value;
+	Type m_type;
+	uint32 m_value;
 };
 
 inline void Checksum::update(const String& data)

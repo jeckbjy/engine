@@ -1,9 +1,6 @@
 //! Logging
 #include "Cute/LogRotateStrategy.h"
 #include "Cute/StringTokenizer.h"
-#include "Cute/DateTimeFormatter.h"
-#include "Cute/DateTimeParser.h"
-#include "Cute/DateTimeFormat.h"
 #include "Cute/Exception.h"
 #include "Cute/Number.h"
 #include "Cute/FileStream.h"
@@ -44,8 +41,7 @@ RotateAtTimeStrategy::RotateAtTimeStrategy(const String& rtime, bool isLocal)
 	{
 	case 3: // day,hh:mm
 	{
-		String::const_iterator it = timestr[index].begin();
-		m_day = DateTimeParser::parseDayOfWeek(it, timestr[index].end());
+        DateTime::parseDayOfWeek(m_day, timestr[index]);
 		++index;
 	}
 	case 2: // hh:mm
@@ -83,7 +79,7 @@ void RotateAtTimeStrategy::getNextRollover()
 		m_threshold += tsp;
 	} while (!(m_threshold.minute() == m_minute &&
 		(-1 == m_hour || m_threshold.hour() == m_hour) &&
-		(-1 == m_day || m_threshold.dayOfWeek() == m_day)));
+		(-1 == m_day  || m_threshold.dayOfWeek() == m_day)));
 	// round to :00.0 seconds
 	m_threshold.assign(m_threshold.year(), m_threshold.month(), m_threshold.day(), m_threshold.hour(), m_threshold.minute());
 }
@@ -110,14 +106,19 @@ bool RotateByIntervalStrategy::mustRotate(LogFile* pFile)
 	{
 		if (pFile->size() != 0)
 		{
-			std::string tag;
+			String tag;
 			FileStream fs(pFile->path());
 			fs.readLine(tag);
 			if (tag.compare(0, ROTATE_TEXT.size(), ROTATE_TEXT) == 0)
 			{
-				std::string timestamp(tag, ROTATE_TEXT.size());
-				int tzd;
-				m_lastRotate = DateTimeParser::parse(DateTimeFormat::RFC1036_FORMAT, timestamp, tzd).timestamp();
+				String timestamp(tag, ROTATE_TEXT.size());
+                DateTime dt;
+                if(DateTime::parse(dt, timestamp))
+                {
+                    m_lastRotate = dt.timestamp();
+                }
+//				int tzd;
+//				m_lastRotate = DateTimeParser::parse(DateTimeFormat::RFC1036_FORMAT, timestamp, tzd).timestamp();
 			}
 			else
 			{
@@ -127,8 +128,10 @@ bool RotateByIntervalStrategy::mustRotate(LogFile* pFile)
 		else
 		{
 			m_lastRotate.update();
-			std::string tag(ROTATE_TEXT);
-			DateTimeFormatter::append(tag, m_lastRotate, DateTimeFormat::RFC1036_FORMAT);
+			String tag(ROTATE_TEXT);
+            DateTime dt(m_lastRotate);
+            DateTime::format(tag, dt, DateTime::RFC1036_FORMAT);
+//			DateTimeFormatter::append(tag, m_lastRotate, DateTimeFormat::RFC1036_FORMAT);
 			pFile->write(tag);
 		}
 	}

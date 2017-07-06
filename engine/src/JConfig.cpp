@@ -3,7 +3,7 @@
 #include "Cute/Exception.h"
 #include "Cute/Number.h"
 #include "Cute/Ascii.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 
 CUTE_NS_BEGIN
 
@@ -280,8 +280,8 @@ void JConfigReader::readString(Variant& value)
 
 		if (ch == 0)
 		{
-			break;
 			error("readKey:donnot match end char!!");
+            break;
 		}
 
 		// 进行转义
@@ -498,7 +498,7 @@ void JConfigReader::error(const String& info)
 Variant JConfig::load(const String& path)
 {
 	String data;
-	File::readAll(path, data);
+	Files::readAll(path, data);
 	return parse(data);
 }
 

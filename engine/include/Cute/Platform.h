@@ -1,141 +1,89 @@
-// module Core
+//! API
 #pragma once
 #include "Cute/API.h"
 
-//////////////////////////////////////////////////////////////////////////
-// 宏定义检测
-//////////////////////////////////////////////////////////////////////////
-///* ==== PLATFORM handles OS, operating environment, graphics API, and
-//CPU. This macro will be phased out in favor of platform adaptation
-//macros, policy decision macros, and top-level port definitions. ==== */
-//#define PLATFORM(FEATURE) (defined CUTE_PLATFORM_##FEATURE )
-//
-///* ==== Platform adaptation macros: these describe properties of the target environment. ==== */
-//
-///* OS() - underlying operating system; only to be used for mandated low-level services like
-//virtual memory, not to choose a GUI toolkit */
-//#define OS(FEATURE) (defined CUTE_OS_##FEATURE)
-//
-///* CPU() - the target CPU architecture */
-//#define CPU(FEATURE) (defined CUTE_CPU_##FEATURE)
-//
-///* HAVE() - specific system features (headers, functions or similar) that are present or not */
-//#define HAVE(FEATURE) (defined HAVE_##FEATURE)
-//
-///* COMPILER() - the compiler being used to build the project */
-//#define COMPILER(FEATURE) (defined CUTE_COMPILER_##FEATURE)
-//
-///* ==== Policy decision macros: these define policy choices for a particular port. ==== */
-//
-///* USE() - use a particular third-party library or optional OS service */
-//#define USE(FEATURE) (defined USE_##FEATURE)
-///* ENABLE() - turn on a specific feature of WebKit */
-//#define ENABLE(FEATURE) (defined ENABLE_##FEATURE)
-//
-//#define ENDIAN(FEATURE) (CUTE_BYTE_ORDER == CUTE_##FEATURE##_ENDIAN)
-
-//////////////////////////////////////////////////////////////////////////
-// Platform Identification
-//////////////////////////////////////////////////////////////////////////
-#define CUTE_OS_ANDROID	      0x0001
-#define CUTE_OS_LINUX         0x0002
-#define CUTE_OS_FREE_BSD      0x0003
-#define CUTE_OS_AIX           0x0004
-#define CUTE_OS_HPUX          0x0005
-#define CUTE_OS_TRU64         0x0006
-#define CUTE_OS_MAC_OS_X      0x0007
-#define CUTE_OS_NET_BSD       0x0008
-#define CUTE_OS_OPEN_BSD      0x0009
-#define CUTE_OS_IRIX          0x000a
-#define CUTE_OS_SOLARIS       0x000b
-#define CUTE_OS_QNX           0x000c
-#define CUTE_OS_VXWORKS       0x000d
-#define CUTE_OS_CYGWIN        0x000e
-#define CUTE_OS_NACL	      0x000f
-#define CUTE_OS_UNKNOWN_UNIX  0x00ff
-#define CUTE_OS_WINDOWS_NT    0x1001
-#define CUTE_OS_WINDOWS_RT    0x1002
-#define CUTE_OS_WINDOWS_CE    0x1003
-#define CUTE_OS_VMS           0x2001
-
-#if defined(__ANDROID__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX  1
-#	define CUTE_OS_FAMILY_LINUX 1
-#	define CUTE_OS CUTE_OS_ANDROID
-#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS_FAMILY_BSD	1
-#	define CUTE_OS CUTE_OS_FREE_BSD
-#elif defined(_AIX) || defined(__TOS_AIX__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_AIX
-#elif defined(hpux) || defined(_hpux) || defined(__hpux)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_HPUX
-#elif defined(__digital__) || defined(__osf__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_TRU64
-#elif defined(__NACL__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_NACL
-#elif defined(__APPLE__) || defined(__TOS_MACOS__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS_FAMILY_BSD	1
-#	define CUTE_OS CUTE_OS_MAC_OS_X
-#elif defined(__NetBSD__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS_FAMILY_BSD	1
-#	define CUTE_OS CUTE_OS_NET_BSD
-#elif defined(__OpenBSD__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS_FAMILY_BSD	1
-#	define CUTE_OS CUTE_OS_OPEN_BSD
-#elif defined(sgi) || defined(__sgi)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_IRIX
-#elif defined(sun) || defined(__sun)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_SOLARIS
-#elif defined(__QNX__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_QNX
-#elif defined(__CYGWIN__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_CYGWIN
-#elif defined(__VXWORKS__) || defined(__vxworks) || defined(CUTE_VXWORKS)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_VXWORKS
-#elif defined(linux) || defined(__linux) || defined(__linux__) || defined(__TOS_LINUX__) || defined(EMSCRIPTEN)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_LINUX
-#elif defined(unix) || defined(__unix) || defined(__unix__)
-#	define CUTE_OS_FAMILY_POSIX 1
-#	define CUTE_OS_FAMILY_UNIX	1
-#	define CUTE_OS CUTE_OS_UNKNOWN_UNIX
+//==============================================================================
+// Check OS:
+// CUTE_OS_FAMILY_WINDOWS:CUTE_OS_WIN_NT,CUTE_OS_WIN_RT,CUTE_OS_WIN_CE
+// CUTE_OS_FAMILY_LINUX  :CUTE_OS_ANDROID,CUTE_OS_LINUX
+// CUTE_OS_FAMILY_VMS    :CUTE_OS_VMS
+// CUTE_OS_FAMILY_APPLE  :CUTE_OS_IOS,CUTE_OS_MAC
+// CUTE_OS_FAMILY_BSD    :CUTE_OS_FAMILY_APPLE,CUTE_OS_FREE_BSD,CUTE_OS_NET_BSD,CUTE_OS_OPEN_BSD
+// CUTE_OS_FAMILY_UNIX   :CUTE_OS_FAMILY_BSD,CUTE_OS_QNX,CUTE_OS_CYGWIN,CUTE_OS_AIX,CUTE_OS_HPUX,
+//                       :CUTE_OS_TRU64,CUTE_OS_IRIX,CUTE_OS_SOLARIS,CUTE_OS_NACL,CUTE_OS_VXWORKS
+//==============================================================================
+#if defined(_WIN32) || defined(_WIN64)
+#   define CUTE_OS_WIN_NT   1
 #elif defined(_WIN32_WCE)
-#	define CUTE_OS_FAMILY_WINDOWS 1
-#	define CUTE_OS CUTE_OS_WINDOWS_CE
-#elif defined(_WIN32) || defined(_WIN64)
-#	define CUTE_OS_FAMILY_WINDOWS 1
-#	define CUTE_OS CUTE_OS_WINDOWS_NT
+#   define CUTE_OS_WIN_CE   1
+#elif defined(__ANDROID__)
+#   define CUTE_OS_ANDROID  1
+#elif defined(__APPLE__)
+#  include <CoreFoundation/CoreFoundation.h>
+#  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#   define CUTE_OS_IOS      1
+#  elif TARGET_OS_MAC
+#   define CUTE_OS_MAC      1
+#  else
+#   error "Unknown apple platform!!"
+#  endif
+#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
+#   define CUTE_OS_FREE_BSD 1
+#elif defined(__NetBSD__)
+#   defined CUTE_OS_NET_BSD 1
+#elif defined(__OpenBSD__)
+#   define CUTE_OS_OPEN_BSD 1
+#elif defined(__QNX__)
+#   define CUTE_OS_QNX      1
+#elif defined(__CYGWIN__)
+#   define CUTE_OS_CYGWIN   1
+#elif defined(_AIX) || defined(__TOS_AIX__)
+#   define CUTE_OS_AIX      1
+#elif defined(hpux) || defined(_hpux) || defined(__hpux)
+#   define CUTE_OS_HPUX     1
+#elif defined(__digital__) || defined(__osf__) || defined(__osf)
+#   define CUTE_OS_TRU64    1
+#elif defined(sgi) || defined(__sgi)
+#   define CUTE_OS_IRIX     1
+#elif defined(sun) || defined(__sun)
+#   define CUTE_OS_SOLARIS  1
+#elif defined(__NACL__)
+#   define CUTE_OS_NACL     1
+#elif defined(__VXWORKS__) || defined(__vxworks) || defined(CUTE_VXWORKS)
+#   define CUTE_OS_VXWORKS  1
 #elif defined(__VMS)
-#	define CUTE_OS_FAMILY_VMS 1
-#	define CUTE_OS CUTE_OS_VMS
+#   define CUTE_OS_VMS      1
+#elif defined(linux) || defined(__linux) || defined(__linux__) || defined(__TOS_LINUX__) || defined(EMSCRIPTEN)
+#   define CUTE_OS_LINUX    1
+#elif defined(unix) || defined(__unix) || defined(__unix__)
+#   define CUTE_OS_UNIX     1
+#else
+#   error "Unknown platform!!"
+#endif
+
+// Check OS_FAMILY
+#if   defined(CUTE_OS_WIN_NT) || defined(CUTE_OS_WIN_RT) || defined(CUTE_OS_WIN_CE)
+#   defined CUTE_OS_FAMILY_WINDOWS
+#elif defined(CUTE_OS_IOS) || defined(CUTE_OS_MAC)
+#   define CUTE_OS_FAMILY_APPLE
+#elif defined(CUTE_OS_ANDROID) || defined(CUTE_OS_LINUX)
+#   define CUTE_OS_FAMILY_LINUX
+#elif defined(CUTE_OS_VMS)
+#   define CUTE_OS_FAMILY_VMS
+#endif
+
+#if defined(CUTE_OS_IOS) || defined(CUTE_OS_MAC) || defined(CUTE_OS_FREE_BSD) || defined(CUTE_OS_NET_BSD) || defined(CUTE_OS_OPEN_BSD)
+#   define CUTE_OS_FAMILY_BSD
+#endif
+
+#if defined(CUTE_OS_FAMILY_BSD) || defined(CUTE_OS_UNIX) || defined(CUTE_OS_HPUX) || defined(CUTE_OS_SOLARIS) || \
+    defined(CUTE_OS_QNX) || defined(CUTE_OS_VXWORKS) || defined(CUTE_OS_NACL)     || defined(CUTE_OS_VXWORKS) || \
+    defined(CUTE_OS_AIX) || defined(CUTE_OS_TRU64)   || defined(CUTE_OS_IRIX)
+#   define CUTE_OS_FAMILY_UNIX
+#endif
+
+#if defined(CUTE_OS_FAMILY_LINUX) || defined(CUTE_OS_FAMILY_UNIX)
+#   define CUTE_OS_FAMILY_POSIX
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -196,6 +144,7 @@
 #error "Unknown Hardware Architecture."
 #endif
 
+
 //////////////////////////////////////////////////////////////////////////
 // BYTE_ORDER check
 //////////////////////////////////////////////////////////////////////////
@@ -238,92 +187,87 @@
 #endif
 
 // check __BYTE_ORDER__
-#ifndef CUTE_BYTE_ORDER
-#	ifdef __BYTE_ORDER__
-#		if (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#ifndef CUTE_ENDIAN
+# ifdef __BYTE_ORDER__
+#   if (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
 #		define CUTE_ENDIAN CUTE_ENDIAN_BIG
-#		else
-#		define CUTE_ENDIAN CUTE_ENDIAN_LITTLE
-#		endif
-#	elif defined(CUTE_OS_FAMILY_WINDOWS)
-#	define CUTE_ENDIAN CUTE_ENDIAN_LITTLE
-#	elif (CUTE_OS == CUTE_OS_HPUX)
-#	define CUTE_ENDIAN CUTE_ENDIAN_BIG
 #	else
-#	error "unknown endian!!"
+#       define CUTE_ENDIAN CUTE_ENDIAN_LITTLE
 #	endif
+# elif defined(CUTE_OS_FAMILY_WINDOWS)
+#   define CUTE_ENDIAN CUTE_ENDIAN_LITTLE
+# elif defined(CUTE_OS_HPUX)
+#   define CUTE_ENDIAN CUTE_ENDIAN_BIG
+# else
+#	error "unknown endian!!"
+# endif
 #endif
+
 
 //////////////////////////////////////////////////////////////////////////
 // compiler check
 //////////////////////////////////////////////////////////////////////////
 #if defined(_MSC_VER)
-#	define CUTE_COMPILER_MSVC
+#	define CUTE_COMPILER_MSVC   1
 #elif defined(__clang__)
-#	define CUTE_COMPILER_CLANG
+#	define CUTE_COMPILER_CLANG  1
 #elif defined (__GNUC__)
-#	define CUTE_COMPILER_GCC
+#	define CUTE_COMPILER_GCC    1
 #elif defined (__MINGW32__) || defined (__MINGW64__)
-#	define CUTE_COMPILER_MINGW
+#	define CUTE_COMPILER_MINGW  1
 #elif defined (__INTEL_COMPILER) || defined(__ICC) || defined(__ECC) || defined(__ICL)
-#	define CUTE_COMPILER_INTEL
+#	define CUTE_COMPILER_INTEL  1
 #elif defined (__SUNPRO_CC)
-#	define CUTE_COMPILER_SUN
+#	define CUTE_COMPILER_SUN    1
 #elif defined (__MWERKS__) || defined(__CWCC__)
-#	define CUTE_COMPILER_CODEWARRIOR
+#	define CUTE_COMPILER_CWCC   1
 #elif defined (__sgi) || defined(sgi)
-#	define CUTE_COMPILER_SGI
+#	define CUTE_COMPILER_SGI    1
 #elif defined (__HP_aCC)
-#	define CUTE_COMPILER_HP_ACC
+#	define CUTE_COMPILER_HP_ACC 1
 #elif defined (__BORLANDC__) || defined(__CODEGEARC__)
-#	define CUTE_COMPILER_CBUILDER
+#	define CUTE_COMPILER_BORLANDC   1
 #elif defined (__DMC__)
-#	define CUTE_COMPILER_DMARS
+#	define CUTE_COMPILER_DMC    1
 #elif defined (__DECCXX)
-#	define CUTE_COMPILER_COMPAC
+#	define CUTE_COMPILER_DECCXX 1
 #elif (defined (__xlc__) || defined (__xlC__)) && defined(__IBMCPP__)
-#	define CUTE_COMPILER_IBM_XLC // IBM XL C++
+#	define CUTE_COMPILER_XLC    1       // IBM XL C++
 #elif defined (__IBMCPP__) && defined(__COMPILER_VER__)
-#	define CUTE_COMPILER_IBM_XLC_ZOS // IBM z/OS C++
+#	define CUTE_COMPILER_XLC_ZOS    1   // IBM z/OS C++
 #endif
+
 
 //////////////////////////////////////////////////////////////////////////
 // check 32 bit or 64 bit
 //////////////////////////////////////////////////////////////////////////
 #if defined(__SUNPRO_CC)
-#	if defined(__sparcv9)
-#	define CUTE_BIT64
-#	else
-#	define CUTE_BIT32
-#	endif
+# if defined(__sparcv9)
+#   define CUTE_BIT64
+# else
+#   define CUTE_BIT32
+# endif
 #elif defined(__sgi)
-
-#	if (_MIPS_SZLONG == 64)
-#	define CUTE_BIT64
-#	else
-#	define CUTE_BIT32
-#	endif
-
+# if (_MIPS_SZLONG == 64)
+#   define CUTE_BIT64
+# else
+#   define CUTE_BIT32
+# endif
 #elif defined(__DECCXX)
-
-#	if defined(__VMS) && defined(__32BITS)
-#	define CUTE_BIT32
-#	else
-#	define CUTE_BIT64
-#	endif
-
+# if defined(__VMS) && defined(__32BITS)
+#   define CUTE_BIT32
+# else
+#   define CUTE_BIT64
+# endif
 #elif defined(_DIAB_TOOL)
-
-#	define CUTE_BIT64
-
+#   define CUTE_BIT64
 #else
 // _MSC_VER __GNUC__ __clang__ __HP_aCC  __IBMCPP__
-#	if defined(_WIN64) || defined(__LP64__) || defined(__64BIT__)
-#	define CUTE_BIT64
-#	else
-#	define CUTE_BIT32
-#	endif
-
+# if defined(_WIN64) || defined(__LP64__) || defined(__64BIT__)
+#   define CUTE_BIT64
+# else
+#   define CUTE_BIT32
+# endif
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -477,7 +421,7 @@
 #endif
 
 // remove??
-#if defined(CUTE_OS_FAMILY_UNIX)
+#if defined(CUTE_OS_FAMILY_POSIX)
 //
 // Note: pthread_cond_timedwait() with CLOCK_MONOTONIC is supported
 // on Linux and QNX, as well as on Android >= 5.0. On Android < 5.0,
@@ -543,10 +487,24 @@
 #define CUTE_VARIADIC
 #endif
 
+//#ifndef NOEXCEPT
+//#if defined(CUTE_CPP11)
+//#   define NOEXCEPT noexcept
+//#else
+//#   define NOEXCEPT throw()
+//# endif
+//#endif
+
 #ifdef CUTE_CPP11
 #define CUTE_ENUM_TYPE(type) : type
 #else
 #define CUTE_ENUM_TYPE(type)
+#endif
+
+#if defined(_MSC_VER)
+#   define CUTE_ALIGN(bytes)    __declspec (align (bytes))
+#else
+#   define CUTE_ALIGN(bytes)   __attribute__ ((aligned (bytes)))
 #endif
 
 // __PRETTY_FUNCTION__:会带有函数参数
@@ -608,9 +566,3 @@
 #define CUTE_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 
 #define NPOS						((unsigned int)-1)
-
-#define ENGINE_NAME					"CuteEngine"
-
-#define CUTE_NS_BEGIN namespace Cute {
-#define CUTE_NS_END	}
-#define CUTE_NS_USING using namespace Cute;

@@ -94,7 +94,7 @@ uint Stream::write7Bit(uint64 value)
 	char buffer[10];
 	//外部确保buff足够，int32最多5位，int64最多10位
 	//高位标识：0表示结尾,1表示后边还有数据
-	size_t count = 0;
+	uint count = 0;
 	while (value > 0x7F)
 	{
 		buffer[count++] = ((uint8_t)(value)& 0x7F) | 0x80;

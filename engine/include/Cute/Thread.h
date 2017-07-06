@@ -11,11 +11,11 @@ typedef HANDLE			thread_t;
 typedef pthread_t		thread_t;
 #endif
 
-#if defined(CUTE_OS_FAMILY_WINDOWS)
+#if   defined(CUTE_OS_FAMILY_WINDOWS)
 typedef DWORD			thread_id;
-#elif (CUTE_OS == CUTE_OS_LINUX)
+#elif defined(CUTE_OS_FAMILY_LINUX)
 typedef pid_t			thread_id;
-#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif defined(CUTE_OS_MAC)
 typedef mach_port_t		thread_id;
 #else
 typedef pthread_t		thread_id;

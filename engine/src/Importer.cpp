@@ -1,7 +1,7 @@
 //! Importer
 #include "Cute/Importer.h"
-#include "Cute/File.h"
-#include "Cute/Path.h"
+#include "Cute/Files.h"
+#include "Cute/Paths.h"
 
 CUTE_NS_BEGIN
 
@@ -15,13 +15,12 @@ Importer::~Importer()
 
 Resource* Importer::import(const String& filePath, const ImportOptions* options /* = NULL */, const String& uuid /* = Strings::BLANK */)
 {
-	if (!File::isFile(filePath))
+	if (!Files::isFile(filePath))
 	{
 		return NULL;
 	}
 
-	Path path(filePath);
-	String ext = path.getExtension();
+    String ext = Paths::getExtension(filePath);
 
 	ImporterSpecific* importer = getImporter(ext);
 	if (importer == NULL)

@@ -2,7 +2,8 @@
 #include "Cute/Json.h"
 #include "Cute/Number.h"
 #include "Cute/Exception.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
+#include <iomanip>
 
 CUTE_NS_BEGIN
 
@@ -474,7 +475,7 @@ static bool isControlCharacter(char ch)
 	return ch > 0 && ch <= 0x1F;
 }
 
-static bool containsControlCharacter(const char* str, unsigned len)
+static bool containsControlCharacter(const char* str, size_t len)
 {
 	char const* end = str + len;
 	while (end != str)
@@ -647,7 +648,7 @@ void JsonWriter::writeHuman(String& doc, const Variant& value)
 Variant Json::load(const String& path)
 {
 	String data;
-	File::readAll(path, data);
+	Files::readAll(path, data);
 	return parse(data);
 }
 

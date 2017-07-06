@@ -1,8 +1,8 @@
 //! Config
 #include "Cute/Table.h"
-#include "Cute/File.h"
+#include "Cute/Paths.h"
+#include "Cute/Files.h"
 #include "Cute/FileStream.h"
-#include "Cute/Path.h"
 
 CUTE_NS_BEGIN
 
@@ -60,11 +60,10 @@ ITable::~ITable()
 
 bool ITable::load(const String& path)
 {
-	if (!File::exists(path))
+	if (!Files::exists(path))
 		return false;
 
-	Path p(path);
-	m_filename = p.getFileName();
+    m_filename = Paths::getFileName(path);
 	m_path = path;
 
 	return doload(path);

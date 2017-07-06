@@ -117,7 +117,7 @@ void AABox::transform(const Matrix4& matrix)
 	// For each one, we transform it using the matrix
 	// Which gives the resulting point and merge the resulting point.
 
-	// First corner 
+	// First corner
 	// min min min
 	currentCorner = oldMin;
 	merge(matrix.multiplyAffine(currentCorner));
@@ -171,9 +171,9 @@ void AABox::transformAffine(const Matrix4& m)
 
 	Vector3 newCentre = m.multiplyAffine(centre);
 	Vector3 newHalfSize(
-		Math::abs(m[0][0]) * halfSize.x + Math::abs(m[0][1]) * halfSize.y + Math::abs(m[0][2]) * halfSize.z,
-		Math::abs(m[1][0]) * halfSize.x + Math::abs(m[1][1]) * halfSize.y + Math::abs(m[1][2]) * halfSize.z,
-		Math::abs(m[2][0]) * halfSize.x + Math::abs(m[2][1]) * halfSize.y + Math::abs(m[2][2]) * halfSize.z);
+	    Math::abs(m[0][0]) * halfSize.x + Math::abs(m[0][1]) * halfSize.y + Math::abs(m[0][2]) * halfSize.z,
+	    Math::abs(m[1][0]) * halfSize.x + Math::abs(m[1][1]) * halfSize.y + Math::abs(m[1][2]) * halfSize.z,
+	    Math::abs(m[2][0]) * halfSize.x + Math::abs(m[2][1]) * halfSize.y + Math::abs(m[2][2]) * halfSize.z);
 
 	setExtents(newCentre - newHalfSize, newCentre + newHalfSize);
 }
@@ -181,20 +181,20 @@ void AABox::transformAffine(const Matrix4& m)
 bool AABox::contains(const Vector3& v) const
 {
 	return
-		m_min.x <= v.x && v.x <= m_max.x &&
-		m_min.y <= v.y && v.y <= m_max.y &&
-		m_min.z <= v.z && v.z <= m_max.z;
+	    m_min.x <= v.x && v.x <= m_max.x &&
+	    m_min.y <= v.y && v.y <= m_max.y &&
+	    m_min.z <= v.z && v.z <= m_max.z;
 }
 
 bool AABox::contains(const AABox& other) const
 {
 	return
-		m_min.x <= other.m_min.x &&
-		m_min.y <= other.m_min.y &&
-		m_min.z <= other.m_min.z &&
-		m_max.x >= other.m_max.x &&
-		m_max.y >= other.m_max.y &&
-		m_max.z >= other.m_max.z;
+	    m_min.x <= other.m_min.x &&
+	    m_min.y <= other.m_min.y &&
+	    m_min.z <= other.m_min.z &&
+	    m_max.x >= other.m_max.x &&
+	    m_max.y >= other.m_max.y &&
+	    m_max.z >= other.m_max.z;
 }
 
 bool AABox::intersects(const AABox& b2) const

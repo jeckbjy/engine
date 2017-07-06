@@ -1,3 +1,4 @@
+//! API
 #pragma once
 #include "Cute/Platform.h"
 #include <stdint.h>
@@ -60,29 +61,24 @@ typedef unsigned short	ushort;
 typedef unsigned int	uint;
 typedef unsigned long	ulong;
 
-typedef std::string		String;
-typedef std::wstring	WString;
-typedef char			UTF8Char;
-typedef String			UTF8String;
-
-#if defined(__SIZEOF_WCHAR_T__)//gcc
-#	if (__SIZEOF_WCHAR_T__ == 2)
-    typedef wchar_t                      UTF16Char;
-    typedef std::wstring                 UTF16String;
-    typedef uint32_t                     UTF32Char;
-    typedef std::basic_string<UTF32Char> UTF32String;
-#	elif (__SIZEOF_WCHAR_T__ == 4)
-    typedef uint16_t                     UTF16Char;
-    typedef std::basic_string<UTF16Char> UTF16String;
-    typedef wchar_t                      UTF32Char;
-    typedef std::wstring                 UTF32String;
-#	endif
+#if defined(CUTE_64BIT)
+typedef int64           pointer_sized_int;
+typedef uint64          pointer_sized_uint;
 #else
-    typedef wchar_t                      UTF16Char;
-    typedef std::wstring                 UTF16String;
-    typedef uint32_t                     UTF32Char;
-    typedef std::basic_string<UTF32Char> UTF32String;
+typedef int             pointer_sized_int;
+typedef unsigned int    pointer_sized_uint;
 #endif
+
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+typedef pointer_sized_int ssize_t;
+#endif
+
+//  用于通过字符串查询枚举值
+struct EnumPair
+{
+    const char* name;
+    int         value;
+};
 
 // STL Define
 #ifdef CUTE_CPP11

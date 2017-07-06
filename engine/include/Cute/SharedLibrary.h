@@ -4,7 +4,7 @@
 
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 typedef HMODULE		module_t;
-#elif (CUTE_OS == CUTE_OS_HPUX)
+#elif defined(CUTE_OS_HPUX)
 #include <dl.h>
 typedef shl_t		module_t;
 #else

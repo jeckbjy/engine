@@ -47,10 +47,10 @@ private:
 #else
 	typedef IOPoll*		loop_t;
 #endif
-	loop_t	m_handle;
-	Atomic	m_stopped;
-	Atomic	m_threads;
-	Atomic	m_blocks;
+	loop_t		m_handle;
+	Atomic32	m_stopped;
+	Atomic32	m_threads;
+	Atomic32	m_blocks;
 };
 
 CUTE_NS_END

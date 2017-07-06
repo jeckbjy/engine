@@ -1,7 +1,7 @@
 // module FileSystem
 #include "Cute/Glob.h"
 #include "Cute/Path.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 #include "Cute/DirectoryIterator.h"
 #include "Cute/UTF8Encoding.h"
 #include "Cute/TextIterator.h"
@@ -187,41 +187,41 @@ void Glob::collect(const Path& pathPattern, const Path& base, const Path& curren
 {
 	try
 	{
-		String pp = pathPattern.toString();
-		String basep = base.toString();
-		String curp = current.toString();
-		Glob g(pattern, options);
-		DirectoryIterator it(base.toString());
-		DirectoryIterator end;
-		Path itPath;
-		while (it != end)
-		{
-			itPath.assign(*it);
-			const String& name = itPath.getFileName();
-			if (g.match(name))
-			{
-				Path p(current);
-				if (p.depth() < pathPattern.depth() - 1)
-				{
-					p.pushDirectory(name);
-					collect(pathPattern, itPath, p, pathPattern[p.depth()], files, options);
-				}
-				else
-				{
-					p.setFileName(name);
-					if (isDirectory(p, (options & GLOB_FOLLOW_SYMLINKS) != 0))
-					{
-						p.makeDirectory();
-						files.insert(p.toString());
-					}
-					else if (!(options & GLOB_DIRS_ONLY))
-					{
-						files.insert(p.toString());
-					}
-				}
-			}
-			++it;
-		}
+//		String pp = pathPattern.toString();
+//		String basep = base.toString();
+//		String curp = current.toString();
+//		Glob g(pattern, options);
+//		DirectoryIterator it(base.toString());
+//		DirectoryIterator end;
+//		Path itPath;
+//		while (it != end)
+//		{
+//			itPath.assign(*it);
+//			const String& name = itPath.getFileName();
+//			if (g.match(name))
+//			{
+//				Path p(current);
+//				if (p.depth() < pathPattern.depth() - 1)
+//				{
+//					p.pushDirectory(name);
+//					collect(pathPattern, itPath, p, pathPattern[p.depth()], files, options);
+//				}
+//				else
+//				{
+//					p.setFileName(name);
+//					if (isDirectory(p, (options & GLOB_FOLLOW_SYMLINKS) != 0))
+//					{
+//						p.makeDirectory();
+//						files.insert(p.toString());
+//					}
+//					else if (!(options & GLOB_DIRS_ONLY))
+//					{
+//						files.insert(p.toString());
+//					}
+//				}
+//			}
+//			++it;
+//		}
 	}
 	catch (Exception&)
 	{
@@ -234,7 +234,7 @@ bool Glob::isDirectory(const Path& path, bool followSymlink)
 	bool isDir = false;
 	try
 	{
-		isDir = File::isDirectory(p);
+		isDir = Files::isDirectory(p);
 	}
 	catch (Exception&)
 	{
@@ -244,12 +244,12 @@ bool Glob::isDirectory(const Path& path, bool followSymlink)
 	{
 		return true;
 	}
-	else if (followSymlink && File::isLink(p))
+    else if (followSymlink && Files::isLink(p))
 	{
 		try
 		{
 			// Test if link resolves to a directory.
-			DirectoryIterator it(p);
+//			DirectoryIterator it(p);
 			return true;
 		}
 		catch (Exception&)

@@ -15,12 +15,12 @@ CUTE_NS_BEGIN
 class PooledThread : public Runnable
 {
 public:
-	PooledThread(const std::string& name, int stackSize = 0);
+	PooledThread(const String& name, int stackSize = 0);
 	~PooledThread();
 
 	void start(int cpu = -1);
 	void start(Thread::Priority priority, Runnable& target, int cpu = -1);
-	void start(Thread::Priority priority, Runnable& target, const std::string& name, int cpu = -1);
+	void start(Thread::Priority priority, Runnable& target, const String& name, int cpu = -1);
 	bool idle();
 	int idleTime();
 	void join();
@@ -40,7 +40,7 @@ private:
 	Mutex	        m_mutex;
 };
 
-PooledThread::PooledThread(const std::string& name, int stackSize) 
+PooledThread::PooledThread(const String& name, int stackSize)
 	: m_idle(true)
 	, m_idleTime(0)
 	, m_target(0)
@@ -85,11 +85,11 @@ void PooledThread::start(Thread::Priority priority, Runnable& target, int cpu)
 	}
 }
 
-void PooledThread::start(Thread::Priority priority, Runnable& target, const std::string& name, int cpu)
+void PooledThread::start(Thread::Priority priority, Runnable& target, const String& name, int cpu)
 {
 	Mutex::ScopedLock lock(m_mutex);
 
-	std::string fullName(name);
+	String fullName(name);
 	if (name.empty())
 	{
 		fullName = m_name;
@@ -228,7 +228,7 @@ ThreadPool::ThreadPool(int minCapacity, int maxCapacity, int idleTime, int stack
 	{
 		if (m_affinityPolicy == TAP_UNIFORM_DISTRIBUTION)
 		{
-			cpu = m_lastCpu.value() % cpuCount;
+			cpu = m_lastCpu % cpuCount;
 			m_lastCpu++;
 		}
 		PooledThread* pThread = createThread();
@@ -256,7 +256,7 @@ ThreadPool::ThreadPool(const String& name, int minCapacity, int maxCapacity, int
 	{
 		if (m_affinityPolicy == TAP_UNIFORM_DISTRIBUTION)
 		{
-			cpu = m_lastCpu.value() % cpuCount;
+			cpu = m_lastCpu % cpuCount;
 			m_lastCpu++;
 		}
 		PooledThread* pThread = createThread();
@@ -329,7 +329,7 @@ int ThreadPool::affinity(int cpu)
 	{
 	case TAP_UNIFORM_DISTRIBUTION:
 	{
-		cpu = m_lastCpu.value() % Environment::processorCount();
+		cpu = m_lastCpu % Environment::processorCount();
 		m_lastCpu++;
 	}
 	break;
@@ -355,7 +355,7 @@ void ThreadPool::start(Runnable& target, int cpu)
 	getThread()->start(Thread::PRIO_NORMAL, target, affinity(cpu));
 }
 
-void ThreadPool::start(Runnable& target, const std::string& rName, int cpu)
+void ThreadPool::start(Runnable& target, const String& rName, int cpu)
 {
 	getThread()->start(Thread::PRIO_NORMAL, target, rName, affinity(cpu));
 }
@@ -365,7 +365,7 @@ void ThreadPool::startWithPriority(Thread::Priority priority, Runnable& target, 
 	getThread()->start(priority, target, affinity(cpu));
 }
 
-void ThreadPool::startWithPriority(Thread::Priority priority, Runnable& target, const std::string& rName, int cpu)
+void ThreadPool::startWithPriority(Thread::Priority priority, Runnable& target, const String& rName, int cpu)
 {
 	getThread()->start(priority, target, rName, affinity(cpu));
 }

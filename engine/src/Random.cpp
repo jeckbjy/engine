@@ -198,7 +198,7 @@ void Random::seed()
 	int fd = open("/dev/urandom", O_RDONLY, 0);
 	if (fd >= 0)
 	{
-		n = read(fd, buffer, length);
+		n = (int)read(fd, buffer, length);
 		close(fd);
 	}
 #endif

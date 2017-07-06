@@ -101,7 +101,9 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 	bool isRoot1 = isDynamic || ((flags & FLAG_ROOT1) != 0);
 
 	if (needSort)
+    {
 		std::sort(keys, keys + num_keys, SortCmp(0));
+    }
 
 	// 用于标识下一次检测起始位置
 	size_t next_pos;
@@ -120,7 +122,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 	std::vector<DATNode*> pools;
 
 	DATNode* root = new DATNode();
-	root->set(0, 0, 0, num_keys);
+	root->set(0, 0, 0, (int)num_keys);
 	nodes.push(root);
 
 	int left, right, depth, index, code;
@@ -199,7 +201,7 @@ void DoubleArrayTrie::build(size_t num_keys, const key_t** keys, int flags)
 			}
 		}
 
-		int base_pos = next_pos - siblings[0]->code;
+		int base_pos = (int)next_pos - siblings[0]->code;
 		int back_code = siblings[siblings.size() - 1]->code;
 		// 查找一个可以插入的位置
 		for (;;++base_pos)
@@ -318,11 +320,11 @@ int DoubleArrayTrie::match(MatchMode mode, const key_t* key, size_t length /* = 
 	// 返回结果
 	if (mode == MATCH_STRICT)
 	{
-		return last_match == length ? last_match : 0;
+		return last_match == length ? (int)last_match : 0;
 	}
 	else
 	{
-		return last_match;
+		return (int)last_match;
 	}
 }
 

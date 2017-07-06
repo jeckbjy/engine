@@ -36,7 +36,7 @@ Pipe::~Pipe()
 	close(CLOSE_BOTH);
 }
 
-int Pipe::write(const void* buffer, int length)
+long Pipe::write(const void* buffer, int length)
 {
 #if defined(_WIN32)
 	assert(m_writer != INVALID_HANDLE_VALUE);
@@ -49,7 +49,7 @@ int Pipe::write(const void* buffer, int length)
 #else
 
 	assert(m_writer != -1);
-	int n;
+	long n;
 	do
 	{
 		n = ::write(m_writer, buffer, length);
@@ -63,7 +63,7 @@ int Pipe::write(const void* buffer, int length)
 #endif
 }
 
-int Pipe::read(void* buffer, int length)
+long Pipe::read(void* buffer, int length)
 {
 #if defined(_WIN32)
 	assert(m_reader != INVALID_HANDLE_VALUE);
@@ -77,7 +77,7 @@ int Pipe::read(void* buffer, int length)
 #else
 	assert(m_reader != -1);
 
-	int n;
+	long n;
 	do
 	{
 		n = ::read(m_reader, buffer, length);

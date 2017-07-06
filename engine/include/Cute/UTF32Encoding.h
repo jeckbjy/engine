@@ -20,7 +20,7 @@ public:
 	void setByteOrder(int byteOrderMark);
 
 	const char* canonicalName() const;
-	bool isA(const std::string& encodingName) const;
+	bool isA(const String& encodingName) const;
 	const CharacterMap& characterMap() const;
 	int convert(const unsigned char* bytes) const;
 	int convert(int ch, unsigned char* bytes, int length) const;

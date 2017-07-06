@@ -37,7 +37,7 @@ bool Debugger::isAvailable()
 	return IsDebuggerPresent() ? true : false;
 #	endif
 
-#elif defined(CUTE_OS == CUTE_OS_VXWORKS)
+#elif defined(CUTE_OS_VXWORKS)
 	return false;
 #elif defined(CUTE_OS_FAMILY_UNIX)
 	return std::getenv("CUTE_ENABLE_DEBUGGER") ? true : false;

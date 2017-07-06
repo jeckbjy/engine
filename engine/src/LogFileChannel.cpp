@@ -3,7 +3,6 @@
 #include "Cute/LogArchiveStrategy.h"
 #include "Cute/LogRotateStrategy.h"
 #include "Cute/LogPurgeStrategy.h"
-#include "Cute/DateTimeFormatter.h"
 #include "Cute/DateTime.h"
 #include "Cute/String.h"
 #include "Cute/Number.h"
@@ -152,15 +151,15 @@ String LogFileChannel::getProperty(const String& name) const
 	else if (name == PROP_ARCHIVE)
 		return m_archive;
 	else if (name == PROP_COMPRESS)
-		return std::string(m_compress ? "true" : "false");
+		return m_compress ? "true" : "false";
 	else if (name == PROP_PURGEAGE)
 		return m_purgeAge;
 	else if (name == PROP_PURGECOUNT)
 		return m_purgeCount;
 	else if (name == PROP_FLUSH)
-		return std::string(m_flush ? "true" : "false");
+		return m_flush ? "true" : "false";
 	else if (name == PROP_ROTATEONOPEN)
-		return std::string(m_rotateOnOpen ? "true" : "false");
+		return m_rotateOnOpen ? "true" : "false";
 	else
 		return LogChannel::getProperty(name);
 }
@@ -183,21 +182,21 @@ uint64_t LogFileChannel::size() const
 }
 
 
-const std::string& LogFileChannel::path() const
+const String& LogFileChannel::path() const
 {
 	return m_path;
 }
 
 
-void LogFileChannel::setRotation(const std::string& rotation)
+void LogFileChannel::setRotation(const String& rotation)
 {
-	std::string::const_iterator it = rotation.begin();
-	std::string::const_iterator end = rotation.end();
+	String::const_iterator it = rotation.begin();
+	String::const_iterator end = rotation.end();
 	int n = 0;
 	while (it != end && Ascii::isSpace(*it)) ++it;
 	while (it != end && Ascii::isDigit(*it)) { n *= 10; n += *it++ - '0'; }
 	while (it != end && Ascii::isSpace(*it)) ++it;
-	std::string unit;
+	String unit;
 	while (it != end && Ascii::isAlpha(*it)) unit += *it++;
 
 	RotateStrategy* pStrategy = 0;
@@ -242,7 +241,7 @@ void LogFileChannel::setRotation(const std::string& rotation)
 }
 
 
-void LogFileChannel::setArchive(const std::string& archive)
+void LogFileChannel::setArchive(const String& archive)
 {
 	ArchiveStrategy* pStrategy = 0;
 	if (archive == "number")
@@ -266,15 +265,15 @@ void LogFileChannel::setArchive(const std::string& archive)
 }
 
 
-void LogFileChannel::setCompress(const std::string& compress)
+void LogFileChannel::setCompress(const String& compress)
 {
-	m_compress = icompare(compress, "true") == 0;
+	m_compress = compress.iequals("true");
 	if (m_archiveStrategy)
 		m_archiveStrategy->compress(m_compress);
 }
 
 
-void LogFileChannel::setPurgeAge(const std::string& age)
+void LogFileChannel::setPurgeAge(const String& age)
 {
 	if (setNoPurge(age)) return;
 
@@ -287,7 +286,7 @@ void LogFileChannel::setPurgeAge(const std::string& age)
 }
 
 
-void LogFileChannel::setPurgeCount(const std::string& count)
+void LogFileChannel::setPurgeCount(const String& count)
 {
 	if (setNoPurge(count)) return;
 
@@ -296,15 +295,15 @@ void LogFileChannel::setPurgeCount(const std::string& count)
 }
 
 
-void LogFileChannel::setFlush(const std::string& flush)
+void LogFileChannel::setFlush(const String& flush)
 {
-	m_flush = icompare(flush, "true") == 0;
+	m_flush = flush.iequals("true");
 }
 
 
-void LogFileChannel::setRotateOnOpen(const std::string& rotateOnOpen)
+void LogFileChannel::setRotateOnOpen(const String& rotateOnOpen)
 {
-	m_rotateOnOpen = icompare(rotateOnOpen, "true") == 0;
+	m_rotateOnOpen = rotateOnOpen.iequals("true");
 }
 
 
@@ -323,9 +322,9 @@ void LogFileChannel::purge()
 }
 
 
-bool LogFileChannel::setNoPurge(const std::string& value)
+bool LogFileChannel::setNoPurge(const String& value)
 {
-	if (value.empty() || 0 == icompare(value, "none"))
+	if (value.empty() || value.iequals("none"))
 	{
 		delete m_purgeStrategy;
 		m_purgeStrategy = 0;
@@ -336,7 +335,7 @@ bool LogFileChannel::setNoPurge(const std::string& value)
 }
 
 
-int LogFileChannel::extractDigit(const std::string& value, std::string::const_iterator* nextToDigit) const
+int LogFileChannel::extractDigit(const String& value, String::const_iterator* nextToDigit) const
 {
 	std::string::const_iterator it = value.begin();
 	std::string::const_iterator end = value.end();
@@ -364,7 +363,7 @@ void LogFileChannel::setPurgeStrategy(PurgeStrategy* strategy)
 }
 
 
-uint64_t LogFileChannel::extractFactor(const std::string& value, std::string::const_iterator start) const
+uint64_t LogFileChannel::extractFactor(const String& value, String::const_iterator start) const
 {
 	while (start != value.end() && Ascii::isSpace(*start)) ++start;
 

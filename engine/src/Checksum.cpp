@@ -126,7 +126,7 @@ Checksum::~Checksum()
 void Checksum::update(const char* data, unsigned length)
 {
 	if (m_type == TYPE_ADLER32)
-		m_value = adler32(m_value, data, length);
+		m_value = (uint32)adler32((unsigned long)m_value, data, length);
 	else
 		m_value = crc32(m_value, data, length);
 }

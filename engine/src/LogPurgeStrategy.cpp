@@ -1,7 +1,8 @@
 //! Logging
 #include "Cute/LogPurgeStrategy.h"
 #include "Cute/DirectoryIterator.h"
-#include "Cute/Path.h"
+#include "Cute/Paths.h"
+#include "Cute/Files.h"
 #include "Cute/Timestamp.h"
 
 CUTE_NS_BEGIN
@@ -19,22 +20,24 @@ PurgeStrategy::~PurgeStrategy()
 
 void PurgeStrategy::list(const std::string& path, std::vector<String>& files)
 {
-	Path p(path);
-	p.makeAbsolute();
-	Path parent = p.parent();
-	std::string baseName = p.getFileName();
-	baseName.append(".");
+//	Path p(path);
+//	p.makeAbsolute();
+//	Path parent = p.parent();
+//	std::string baseName = p.getFileName();
+//	baseName.append(".");
+    
+    String parent = Paths::getDirectory(path);
+    String baseName = Paths::getBaseFileName(path);
+    baseName.append(".");
 
-	DirectoryIterator it(parent.toString());
-	DirectoryIterator end;
-	while (it != end)
-	{
-		if (it.name().compare(0, baseName.size(), baseName) == 0)
-		{
-			files.push_back(*it);
-		}
-		++it;
-	}
+    DirectoryIterator it(parent, false);
+    while(it.next())
+    {
+        if (it.toString().compare(0, baseName.size(), baseName) == 0)
+        {
+        	files.push_back(*it);
+        }
+    }
 }
 
 //
@@ -54,10 +57,10 @@ void PurgeByAgeStrategy::purge(const std::string& path)
 	list(path, files);
 	for (FileList::iterator it = files.begin(); it != files.end(); ++it)
 	{
-		Timestamp ts = File::getLastModified(*it);
+		Timestamp ts = Files::getLastModificationTime(*it);
 		if (ts.isElapsed(m_age.totalMicroseconds()))
 		{
-			File::remove(*it);
+			Files::remove(*it);
 		}
 	}
 }
@@ -82,11 +85,11 @@ void PurgeByCountStrategy::purge(const std::string& path)
 	{
 		FileList::iterator it = files.begin();
 		FileList::iterator purgeIt = it;
-		Timestamp purgeTS = File::getLastModified(*purgeIt);
+		Timestamp purgeTS = Files::getLastModificationTime(*purgeIt);
 		++it;
 		while (it != files.end())
 		{
-			Timestamp md(File::getLastModified(*it));
+			Timestamp md(Files::getLastModificationTime(*it));
 			if (md <= purgeTS)
 			{
 				purgeTS = md;
@@ -94,7 +97,7 @@ void PurgeByCountStrategy::purge(const std::string& path)
 			}
 			++it;
 		}
-		File::remove(*purgeIt);
+		Files::remove(*purgeIt);
 		files.erase(purgeIt);
 	}
 }

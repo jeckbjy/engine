@@ -1,6 +1,6 @@
 //! Application
 #include "Cute/Application.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 
 CUTE_NS_BEGIN
 
@@ -52,7 +52,7 @@ bool Application::setup()
 	m_options.get(m_configPath, "config");
 	if (m_configPath.empty())
 		m_configPath = "./" + m_name + ".cfg";
-	if (File::exists(m_configPath))
+	if (Files::exists(m_configPath))
 		m_config.load(m_configPath);
 
 	// init logger

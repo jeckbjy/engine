@@ -1,6 +1,7 @@
 #pragma once
 #include "Cute/API.h"
 #include "Cute/Types.h"
+#include "Cute/String.h"
 
 CUTE_NS_BEGIN
 

@@ -84,7 +84,7 @@ URI::URI(const String& scheme, const String& pathEtc)
 	: m_scheme(scheme)
 	, m_port(0)
 {
-	toLowerInPlace(m_scheme);
+    m_scheme.toLower();
 	m_port = getWellKnownPort();
 	String::const_iterator beg = pathEtc.begin();
 	String::const_iterator end = pathEtc.end();
@@ -94,7 +94,7 @@ URI::URI(const String& scheme, const String& pathEtc)
 URI::URI(const String& scheme, const String& authority, const String& pathEtc) 
 	: m_scheme(scheme)
 {
-	toLowerInPlace(m_scheme);
+    m_scheme.toLower();
 	String::const_iterator beg = authority.begin();
 	String::const_iterator end = authority.end();
 	parseAuthority(beg, end);
@@ -108,7 +108,7 @@ URI::URI(const String& scheme, const String& authority, const String& path, cons
 	, m_path(path)
 	, m_query(query)
 {
-	toLowerInPlace(m_scheme);
+    m_scheme.toLower();
 	String::const_iterator beg = authority.begin();
 	String::const_iterator end = authority.end();
 	parseAuthority(beg, end);
@@ -120,7 +120,7 @@ URI::URI(const String& scheme, const String& authority, const String& path, cons
 	, m_query(query)
 	, m_fragment(fragment)
 {
-	toLowerInPlace(m_scheme);
+	m_scheme.toLower();
 	String::const_iterator beg = authority.begin();
 	String::const_iterator end = authority.end();
 	parseAuthority(beg, end);
@@ -250,7 +250,7 @@ String URI::toString() const
 void URI::setScheme(const String& scheme)
 {
 	m_scheme = scheme;
-	toLowerInPlace(m_scheme);
+    m_scheme.toLower();
 	if (m_port == 0)
 		m_port = getWellKnownPort();
 }
@@ -722,7 +722,7 @@ void URI::parseHostAndPort(String::const_iterator& it, const String::const_itera
 	}
 	else m_port = getWellKnownPort();
 	m_host = host;
-	toLowerInPlace(m_host);
+    m_host.toLower();
 }
 
 void URI::parsePath(String::const_iterator& it, const String::const_iterator& end)

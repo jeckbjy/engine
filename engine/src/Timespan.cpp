@@ -1,31 +1,75 @@
 // module DateTime
 #include "Cute/Timespan.h"
+#include "Cute/Number.h"
 
 CUTE_NS_BEGIN
 
-const int64_t Timespan::MILLISECONDS = 1000;
-const int64_t Timespan::SECONDS = 1000 * Timespan::MILLISECONDS;
-const int64_t Timespan::MINUTES = 60 * Timespan::SECONDS;
-const int64_t Timespan::HOURS = 60 * Timespan::MINUTES;
-const int64_t Timespan::DAYS = 24 * Timespan::HOURS;
+const int64 Timespan::MILLISECONDS = 1000;
+const int64 Timespan::SECONDS 	 = 1000 * Timespan::MILLISECONDS;
+const int64 Timespan::MINUTES 	 = 60 * Timespan::SECONDS;
+const int64 Timespan::HOURS 		 = 60 * Timespan::MINUTES;
+const int64 Timespan::DAYS 		 = 24 * Timespan::HOURS;
 
-Timespan::Timespan() 
+String Timespan::format(const Timespan& timespan, const String& fmt)
+{
+	String str;
+	append(str, timespan, fmt);
+	return str;
+}
+
+void Timespan::append(String& str, const Timespan& timespan, const String& fmt)
+{
+	String::const_iterator it  = fmt.begin();
+	String::const_iterator end = fmt.end();
+	String::value_type ch;
+	while (it != end)
+	{
+		ch = *it++;
+		if (ch == '%')
+		{
+			ch = *it++;
+			if(it == end)
+				break;
+
+			switch (ch)
+			{
+			case 'd': Number::append (str, timespan.days()); break;
+			case 'H': Number::append0(str, timespan.hours(), 2); break;
+			case 'h': Number::append (str, timespan.totalHours()); break;
+			case 'M': Number::append0(str, timespan.minutes(), 2); break;
+			case 'm': Number::append (str, timespan.totalMinutes()); break;
+			case 'S': Number::append0(str, timespan.seconds(), 2); break;
+			case 's': Number::append (str, timespan.totalSeconds()); break;
+			case 'i': Number::append0(str, timespan.milliseconds(), 3); break;
+			case 'c': Number::append (str, timespan.milliseconds() / 100); break;
+			case 'F': Number::append0(str, timespan.milliseconds() * 1000 + timespan.microseconds(), 6); break;
+			default:  str += ch;
+			}
+		}
+		else
+		{
+			str += ch;
+		}
+	}
+}
+
+Timespan::Timespan()
 	: m_span(0)
 {
 }
 
-Timespan::Timespan(int64_t microSeconds) 
-	: m_span(microSeconds)
+Timespan::Timespan(int64 microseconds)
+	: m_span(microseconds)
 {
 }
 
-Timespan::Timespan(long otherSeconds, long otherMicroSeconds) 
-	: m_span(int64_t(otherSeconds)*SECONDS + otherMicroSeconds)
+Timespan::Timespan(long seconds, long microseconds)
+	: m_span(seconds * SECONDS + microseconds)
 {
 }
 
-Timespan::Timespan(int otherDays, int otherHours, int otherMinutes, int otherSeconds, int otherMicroSeconds)
-	: m_span(int64_t(otherMicroSeconds) + int64_t(otherSeconds)*SECONDS + int64_t(otherMinutes)*MINUTES + int64_t(otherHours)*HOURS + int64_t(otherDays)*DAYS)
+Timespan::Timespan(int days, int hours, int minutes, int seconds, int microseconds)
+	: m_span(microseconds + seconds * SECONDS + minutes * MINUTES + hours * HOURS + days * DAYS)
 {
 }
 
@@ -44,21 +88,21 @@ Timespan& Timespan::operator = (const Timespan& timespan)
 	return *this;
 }
 
-Timespan& Timespan::operator = (int64_t microSeconds)
+Timespan& Timespan::operator = (int64 microseconds)
 {
-	m_span = microSeconds;
+	m_span = microseconds;
 	return *this;
 }
 
-Timespan& Timespan::assign(int otherDays, int otherHours, int otherMinutes, int otherSeconds, int otherMicroSeconds)
+Timespan& Timespan::assign(int days, int hours, int minutes, int seconds, int microseconds)
 {
-	m_span = int64_t(otherMicroSeconds) + int64_t(otherSeconds)*SECONDS + int64_t(otherMinutes)*MINUTES + int64_t(otherHours)*HOURS + int64_t(otherDays)*DAYS;
+	m_span = microseconds + seconds * SECONDS + minutes * MINUTES + hours * HOURS + days * DAYS;
 	return *this;
 }
 
-Timespan& Timespan::assign(long otherSeconds, long otherMicroSeconds)
+Timespan& Timespan::assign(long seconds, long microseconds)
 {
-	m_span = int64_t(otherSeconds)*SECONDS + int64_t(otherMicroSeconds);
+	m_span = seconds * SECONDS + microseconds;
 	return *this;
 }
 
@@ -89,25 +133,25 @@ Timespan& Timespan::operator -= (const Timespan& d)
 	return *this;
 }
 
-Timespan Timespan::operator + (int64_t microSeconds) const
+Timespan Timespan::operator + (int64 microseconds) const
 {
-	return Timespan(m_span + microSeconds);
+	return Timespan(m_span + microseconds);
 }
 
-Timespan Timespan::operator - (int64_t microSeconds) const
+Timespan Timespan::operator - (int64 microseconds) const
 {
-	return Timespan(m_span - microSeconds);
+	return Timespan(m_span - microseconds);
 }
 
-Timespan& Timespan::operator += (int64_t microSeconds)
+Timespan& Timespan::operator += (int64 microseconds)
 {
-	m_span += microSeconds;
+	m_span += microseconds;
 	return *this;
 }
 
-Timespan& Timespan::operator -= (int64_t microSeconds)
+Timespan& Timespan::operator -= (int64 microseconds)
 {
-	m_span -= microSeconds;
+	m_span -= microseconds;
 	return *this;
 }
 

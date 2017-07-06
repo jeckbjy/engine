@@ -140,7 +140,7 @@ bool IOPoll::reset()
 		{
 			uint64_t counter(0);
 			errno = 0;
-			int bytes = ::read(m_reader, &counter, sizeof(uint64_t));
+			long bytes = (long)::read(m_reader, &counter, sizeof(uint64_t));
 			if (bytes < 0 && errno == EINTR)
 				continue;
 			return bytes > 0;
@@ -152,7 +152,7 @@ bool IOPoll::reset()
 		for (;;)
 		{
 			char data[32];
-			int bytes = ::read(m_reader, data, sizeof(data));
+			long bytes = (long)::read(m_reader, data, sizeof(data));
 			if (bytes < 0 && errno == EINTR)
 				continue;
 			bool interrupted = bytes > 0;

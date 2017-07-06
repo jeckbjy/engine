@@ -3,14 +3,15 @@
 #include <cstdio> // sprintf()
 
 #ifdef CUTE_OS_FAMILY_POSIX
-#include <unistd.h>
-#include <sys/utsname.h>
-#include <sys/param.h>
-#if defined(CUTE_OS_FAMILY_BSD)
-#include <sys/sysctl.h>
-#elif CUTE_OS == CUTE_OS_HPUX
-#include <pthread.h>
-#endif
+# include <unistd.h>
+# include <sys/utsname.h>
+# include <sys/param.h>
+
+# if    defined(CUTE_OS_FAMILY_BSD)
+#   include <sys/sysctl.h>
+# elif  defined(CUTE_OS_HPUX)
+#   include <pthread.h>
+# endif
 #endif
 
 CUTE_NS_BEGIN
@@ -90,9 +91,10 @@ unsigned Environment::processorCount()
 	return si.dwNumberOfProcessors;
 #else
 #	if defined(_SC_NPROCESSORS_ONLN)
-	int count = sysconf(_SC_NPROCESSORS_ONLN);
-	if (count <= 0) count = 1;
-	return static_cast<int>(count);
+	long count = sysconf(_SC_NPROCESSORS_ONLN);
+	if (count <= 0)
+        count = 1;
+	return static_cast<unsigned>(count);
 #	elif defined(CUTE_OS_FAMILY_BSD)
 	unsigned count;
 	std::size_t size = sizeof(count);
@@ -100,7 +102,7 @@ unsigned Environment::processorCount()
 		return 1;
 	else
 		return count;
-#	elif CUTE_OS == CUTE_OS_HPUX
+#	elif defined(CUTE_OS_HPUX)
 	return pthread_num_processors_np();
 #	else
 	return 1;

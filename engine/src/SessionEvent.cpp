@@ -17,7 +17,7 @@ PacketEvent::~PacketEvent()
 
 void PacketEvent::process()
 {
-	EventHandler* handler = HandlerService::instance().find(m_msg->msgid());
+	EventHandler* handler = HandlerService::instance().find((uint32)m_msg->msgid());
 	if (handler)
 		handler->process(this);
 }

@@ -1,7 +1,7 @@
 //! Process
 #include "Cute/SharedMemory.h"
 #include "Cute/String.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 #include "Cute/Error.h"
 #include "Cute/Exception.h"
 
@@ -15,7 +15,7 @@
 
 CUTE_NS_BEGIN
 
-SharedMemory::SharedMemory(const std::string& name, size_t size, AccessMode mode, const void* addrHint /* = 0 */, bool server /* = true */)
+SharedMemory::SharedMemory(const String& name, size_t size, AccessMode mode, const void* addrHint /* = 0 */, bool server /* = true */)
 	: m_address(0)
 	, m_size(size)
 	, m_mode(mode)
@@ -49,7 +49,7 @@ SharedMemory::SharedMemory(const std::string& name, size_t size, AccessMode mode
 	m_fileMapped = false;
 	m_server = server;
 
-#if CUTE_OS == CUTE_OS_HPUX
+#if defined(CUTE_OS_HPUX)
 	m_name.append("tmp/");
 #endif
 	m_name.append(name);
@@ -84,10 +84,10 @@ SharedMemory::SharedMemory(const String& file, AccessMode mode, const void* addr
 	, m_mode(mode)
 	, m_handle(INVALID_HANDLE_VALUE)
 {
-	if (!File::exists(file) || !File::isFile(file))
+	if (!Files::exists(file) || !Files::isFile(file))
 		throw FileNotFoundException(file);
 
-	m_size = (size_t)File::getSize(file);
+	m_size = (size_t)Files::getSize(file);
 #ifdef _WIN32
 	m_file = INVALID_HANDLE_VALUE;
 

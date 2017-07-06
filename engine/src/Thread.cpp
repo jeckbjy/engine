@@ -37,7 +37,7 @@ namespace
 namespace {
     void setThreadName(pthread_t thread, const String& threadName)
     {
-#if (CUTE_OS == POCO_OS_MAC_OS_X)
+#if defined(POCO_OS_MAC)
         pthread_setname_np(threadName.c_str()); // __OSX_AVAILABLE_STARTING(__MAC_10_6, __IPHONE_3_2)
 #else
         if (pthread_setname_np(thread, threadName.c_str()) == ERANGE && threadName.size() > 15)
@@ -86,7 +86,7 @@ __RET __API RunnableEntry(void* args)
 #if defined(CUTE_POSIX_DEBUGGER_THREAD_NAMES)
     setThreadName(pThread->m_thread, pThread->getName());
 #endif
-#if CUTE_OS == CUTE_OS_LINUX
+#if defined(CUTE_OS_FAMILY_LINUX)
 	pThread->m_tid = (thread_id)syscall(SYS_gettid);
 #endif
 	try
@@ -199,7 +199,7 @@ void Thread::sleep(long milliseconds)
 #ifdef _WIN32
 	::Sleep(milliseconds);
 #else
-	::usleep(milliseconds * 1000);
+	::usleep(useconds_t(milliseconds * 1000));
 #endif
 }
 
@@ -222,7 +222,7 @@ Thread::TID Thread::currentTID()
 {
 #ifdef _WIN32
 	return ::GetCurrentThreadId();
-#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif defined(CUTE_OS_MAC)
     return pthread_mach_thread_np(pthread_self());
 #elif defined(CUTE_OS_FAMILY_LINUX)
 #ifndef SYS_gettid
@@ -281,7 +281,7 @@ String makeName(int id)
 
 int uniqueId()
 {
-	static Atomic counter;
+	static Atomic32 counter;
 	return ++counter;
 }
 
@@ -414,10 +414,10 @@ void Thread::startInternal(Runnable* target)
 		throw SystemException("cannot start thread");
 	}
 
-#if CUTE_OS == CUTE_OS_LINUX
+#if   defined(CUTE_OS_LINUX)
 	// On Linux the TID is acquired from the running thread using syscall
 	m_tid = 0;
-#elif CUTE_OS == CUTE_OS_MAC_OS_X
+#elif defined(CUTE_OS_MAC)
 	m_tid = static_cast<TID>(pthread_mach_thread_np(m_thread));
 #else
 	m_tid = m_thread;
@@ -590,7 +590,7 @@ void Thread::setAffinity(int cpu)
 		throw SystemException("Failed to set affinity");
 
 	m_cpu = cpu;
-#elif (CUTE_OS == CUTE_OS_MAC_OS_X)
+#elif defined(CUTE_OS_MAC)
 	kern_return_t ret;
 	thread_affinity_policy policy;
 	policy.affinity_tag = cpu;

@@ -12,7 +12,7 @@ public:
 	Importer();
 	~Importer();
 
-	Resource* import(const String& filePath, const ImportOptions* options = NULL, const String& uuid = Strings::BLANK);
+	Resource* import(const String& filePath, const ImportOptions* options = NULL, const String& uuid = "");
 
 private:
 	ImporterSpecific* getImporter(const String& ext);

@@ -88,7 +88,7 @@ void sock_listen(socket_t sock, int backlog)
 		throw NetException("socket listen error!");
 }
 
-int sock_close(socket_t sock)
+long sock_close(socket_t sock)
 {
 #ifdef _WIN32
 	return ::closesocket(sock);
@@ -97,9 +97,9 @@ int sock_close(socket_t sock)
 #endif
 }
 
-int sock_recv(socket_t sock, void* buff, int size, int flags /* = 0 */)
+long sock_recv(socket_t sock, void* buff, int size, int flags /* = 0 */)
 {
-	int rc;
+	long rc;
 	do
 	{
 		rc = ::recv(sock, (char*)buff, size, flags);
@@ -107,9 +107,9 @@ int sock_recv(socket_t sock, void* buff, int size, int flags /* = 0 */)
 	return rc;
 }
 
-int sock_send(socket_t sock, const void* buff, int size, int flags /* = 0 */)
+long sock_send(socket_t sock, const void* buff, int size, int flags /* = 0 */)
 {
-	int rc;
+	long rc;
 	do
 	{
 		rc = ::send(sock, (const char*)buff, size, flags);
@@ -117,9 +117,9 @@ int sock_send(socket_t sock, const void* buff, int size, int flags /* = 0 */)
 	return rc;
 }
 
-int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen)
+long sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen)
 {
-	int rc;
+	long rc;
 	do
 	{
 		rc = ::recvfrom(sock, (char*)buff, size, flags, from, &fromlen);
@@ -127,9 +127,9 @@ int sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockadd
 	return rc;
 }
 
-int sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen)
+long sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen)
 {
-	int rc;
+	long rc;
 	do
 	{
 		rc = ::sendto(sock, (const char*)(buff), size, flags, to, tolen);
@@ -137,7 +137,7 @@ int sock_sendto(socket_t sock, const void* buff, int size, int flags, const stru
 	return rc;
 }
 
-int sock_connect(socket_t sock, const struct sockaddr* addr, int len)
+long sock_connect(socket_t sock, const struct sockaddr* addr, int len)
 {
 	int rc;
 	do
@@ -147,7 +147,7 @@ int sock_connect(socket_t sock, const struct sockaddr* addr, int len)
 	return rc;
 }
 
-int sock_ioctl(socket_t sock, ioctl_req_t request, void* arg)
+long sock_ioctl(socket_t sock, ioctl_req_t request, void* arg)
 {
 #ifdef _WIN32
 	return ::ioctlsocket(sock, request, reinterpret_cast<u_long*>(&arg));
@@ -156,7 +156,7 @@ int sock_ioctl(socket_t sock, ioctl_req_t request, void* arg)
 #endif
 }
 
-int sock_readable(socket_t sock)
+long sock_readable(socket_t sock)
 {
 	int bytes = 0;
 	sock_ioctl(sock, FIONREAD, &bytes);

@@ -1,6 +1,6 @@
 //! Logging
 #include "Cute/LogArchiveStrategy.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 #include "Cute/Path.h"
 
 CUTE_NS_BEGIN
@@ -29,9 +29,9 @@ void ArchiveStrategy::compress(bool flag)
 void ArchiveStrategy::moveFile(const std::string& oldPath, const std::string& newPath)
 {
 	bool compressed = false;
-	Path p(oldPath);
+//	Path p(oldPath);
 	String f(oldPath);
-	if (!File::exists(oldPath))
+	if (!Files::exists(oldPath))
 	{
 		f = oldPath + ".gz";
 		compressed = true;
@@ -41,11 +41,11 @@ void ArchiveStrategy::moveFile(const std::string& oldPath, const std::string& ne
 		mvPath.append(".gz");
 	if (!_compress || compressed)
 	{
-		File::rename(f, mvPath);
+		Files::rename(f, mvPath);
 	}
 	else
 	{
-		File::rename(f, newPath);
+		Files::rename(f, newPath);
 		//if (!_pCompressor) _pCompressor = new ArchiveCompressor;
 		//_pCompressor->compress(newPath);
 	}
@@ -53,7 +53,7 @@ void ArchiveStrategy::moveFile(const std::string& oldPath, const std::string& ne
 
 bool ArchiveStrategy::exists(const std::string& name)
 {
-	if (File::exists(name))
+	if (Files::exists(name))
 	{
 		return true;
 	}
@@ -61,7 +61,7 @@ bool ArchiveStrategy::exists(const std::string& name)
 	{
 		std::string gzName(name);
 		gzName.append(".gz");
-		return File::exists(gzName);
+		return Files::exists(gzName);
 	}
 	else return false;
 }

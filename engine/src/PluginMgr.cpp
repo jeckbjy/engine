@@ -1,7 +1,7 @@
 //! SharedLibrary
 #include "Cute/PluginMgr.h"
 #include "Cute/Plugin.h"
-#include "Cute/Path.h"
+#include "Cute/Paths.h"
 #include "Cute/String.h"
 #include "Cute/SharedLibrary.h"
 
@@ -19,8 +19,7 @@ PluginMgr::~PluginMgr()
 
 void PluginMgr::load(const String& path)
 {
-	Path p(path);
-	String libname = p.getFileName();
+    String libname = Paths::getFileName(path);
 
 	Mutex::ScopedLock lock(m_mutex);
 	if (m_libs.find(libname) != m_libs.end())
@@ -29,7 +28,7 @@ void PluginMgr::load(const String& path)
 	SharedLibrary* lib = new SharedLibrary();
 	try
 	{
-		if (!endsWith(path, SharedLibrary::suffix()))
+        if(!path.endsWith(SharedLibrary::suffix()))
 			lib->load(path + SharedLibrary::suffix());
 		else
 			lib->load(path);

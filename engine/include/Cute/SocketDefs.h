@@ -5,7 +5,7 @@
 #	include <winsock2.h>
 #	include <ws2tcpip.h>
 
-#elif (CUTE_OS == CUTE_OS_VXWORKS)
+#elif defined(CUTE_OS_VXWORKS)
 #	include <hostLib.h>
 #	include <ifLib.h>
 #	include <inetLib.h>
@@ -15,7 +15,7 @@
 #	include <socket.h>
 #	include <netinet/tcp.h>
 
-#elif defined(CUTE_OS_FAMILY_UNIX) || defined(CUTE_OS_FAMILY_VMS)
+#elif defined(CUTE_OS_FAMILY_POSIX) || defined(CUTE_OS_FAMILY_VMS)
 #	include <unistd.h>
 #	include <errno.h>
 #	include <sys/types.h>
@@ -28,7 +28,7 @@
 #	include <netinet/tcp.h>
 #	include <netdb.h>
 
-#	if defined(CUTE_OS_FAMILY_UNIX)
+#	if defined(CUTE_OS_FAMILY_POSIX)
 #	include <net/if.h>
 #	endif
 
@@ -42,7 +42,7 @@
 #	include <arpa/inet.h>
 #	endif
 
-#	if (CUTE_OS == CUTE_OS_SOLARIS) || (CUTE_OS == CUTE_OS_MAC_OS_X)
+#	if defined(CUTE_OS_SOLARIS) || defined(CUTE_OS_MAC)
 #	include <sys/sockio.h>
 #	include <sys/filio.h>
 #	endif
@@ -70,14 +70,14 @@ socket_t CUTE_CORE_API sock_accept(socket_t listener, sockaddr* addr, socklen_t*
 void CUTE_CORE_API sock_bind(socket_t sock, const struct sockaddr* addr, int len);
 void CUTE_CORE_API sock_listen(socket_t sock, int backlog);
 
-int CUTE_CORE_API sock_close(socket_t sock);
-int CUTE_CORE_API sock_recv(socket_t sock, void* buff, int size, int flags = 0);
-int CUTE_CORE_API sock_send(socket_t sock, const void* buff, int size, int flags = 0);
-int CUTE_CORE_API sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen);
-int CUTE_CORE_API sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen);
-int CUTE_CORE_API sock_connect(socket_t sock, const struct sockaddr* addr, int len);
-int CUTE_CORE_API sock_ioctl(socket_t sock, ioctl_req_t request, void* arg);
-int CUTE_CORE_API sock_readable(socket_t sock);
+long CUTE_CORE_API sock_close(socket_t sock);
+long CUTE_CORE_API sock_recv(socket_t sock, void* buff, int size, int flags = 0);
+long CUTE_CORE_API sock_send(socket_t sock, const void* buff, int size, int flags = 0);
+long CUTE_CORE_API sock_recvfrom(socket_t sock, void* buff, int size, int flags, struct sockaddr* from, socklen_t fromlen);
+long CUTE_CORE_API sock_sendto(socket_t sock, const void* buff, int size, int flags, const struct sockaddr* to, int tolen);
+long CUTE_CORE_API sock_connect(socket_t sock, const struct sockaddr* addr, int len);
+long CUTE_CORE_API sock_ioctl(socket_t sock, ioctl_req_t request, void* arg);
+long CUTE_CORE_API sock_readable(socket_t sock);
 
 void CUTE_CORE_API sock_setoption(socket_t sock, int level, int option, const void* value, socklen_t length);
 void CUTE_CORE_API sock_getoption(socket_t sock, int level, int option, void* value, socklen_t length);

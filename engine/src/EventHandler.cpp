@@ -22,7 +22,7 @@ void EventHandler::process(PacketEvent* ev)
 	HandlerProfiler::Timer timer;
 	HandlerProfiler::instance().start(timer);
 
-	int cmdid = ev->getPacket()->msgid();
+	int cmdid = (int)ev->getPacket()->msgid();
 	int result = handle(ev);
 	if (result != 0)
 	{// 返回值处理

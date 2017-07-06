@@ -4,9 +4,6 @@
 #include "Cute/Number.h"
 #include "Cute/DateTime.h"
 #include "Cute/Timestamp.h"
-#include "Cute/DateTimeFormat.h"
-#include "Cute/DateTimeParser.h"
-#include "Cute/DateTimeFormatter.h"
 
 CUTE_NS_BEGIN
 
@@ -217,14 +214,13 @@ public:
 
 	void encode(String& value) const
 	{
-		value = DateTimeFormatter::format(m_value, DateTimeFormat::ISO8601_FORMAT);
+        DateTime::format(value, m_value);
 	}
 
 	void decode(const String& value)
 	{
-		int tzd = 0;
-		if (!DateTimeParser::tryParse(DateTimeFormat::ISO8601_FORMAT, value, m_value, tzd))
-			throw BadCastException("string -> DateTime");
+        if(!DateTime::parse(m_value, value))
+            throw BadCastException("string -> DateTime");
 	}
 
 	DateTime& value()

@@ -360,7 +360,7 @@ bool BufferList::recv(socket_t sock)
 	size_t size = tail->writable();
 
 	bool result = true;
-	int ret;
+	long ret;
 	for (;;)
 	{
 		if (size == 0)
@@ -401,7 +401,7 @@ bool BufferList::send(socket_t sock)
 	{
 		buf = m_curr->data + m_offs;
 		len = m_curr->size - m_offs;
-		int ret = sock_send(sock, buf, (int)len);
+		long ret = sock_send(sock, buf, (int)len);
 		if (ret < 0)
 			return false;
 

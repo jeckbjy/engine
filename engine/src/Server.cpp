@@ -68,7 +68,7 @@ void Server::process()
 		Session* sess = pending.sess;
 		int events = pending.events;
 
-		if ((events & (PE_REMOVE || PE_ERROR)) != 0)
+		if ((events & (PE_REMOVE | PE_ERROR)) != 0)
 			sess->close();
 
 		if ((events & PE_ERROR) != 0)

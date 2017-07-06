@@ -92,7 +92,7 @@ private:
 	int				m_serial;
 	int				m_age;
 	int				m_stackSize;
-	Atomic			m_lastCpu;
+	Atomic32		m_lastCpu;
 	ThreadVec		m_threads;
 	mutable Mutex	m_mutex;
 	AffinityPolicy	m_affinityPolicy;

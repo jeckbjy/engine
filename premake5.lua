@@ -140,10 +140,11 @@ group "core"
 		kind 			( lib_kind )
 		
 		-- add files
-		files			{ "engine/**.*" }
+		files			{ "engine/include/**.*", "engine/src/**.*" }
 		removefiles		{ "engine/src/conversion/**.*" }
 		removefiles		{ "engine/src/pcre/**.*" }
 		removefiles		{ "engine/backup/**.*" }
+		removefiles		{ "engine/**.DS_Store"}
 		module_vpaths	( { "engine/**.*" }, "Core"	)
 
 -- 测试项目

@@ -2,6 +2,7 @@
 #include "Cute/Ref.h"
 #include "Cute/RTTI.h"
 #include "Cute/PreDeclare.h"
+#include "Cute/String.h"
 
 CUTE_NS_BEGIN
 

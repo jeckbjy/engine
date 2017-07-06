@@ -1,598 +1,230 @@
 #pragma once
+#include "Cute/Types.h"
 #include "Cute/Ascii.h"
+#include <string>
 
 CUTE_NS_BEGIN
 
-class CUTE_CORE_API Strings
+class CUTE_CORE_API String : public std::string
 {
+	typedef std::string BaseString;
 public:
-	enum Encoding
-	{
-		None,               // Unknown or binary
-		ANSI,               // 0-255
-		ASCII,              // 0-127
-		UTF8_BOM,           // UTF8 with BOM
-		UTF8_NOBOM,         // UTF8 without BOM
-		UTF16_LE_BOM,       // UTF16 LE with BOM
-		UTF16_LE_NOBOM,     // UTF16 LE without BOM
-		UTF16_BE_BOM,       // UTF16-BE with BOM
-		UTF16_BE_NOBOM      // UTF16-BE without BOM
-	};
+	typedef iterator            Iterator;
+	typedef const_iterator      ConstIterator;
+	typedef reverse_iterator    ReverseIterator;
+	typedef const_reverse_iterator ConstReverseIterator;
+	String();
+	String(int8 value);
+	String(int16 value);
+	String(int32 value);
+	String(int64 value);
+	String(uint8 value);
+	String(uint16 value);
+	String(uint32 value);
+	String(uint64 value);
+	String(float value);
+	String(double value);
+	String(char text, size_t count = 1);
+	String(const char* text);
+	String(const char* text, size_t maxChars);
+	String(const String& other, size_t start = npos, size_t count = npos);
+	String(const BaseString& other);
+#if defined(CUTE_CPP11)
+	String(String&& other);
+#endif
+	template<typename Iter>
+	String(const Iter& begin, const Iter& end): BaseString(begin, end) {}
 
-	static const String BLANK;
+	String& operator +=(const String& value);
+	String& operator +=(char value);
+	String& operator +=(int8 value);
+	String& operator +=(int16 value);
+	String& operator +=(int32 value);
+	String& operator +=(int64 value);
+	String& operator +=(uint8 value);
+	String& operator +=(uint16 value);
+	String& operator +=(uint32 value);
+	String& operator +=(uint64 value);
+	String& operator +=(float value);
+	String& operator +=(double value);
 
-	static void toUTF8(const UTF16String& from, UTF8String& to);
-	static void toUTF8(const UTF32String& from, UTF8String& to);
+	String& operator <<(const String& value);
+	String& operator <<(char value);
+	String& operator <<(int8 value);
+	String& operator <<(int16 value);
+	String& operator <<(int32 value);
+	String& operator <<(int64 value);
+	String& operator <<(uint8 value);
+	String& operator <<(uint16 value);
+	String& operator <<(uint32 value);
+	String& operator <<(uint64 value);
+	String& operator <<(float value);
+	String& operator <<(double value);
 
-	static void toUTF16(const UTF8String& from, UTF16String& to);
-	static void toUTF32(const UTF8String& from, UTF32String& to);
+	void format(const char* fmt, ...);
+	void format(const char* fmt, va_list& va);
 
-	static String format(const char* fmt, ...);
-	static void format(String& result, const char* fmt, ...);
-	static void format(String& result, const char* fmt, va_list& va);
+	char charAt(size_t index) const;
+	char lastCharAt(size_t index) const;
+
+//    int  compare(const String& other) const;
+	bool equals(const String& other) const;
+	bool startsWith(const String& prefix) const;
+	bool endsWith(const String& suffix) const;
+	bool contains(char ch, size_t start = 0) const;
+	bool contains(const String& other, size_t start = 0) const;
+	bool containsAny(const String& other, size_t start = 0) const;
+
+	int  icompare(const String& other) const;
+	bool iequals(const String& other) const;
+	bool istartsWith(const String& prefix) const;
+	bool iendsWith(const String& suffix) const;
+	bool icontains(char ch, size_t start = 0) const;
+	bool icontains(const String& other, size_t start = 0) const;
+	bool icontainsAny(const String& other, size_t start = 0) const;
+
+	long indexOf(char ch, bool ignoreCase = false, size_t start = 0) const;
+	long indexOf(const String& other, bool ignoreCase = false, size_t start = 0) const;
+	long indexOfAny(const String& other, bool ignoreCase = false, size_t start = 0) const;
+
+	long lastIndexOf(char ch, bool ignoreCase = false, size_t rstart = 0) const;
+	long lastIndexOf(const String& other, bool ignoreCase = false, size_t rstart = 0) const;
+	long lastIndexOfAny(const String& other, bool ignoreCase = false, size_t rstart = 0) const;
+
+	void trim();
+	void trimLeft();
+	void trimRight();
+	void toUpper();
+	void toLower();
+
+	void remove(size_t start);
+	void remove(size_t start, size_t length);
+	void remove(const String& word);
+	long removeFirst(const String& word, long offset = 0);
+	void replace(const String& from, const String& to);
+	long replaceFirst(const String& from, const String& to, long offset = 0);
+	void split();
+	void splitAny();
+
+public:
+	template<typename T, int N>
+	bool equalsAny(T str[N]);
+
+	template<typename T, int N>
+	bool startsWithAny(T str[N]);
+
+	template<typename T, int N>
+	bool endsWithAny(T str[N]);
+
+	template<typename T, int N>
+	bool iequalsAny(T str[N]);
+
+	template<typename T, int N>
+	bool istartsWithAny(T str[N]);
+
+	template<typename T, int N>
+	bool iendsWithAny(T str[N]);
 };
 
-/// Tests whether the string starts with the given prefix.
-template <class S>
-bool startsWith(const S& str, const S& prefix)
+//
+// inlines
+//
+inline char String::charAt(size_t index) const
 {
-	return str.size() >= prefix.size() && equal(prefix.begin(), prefix.end(), str.begin());
+	return this->at(index);
 }
 
-/// Tests whether the string ends with the given suffix.
-template <class S>
-bool endsWith(const S& str, const S& suffix)
+inline char String::lastCharAt(size_t index) const
 {
-	return str.size() >= suffix.size() && equal(suffix.rbegin(), suffix.rend(), str.rbegin());
+	return this->at(this->length() - index);
 }
 
-template <class S>
-S trimLeft(const S& str)
+template<typename T, int N>
+bool String::equalsAny(T str[N])
 {
-	typename S::const_iterator it = str.begin();
-	typename S::const_iterator end = str.end();
-
-	while (it != end && Ascii::isSpace(*it)) ++it;
-	return S(it, end);
-}
-
-template <class S>
-S& trimLeftInPlace(S& str)
-{
-	typename S::iterator it = str.begin();
-	typename S::iterator end = str.end();
-
-	while (it != end && Ascii::isSpace(*it)) ++it;
-	str.erase(str.begin(), it);
-	return str;
-}
-
-template <class S>
-S trimRight(const S& str)
-{
-	int pos = int(str.size()) - 1;
-
-	while (pos >= 0 && Ascii::isSpace(str[pos])) --pos;
-	return S(str, 0, pos + 1);
-}
-
-template <class S>
-S& trimRightInPlace(S& str)
-{
-	int pos = int(str.size()) - 1;
-
-	while (pos >= 0 && Ascii::isSpace(str[pos])) --pos;
-	str.resize(pos + 1);
-
-	return str;
-}
-
-template <class S>
-S trim(const S& str)
-{
-	int first = 0;
-	int last = int(str.size()) - 1;
-
-	while (first <= last && Ascii::isSpace(str[first])) ++first;
-	while (last >= first && Ascii::isSpace(str[last])) --last;
-
-	return S(str, first, last - first + 1);
-}
-
-template <class S>
-S& trimInPlace(S& str)
-{
-	int first = 0;
-	int last = int(str.size()) - 1;
-
-	while (first <= last && Ascii::isSpace(str[first])) ++first;
-	while (last >= first && Ascii::isSpace(str[last])) --last;
-
-	str.resize(last + 1);
-	str.erase(0, first);
-
-	return str;
-}
-
-template <class S>
-S toUpper(const S& str)
-{
-	typename S::const_iterator it = str.begin();
-	typename S::const_iterator end = str.end();
-
-	S result;
-	result.reserve(str.size());
-	while (it != end) result += static_cast<typename S::value_type>(Ascii::toUpper(*it++));
-	return result;
-}
-
-template <class S>
-S& toUpperInPlace(S& str)
-{
-	typename S::iterator it = str.begin();
-	typename S::iterator end = str.end();
-
-	while (it != end) { *it = static_cast<typename S::value_type>(Ascii::toUpper(*it)); ++it; }
-	return str;
-}
-
-template <class S>
-S toLower(const S& str)
-{
-	typename S::const_iterator it = str.begin();
-	typename S::const_iterator end = str.end();
-
-	S result;
-	result.reserve(str.size());
-	while (it != end) result += static_cast<typename S::value_type>(Ascii::toLower(*it++));
-	return result;
-}
-
-template <class S>
-S& toLowerInPlace(S& str)
-{
-	typename S::iterator it = str.begin();
-	typename S::iterator end = str.end();
-
-	while (it != end) { *it = static_cast<typename S::value_type>(Ascii::toLower(*it)); ++it; }
-	return str;
-}
-
-/// Returns a copy of str with all characters in
-/// from replaced by the corresponding (by position)
-/// characters in to. If there is no corresponding
-/// character in to, the character is removed from
-/// the copy. 
-template <class S>
-S translate(const S& str, const S& from, const S& to)
-{
-	S result;
-	result.reserve(str.size());
-	typename S::const_iterator it = str.begin();
-	typename S::const_iterator end = str.end();
-	typename S::size_type toSize = to.size();
-	while (it != end)
+	for (int i = 0; i < N; ++i)
 	{
-		typename S::size_type pos = from.find(*it);
-		if (pos == S::npos)
-		{
-			result += *it;
-		}
-		else
-		{
-			if (pos < toSize) result += to[pos];
-		}
-		++it;
-	}
-	return result;
-}
-
-/// Replaces in str all occurrences of characters in from
-/// with the corresponding (by position) characters in to.
-/// If there is no corresponding character, the character
-/// is removed.
-template <class S>
-S& translateInPlace(S& str, const S& from, const S& to)
-{
-	str = translate(str, from, to);
-	return str;
-}
-
-template <class S>
-S& replaceInPlace(S& str, const S& from, const S& to, typename S::size_type start = 0)
-{
-	assert(from.size() > 0);
-
-	S result;
-	typename S::size_type pos = 0;
-	result.append(str, 0, start);
-	do
-	{
-		pos = str.find(from, start);
-		if (pos != S::npos)
-		{
-			result.append(str, start, pos - start);
-			result.append(to);
-			start = pos + from.length();
-		}
-		else result.append(str, start, str.size() - start);
-	} while (pos != S::npos);
-	str.swap(result);
-	return str;
-}
-
-template <class S>
-S& replaceInPlace(S& str, const typename S::value_type* from, const typename S::value_type* to, typename S::size_type start = 0)
-{
-	assert(*from);
-
-	S result;
-	typename S::size_type pos = 0;
-	typename S::size_type fromLen = std::strlen(from);
-	result.append(str, 0, start);
-	do
-	{
-		pos = str.find(from, start);
-		if (pos != S::npos)
-		{
-			result.append(str, start, pos - start);
-			result.append(to);
-			start = pos + fromLen;
-		}
-		else result.append(str, start, str.size() - start);
-	} while (pos != S::npos);
-	str.swap(result);
-	return str;
-}
-
-template <class S>
-S& replaceInPlace(S& str, const typename S::value_type from, const typename S::value_type to = 0, typename S::size_type start = 0)
-{
-	if (from == to) return str;
-
-	typename S::size_type pos = 0;
-	do
-	{
-		pos = str.find(from, start);
-		if (pos != S::npos)
-		{
-			if (to) str[pos] = to;
-			else str.erase(pos, 1);
-		}
-	} while (pos != S::npos);
-
-	return str;
-}
-
-template <class S>
-S& removeInPlace(S& str, const typename S::value_type ch, typename S::size_type start = 0)
-{
-	return replaceInPlace(str, ch, 0, start);
-}
-
-/// Replace all occurrences of from (which must not be the empty string)
-/// in str with to, starting at position start.
-template <class S>
-S replace(const S& str, const S& from, const S& to, typename S::size_type start = 0)
-{
-	S result(str);
-	replaceInPlace(result, from, to, start);
-	return result;
-}
-
-template <class S>
-S replace(const S& str, const typename S::value_type* from, const typename S::value_type* to, typename S::size_type start = 0)
-{
-	S result(str);
-	replaceInPlace(result, from, to, start);
-	return result;
-}
-
-template <class S>
-S replace(const S& str, const typename S::value_type from, const typename S::value_type to = 0, typename S::size_type start = 0)
-{
-	S result(str);
-	replaceInPlace(result, from, to, start);
-	return result;
-}
-
-template <class S>
-S remove(const S& str, const typename S::value_type ch, typename S::size_type start = 0)
-{
-	S result(str);
-	replaceInPlace(result, ch, 0, start);
-	return result;
-}
-
-////////////////////////////////////////////////////////////////////////////
-/// Concatenates strings.
-//////////////////////////////////////////////////////////////////////////
-template <class S>
-S cat(const S& s1, const S& s2)
-{
-	S result = s1;
-	result.reserve(s1.size() + s2.size());
-	result.append(s2);
-	return result;
-}
-
-template <class S>
-S cat(const S& s1, const S& s2, const S& s3)
-{
-	S result = s1;
-	result.reserve(s1.size() + s2.size() + s3.size());
-	result.append(s2);
-	result.append(s3);
-	return result;
-}
-
-template <class S>
-S cat(const S& s1, const S& s2, const S& s3, const S& s4)
-{
-	S result = s1;
-	result.reserve(s1.size() + s2.size() + s3.size() + s4.size());
-	result.append(s2);
-	result.append(s3);
-	result.append(s4);
-	return result;
-}
-
-template <class S>
-S cat(const S& s1, const S& s2, const S& s3, const S& s4, const S& s5)
-{
-	S result = s1;
-	result.reserve(s1.size() + s2.size() + s3.size() + s4.size() + s5.size());
-	result.append(s2);
-	result.append(s3);
-	result.append(s4);
-	result.append(s5);
-	return result;
-}
-
-template <class S>
-S cat(const S& s1, const S& s2, const S& s3, const S& s4, const S& s5, const S& s6)
-{
-	S result = s1;
-	result.reserve(s1.size() + s2.size() + s3.size() + s4.size() + s5.size() + s6.size());
-	result.append(s2);
-	result.append(s3);
-	result.append(s4);
-	result.append(s5);
-	result.append(s6);
-	return result;
-}
-
-template <class S, class It>
-S cat(const S& delim, const It& begin, const It& end)
-{
-	S result;
-	for (It it = begin; it != end; ++it)
-	{
-		if (!result.empty()) result.append(delim);
-		result += *it;
-	}
-	return result;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// icompare
-//////////////////////////////////////////////////////////////////////////
-/// Case-insensitive string comparison
-template <class S, class It>
-int icompare(
-	const S& str,
-	typename S::size_type pos,
-	typename S::size_type n,
-	It it2,
-	It end2)
-{
-	typename S::size_type sz = str.size();
-	if (pos > sz) pos = sz;
-	if (pos + n > sz) n = sz - pos;
-	It it1 = str.begin() + pos;
-	It end1 = str.begin() + pos + n;
-	while (it1 != end1 && it2 != end2)
-	{
-		typename S::value_type c1(static_cast<typename S::value_type>(Ascii::toLower(*it1)));
-		typename S::value_type c2(static_cast<typename S::value_type>(Ascii::toLower(*it2)));
-		if (c1 < c2)
-			return -1;
-		else if (c1 > c2)
-			return 1;
-		++it1; ++it2;
+		if (this->equals(str[i]))
+			return true;
 	}
 
-	if (it1 == end1)
-		return it2 == end2 ? 0 : -1;
-	else
-		return 1;
+	return false;
 }
 
-// A special optimization for an often used case.
-template <class S>
-int icompare(const S& str1, const S& str2)
+template<typename T, int N>
+bool String::startsWithAny(T str[N])
 {
-	typename S::const_iterator it1(str1.begin());
-	typename S::const_iterator end1(str1.end());
-	typename S::const_iterator it2(str2.begin());
-	typename S::const_iterator end2(str2.end());
-	while (it1 != end1 && it2 != end2)
+	for (int i = 0; i < N; ++i)
 	{
-		typename S::value_type c1(static_cast<typename S::value_type>(Ascii::toLower(*it1)));
-		typename S::value_type c2(static_cast<typename S::value_type>(Ascii::toLower(*it2)));
-		if (c1 < c2)
-			return -1;
-		else if (c1 > c2)
-			return 1;
-		++it1; ++it2;
+		if (this->startsWith(str[i]))
+			return true;
 	}
 
-	if (it1 == end1)
-		return it2 == end2 ? 0 : -1;
-	else
-		return 1;
+	return false;
 }
 
-template <class S>
-int icompare(const S& str1, typename S::size_type n1, const S& str2, typename S::size_type n2)
+template<typename T, int N>
+bool String::endsWithAny(T str[N])
 {
-	if (n2 > str2.size()) n2 = str2.size();
-	return icompare(str1, 0, n1, str2.begin(), str2.begin() + n2);
-}
-
-template <class S>
-int icompare(const S& str1, typename S::size_type n, const S& str2)
-{
-	if (n > str2.size()) n = str2.size();
-	return icompare(str1, 0, n, str2.begin(), str2.begin() + n);
-}
-
-template <class S>
-int icompare(const S& str1, typename S::size_type pos, typename S::size_type n, const S& str2)
-{
-	return icompare(str1, pos, n, str2.begin(), str2.end());
-}
-
-template <class S>
-int icompare(
-	const S& str1,
-	typename S::size_type pos1,
-	typename S::size_type n1,
-	const S& str2,
-	typename S::size_type pos2,
-	typename S::size_type n2)
-{
-	typename S::size_type sz2 = str2.size();
-	if (pos2 > sz2) pos2 = sz2;
-	if (pos2 + n2 > sz2) n2 = sz2 - pos2;
-	return icompare(str1, pos1, n1, str2.begin() + pos2, str2.begin() + pos2 + n2);
-}
-
-template <class S>
-int icompare(
-	const S& str1,
-	typename S::size_type pos1,
-	typename S::size_type n,
-	const S& str2,
-	typename S::size_type pos2)
-{
-	typename S::size_type sz2 = str2.size();
-	if (pos2 > sz2) pos2 = sz2;
-	if (pos2 + n > sz2) n = sz2 - pos2;
-	return icompare(str1, pos1, n, str2.begin() + pos2, str2.begin() + pos2 + n);
-}
-
-template <class S>
-int icompare(
-	const S& str,
-	typename S::size_type pos,
-	typename S::size_type n,
-	const typename S::value_type* ptr)
-{
-	//poco_check_ptr(ptr);
-	typename S::size_type sz = str.size();
-	if (pos > sz) pos = sz;
-	if (pos + n > sz) n = sz - pos;
-	typename S::const_iterator it = str.begin() + pos;
-	typename S::const_iterator end = str.begin() + pos + n;
-	while (it != end && *ptr)
+	for (int i = 0; i < N; ++i)
 	{
-		typename S::value_type c1(static_cast<typename S::value_type>(Ascii::toLower(*it)));
-		typename S::value_type c2(static_cast<typename S::value_type>(Ascii::toLower(*ptr)));
-		if (c1 < c2)
-			return -1;
-		else if (c1 > c2)
-			return 1;
-		++it; ++ptr;
+		if (this->endsWith(str[i]))
+			return true;
 	}
 
-	if (it == end)
-		return *ptr == 0 ? 0 : -1;
-	else
-		return 1;
+	return false;
 }
 
-template <class S>
-int icompare(
-	const S& str,
-	typename S::size_type pos,
-	const typename S::value_type* ptr)
+template<typename T, int N>
+bool String::iequalsAny(T str[N])
 {
-	return icompare(str, pos, str.size() - pos, ptr);
+	for (int i = 0; i < N; ++i)
+	{
+		if (iequals(str[i]))
+			return true;
+	}
+
+	return false;
 }
 
-template <class S>
-int icompare(
-	const S& str,
-	const typename S::value_type* ptr)
+template<typename T, int N>
+bool String::istartsWithAny(T str[N])
 {
-	return icompare(str, 0, str.size(), ptr);
+	for (int i = 0; i < N; ++i)
+	{
+		if (istartsWith(str[i]))
+			return true;
+	}
+
+	return false;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// case-insensitive string equality
-//////////////////////////////////////////////////////////////////////////
-template <typename charT>
-struct i_char_traits : public std::char_traits<charT>
+template<typename T, int N>
+bool String::iendsWithAny(T str[N])
 {
-	inline static bool eq(charT c1, charT c2)
+	for (int i = 0; i < N; ++i)
 	{
-		return Ascii::toLower(c1) == Ascii::toLower(c2);
+		if (iendsWith(str[i]))
+			return true;
 	}
 
-	inline static bool ne(charT c1, charT c2)
-	{
-		return !eq(c1, c2);
-	}
-
-	inline static bool lt(charT c1, charT c2)
-	{
-		return Ascii::toLower(c1) < Ascii::toLower(c2);
-	}
-
-	static int compare(const charT* s1, const charT* s2, size_t n)
-	{
-		for (int i = 0; i < n && s1 && s2; ++i, ++s1, ++s2)
-		{
-			if (Ascii::toLower(*s1) == Ascii::toLower(*s2)) continue;
-			else if (Ascii::toLower(*s1) < Ascii::toLower(*s2)) return -1;
-			else return 1;
-		}
-
-		return 0;
-	}
-
-	static const charT* find(const charT* s, int n, charT a)
-	{
-		while (n-- > 0 && Ascii::toLower(*s) != Ascii::toLower(a)) { ++s; }
-		return s;
-	}
-};
-
-/// Case-insensitive String counterpart.
-typedef std::basic_string<char, i_char_traits<char> > istring;
-
-/// Case-insensitive substring; searches for a substring without regards to case.
-template<typename T>
-std::size_t isubstr(const T& str, const T& sought)
-{
-	typename T::const_iterator it = std::search(str.begin(), str.end(),
-		sought.begin(), sought.end(),
-		i_char_traits<typename T::value_type>::eq);
-
-	if (it != str.end()) return it - str.begin();
-	else return static_cast<std::size_t>(T::npos);
+	return false;
 }
 
-/// Case-insensitive less-than functor; useful for standard maps
-/// and sets with Strings keys and case-insensitive ordering
-/// requirement.
-struct CILess
-{
-	inline bool operator() (const String& s1, const String& s2) const
-	{
-		return icompare(s1, s2) < 0;
-	}
-};
+//
+//
+//
+inline String& String::operator <<(const String& value) { *this += value; return *this;}
+inline String& String::operator <<(char value)   { *this += value; return *this;}
+inline String& String::operator <<(int8 value)   { *this += value; return *this;}
+inline String& String::operator <<(int16 value)  { *this += value; return *this;}
+inline String& String::operator <<(int32 value)  { *this += value; return *this;}
+inline String& String::operator <<(int64 value)  { *this += value; return *this;}
+inline String& String::operator <<(uint8 value)  { *this += value; return *this;}
+inline String& String::operator <<(uint16 value) { *this += value; return *this;}
+inline String& String::operator <<(uint32 value) { *this += value; return *this;}
+inline String& String::operator <<(uint64 value) { *this += value; return *this;}
+inline String& String::operator <<(float value)  { *this += value; return *this;}
+inline String& String::operator <<(double value) { *this += value; return *this;}
 
 CUTE_NS_END

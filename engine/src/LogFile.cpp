@@ -1,6 +1,6 @@
 //! Logging
 #include "Cute/LogFile.h"
-#include "Cute/File.h"
+#include "Cute/Files.h"
 #include "Cute/Exception.h"
 
 CUTE_NS_BEGIN
@@ -23,12 +23,12 @@ LogFile::LogFile(const String& filePath)
 		throw OpenFileException(m_path);
 #endif
 
-	if (File::exists(filePath))
+	if (Files::exists(filePath))
 	{
 		if (0 == size())
-			m_creationDate = File::getLastModified(m_path);
+			m_creationDate = Files::getLastModificationTime(m_path);
 		else
-			m_creationDate = File::getCreationTime(m_path);
+			m_creationDate = Files::getCreationTime(m_path);
 	}
 }
 

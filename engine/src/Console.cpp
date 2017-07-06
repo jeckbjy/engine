@@ -27,22 +27,22 @@ static WORD WIN_COLOR_FOREGROUND[Console::COLOR_MAX] =
 #else
 enum AnsiTextAttr
 {
-	TA_NORMAL   = 0,
-	TA_BOLD     = 1,
-	TA_BLINK    = 5,
-	TA_REVERSE  = 7
+    TA_NORMAL   = 0,
+    TA_BOLD     = 1,
+    TA_BLINK    = 5,
+    TA_REVERSE  = 7
 };
 // 前景色
 enum AnsiFGTextAttr
 {
-	FG_BLACK = 30, FG_RED, FG_GREEN, FG_BROWN, FG_BLUE,
-	FG_MAGENTA, FG_CYAN, FG_WHITE, FG_YELLOW
+    FG_BLACK = 30, FG_RED, FG_GREEN, FG_BROWN, FG_BLUE,
+    FG_MAGENTA, FG_CYAN, FG_WHITE, FG_YELLOW
 };
 // 背景色
 enum AnsiBGTextAttr
 {
-	BG_BLACK = 40, BG_RED, BG_GREEN, BG_BROWN, BG_BLUE,
-	BG_MAGENTA, BG_CYAN, BG_WHITE, BG_YELLOW
+    BG_BLACK = 40, BG_RED, BG_GREEN, BG_BROWN, BG_BLUE,
+    BG_MAGENTA, BG_CYAN, BG_WHITE, BG_YELLOW
 };
 
 // 前景色对应数组
@@ -70,7 +70,7 @@ void Console::setColor(Color color, bool stdout_stream)
 {
 #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(stdout_stream ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
-	SetConsoleTextAttribute(hConsole, WIN_COLOR_FOREGROUND[color]);
+    SetConsoleTextAttribute(hConsole, WIN_COLOR_FOREGROUND[color]);
 #else
     fprintf(stdout_stream ? stdout : stderr, "\x1b[%d%sm", UNIX_COLOR_FOREGROUND[color], (color >= YELLOW ? ";1" : ""));
 #endif
@@ -88,65 +88,62 @@ void Console::resetColor(bool stdout_stream)
 
 Console::Color Console::parseColor(const String& color)
 {
-	if (icompare(color, "default") == 0)
-		return DEFAULT;
-	else if (icompare(color, "black") == 0)
-		return BLACK;
-	else if (icompare(color, "red") == 0)
-		return RED;
-	else if (icompare(color, "green") == 0)
-		return GREEN;
-	else if (icompare(color, "brown") == 0)
-		return BROWN;
-	else if (icompare(color, "blue") == 0)
-		return BLUE;
-	else if (icompare(color, "magenta") == 0)
-		return MAGENTA;
-	else if (icompare(color, "cyan") == 0)
-		return CYAN;
-	else if (icompare(color, "gray") == 0)
-		return GRAY;
-//	else if (icompare(color, "darkGray") == 0)
-//		return DARKGRAY;
-	else if (icompare(color, "lred") == 0)
-		return LRED;
-	else if (icompare(color, "lgreen") == 0)
-		return LGREEN;
-	else if (icompare(color, "yellow") == 0)
-		return YELLOW;
-	else if (icompare(color, "lblue") == 0)
-		return LBLUE;
-	else if (icompare(color, "lmagenta") == 0)
-		return LMAGENTA;
-	else if (icompare(color, "lcyan") == 0)
-		return LCYAN;
-	else if (icompare(color, "white") == 0)
-		return WHITE;
-	else throw InvalidArgumentException("Invalid color value", color);
+    static const EnumPair COLOR_MAP[] = {
+        {"default", DEFAULT},
+        {"black",   BLACK},
+        {"red",     RED},
+        {"green",   GREEN},
+        {"brown",   BROWN},
+        {"blue",    BLUE},
+        {"magenta", MAGENTA},
+        {"cyan",    CYAN},
+        {"gray",    GRAY},
+        {"lred",    LRED},
+        {"lgreen",  LGREEN},
+        {"lblue",   LBLUE},
+        {"lmagenta",LMAGENTA},
+        {"lcyan",   LCYAN},
+        {"yellow",  YELLOW},
+        {"white",   WHITE},
+        {NULL,      0},
+    };
+    
+    for(int i = 0; i < INT32_MAX; ++i)
+    {
+        if(COLOR_MAP[i].name == NULL){
+            return DEFAULT;
+//            throw InvalidArgumentException("Invalid color value", color);
+        }
+        
+        if(color.iequals(COLOR_MAP[i].name))
+            return (Color)COLOR_MAP[i].value;
+    }
+    
+    return DEFAULT;
 }
 
 String Console::formatColor(Color color)
 {
-	switch (color)
-	{
-	case BLACK:    return "black";
-	case RED:      return "red";
-	case GREEN:    return "green";
-	case BROWN:    return "brown";
-	case BLUE:     return "blue";
-	case MAGENTA:  return "magenta";
-	case CYAN:     return "cyan";
-//	case GRAY:     return "gray";
-//	case DARKGRAY: return "darkGray";
-	case LRED:     return "lred";
-	case LGREEN:   return "lgreen";
-	case YELLOW:   return "yellow";
-	case LBLUE:    return "lblue";
-	case LMAGENTA: return "lmagenta";
-	case LCYAN:    return "lcyan";
-	case WHITE:    return "white";
-	default:       return "invalid";
-	}
+    switch (color)
+    {
+    case BLACK:    return "black";
+    case RED:      return "red";
+    case GREEN:    return "green";
+    case BROWN:    return "brown";
+    case BLUE:     return "blue";
+    case MAGENTA:  return "magenta";
+    case CYAN:     return "cyan";
+//  case GRAY:     return "gray";
+//  case DARKGRAY: return "darkGray";
+    case LRED:     return "lred";
+    case LGREEN:   return "lgreen";
+    case YELLOW:   return "yellow";
+    case LBLUE:    return "lblue";
+    case LMAGENTA: return "lmagenta";
+    case LCYAN:    return "lcyan";
+    case WHITE:    return "white";
+    default:       return "invalid";
+    }
 }
 
 CUTE_NS_END

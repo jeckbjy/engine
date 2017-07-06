@@ -23,7 +23,7 @@ TextConverter::~TextConverter()
 {
 }
 
-int TextConverter::convert(const std::string& source, std::string& destination, Transform trans)
+int TextConverter::convert(const String& source, String& destination, Transform trans)
 {
 	if (trans == 0)
 		trans = &nullTransform;
@@ -47,7 +47,7 @@ int TextConverter::convert(const std::string& source, std::string& destination, 
 	return errors;
 }
 
-int TextConverter::convert(const void* source, int length, std::string& destination, Transform trans)
+int TextConverter::convert(const void* source, int length, String& destination, Transform trans)
 {
 	cute_check_ptr(source);
 

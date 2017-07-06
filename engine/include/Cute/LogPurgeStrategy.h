@@ -1,6 +1,5 @@
 #pragma once
 #include "Cute/Foundation.h"
-#include "Cute/File.h"
 #include "Cute/Timespan.h"
 
 CUTE_NS_BEGIN
