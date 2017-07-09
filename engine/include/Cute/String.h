@@ -35,6 +35,19 @@ public:
 	template<typename Iter>
 	String(const Iter& begin, const Iter& end): BaseString(begin, end) {}
 
+	String& operator  =(const String& value);
+	String& operator  =(char value);
+	String& operator  =(int8 value);
+	String& operator  =(int16 value);
+	String& operator  =(int32 value);
+	String& operator  =(int64 value);
+	String& operator  =(uint8 value);
+	String& operator  =(uint16 value);
+	String& operator  =(uint32 value);
+	String& operator  =(uint64 value);
+	String& operator  =(float value);
+	String& operator  =(double value);
+
 	String& operator +=(const String& value);
 	String& operator +=(char value);
 	String& operator +=(int8 value);
@@ -105,25 +118,6 @@ public:
 	long replaceFirst(const String& from, const String& to, long offset = 0);
 	void split();
 	void splitAny();
-
-public:
-	template<typename T, int N>
-	bool equalsAny(T str[N]);
-
-	template<typename T, int N>
-	bool startsWithAny(T str[N]);
-
-	template<typename T, int N>
-	bool endsWithAny(T str[N]);
-
-	template<typename T, int N>
-	bool iequalsAny(T str[N]);
-
-	template<typename T, int N>
-	bool istartsWithAny(T str[N]);
-
-	template<typename T, int N>
-	bool iendsWithAny(T str[N]);
 };
 
 //
@@ -137,78 +131,6 @@ inline char String::charAt(size_t index) const
 inline char String::lastCharAt(size_t index) const
 {
 	return this->at(this->length() - index);
-}
-
-template<typename T, int N>
-bool String::equalsAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (this->equals(str[i]))
-			return true;
-	}
-
-	return false;
-}
-
-template<typename T, int N>
-bool String::startsWithAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (this->startsWith(str[i]))
-			return true;
-	}
-
-	return false;
-}
-
-template<typename T, int N>
-bool String::endsWithAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (this->endsWith(str[i]))
-			return true;
-	}
-
-	return false;
-}
-
-template<typename T, int N>
-bool String::iequalsAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (iequals(str[i]))
-			return true;
-	}
-
-	return false;
-}
-
-template<typename T, int N>
-bool String::istartsWithAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (istartsWith(str[i]))
-			return true;
-	}
-
-	return false;
-}
-
-template<typename T, int N>
-bool String::iendsWithAny(T str[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		if (iendsWith(str[i]))
-			return true;
-	}
-
-	return false;
 }
 
 //

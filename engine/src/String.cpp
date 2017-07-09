@@ -1,18 +1,9 @@
 //! Text
 #include "Cute/String.h"
 #include "Cute/Ascii.h"
-#include <inttypes.h>
 
 CUTE_NS_BEGIN
-
-//template<typename STR>
-//inline bool str_equal(const STR& str1, const STR& str2, bool ignoreCase)
-//{
-//    if(!ignoreCase)
-//        return std::equal(str1.begin(), str1.end(), str2.begin());
-//    else
-//        return std::equal(str1.begin(), str1.end(), str2.begin(), &Ascii::equalIgnoreCase);
-//}
+// http ://www.cnblogs.com/zyl910/archive/2012/08/08/c99int.html
 
 String::String()
 {
@@ -69,7 +60,7 @@ String::String(double value)
 }
 
 String::String(char text, size_t count)
-    : BaseString(text, count)
+    : BaseString(count, text)
 {
 }
 
@@ -100,16 +91,108 @@ String::String(String&& other)
 }
 #endif
 
+String& String::operator  =(const String& value)
+{
+	BaseString::assign(value);
+	return *this;
+}
+
+String& String::operator  =(char value)
+{
+	this->assign(&value, 1);
+	return *this;
+}
+
+String& String::operator  =(int8 value)
+{
+	char buff[20];
+	sprintf(buff, "%i", value);
+	BaseString::assign(buff);
+	return *this;
+}
+
+String& String::operator  =(int16 value)
+{
+	char buff[20];
+	sprintf(buff, "%hi", value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator  =(int32 value)
+{
+	char buff[20];
+	sprintf(buff, "%i", value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator  =(int64 value)
+{
+	char buff[20];
+	sprintf(buff, "%I64i", value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator  =(uint8 value)
+{
+	char buff[20];
+	//sprintf(buff, "%"PRIu8, value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator =(uint16 value)
+{
+	char buff[20];
+	//sprintf(buff, "%"PRIu16, value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator =(uint32 value)
+{
+	char buff[20];
+	//sprintf(buff, "%"PRIu32, value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator =(uint64 value)
+{
+	char buff[20];
+	//sprintf(buff, "%"PRIu64, value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator =(float value)
+{
+	char buff[20];
+	sprintf(buff, "%f", value);
+	this->assign(buff);
+	return *this;
+}
+
+String& String::operator =(double value)
+{
+	char buff[20];
+	sprintf(buff, "%f", value);
+	this->assign(buff);
+	return *this;
+}
+
 String& String::operator +=(const String& value)
 {
-    this->append(value.data(), value.length());
+    BaseString::append(value.data(), value.length());
     return *this;
 }
 
 String& String::operator+=(int8 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIi8, value);
+    //sprintf(buff, "%"PRIi8, value);
     this->append(buff);
     return *this;
 }
@@ -117,7 +200,7 @@ String& String::operator+=(int8 value)
 String& String::operator+=(int16 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIi16, value);
+    //sprintf(buff, "%"PRIi16, value);
     this->append(buff);
     return *this;
 }
@@ -125,7 +208,7 @@ String& String::operator+=(int16 value)
 String& String::operator+=(int32 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIi32, value);
+    //sprintf(buff, "%"PRIi32, value);
     this->append(buff);
     return *this;
 }
@@ -133,7 +216,7 @@ String& String::operator+=(int32 value)
 String& String::operator+=(int64 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIi64, value);
+    //sprintf(buff, "%"PRIi64, value);
     this->append(buff);
     return *this;
 }
@@ -141,7 +224,7 @@ String& String::operator+=(int64 value)
 String& String::operator+=(uint8 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIu8, value);
+    //sprintf(buff, "%"PRIu8, value);
     this->append(buff);
     return *this;
 }
@@ -149,7 +232,7 @@ String& String::operator+=(uint8 value)
 String& String::operator+=(uint16 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIu16, value);
+    //sprintf(buff, "%"PRIu16, value);
     this->append(buff);
     return *this;
 }
@@ -157,7 +240,7 @@ String& String::operator+=(uint16 value)
 String& String::operator+=(uint32 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIu32, value);
+    //sprintf(buff, "%"PRIu32, value);
     this->append(buff);
     return *this;
 }
@@ -165,7 +248,7 @@ String& String::operator+=(uint32 value)
 String& String::operator+=(uint64 value)
 {
     char buff[20];
-    sprintf(buff, "%"PRIu64, value);
+    //sprintf(buff, "%"PRIu64, value);
     this->append(buff);
     return *this;
 }

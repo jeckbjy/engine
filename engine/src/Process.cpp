@@ -4,6 +4,14 @@
 
 CUTE_NS_BEGIN
 
+ChildProcess::ChildProcess()
+{
+}
+
+ChildProcess::~ChildProcess()
+{
+}
+
 std::vector<char> ChildProcess::GetEnvironmentBuffer(const std::map<String, String>& env)
 {
   std::vector<char> envbuf;

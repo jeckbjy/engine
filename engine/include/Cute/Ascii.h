@@ -88,7 +88,7 @@ inline int Ascii::properties(int ch)
 
 inline bool Ascii::isAscii(int ch)
 {
-	return (static_cast<uint32_t>(ch) & 0xFFFFFF80) == 0;
+	return (static_cast<unsigned int>(ch) & 0xFFFFFF80) == 0;
 }
 
 inline bool Ascii::hasProperties(int ch, int props)

@@ -47,19 +47,21 @@
 #elif defined(CUTE_OS_FAMILY_WINDOWS)
 #   define CUTE_ATOMIC_MEMORY_BARRIER()         _ReadWriteBarrier()
 
-#   define CUTE_ATOMIC_INC32(ptr)               _InterlockedIncrement(ptr)
-#   define CUTE_ATOMIC_DEC32(ptr)               _InterlockedDecrement(ptr)
-#   define CUTE_ATOMIC_ADD32(ptr, v)            _InterlockedExchangeAdd(ptr, v)
-#   define CUTE_ATOMIC_EXCHANGE32(ptr, v)       _InterlockedExchange(ptr, v)
-#   define CUTE_ATOMIC_CMP_BOOL32(ptr, v, cmp)  _InterlockedCompareExchange(ptr, v, cmp) == cmp
-#   define CUTE_ATOMIC_CMP_VAL32(ptr, v, cmp)   _InterlockedCompareExchange(ptr, v, cmp)
+#   define CUTE_ATOMIC_GET32(ptr)               InterlockedExchangeAdd( (long volatile*)ptr, 0)
+#   define CUTE_ATOMIC_INC32(ptr)               InterlockedIncrement(   (long volatile*)ptr)
+#   define CUTE_ATOMIC_DEC32(ptr)               InterlockedDecrement(   (long volatile*)ptr)
+#   define CUTE_ATOMIC_ADD32(ptr, v)            InterlockedExchangeAdd( (long volatile*)ptr, v)
+#   define CUTE_ATOMIC_EXCHANGE32(ptr, v)       InterlockedExchange(    (long volatile*)ptr, v)
+#   define CUTE_ATOMIC_CMP_BOOL32(ptr, v, cmp)  InterlockedCompareExchange((long volatile*)ptr, v, cmp) == cmp
+#   define CUTE_ATOMIC_CMP_VAL32(ptr, v, cmp)   InterlockedCompareExchange((long volatile*)ptr, v, cmp)
 
-#   define CUTE_ATOMIC_INC64(ptr)               _InterlockedIncrement64(ptr)
-#   define CUTE_ATOMIC_DEC64(ptr)               _InterlockedDecrement64(ptr)
-#   define CUTE_ATOMIC_ADD64(ptr, v)            _InterlockedExchangeAdd64(ptr, v)
-#   define CUTE_ATOMIC_EXCHANGE64(ptr, v)       _InterlockedExchange64(ptr, v)
-#   define CUTE_ATOMIC_CMP_BOOL64(ptr, v, cmp)  _InterlockedCompareExchange64(ptr, v, cmp) == cmp
-#   define CUTE_ATOMIC_CMP_VAL64(ptr, v, cmp)   _InterlockedCompareExchange64(ptr, v, cmp)
+#   define CUTE_ATOMIC_GET64(ptr)               InterlockedExchangeAdd64( (LONG64 volatile*)ptr, 0)
+#   define CUTE_ATOMIC_INC64(ptr)               InterlockedIncrement64(   (LONG64 volatile*) ptr)
+#   define CUTE_ATOMIC_DEC64(ptr)               InterlockedDecrement64(   (LONG64 volatile*) ptr)
+#   define CUTE_ATOMIC_ADD64(ptr, v)            InterlockedExchangeAdd64( (LONG64 volatile*) ptr, v)
+#   define CUTE_ATOMIC_EXCHANGE64(ptr, v)       InterlockedExchange64(    (LONG64 volatile*) ptr, v)
+#   define CUTE_ATOMIC_CMP_BOOL64(ptr, v, cmp)  InterlockedCompareExchange64( (LONG64 volatile*) ptr, v, cmp) == cmp
+#   define CUTE_ATOMIC_CMP_VAL64(ptr, v, cmp)   InterlockedCompareExchange64( (LONG64 volatile*) ptr, v, cmp)
 
 //#   define CUTE_ATOMIC_TEST_AND_SET(ptr, v)    InterlockedCompareExchange(ptr, v, *ptr)
 

@@ -3,6 +3,7 @@
 #include "Cute/Platform.h"
 #include "Cute/CompilerConfig.h"
 #include "Cute/Types.h"
+#include "Cute/Strings.h"
 #include "Cute/API.h"
 
 #ifdef _WIN32
@@ -70,7 +71,7 @@ typedef int			ioctl_req_t;
 #	endif
 #endif
 
-#ifdef CUTE_OS_FAMILY_WINDOWS
+#if defined(CUTE_OS_FAMILY_WINDOWS)
 
 // 自动关闭
 class HandleScope

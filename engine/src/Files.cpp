@@ -26,7 +26,7 @@ bool Files::createDirectories(const String& path)
 
 bool Files::remove(const String& path, bool recursive)
 {
-    stat_t st;
+    file_attr_t st;
     if(!FileHelper::getFileAttr(path, st))
     {
         return false;

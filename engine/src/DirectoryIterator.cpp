@@ -39,9 +39,9 @@ public:
 		this->close();
 	}
 
-	bool next(File& result)
+	bool next(FileInfo& result)
 	{
-		WIN32_FIND_DATA findData;
+		WIN32_FIND_DATAA findData;
 		if(m_handle == INVALID_HANDLE_VALUE)
 		{
 			m_handle = FindFirstFileA(m_path.c_str(), &findData);

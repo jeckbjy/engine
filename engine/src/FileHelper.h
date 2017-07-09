@@ -3,7 +3,9 @@
 #include "Cute/Foundation.h"
 #include "Cute/FileInfo.h"
 
-#if defined(CUTE_OS_FAMILY_POSIX)
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+#	include <shellapi.h>
+#elif defined(CUTE_OS_FAMILY_POSIX)
 #   include <sys/stat.h>
 #   include <unistd.h>
 #   if defined(CUTE_OS_FAMILY_BSD)

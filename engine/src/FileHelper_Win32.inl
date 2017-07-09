@@ -19,7 +19,7 @@ inline DWORD getAttributes(const String& path)
 
 inline bool getAttributesEx(const String& path, WIN32_FILE_ATTRIBUTE_DATA& fad)
 {
-    return GetFileAttributesEx (path.c_str(), GetFileExInfoStandard, &fad) == TRUE;
+    return GetFileAttributesExA (path.c_str(), GetFileExInfoStandard, &fad) == TRUE;
 }
 
 inline bool setAttributes(const String& path, DWORD newAttrs, bool flag)
@@ -33,7 +33,7 @@ inline bool setAttributes(const String& path, DWORD newAttrs, bool flag)
     else
         oldAttrs |=  newAttrs;
 
-    return SetFileAttributesA(path.c_str(), oldAttrs) == true;
+    return SetFileAttributesA(path.c_str(), oldAttrs) == TRUE;
 }
 
 inline bool exists(const String& path)
@@ -57,13 +57,12 @@ inline bool isLink(DWORD attr)
     return (attr & FILE_ATTRIBUTE_REPARSE_POINT) != 0;
 }
 
- inline bool isDevice(const String& path)
- {
-    return
-        path.istartsWith("\\\\.\\") || 
-        path.iequalsAny(["CON", "PRN", "AUX", "NUL"]) ||
-        (path.istartsWithAny(["LPT", "COM"] && path.size() == 4 && path[3] > 0x30 && isdigit(path[3])
-        );
+inline bool isDevice(const String& path)
+{
+	return
+		path.istartsWith("\\\\.\\") ||
+		path.iequals("CON") || path.iequals("PRN") || path.iequals("AUX") || path.iequals("NUL") ||
+		( (path.istartsWith("LPT") || path.istartsWith("COM")) && path.size() == 4 && path[3] > 0x30 && isdigit(path[3]) );
  }
 
 inline bool isHidden(DWORD attr)
@@ -81,7 +80,7 @@ inline bool isWritable(DWORD attr)
     return (attr & FILE_ATTRIBUTE_READONLY) == 0;
 }
 
-inline bool isExecutable()
+inline bool isExecutable(DWORD)
 {
     return true;
 }
@@ -108,7 +107,7 @@ inline FILETIME* toFileTime (const int64 time, FILETIME* const ft) noexcept
 inline bool setFileTimes(const String& path, int64 modifyTime, int64 accessTime, int64 creationTime)
 {
     bool ok = false;
-    HANDLE h = CreateFileA (m_path.data(), GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+    HANDLE h = CreateFileA (path.data(), GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
     if (h != INVALID_HANDLE_VALUE)
     {
@@ -117,7 +116,7 @@ inline bool setFileTimes(const String& path, int64 modifyTime, int64 accessTime,
         ok = SetFileTime (h,
                           toFileTime (creationTime, &c),
                           toFileTime (accessTime, &a),
-                          toFileTime (modificationTime, &m)) != 0;
+                          toFileTime (modifyTime, &m)) != 0;
 
         CloseHandle (h);
     }
@@ -141,11 +140,13 @@ inline bool getFileTimes(const stat_t& st, int64* modifyTime, int64* accessTime,
         *accessTime = fromFileTime(&st.ftLastAccessTime);
     if(creationTime)
         *creationTime = fromFileTime(&st.ftCreationTime);
+
+	return true;
 }
 
 inline bool setSize(const String& path, int64 size)
 {
-    HANDLE handle = CreateFile(path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, OPEN_EXISTING);
+    HANDLE handle = CreateFileA(path.c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING, 0, 0);
     if (handle == INVALID_HANDLE_VALUE)
         return false;
 
@@ -199,40 +200,40 @@ inline int64 getFreeSpace(const String& path)
 
 inline bool copy(const String& src, const String& dst)
 {
-    return CopyFile(src.c_str(), dst.c_str(), FALSE) == TRUE;
+    return CopyFileA(src.c_str(), dst.c_str(), FALSE) == TRUE;
 }
 
 inline bool move(const String& src, const String& dst)
 {
-    return MoveFile(src.c_str(), dst.c_str()) == TRUE;
+    return MoveFileA(src.c_str(), dst.c_str()) == TRUE;
 }
 
 inline bool moveToTrash(const String& path)
 {
-    SHFILEOPSTRUCT fos = { 0 };
+    SHFILEOPSTRUCTA fos = { 0 };
     fos.wFunc = FO_DELETE;
     fos.pFrom = path.c_str();
     fos.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_RENAMEONCOLLISION;
 
-    return SHFileOperation (&fos) == 0;
+    return SHFileOperationA (&fos) == 0;
 }
 
 inline bool rename(const String& src, const String& dst)
 {
-    return MoveFileEx(src.c_str(), dst.c_str(), MOVEFILE_REPLACE_EXISTING) == TRUE;
+    return MoveFileExA(src.c_str(), dst.c_str(), MOVEFILE_REPLACE_EXISTING) == TRUE;
 }
 
 inline bool remove(const String& path, DWORD attr)
 {
     if(isDirectory(attr))
-        return RemoveDirectory(path.c_str()) == TRUE;
+        return RemoveDirectoryA(path.c_str()) == TRUE;
     else
-        return DeleteFile(path.c_str()) == TRUE;
+        return DeleteFileA(path.c_str()) == TRUE;
 }
 
 inline bool createFile(const String& path)
 {
-    HANDLE file = CreateFileA(path.c_str(), , GENERIC_WRITE, 0, 0, CREATE_NEW, 0, 0);
+    HANDLE file = CreateFileA(path.c_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, 0, 0);
     if(file != INVALID_HANDLE_VALUE)
     {
         CloseHandle(file);
@@ -246,7 +247,7 @@ inline bool createFile(const String& path)
 
 inline bool createDirectory(const String& path)
 {
-    return CreateDirectory(path.c_str(), 0) == TRUE;
+    return CreateDirectoryA(path.c_str(), 0) == TRUE;
 }
 
 #endif

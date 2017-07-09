@@ -1,6 +1,5 @@
 //! API
 #pragma once
-#include "Cute/Platform.h"
 
 /* This file has some checks to see whether the compiler supports various C++11/14 features,
  When these aren't available, the code defines a few workarounds, so that we can still use

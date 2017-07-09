@@ -21,12 +21,12 @@ struct RegistryWrapper
             DWORD result;
             if(isWriting)
             {
-                DWORD flags = REG_OPTION_NON_VOLATILE,KEY_WRITE | KEY_QUERY_VALUE | wow64Flags;
-                RegCreateKeyEx(rootKey, name.c_str(), 0, 0, flags, 0, &m_key, &result);
+                DWORD flags =  KEY_WRITE | KEY_QUERY_VALUE | mode;
+                RegCreateKeyExA(rootKey, name.c_str(), 0, 0, REG_OPTION_NON_VOLATILE, flags, 0, &m_key, &result);
             }
             else
             {
-                RegOpenKeyEx (rootKey, name.c_str(), 0, KEY_READ | wow64Flags, &m_key);
+                RegOpenKeyExA (rootKey, name.c_str(), 0, KEY_READ | mode, &m_key);
             }
         }
     }
@@ -39,21 +39,21 @@ struct RegistryWrapper
 
     HKEY getRootKey(const String& name) noexcept
     {
-        if (name.startsWithIgnoreCase ("HKEY_CURRENT_USER\\"))
+        if (name.istartsWith ("HKEY_CURRENT_USER\\"))
             return HKEY_CURRENT_USER;
-        if (name.startsWithIgnoreCase ("HKCU\\"))
+        if (name.istartsWith("HKCU\\"))
             return HKEY_CURRENT_USER;
-        if (name.startsWithIgnoreCase ("HKEY_LOCAL_MACHINE\\"))
+        if (name.istartsWith("HKEY_LOCAL_MACHINE\\"))
             return HKEY_LOCAL_MACHINE;
-        if (name.startsWithIgnoreCase ("HKLM\\"))
+        if (name.istartsWith("HKLM\\"))
             return HKEY_LOCAL_MACHINE;
-        if (name.startsWithIgnoreCase ("HKEY_CLASSES_ROOT\\"))
+        if (name.istartsWith("HKEY_CLASSES_ROOT\\"))
             return HKEY_CLASSES_ROOT;
-        if (name.startsWithIgnoreCase ("HKCR\\"))
+        if (name.istartsWith("HKCR\\"))
             return HKEY_CLASSES_ROOT;
-        if (name.startsWithIgnoreCase ("HKEY_USERS\\"))
+        if (name.istartsWith("HKEY_USERS\\"))
             return HKEY_USERS;
-        if (name.startsWithIgnoreCase ("HKU\\"))
+        if (name.istartsWith("HKU\\"))
             return HKEY_USERS;
         return 0;
     }
@@ -65,7 +65,7 @@ struct RegistryWrapper
 
     bool setValue(const DWORD type,  const void* data, size_t size)
     {
-        return RegSetValueEx(m_key, m_path.c_str(), 0, type, (const BYTE*)data, (DWORD)size) == ERROR_SUCCESS;
+        return RegSetValueExA(m_key, m_path.c_str(), 0, type, (const BYTE*)data, (DWORD)size) == ERROR_SUCCESS;
     }
 
     bool keyExists()
@@ -82,7 +82,7 @@ struct RegistryWrapper
         unsigned long bufferSize = sizeof (buffer);
         DWORD type = 0;
 
-        DWORD result = RegQueryValueEx (m_key, m_path.c_str(), 0, &type, buffer, &bufferSize);
+        DWORD result = RegQueryValueExA (m_key, m_path.c_str(), 0, &type, buffer, &bufferSize);
 
         return result == ERROR_SUCCESS || result == ERROR_MORE_DATA;
     }
@@ -91,7 +91,7 @@ struct RegistryWrapper
     {
         if(m_key == 0)
             return false;
-        return RegDeleteValue (m_key, m_path.c_str()) == ERROR_SUCCESS;
+        return RegDeleteValueA (m_key, m_path.c_str()) == ERROR_SUCCESS;
     }
 
     bool deleteKey()
@@ -101,7 +101,7 @@ struct RegistryWrapper
 
         // todo:递归删除
 
-        return RegDeleteKey(m_key, m_path.c_str()) == ERROR_SUCCESS;
+        return RegDeleteKeyA (m_key, m_path.c_str()) == ERROR_SUCCESS;
     }
 
 };

@@ -10,6 +10,27 @@ CUTE_NS_BEGIN
 //////////////////////////////////////////////////////////////////////////
 // ChildProcess
 //////////////////////////////////////////////////////////////////////////
+static bool SetupInheritHandle(HANDLE& hDst, HANDLE hSrc, HANDLE hProc, DWORD stdHandleID)
+{
+  HANDLE hTmp = hSrc;
+  if (hTmp == INVALID_HANDLE_VALUE)
+      hTmp = GetStdHandle(stdHandleID);
+
+  if (hTmp != INVALID_HANDLE_VALUE)
+  {
+      DuplicateHandle(hProc, hTmp, hProc, &hDst, 0, TRUE, DUPLICATE_SAME_ACCESS);
+      if (hSrc != INVALID_HANDLE_VALUE)
+          ::CloseHandle(hSrc);
+
+      return true;
+  }
+  else
+  {
+      hDst = NULL;
+      return false;
+  }
+}
+
 // Based on code from https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/
 static String EscapeArg(const String& arg)
 {
@@ -74,7 +95,7 @@ int ChildProcess::wait() const
     return 0;
 }
 
-void ChildProcess::kill() const
+void ChildProcess::kill()
 {
     
 }
@@ -194,7 +215,7 @@ void Process::times(long& userTime, long& kernelTime)
     }
 }
 
-pid_t Process::pid()
+pid_t Process::id()
 {
     return GetCurrentProcessId();
 }
@@ -207,7 +228,7 @@ void Process::kill(PID pid)
         if (TerminateProcess(hProc, 0) == 0)
         {
             CloseHandle(hProc);
-            return false;
+            return;
             // throw SystemException("cannot kill process");
         }
         CloseHandle(hProc);

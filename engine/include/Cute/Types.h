@@ -1,7 +1,10 @@
 //! API
 #pragma once
 #include "Cute/Platform.h"
-#include <stdint.h>
+#include "Cute/auto_stdint.h"
+#include "Cute/auto_inttypes.h"
+
+//#include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>
 #include <assert.h>
@@ -36,6 +39,10 @@ namespace std{
 #else
 #include <hash_map>
 #include <hash_set>
+#endif
+
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+#include <Windows.h>
 #endif
 
 CUTE_NS_BEGIN

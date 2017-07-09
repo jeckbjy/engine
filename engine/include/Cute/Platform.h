@@ -1,6 +1,8 @@
 //! API
 #pragma once
 #include "Cute/API.h"
+#include "Cute/CompilerConfig.h"
+#include "Cute/CompilerSupport.h"
 
 //==============================================================================
 // Check OS:
@@ -63,7 +65,7 @@
 
 // Check OS_FAMILY
 #if   defined(CUTE_OS_WIN_NT) || defined(CUTE_OS_WIN_RT) || defined(CUTE_OS_WIN_CE)
-#   defined CUTE_OS_FAMILY_WINDOWS
+#   define CUTE_OS_FAMILY_WINDOWS
 #elif defined(CUTE_OS_IOS) || defined(CUTE_OS_MAC)
 #   define CUTE_OS_FAMILY_APPLE
 #elif defined(CUTE_OS_ANDROID) || defined(CUTE_OS_LINUX)

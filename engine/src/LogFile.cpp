@@ -81,8 +81,8 @@ uint64_t LogFile::size() const
 #ifdef _WIN32
 	if (INVALID_HANDLE_VALUE == m_file)
 	{
-		if (File::exists(m_path))
-			return File::getSize(m_path);
+		if (Files::exists(m_path))
+			return Files::getSize(m_path);
 		else 
 			return 0;
 	}

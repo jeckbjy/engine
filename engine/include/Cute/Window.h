@@ -20,9 +20,9 @@
 CUTE_NS_BEGIN
 
 // 定义不同类型窗体指针
-#if defined(CUTE_OS_WINDOWS_NT)
+#if defined(CUTE_OS_WIN_NT)
 typedef HWND window_t;
-#elif defined(CUTE_OS_WINDOWS_RT)
+#elif defined(CUTE_OS_WIN_RT)
 typedef Platform::Agile<Windows::UI::Core::CoreWindow> window_t;
 #elif defined(CU_OS_ANDROID)
 typedef ::ANativeWindow*	window_t;
