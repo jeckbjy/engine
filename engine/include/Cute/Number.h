@@ -30,25 +30,30 @@ public:
 	static const unsigned short BASE_HEX = 0x10;
 	static const unsigned short BASE_OCT = 010;
 
-	static String format(int	value);
+	static String format(int32	value);
 	static String format(int64	value);
+    static String format(uint32	value);
 	static String format(uint64	value);
 
-	static String format(int	value, int width);
+	static String format(int32	value, int width);
 	static String format(int64	value, int width);
-	static String format(uint64	value, int width);
+	static String format(uint32	value, int width);
+    static String format(uint64	value, int width);
 
-	static String format0(int	value, int width);
+	static String format0(int32	value, int width);
 	static String format0(int64	value, int width);
-	static String format0(uint64 value, int width);
+	static String format0(uint32 value, int width);
+    static String format0(uint64 value, int width);
 
-	static String formatHex(int		value, bool prefex = false);
+	static String formatHex(int32	value, bool prefex = false);
 	static String formatHex(int64	value, bool prefex = false);
-	static String formatHex(uint64	value, bool prefex = false);
+	static String formatHex(uint32	value, bool prefex = false);
+    static String formatHex(uint64	value, bool prefex = false);
 
-	static String formatHex(int		value, int width, bool prefix = false);
+	static String formatHex(int32	value, int width, bool prefix = false);
 	static String formatHex(int64	value, int width, bool prefix = false);
-	static String formatHex(uint64	value, int width, bool prefix = false);
+	static String formatHex(uint32	value, int width, bool prefix = false);
+    static String formatHex(uint64	value, int width, bool prefix = false);
 
 	static String format(float value);
 	static String format(float value, int precision);
@@ -60,25 +65,30 @@ public:
 
 	static String format(const void* ptr);
 
-	static void append(String& str, int		value);
+	static void append(String& str, int32	value);
+    static void append(String& str, uint32  value);
 	static void append(String& str, int64	value);
 	static void append(String& str, uint64	value);
 
-	static void append(String& str, int		value, int width);
+	static void append(String& str, int32	value, int width);
+    static void append(String& str, uint32	value, int width);
 	static void append(String& str, int64	value, int width);
 	static void append(String& str, uint64	value, int width);
 
-	static void append0(String& str, int	value, int width);
+	static void append0(String& str, int32	value, int width);
+    static void append0(String& str, uint32	value, int width);
 	static void append0(String& str, int64  value, int width);
 	static void append0(String& str, uint64 value, int width);
 
-	static void appendHex(String& str, int	  value, bool prefex = false);
+	static void appendHex(String& str, int32  value, bool prefex = false);
 	static void appendHex(String& str, int64  value, bool prefex = false);
-	static void appendHex(String& str, uint64 value, bool prefex = false);
+	static void appendHex(String& str, uint32 value, bool prefex = false);
+    static void appendHex(String& str, uint64 value, bool prefex = false);
 
-	static void appendHex(String& str, int	  value, int width, bool prefex = false);
+	static void appendHex(String& str, int32  value, int width, bool prefex = false);
 	static void appendHex(String& str, int64  value, int width, bool prefex = false);
-	static void appendHex(String& str, uint64 value, int width, bool prefex = false);
+	static void appendHex(String& str, uint32 value, int width, bool prefex = false);
+    static void appendHex(String& str, uint64 value, int width, bool prefex = false);
 
 	static void append(String& str, float value);
 	static void append(String& str, float value, int precision);
@@ -90,18 +100,18 @@ public:
 
 	static void append(String& str, const void* ptr);
 
-	static void parse(const String& str, bool& val);
-	static void parse(const String& str, int8& val);
-	static void parse(const String& str, int16& val);
-	static void parse(const String& str, int32& val);
-	static void parse(const String& str, int64& val);
-	static void parse(const String& str, uint8& val);
+	static void parse(const String& str, bool&   val);
+	static void parse(const String& str, int8&   val);
+	static void parse(const String& str, int16&  val);
+	static void parse(const String& str, int32&  val);
+	static void parse(const String& str, int64&  val);
+	static void parse(const String& str, uint8&  val);
 	static void parse(const String& str, uint16& val);
 	static void parse(const String& str, uint32& val);
 	static void parse(const String& str, uint64& val);
-	static void parse(const String& str, float& val);
+	static void parse(const String& str, float&  val);
 	static void parse(const String& str, double& val);
-	static void parse(const String& str, char& val);
+	static void parse(const String& str, char&   val);
 
 	// parser
 	static int		parse(const String& s);

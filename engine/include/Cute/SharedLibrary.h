@@ -84,4 +84,19 @@ private:
 	static Mutex s_mutex;
 };
 
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+/* Used with DynamicLibrary to simplify importing functions from a win32 DLL.
+ 
+ dll: the DynamicLibrary object
+ functionName: function to import
+ localFunctionName: name you want to use to actually call it (must be different)
+ returnType: the return type
+ params: list of params (bracketed)
+ */
+#define CUTE_LOAD_FUNCTION(dll, FUNC_NAME, LOCAL_NAME, RETURN, PARAMS)   \
+    typedef RETURN (WINAPI *LOCAL_NAME##_FUNC) PARAMS;                   \
+    LOCAL_NAME##_FUNC LOCAL_NAME = (LOCAL_NAME##_FUNC) dll.getSymbol(#FUNC_NAME);
+
+#endif
+
 CUTE_NS_END

@@ -277,10 +277,10 @@ private:
        #endif
     }
 
-   #if ! (defined (JUCE_DLL) || defined (JUCE_DLL_BUILD))
-    CUTE_DECLARE_NON_COPYABLE (HeapBlock)
-    CUTE_PREVENT_HEAP_ALLOCATION // Creating a 'new HeapBlock' would be missing the point!
-   #endif
+//   #if ! (defined (CUTE_DLL) || defined (CUTE_DLL_BUILD))
+//    CUTE_DECLARE_NON_COPYABLE (HeapBlock)
+//    CUTE_PREVENT_HEAP_ALLOCATION // Creating a 'new HeapBlock' would be missing the point!
+//   #endif
 };
 
 CUTE_NS_END

@@ -57,10 +57,43 @@ struct RegistryWrapper
             return HKEY_USERS;
         return 0;
     }
+    
+    uint32 getBinaryValue(Buffer& result)
+    {
+        if(m_key == 0)
+            return REG_NONE;
+        
+        for(size_t bufferSize = 1024; ; bufferSize *= 2)
+        {
+            result.resize(bufferSize, false);
+            DWORD type = REG_NONE;
+            DWORD err = RegQueryValueExA(m_key, m_path.c_str(), 0, &type, (LPBYTE)result.data(), &bufferSize)
+            if(err == ERROR_SUCCESS)
+            {
+                result.resize(bufferSize, false);
+                return (uint32)type;
+            }
+            
+            if(err != ERROR_MORE_DATA)
+                break;
+        }
+    }
 
     String getValue(const String& defaultValue)
     {
-        return "";
+        Buffer buffer;
+        uint32 type = getBinaryValue(buffer);
+        switch(type)
+        {
+        case REG_SZ:
+            return static_cast<const WCHAR*>(buffer.data());
+        case REG_DWORD:
+            return static_cast<const DWORD*>(buffer.data());
+        default:
+            break;
+        }
+        
+        return defaultValue;
     }
 
     bool setValue(const DWORD type,  const void* data, size_t size)
@@ -106,6 +139,12 @@ struct RegistryWrapper
 
 };
 
+int32 WindowsRegistry::getValue(Buffer& result, const String& path, WoW64Mode mode)
+{
+    RegistryWrapper reg(path, false, mode);
+    return reg.getBinaryValue(result);
+}
+
 String WindowsRegistry::getValue(const String& path, const String& defaultValue, WoW64Mode mode)
 {
     RegistryWrapper reg(path, false, mode);
@@ -128,6 +167,12 @@ bool WindowsRegistry::setValue(const String& path, uint64 value, WoW64Mode mode)
 {
     RegistryWrapper reg(path, true, mode);
     return reg.setValue(REG_QWORD, &value, sizeof(value));
+}
+
+bool WindowsRegistry::setValue(const String& path, const Buffer& value, WoW64Mode mode)
+{
+    RegistryWrapper reg(path, true, mode);
+    return reg.setValue(REG_BINARY, value.data(), value.size());
 }
 
 bool WindowsRegistry::valueExists(const String& path, WoW64Mode mode)

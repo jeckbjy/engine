@@ -1,8 +1,8 @@
 //! API
 #pragma once
 #include "Cute/Platform.h"
-#include "Cute/auto_stdint.h"
-#include "Cute/auto_inttypes.h"
+//#include "Cute/auto_stdint.h"
+//#include "Cute/auto_inttypes.h"
 
 //#include <stdint.h>
 #include <stddef.h>

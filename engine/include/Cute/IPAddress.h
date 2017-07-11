@@ -29,32 +29,62 @@ public:
     
     /** Populates a list of all the IP addresses that this machine is using. */
     static void findAllAddresses(Vector<IPAddress>& results, bool includeIPv6 = false);
+    static IPAddress any(bool IPv6 = false) noexcept;
+    static IPAddress local(bool IPv6 = false) noexcept;
+    static IPAddress broadcast() noexcept;
 
-	IPAddress();
-	IPAddress(const String& addr);
+	IPAddress(bool IPv6 = false) noexcept;
+    IPAddress(const uint8 bytes[], bool IPv6 = false) noexcept;
+    // ipv6
+    IPAddress(const uint16 bytesp[8]) noexcept;
+    // ipv4
+    IPAddress(uint8 addr1, uint8 addr2, uint8 addr3, uint8 addr4) noexcept;
+    // ipv6
+    IPAddress (uint16 a1, uint16 a2, uint16 a3, uint16 a4, uint16 a5, uint16 a6, uint16 a7, uint16 a8) noexcept;
+    // IPv4 address from a packed 32-bit integer
+    IPAddress(uint32 asNativeEndian32Bit) noexcept;
+    // ipv4:"1.2.3.4",ipv6:1:2:3:4:5:6:7:8
+    IPAddress(const String& addr);
 	~IPAddress();
+    
+    String toString() const;
 
-	bool isWildcard() const;
-	bool isBroadcast() const;
-	bool isLoopback() const;
-	bool isMulticast() const;
-	bool isUnicast() const;
-	bool isLinkLocal() const;
-	bool isSiteLocal() const;
-	bool isIPv4Compatible() const;
+//    bool isWildcard() const;
+//    bool isBroadcast() const;
+//    bool isLoopback() const;
+//    bool isMulticast() const;
+//    bool isUnicast() const;
+//    bool isLinkLocal() const;
+//    bool isSiteLocal() const;
+//    bool isIPv4Compatible() const;
+//    bool isIPv4Mapped() const;
+//    bool isWellKnownMC() const;
+//    bool isNodeLocalMC() const;
+//    bool isLinkLocalMC() const;
+//    bool isSiteLocalMC() const;
+//    bool isOrgLocalMC() const;
+//    bool isGlobalMC() const;
+    
+	bool operator == (const IPAddress& addr) const noexcept;
+	bool operator != (const IPAddress& addr) const noexcept;
+//	bool operator <  (const IPAddress& addr) const;
+//	bool operator <= (const IPAddress& addr) const;
+//	bool operator >  (const IPAddress& addr) const;
+//	bool operator >= (const IPAddress& addr) const;
 
-	bool operator == (const IPAddress& addr) const;
-	bool operator != (const IPAddress& addr) const;
-	bool operator <  (const IPAddress& addr) const;
-	bool operator <= (const IPAddress& addr) const;
-	bool operator >  (const IPAddress& addr) const;
-	bool operator >= (const IPAddress& addr) const;
+//	IPAddress operator & (const IPAddress& addr) const;
+//	IPAddress operator | (const IPAddress& addr) const;
+//	IPAddress operator ^ (const IPAddress& addr) const;
+//	IPAddress operator ~ () const;
 
-	IPAddress operator & (const IPAddress& addr) const;
-	IPAddress operator | (const IPAddress& addr) const;
-	IPAddress operator ^ (const IPAddress& addr) const;
-	IPAddress operator ~ () const;
-
+private:
+    /** Method used to zero the remaining bytes of the address array when creating IPv4 addresses */
+    void zeroUnusedBytes()
+    {
+        for (int i = 4; i < 16; ++i)
+            m_address[i] = 0;
+    }
+    
 private:
     union ByteUnion
     {
@@ -65,5 +95,23 @@ private:
     uint8 m_address[16];
     bool  m_isIPv6;
 };
+
+//
+// inlines
+//
+inline IPAddress IPAddress::any(bool IPv6) noexcept
+{
+    return IPAddress (IPv6);
+}
+
+inline IPAddress IPAddress::broadcast() noexcept
+{
+    return IPAddress (255, 255, 255, 255);
+}
+
+inline IPAddress IPAddress::local(bool IPv6) noexcept
+{
+    return IPv6 ? IPAddress (0, 0, 0, 0, 0, 0, 0, 1) : IPAddress (127, 0, 0, 1);
+}
 
 CUTE_NS_END

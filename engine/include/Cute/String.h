@@ -14,16 +14,6 @@ public:
 	typedef reverse_iterator    ReverseIterator;
 	typedef const_reverse_iterator ConstReverseIterator;
 	String();
-	String(int8 value);
-	String(int16 value);
-	String(int32 value);
-	String(int64 value);
-	String(uint8 value);
-	String(uint16 value);
-	String(uint32 value);
-	String(uint64 value);
-	String(float value);
-	String(double value);
 	String(char text, size_t count = 1);
 	String(const char* text);
 	String(const char* text, size_t maxChars);

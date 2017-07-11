@@ -126,7 +126,7 @@ workspace "cute"
 	filter {"action:vs*", "kind:SharedLib"}
 		implibdir(lib_dir)
 		disablewarnings {'4819'}
-	filter {"action:gmake", "action:xcode4"}
+	filter {"action:xcode4", "action:gmake"}
 		buildoptions {"-std=c++11", "-fpermissive", "-g -ggdb -Wall"}
 		links { "pthread", "dl"}
 	filter {"action:gmake","kind:SharedLib"}
@@ -193,7 +193,7 @@ group "tools"
 		kind 		( "ConsoleApp" )
 		dependson 	{ "engine" }
 		files 		{ "tools/tabgen/**.*" }
-
+--[[
 	-- execel转csv工具
 	project("csvgen")
 		language("C#")
@@ -202,6 +202,7 @@ group "tools"
 		links 	{"Excel", "System", "System.Data", "System.XML"}
 		files 	{"tools/csvgen/src/**.*"}
 		vpaths	{ ["src"] = "tools/csvgen/src/**.*" }
+]]
 
 -- 渲染API		
 group "plugin_render"

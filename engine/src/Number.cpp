@@ -516,7 +516,7 @@ bool strToFloat(const String& str, double& result, char decSep, char thSep)
 //////////////////////////////////////////////////////////////////////////
 // format
 //////////////////////////////////////////////////////////////////////////
-String Number::format(int value)
+String Number::format(int32 value)
 {
 	String result;
 	append(result, value);
@@ -530,6 +530,13 @@ String Number::format(int64	value)
 	return result;
 }
 
+String Number::format(uint32 value)
+{
+    String result;
+    append(result, value);
+    return result;
+}
+
 String Number::format(uint64 value)
 {
 	String result;
@@ -537,7 +544,7 @@ String Number::format(uint64 value)
 	return result;
 }
 
-String Number::format(int value, int width)
+String Number::format(int32 value, int width)
 {
 	String result;
 	append(result, value, width);
@@ -551,6 +558,13 @@ String Number::format(int64 value, int width)
 	return result;
 }
 
+String Number::format(uint32 value, int width)
+{
+    String result;
+    append(result, value, width);
+    return result;
+}
+
 String Number::format(uint64 value, int width)
 {
 	String result;
@@ -558,7 +572,7 @@ String Number::format(uint64 value, int width)
 	return result;
 }
 
-String Number::format0(int value, int width)
+String Number::format0(int32 value, int width)
 {
 	String result;
 	append0(result, value, width);
@@ -572,6 +586,13 @@ String Number::format0(int64 value, int width)
 	return result;
 }
 
+String Number::format0(uint32 value, int width)
+{
+    String result;
+    append0(result, value, width);
+    return result;
+}
+
 String Number::format0(uint64 value, int width)
 {
 	String result;
@@ -579,7 +600,7 @@ String Number::format0(uint64 value, int width)
 	return result;
 }
 
-String Number::formatHex(int value, bool prefex /* = false */)
+String Number::formatHex(int32 value, bool prefex /* = false */)
 {
 	String result;
 	appendHex(result, value, prefex);
@@ -593,6 +614,13 @@ String Number::formatHex(int64 value, bool prefex /* = false */)
 	return result;
 }
 
+String Number::formatHex(uint32 value, bool prefex /* = false */)
+{
+    String result;
+    appendHex(result, value, prefex);
+    return result;
+}
+
 String Number::formatHex(uint64 value, bool prefex /* = false */)
 {
 	String result;
@@ -600,7 +628,7 @@ String Number::formatHex(uint64 value, bool prefex /* = false */)
 	return result;
 }
 
-String Number::formatHex(int value, int width, bool prefex /* = false */)
+String Number::formatHex(int32 value, int width, bool prefex /* = false */)
 {
 	String result;
 	appendHex(result, value, width, prefex);
@@ -612,6 +640,13 @@ String Number::formatHex(int64 value, int width, bool prefex /* = false */)
 	String result;
 	appendHex(result, value, width, prefex);
 	return result;
+}
+
+String Number::formatHex(uint32 value, int width, bool prefex /* = false */)
+{
+    String result;
+    appendHex(result, value, width, prefex);
+    return result;
 }
 
 String Number::formatHex(uint64 value, int width, bool prefex /* = false */)
@@ -673,7 +708,12 @@ String Number::format(const void* ptr)
 //////////////////////////////////////////////////////////////////////////
 // append
 //////////////////////////////////////////////////////////////////////////
-void Number::append(String& str, int value)
+void Number::append(String& str, int32 value)
+{
+	intToStr(str, value, BASE_DEC);
+}
+
+void Number::append(String& str, uint32 value)
 {
 	intToStr(str, value, BASE_DEC);
 }
@@ -688,9 +728,14 @@ void Number::append(String& str, uint64 value)
 	intToStr(str, value, BASE_DEC);
 }
 
-void Number::append(String& str, int value, int width)
+void Number::append(String& str, int32 value, int width)
 {
 	intToStr(str, value, BASE_DEC, false, width);
+}
+
+void Number::append(String& str, uint32 value, int width)
+{
+    intToStr(str, value, BASE_DEC, false, width);
 }
 
 void Number::append(String& str, int64 value, int width)
@@ -703,9 +748,14 @@ void Number::append(String& str, uint64 value, int width)
 	intToStr(str, value, BASE_DEC, false, width);
 }
 
-void Number::append0(String& str, int value, int width)
+void Number::append0(String& str, int32 value, int width)
 {
 	intToStr(str, value, BASE_DEC, false, width, '0');
+}
+
+void Number::append0(String& str, uint32 value, int width)
+{
+    intToStr(str, value, BASE_DEC, false, width, '0');
 }
 
 void Number::append0(String& str, int64 value, int width)
@@ -718,7 +768,7 @@ void Number::append0(String& str, uint64 value, int width)
 	intToStr(str, value, BASE_DEC, false, width, '0');
 }
 
-void Number::appendHex(String& str, int value, bool prefex /* = false */)
+void Number::appendHex(String& str, int32 value, bool prefex /* = false */)
 {
 	intToStr(str, value, BASE_HEX, prefex);
 }
@@ -728,12 +778,17 @@ void Number::appendHex(String& str, int64 value, bool prefex /* = false */)
 	intToStr(str, value, BASE_HEX, prefex);
 }
 
+void Number::appendHex(String& str, uint32 value, bool prefex /* = false */)
+{
+    intToStr(str, value, BASE_HEX, prefex);
+}
+
 void Number::appendHex(String& str, uint64 value, bool prefex /* = false */)
 {
 	intToStr(str, value, BASE_HEX, prefex);
 }
 
-void Number::appendHex(String& str, int value, int width, bool prefex /* = false */)
+void Number::appendHex(String& str, int32 value, int width, bool prefex /* = false */)
 {
 	intToStr(str, value, BASE_HEX, prefex, width);
 }
@@ -741,6 +796,11 @@ void Number::appendHex(String& str, int value, int width, bool prefex /* = false
 void Number::appendHex(String& str, int64 value, int width, bool prefex /* = false */)
 {
 	intToStr(str, value, BASE_HEX, prefex, width);
+}
+
+void Number::appendHex(String& str, uint32 value, int width, bool prefex /* = false */)
+{
+    intToStr(str, value, BASE_HEX, prefex, width);
 }
 
 void Number::appendHex(String& str, uint64 value, int width, bool prefex /* = false */)
@@ -1002,6 +1062,7 @@ double Number::pow10(int exponent)
 	{
 		return 0.0;
 	}
+    
 	static const double constants[] = 
 	{
 		1e-323, 1e-322, 1e-321, 1e-320, 1e-319, 1e-318, 1e-317, 1e-316, 1e-315, 1e-314,

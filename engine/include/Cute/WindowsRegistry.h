@@ -23,10 +23,14 @@ public:
         WoW64_32bit  = 0x200
     };
 
+    static int32  getValue(Buffer& result, const String& path, WoW64Mode mode = WoW64_Default);
     static String getValue(const String& path, const String& defaultValue = String(), WoW64Mode mode = WoW64_Default);
+    
     static bool   setValue(const String& path, const String& value, WoW64Mode mode = WoW64_Default);
     static bool   setValue(const String& path, uint32 value, WoW64Mode mode = WoW64_Default);
     static bool   setValue(const String& path, uint64 value, WoW64Mode mode = WoW64_Default);
+    static bool   setValue(const String& path, const Buffer& value, WoW64Mode mode = WoW64_Default);
+   
     static bool   valueExists(const String& path, WoW64Mode mode = WoW64_Default);
     static bool   keyExists(const String& path, WoW64Mode mode = WoW64_Default);
     static bool   deleteValue(const String& path, WoW64Mode mode = WoW64_Default);
