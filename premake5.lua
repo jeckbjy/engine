@@ -131,8 +131,6 @@ workspace "cute"
 		links { "pthread", "dl"}
 	filter {"action:gmake","kind:SharedLib"}
 		buildoptions {"-fPIC"}
-	filter {"action:xcode4"}
-		links { "Cocoa.framework" }	
 	filter {}
 	
 -- 主工程
@@ -148,6 +146,10 @@ group "core"
 		removefiles		{ "engine/backup/**.*" }
 		removefiles		{ "engine/**.DS_Store"}
 		module_vpaths	( { "engine/**.*" }, "Core"	)
+
+		if os.is("macosx") then
+			links { "Cocoa.framework" }	
+		end
 
 -- 测试项目
 group "samples"
@@ -236,7 +238,7 @@ group "plugin_graphics"
 		end
 				
 	project("plugin_vulkan")
-		src_dir 	= "plugins/RenderValkan/"
+		src_dir 	= "plugins/RenderVulkan/"
 		sdk_dir 	= "D:/Program Files/Vulkan/1.0.11.0/"
 		
 		dependson 	{ "engine" }
