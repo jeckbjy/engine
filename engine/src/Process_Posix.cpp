@@ -1,5 +1,6 @@
 //! Process
 #include "Cute/Platform.h"
+#include "Cute/Ref.h"
 
 #if defined(CUTE_OS_FAMILY_POSIX)
 #include "Cute/Process.h"
@@ -14,7 +15,7 @@ CUTE_NS_BEGIN
 //////////////////////////////////////////////////////////////////////////
 // ChildProcess
 //////////////////////////////////////////////////////////////////////////
-class ChildProcessImpl
+class ChildProcessImpl : public Ref<ChildProcessImpl>
 {
 public:
     ChildProcessImpl(pid_t pid): m_pid(pid) {}
@@ -22,6 +23,17 @@ public:
 public:
     pid_t m_pid;
 };
+
+ChildProcess::ChildProcess()
+    : m_impl(NULL)
+{
+}
+
+ChildProcess::~ChildProcess()
+{
+    if(m_impl != NULL)
+        m_impl->decRef();
+}
 
 int ChildProcess::wait() const
 {
@@ -33,12 +45,16 @@ int ChildProcess::wait() const
 
 void ChildProcess::kill()
 {
-    
+    if(m_impl)
+        Process::kill(m_impl->m_pid);
 }
 
 bool ChildProcess::isRunning() const
 {
-    return false;
+    if(m_impl)
+        return Process::isRunning(m_impl->m_pid);
+    else
+        return false;
 }
 
 bool ChildProcess::launch(const String& command, const Args& args, const String& directory, handle_t pipes[3], const Envs& envs)
@@ -99,9 +115,11 @@ bool ChildProcess::launch(const String& command, const Args& args, const String&
         
         int pid = spawn(command.c_str(), 3, fdmap, &inherit, argv, envPtr);
         if (pid == -1)
-            throw SystemException("cannot spawn", command);
+            return false;
+//            throw SystemException("cannot spawn", command);
         
         m_impl = new ChildProcessImpl(pid);
+        m_impl->incRef();
         return true;
         //    return pid;
     }
@@ -113,7 +131,8 @@ bool ChildProcess::launch(const String& command, const Args& args, const String&
     int pid = fork();
     if (pid < 0)
     {
-        throw SystemException("Cannot fork process for", command);
+        return false;
+//        throw SystemException("Cannot fork process for", command);
     }
     else if (pid == 0)
     {
@@ -168,6 +187,7 @@ bool ChildProcess::launch(const String& command, const Args& args, const String&
     }
     
     m_impl = new ChildProcessImpl(pid);
+    m_impl->incRef();
     //  return pid;
     return true;
 }

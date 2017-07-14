@@ -115,7 +115,7 @@ workspace "cute"
 	-- 调试信息
 	filter "configurations:Debug"
 		defines { "DEBUG" }
-		flags 	{ "Symbols" }
+		--flags 	{ "Symbols" }
 	filter "configurations:Release"
 		defines { "NDEBUG" }
 		optimize "On"
@@ -131,6 +131,8 @@ workspace "cute"
 		links { "pthread", "dl"}
 	filter {"action:gmake","kind:SharedLib"}
 		buildoptions {"-fPIC"}
+	filter {"action:xcode4"}
+		links { "Cocoa.framework" }	
 	filter {}
 	
 -- 主工程
@@ -155,6 +157,13 @@ group "samples"
 		kind			( "ConsoleApp" )
 		
 		files			{ src_dir .. "**.*" }
+		vpaths 			{ ["src"] = src_dir .. "**.*" }
+
+	project("unit")
+		src_dir			= "samples/unit/"
+		 kind 			( "ConsoleApp" )
+		 files 			{ src_dir .. "**.*" }
+		 vpaths 		{ ["src"] = src_dir .. "**.*" }
 	
 -- 服务器
 group "server"	
@@ -205,7 +214,7 @@ group "tools"
 ]]
 
 -- 渲染API		
-group "plugin_render"
+group "plugin_graphics"
 	project("plugin_ogl")
 		src_dir 	= "plugins/RenderOGL/"
 		glew_dir 	= src_dir .."/glew/"
@@ -269,6 +278,34 @@ group "plugin_render"
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
+
+	project("plugin_metal")
+		src_dir = "plugins/RenderMetal/"
+		-- sdk_dir = "D:/Program Files (x86)/Windows Kits/10/"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_METAL" }
+
+		links 		{ "Metal.framework" }
+		
+		-- dependson
+		-- includedirs { sdk_dir .. "Include/10.0.10069.0/um/"}
+		-- libdirs		{ sdk_dir .. "Lib/10.0.10069.0/um/x64" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
+
+group "plugin_render"
+	project("plugin_beast")
+		src_dir = "plugins/RenderBeast/"
+
+		dependson	{ "engine" }
+		kind		( "SharedLib" )
+		defines		{ "CUTE_BUILD_BEAST" }
+
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir .. "**.*" } }	
 		
 -- 数据库
 group "plugin_db"

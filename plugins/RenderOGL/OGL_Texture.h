@@ -3,18 +3,15 @@
 
 CUTE_NS_BEGIN
 
-class CU_OGL_API OGL_Texture : public Texture
+class CUTE_OGL_API OGL_Texture : public ITexture
 {
 	static GLenum getGLTarget(TexType type, uint32_t arrays);
 public:
 	OGL_Texture(const TextureDesc& desc);
 	virtual ~OGL_Texture();
 
-	void* map(PixelData& data, MAP_FLAG flag, uint level, uint face);
+	void* map();
 	void unmap();
-
-	void read(PixelData& data, uint level, uint face);
-	void write(const PixelData& data, uint level, uint face, bool discard);
 
 	void active(GLint index);
 	void bindToFrameBuffer(GLenum attachment);

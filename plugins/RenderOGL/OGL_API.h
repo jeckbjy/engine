@@ -21,10 +21,9 @@
 #pragma comment(lib, "opengl32.lib")
 #endif
 
-#include "API.h"
-#include "Graphics.h"
+#include "Cute/Graphics.h"
 
-// 版本
+//
 #define OGL_VERSION_2	2
 #define OGL_VERSION_3	3
 #define OGL_VERSION_4	4
@@ -58,8 +57,8 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 #	include <OpenGLES/ES2/glext.h>
 
 #	define glClearDepth glClearDepthf
-#	define CU_OPENGL_ES
-#	define CU_HAS_VAO
+#	define CUTE_OPENGL_ES
+#	define CUTE_HAS_VAO
 
 #	define glBindVertexArray	glBindVertexArrayOES
 #	define glDeleteVertexArrays glDeleteVertexArraysOES
@@ -67,11 +66,10 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 #	define glIsVertexArray		glIsVertexArrayOES
 
 #	elif TARGET_OS_MAC
-// 桌面系统
-#	include <OpenGL/gl.h>
-#	include <OpenGL/glext.h>
+#	include <OpenGL/gl3.h>
+#	include <OpenGL/gl3ext.h>
 
-#	define CU_HAS_VAO
+#	define CUTE_HAS_VAO
 
 #	define glBindVertexArray	glBindVertexArrayAPPLE
 #	define glDeleteVertexArrays glDeleteVertexArraysAPPLE
@@ -83,17 +81,17 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 
 // http://www.luluathena.com/?p=1739
 // http://www.cnblogs.com/vertexshader/articles/3022981.html
-#define CU_USE_PBO	// Pixel Buffer Object
-#define CU_USE_TEXTURE_ARRAY
-#define CU_USE_DRAW_INDEX_BASE
-#define CU_USE_UNIFORM_BLOCK
+#define CUTE_USE_PBO	// Pixel Buffer Object
+#define CUTE_USE_TEXTURE_ARRAY
+#define CUTE_USE_DRAW_INDEX_BASE
+#define CUTE_USE_UNIFORM_BLOCK
 
 #define OGL_VERSION		OGL_VERSION_4
 
 #if defined(CU_HAS_VAO) && !defined(CU_NO_VAO)
-#define CU_USE_VAO
+#define CUTE_USE_VAO
 #endif
 
 #if defined(CU_HAS_SPO) && !defined(CU_NO_SPO)
-#define CU_USE_SPO
+#define CUTE_USE_SPO
 #endif

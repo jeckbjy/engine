@@ -197,15 +197,17 @@ String& String::operator+=(double value)
     return *this;
 }
 
-void String::format(const char* fmt, ...)
+String& String::format(const char* fmt, ...)
 {
     va_list va;
     va_start(va, fmt);
     format(fmt, va);
     va_end(va);
+    
+    return *this;
 }
 
-void String::format(const char* fmt, va_list& va)
+String& String::format(const char* fmt, va_list& va)
 {
     int size = vsnprintf(0, 0, fmt, va);
     if (size > 0)
@@ -217,8 +219,194 @@ void String::format(const char* fmt, va_list& va)
         else
             (*this)[size] = '\0';
     }
+    
+    return *this;
 }
 
+String& String::appendN(const char *fmt, ...)
+{
+    va_list va;
+    va_start(va, fmt);
+    appendN(fmt, va);
+    va_end(va);
+    return *this;
+}
+
+String& String::appendN(const char *fmt, va_list &va)
+{
+    String temp;
+    format(fmt, va);
+    this->append(temp);
+    return *this;
+}
+
+String& String::append(const String& value)
+{
+    BaseString::append(value);
+    return *this;
+}
+
+String& String::append(const String &value, size_t start, size_t count)
+{
+    BaseString::append(value, start, count);
+    return *this;
+}
+
+String& String::append(const char* value)
+{
+    BaseString::append(value);
+    return *this;
+}
+
+String& String::append(const char* value, size_t n)
+{
+    BaseString::append(value, n);
+    return *this;
+}
+
+String& String::append(const char* value, size_t start, size_t count)
+{
+    BaseString::append(value, start, count);
+    return *this;
+}
+
+String& String::append(size_t n, char value)
+{
+    BaseString::append(n, value);
+    return *this;
+}
+
+void String::appendN(float  value, int width, int precision)
+{
+    
+}
+
+void String::appendN(double value, int width, int precision)
+{
+    
+}
+
+void String::appendN(int32  value, int width, char fill)
+{
+    
+}
+void String::appendN(int64  value, int width, char fill)
+{
+    
+}
+void String::appendN(uint32 value, int width, char fill)
+{
+    
+}
+void String::appendN(uint64 value, int width, char fill)
+{
+    
+}
+
+void String::append0(int32  value, int width)
+{
+    
+}
+void String::append0(int64  value, int width)
+{
+    
+}
+void String::append0(uint32 value, int width)
+{
+    
+}
+void String::append0(uint64 value, int width)
+{
+    
+}
+
+void String::appendHex(int32  value, int width, bool prefex)
+{
+    
+}
+void String::appendHex(int64  value, int width, bool prefex)
+{
+    
+}
+void String::appendHex(uint32 value, int width, bool prefex)
+{
+    
+}
+
+void String::appendHex(uint64 value, int width, bool prefex)
+{
+    
+}
+
+void String::appendOct(int32  value, int width, bool prefex)
+{
+    
+}
+
+void String::appendOct(int64  value, int width, bool prefex)
+{
+    
+}
+void String::appendOct(uint32 value, int width, bool prefex)
+{
+    
+}
+void String::appendOct(uint64 value, int width, bool prefex)
+{
+    
+}
+
+bool String::parse(char&   value) const
+{
+    return false;
+}
+
+bool String::parse(int8&   value) const
+{
+    return false;
+}
+
+bool String::parse(int16&  value) const
+{
+    return false;
+}
+
+bool String::parse(int32&  value) const
+{
+    return false;
+}
+bool String::parse(int64&  value) const
+{
+    return false;
+}
+bool String::parse(uint8&  value) const
+{
+    return false;
+}
+bool String::parse(uint16& value) const
+{
+    return false;
+}
+bool String::parse(uint32& value) const
+{
+    return false;
+}
+bool String::parse(uint64& value) const
+{
+    return false;
+}
+bool String::parse(float&  value) const
+{
+    return false;
+}
+bool String::parse(double& value) const
+{
+    return false;
+}
+
+//
+//
+//
 int String::icompare(const String &other)const
 {
     ConstIterator itr1 = this->begin();

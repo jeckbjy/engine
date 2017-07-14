@@ -6,7 +6,7 @@ CUTE_NS_BEGIN
 OGL_SwapChain::OGL_SwapChain(const SwapChainDesc& desc)
 	: m_wnd(desc.wnd)
 {
-#if defined(CU_OS_WIN)
+#if defined(CUTE_OS_WIN)
 	HWND hwnd = m_wnd->getHandle();
 
 	// create hdc and set format
@@ -29,8 +29,8 @@ OGL_SwapChain::OGL_SwapChain(const SwapChainDesc& desc)
 	// create context
 	m_hrc = wglCreateContext(m_hdc);
 	wglMakeCurrent(m_hdc, m_hrc);
-#elif defined(CU_USE_X11)
-#elif defined(CU_USE_XCB)
+#elif defined(CUTE_USE_X11)
+#elif defined(CUTE_USE_XCB)
 #endif
 }
 

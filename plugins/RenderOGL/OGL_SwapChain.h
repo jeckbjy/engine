@@ -2,7 +2,8 @@
 
 CUTE_NS_BEGIN
 
-class CU_OGL_API OGL_SwapChain : public SwapChain
+// same as glContext
+class CU_OGL_API OGL_SwapChain : public ISwapChain
 {
 public:
 	OGL_SwapChain(const SwapChainDesc& desc);

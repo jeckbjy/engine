@@ -3,6 +3,9 @@
 
 CUTE_NS_BEGIN
 
+// a3d
+//http://qiita.com/ProjectAsura/items/8f03960246c105f0545a
+
 enum INDIRECT_ARGUMENT_TYPE
 {
 	INDIRECT_ARGUMENT_TYPE_DRAW			= 0,
@@ -704,13 +707,13 @@ struct CUTE_CORE_API MetaDataHDR10
 
 struct CUTE_CORE_API DeviceInfo
 {
-	uint32_t    constantBufferMemoryAlignment;
-	uint32_t    maxTargetWidth;                
-	uint32_t    maxTargetHeight;               
-	uint32_t    maxTargetArraySize;            
-	uint32_t    maxColorSampleCount;           
-	uint32_t    maxDepthSampleCount;           
-	uint32_t    maxStencilSampleCount;         
+	uint32 constantBufferMemoryAlignment;
+	uint32 maxTargetWidth;                
+	uint32 maxTargetHeight;               
+	uint32 maxTargetArraySize;            
+	uint32 maxColorSampleCount;           
+	uint32 maxDepthSampleCount;           
+	uint32 maxStencilSampleCount;
 };
 
 struct CUTE_CORE_API DeviceDesc
@@ -768,12 +771,12 @@ public:
 	virtual bool getSubresourceLayout(SubresourceLayout& layout, uint32 subresource) const = 0;
 };
 
-class CUTE_CORE_API ITextureView : public Object
-{
-	DECLARE_RTTI(ITextureView, Object, OID_ANY)
-public:
-	virtual ~ITextureView(){}
-};
+//class CUTE_CORE_API ITextureView : public Object
+//{
+//	DECLARE_RTTI(ITextureView, Object, OID_ANY)
+//public:
+//	virtual ~ITextureView(){}
+//};
 
 class CUTE_CORE_API IFrameBuffer : public Object
 {

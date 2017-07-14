@@ -26,46 +26,84 @@ public:
 	String(const Iter& begin, const Iter& end): BaseString(begin, end) {}
 
 	String& operator  =(const String& value);
-	String& operator  =(char value);
-	String& operator  =(int8 value);
-	String& operator  =(int16 value);
-	String& operator  =(int32 value);
-	String& operator  =(int64 value);
-	String& operator  =(uint8 value);
+	String& operator  =(char   value);
+	String& operator  =(int8   value);
+	String& operator  =(int16  value);
+	String& operator  =(int32  value);
+	String& operator  =(int64  value);
+	String& operator  =(uint8  value);
 	String& operator  =(uint16 value);
 	String& operator  =(uint32 value);
 	String& operator  =(uint64 value);
-	String& operator  =(float value);
+	String& operator  =(float  value);
 	String& operator  =(double value);
 
 	String& operator +=(const String& value);
-	String& operator +=(char value);
-	String& operator +=(int8 value);
-	String& operator +=(int16 value);
-	String& operator +=(int32 value);
-	String& operator +=(int64 value);
-	String& operator +=(uint8 value);
+	String& operator +=(char   value);
+	String& operator +=(int8   value);
+	String& operator +=(int16  value);
+	String& operator +=(int32  value);
+	String& operator +=(int64  value);
+	String& operator +=(uint8  value);
 	String& operator +=(uint16 value);
 	String& operator +=(uint32 value);
 	String& operator +=(uint64 value);
-	String& operator +=(float value);
+	String& operator +=(float  value);
 	String& operator +=(double value);
-
-	String& operator <<(const String& value);
-	String& operator <<(char value);
-	String& operator <<(int8 value);
-	String& operator <<(int16 value);
-	String& operator <<(int32 value);
-	String& operator <<(int64 value);
-	String& operator <<(uint8 value);
-	String& operator <<(uint16 value);
-	String& operator <<(uint32 value);
-	String& operator <<(uint64 value);
-	String& operator <<(float value);
-	String& operator <<(double value);
-
-	void format(const char* fmt, ...);
-	void format(const char* fmt, va_list& va);
+  
+    String& append(const String& value);
+    String& append(const String& value, size_t start, size_t count);
+    String& append(const char* value);
+    String& append(const char* value, size_t n);
+    String& append(const char* value, size_t start, size_t count);
+    String& append(size_t n, char value);
+    
+    String& format(const char* fmt, ...);
+    String& format(const char* fmt, va_list& va);
+    String& appendN(const char* fmt, ...);
+    String& appendN(const char* fmt, va_list& va);
+    // append number(integer or float)
+    void appendN(float  value, int width = 0, int precision = 0);
+    void appendN(double value, int width = 0, int precision = 0);
+    void appendN(int32  value, int width = 0, char fill=0);
+    void appendN(int64  value, int width = 0, char fill=0);
+    void appendN(uint32 value, int width = 0, char fill=0);
+    void appendN(uint64 value, int width = 0, char fill=0);
+    
+    void append0(int32  value, int width);
+    void append0(int64  value, int width);
+    void append0(uint32 value, int width);
+    void append0(uint64 value, int width);
+    
+    void appendHex(int32  value, int width = 0, bool prefex = false);
+    void appendHex(int64  value, int width = 0, bool prefex = false);
+    void appendHex(uint32 value, int width = 0, bool prefex = false);
+    void appendHex(uint64 value, int width = 0, bool prefex = false);
+    
+    void appendOct(int32  value, int width = 0, bool prefex = false);
+    void appendOct(int64  value, int width = 0, bool prefex = false);
+    void appendOct(uint32 value, int width = 0, bool prefex = false);
+    void appendOct(uint64 value, int width = 0, bool prefex = false);
+    
+    bool parse(char&   value) const;
+    bool parse(int8&   value) const;
+    bool parse(int16&  value) const;
+    bool parse(int32&  value) const;
+    bool parse(int64&  value) const;
+    bool parse(uint8&  value) const;
+    bool parse(uint16& value) const;
+    bool parse(uint32& value) const;
+    bool parse(uint64& value) const;
+    bool parse(float&  value) const;
+    bool parse(double& value) const;
+    
+    int    toInteger() const;
+    uint   toUnsigned() const;
+    float  toFloat() const;
+    double toDouble() const;
+    
+    template<typename T>
+    T toNumber() const;
 
 	char charAt(size_t index) const;
 	char lastCharAt(size_t index) const;
@@ -106,8 +144,8 @@ public:
 	long removeFirst(const String& word, long offset = 0);
 	void replace(const String& from, const String& to);
 	long replaceFirst(const String& from, const String& to, long offset = 0);
-	void split();
-	void splitAny();
+//	void split();
+//	void splitAny();
 };
 
 //
@@ -123,20 +161,42 @@ inline char String::lastCharAt(size_t index) const
 	return this->at(this->length() - index);
 }
 
-//
-//
-//
-inline String& String::operator <<(const String& value) { *this += value; return *this;}
-inline String& String::operator <<(char value)   { *this += value; return *this;}
-inline String& String::operator <<(int8 value)   { *this += value; return *this;}
-inline String& String::operator <<(int16 value)  { *this += value; return *this;}
-inline String& String::operator <<(int32 value)  { *this += value; return *this;}
-inline String& String::operator <<(int64 value)  { *this += value; return *this;}
-inline String& String::operator <<(uint8 value)  { *this += value; return *this;}
-inline String& String::operator <<(uint16 value) { *this += value; return *this;}
-inline String& String::operator <<(uint32 value) { *this += value; return *this;}
-inline String& String::operator <<(uint64 value) { *this += value; return *this;}
-inline String& String::operator <<(float value)  { *this += value; return *this;}
-inline String& String::operator <<(double value) { *this += value; return *this;}
+inline int String::toInteger() const
+{
+    return toNumber<int>();
+}
+
+inline uint String::toUnsigned() const
+{
+    return toNumber<uint>();
+}
+
+inline float String::toFloat() const
+{
+    return toNumber<float>();
+}
+
+inline double String::toDouble() const
+{
+    return toNumber<double>();
+}
+
+template<typename T>
+inline T String::toNumber() const
+{
+    T result;
+    if(parse(result))
+        return result;
+    else
+        return (T)0;
+}
+
+// 流处理
+template<typename T>
+inline String& operator <<(String& str,const T& value)
+{
+    str += value;
+    return str;
+}
 
 CUTE_NS_END

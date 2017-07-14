@@ -4,10 +4,9 @@
 CUTE_NS_BEGIN
 
 OGL_Buffer::OGL_Buffer(const BufferDesc& desc)
-:GpuBuffer(desc)
+//:IBuffer(desc)
 {
 	GLenum usage = isDynamic()? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
-	// 创建并分配空间
 	m_target = OGL_Mapping::getBufferUsage(desc.usage);
 	glGenBuffers(1, &m_vbo);
 	glBindBuffer(m_target, m_vbo);
@@ -19,7 +18,7 @@ OGL_Buffer::~OGL_Buffer()
 	glDeleteBuffers(1, &m_vbo);
 }
 
-void* OGL_Buffer::map(size_t offset, size_t len, MAP_FLAG flag)
+void* OGL_Buffer::map()
 {
 	GLenum access = OGL_Mapping::getAccess(flag);
 	glBindBuffer(m_target, m_vbo);

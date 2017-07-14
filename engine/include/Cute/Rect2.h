@@ -2,9 +2,11 @@
 #pragma once
 #include "Cute/Foundation.h"
 #include "Cute/Vector2.h"
+#include "Cute/Vector4.h"
 
 CUTE_NS_BEGIN
 
+class Matrix4;
 template<typename T>
 class TRect2
 {
@@ -38,20 +40,20 @@ typedef TRect2<float>	Rect2;
 //
 //////////////////////////////////////////////////////////////////////////
 template<typename T>
-TRect2::TRect2()
+TRect2<T>::TRect2()
 	: x(0), y(0), width(0), height(0)
 {
 }
 
 template<typename T>
-TRect2::TRect2(T x, T y, T width, T height)
+TRect2<T>::TRect2(T x, T y, T width, T height)
 	: x(x), y(y), width(width), height(height)
 {
 
 }
 
 template<typename T>
-bool TRect2::contains(const TVector2<T>& point) const
+bool TRect2<T>::contains(const TVector2<T>& point) const
 {
 	if (point.x >= x && point.x <= (x + width))
 	{
@@ -63,7 +65,7 @@ bool TRect2::contains(const TVector2<T>& point) const
 }
 
 template<typename T>
-bool TRect2::overlaps(const TRect2& other) const
+bool TRect2<T>::overlaps(const TRect2& other) const
 {
 	float otherRight = other.x + other.width;
 	float myRight = x + width;
@@ -79,7 +81,7 @@ bool TRect2::overlaps(const TRect2& other) const
 }
 
 template<typename T>
-void TRect2::encapsulate(const TRect2& other)
+void TRect2<T>::encapsulate(const TRect2& other)
 {
 	float myRight = x + width;
 	float myBottom = y + height;
@@ -104,7 +106,7 @@ void TRect2::encapsulate(const TRect2& other)
 }
 
 template<typename T>
-void TRect2::clip(const TRect2& clipRect)
+void TRect2<T>::clip(const TRect2& clipRect)
 {
 	float newLeft = std::max(x, clipRect.x);
 	float newTop = std::max(y, clipRect.y);
@@ -119,45 +121,45 @@ void TRect2::clip(const TRect2& clipRect)
 }
 
 template<typename T>
-void TRect2::transform(const Matrix4& matrix)
+void TRect2<T>::transform(const Matrix4& matrix)
 {
-	Vector4 verts[4];
-	verts[0] = Vector4(x, y, 0.0f, 1.0f);
-	verts[1] = Vector4(x + width, y, 0.0f, 1.0f);
-	verts[2] = Vector4(x, y + height, 0.0f, 1.0f);
-	verts[3] = Vector4(x + width, y + height, 0.0f, 1.0f);
-
-	for (int i = 0; i < 4; i++)
-		verts[i] = matrix.multiply(verts[i]);
-
-	float minX = std::numeric_limits<float>::max();
-	float maxX = std::numeric_limits<float>::min();
-	float minY = std::numeric_limits<float>::max();
-	float maxY = std::numeric_limits<float>::min();
-
-	for (int i = 0; i < 4; i++)
-	{
-		if (verts[i].x < minX)
-			minX = verts[i].x;
-
-		if (verts[i].y < minY)
-			minY = verts[i].y;
-
-		if (verts[i].x > maxX)
-			maxX = verts[i].x;
-
-		if (verts[i].y > maxY)
-			maxY = verts[i].y;
-	}
-
-	x = minX;
-	y = minY;
-	width = maxX - x;
-	height = maxY - y;
+//	Vector4 verts[4];
+//	verts[0] = Vector4(x, y, 0.0f, 1.0f);
+//	verts[1] = Vector4(x + width, y, 0.0f, 1.0f);
+//	verts[2] = Vector4(x, y + height, 0.0f, 1.0f);
+//	verts[3] = Vector4(x + width, y + height, 0.0f, 1.0f);
+//
+//	for (int i = 0; i < 4; i++)
+//		verts[i] = matrix.multiply(verts[i]);
+//
+//	float minX = std::numeric_limits<float>::max();
+//	float maxX = std::numeric_limits<float>::min();
+//	float minY = std::numeric_limits<float>::max();
+//	float maxY = std::numeric_limits<float>::min();
+//
+//	for (int i = 0; i < 4; i++)
+//	{
+//		if (verts[i].x < minX)
+//			minX = verts[i].x;
+//
+//		if (verts[i].y < minY)
+//			minY = verts[i].y;
+//
+//		if (verts[i].x > maxX)
+//			maxX = verts[i].x;
+//
+//		if (verts[i].y > maxY)
+//			maxY = verts[i].y;
+//	}
+//
+//	x = minX;
+//	y = minY;
+//	width = maxX - x;
+//	height = maxY - y;
 }
 
 template<typename T>
-void TRect2::cut(const TRect2& cutRect, std::vector<TRect2>& pieces)
+void TRect2<T>::cut(const TRect2& cutRect, std::vector<TRect2>& pieces)
 {
 	size_t initialPieces = pieces.size();
 
@@ -227,14 +229,14 @@ void TRect2::cut(const TRect2& cutRect, std::vector<TRect2>& pieces)
 }
 
 template<typename T>
-void TRect2::cut(const std::vector<TRect2>& cutRects, std::vector<TRect2>& pieces)
+void TRect2<T>::cut(const std::vector<TRect2>& cutRects, std::vector<TRect2>& pieces)
 {
 	RectVector tempPieces[2];
 	size_t bufferIdx = 0;
 
 	tempPieces[0].push_back(*this);
 
-	for (RectVector::const_iterator itor = cutRects.begin(); itor != cutRects.end(); ++itor)
+	for (typename RectVector::const_iterator itor = cutRects.begin(); itor != cutRects.end(); ++itor)
 	{
 		const TRect2& cutRect = *itor;
 
@@ -244,7 +246,7 @@ void TRect2::cut(const std::vector<TRect2>& cutRects, std::vector<TRect2>& piece
 		RectVector& piece_temp = tempPieces[bufferIdx];
 		piece_temp.clear();
 
-		for (RectVector::iterator itor1 = piece_temp.begin(); itor1 != piece_temp.end(); ++itor1)
+		for (typename RectVector::iterator itor1 = piece_temp.begin(); itor1 != piece_temp.end(); ++itor1)
 		{
 			TRect2& rect = *itor1;
 			rect.cut(cutRect, piece_temp);

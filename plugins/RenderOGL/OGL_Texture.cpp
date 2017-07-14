@@ -3,7 +3,6 @@
 
 CUTE_NS_BEGIN
 
-// 压缩，非压缩，数组，非数组共4种情况
 static const char TEX_NORMAL = 0;
 static const char TEX_ARRAYS = 1;
 static const char TEX_COMPRESS = 2;
@@ -20,12 +19,12 @@ GLenum OGL_Texture::getGLTarget(TexType type, uint32_t arrays)
 	}
 	return GL_TEXTURE_2D;
 }
-// todo:数据初始化
+
 OGL_Texture::OGL_Texture(const TextureDesc& desc)
 :Texture(desc)
 {
 	m_target = getGLTarget(desc.type, desc.depthOrArraySize);
-	// 创建
+	//
 	glGenTextures(1, &m_handle);
 	glBindTexture(m_target, m_handle);
 	// This needs to be set otherwise the texture doesn't get rendered
@@ -42,7 +41,7 @@ OGL_Texture::OGL_Texture(const TextureDesc& desc)
 	GLenum gltype;
 	OGL_Mapping::getPixelFormat(desc.format, glinternal, glformat, gltype);
 
-	// 分配空间
+	//
 	bool compressed = PixelUtil::isCompressed(m_format);
 
 	char fill_mode;
@@ -111,7 +110,7 @@ void OGL_Texture::bindToFrameBuffer(GLenum attachment)
 	}
 }
 
-void* OGL_Texture::map(PixelData& data, MAP_FLAG flag, uint level, uint face)
+void* OGL_Texture::map()
 {
 	return 0;
 }
@@ -121,60 +120,60 @@ void OGL_Texture::unmap()
 
 }
 
-void OGL_Texture::read(PixelData& data, uint level, uint face)
-{
-	// 传入参数不用这么复杂？？
-	glBindTexture(m_target, m_handle);
-	GLenum target = (m_type == TEX_CUBE) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X + face : m_target;
-	if (PixelUtil::isCompressed(m_format))
-	{// 创建空间？？
-		glGetCompressedTexImage(target, level, data.data);
-	}
-	else
-	{
-		glGetTexImage(target, level, OGL_Mapping::getGLFormat(m_format), OGL_Mapping::getGLType(m_format), data.data);
-	}
-}
-
-void OGL_Texture::write(const PixelData& data, uint level, uint face, bool discard)
-{
-	// 还能再简化么？
-	glBindTexture(m_target, m_handle);
-	GLint glinternal;
-	GLenum glformat;
-	GLenum gltype;
-	OGL_Mapping::getPixelFormat(m_format, glinternal, glformat, gltype);
-
-	uint image_size = 0;
-	bool compressed = PixelUtil::isCompressed(m_format);
-	switch (m_target)
-	{
-	case GL_TEXTURE_1D:
-		if (compressed)
-			glCompressedTexSubImage1D(m_target, level, data.x, data.width, glformat, image_size, data.data);
-		else
-			glTexSubImage1D(m_target,level,data.x, data.width, glformat, gltype, data.data);
-		break;
-	case GL_TEXTURE_2D:
-	case GL_TEXTURE_CUBE_MAP:
-	{
-		GLenum target = (m_type == TEX_CUBE) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X + face : GL_TEXTURE_2D;
-		if (compressed)
-			glCompressedTexSubImage2D(target, level, data.x, data.y, data.width, data.height, glformat, image_size, data.data);
-		else
-			glTexSubImage2D(target, level, data.x, data.y, data.width, data.height, glformat, gltype, data.data);
-	}
-		break;
-	case GL_TEXTURE_3D:
-		if (compressed)
-			glCompressedTexSubImage3D(m_target, level, data.x, data.y, data.z, data.width, data.height, data.depth, glformat, image_size, data.data);
-		else
-			glTexSubImage3D(m_target, level, data.x, data.y, data.z, data.width, data.height, data.depth, glformat, gltype, data.data);
-		break;
-	default:
-		break;
-	}
-}
+//void OGL_Texture::read(PixelData& data, uint level, uint face)
+//{
+//	// 传入参数不用这么复杂？？
+//	glBindTexture(m_target, m_handle);
+//	GLenum target = (m_type == TEX_CUBE) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X + face : m_target;
+//	if (PixelUtil::isCompressed(m_format))
+//	{// 创建空间？？
+//		glGetCompressedTexImage(target, level, data.data);
+//	}
+//	else
+//	{
+//		glGetTexImage(target, level, OGL_Mapping::getGLFormat(m_format), OGL_Mapping::getGLType(m_format), data.data);
+//	}
+//}
+//
+//void OGL_Texture::write(const PixelData& data, uint level, uint face, bool discard)
+//{
+//	// 还能再简化么？
+//	glBindTexture(m_target, m_handle);
+//	GLint glinternal;
+//	GLenum glformat;
+//	GLenum gltype;
+//	OGL_Mapping::getPixelFormat(m_format, glinternal, glformat, gltype);
+//
+//	uint image_size = 0;
+//	bool compressed = PixelUtil::isCompressed(m_format);
+//	switch (m_target)
+//	{
+//	case GL_TEXTURE_1D:
+//		if (compressed)
+//			glCompressedTexSubImage1D(m_target, level, data.x, data.width, glformat, image_size, data.data);
+//		else
+//			glTexSubImage1D(m_target,level,data.x, data.width, glformat, gltype, data.data);
+//		break;
+//	case GL_TEXTURE_2D:
+//	case GL_TEXTURE_CUBE_MAP:
+//	{
+//		GLenum target = (m_type == TEX_CUBE) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X + face : GL_TEXTURE_2D;
+//		if (compressed)
+//			glCompressedTexSubImage2D(target, level, data.x, data.y, data.width, data.height, glformat, image_size, data.data);
+//		else
+//			glTexSubImage2D(target, level, data.x, data.y, data.width, data.height, glformat, gltype, data.data);
+//	}
+//		break;
+//	case GL_TEXTURE_3D:
+//		if (compressed)
+//			glCompressedTexSubImage3D(m_target, level, data.x, data.y, data.z, data.width, data.height, data.depth, glformat, image_size, data.data);
+//		else
+//			glTexSubImage3D(m_target, level, data.x, data.y, data.z, data.width, data.height, data.depth, glformat, gltype, data.data);
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
 void OGL_Texture::create1D(GLint glinternal, GLenum glformat, GLenum gltype, bool compressed, char fill_mode, const char* data)
 {

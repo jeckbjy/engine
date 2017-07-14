@@ -498,9 +498,11 @@
 //#endif
 
 #ifdef CUTE_CPP11
-#define CUTE_ENUM_TYPE(type) : type
+#define CUTE_ENUM(NAME, TYPE)       enum NAME : TYPE
+#define CUTE_ENUM_CLASS(NAME, TYPE) enum class NAME : TYPE
 #else
-#define CUTE_ENUM_TYPE(type)
+#define CUTE_ENUM(NAME, TYPE)       enum NAME
+#define CUTE_ENUM_CLASS(NAME, TYPE) namespace NAME { enum {
 #endif
 
 #if defined(_MSC_VER)
