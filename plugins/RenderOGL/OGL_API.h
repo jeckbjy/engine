@@ -21,7 +21,7 @@
 #pragma comment(lib, "opengl32.lib")
 #endif
 
-#include "Cute/Graphics.h"
+#include "Cute/RenderAPI.h"
 
 //
 #define OGL_VERSION_2	2

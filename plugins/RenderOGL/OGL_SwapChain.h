@@ -3,7 +3,7 @@
 CUTE_NS_BEGIN
 
 // same as glContext
-class CU_OGL_API OGL_SwapChain : public ISwapChain
+class CUTE_OGL_API OGL_SwapChain : public ISwapChain
 {
 public:
 	OGL_SwapChain(const SwapChainDesc& desc);
@@ -13,13 +13,13 @@ public:
 	void bind(void*);
 
 private:
-	WindowPtr	m_wnd;
-#if defined(CU_OS_WIN)
-	HDC			m_hdc;
-	HGLRC		m_hrc;
-#elif defined(CU_OS_LINUX)
-	::Display	m_display;
-#endif
+//	WindowPtr	m_wnd;
+//#if defined(CU_OS_WIN)
+//	HDC			m_hdc;
+//	HGLRC		m_hrc;
+//#elif defined(CU_OS_LINUX)
+//	::Display	m_display;
+//#endif
 };
 
 CUTE_NS_END

@@ -1,13 +1,8 @@
 #pragma once
 #include "Cute/Foundation.h"
+#include "Cute/Resource.h"
 
 CUTE_NS_BEGIN
-
-// resource asset
-class CUTE_CORE_API Resource : public Object
-{
-
-};
 
 class CUTE_CORE_API ImportOptions : public Object
 {

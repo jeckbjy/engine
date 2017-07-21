@@ -6,7 +6,7 @@
 CUTE_NS_BEGIN
 
 class OGL_Program;
-class CU_OGL_API OGL_DescriptorSet : public DescriptorSet
+class CUTE_OGL_API OGL_DescriptorSet : public IDescriptorSet
 {
 public:
 	OGL_DescriptorSet(OGL_Program* prog);

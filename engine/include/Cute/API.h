@@ -1,6 +1,24 @@
 //! API
 #pragma once
 
+//////////////////////////////////////////////////////////////////////////
+// 导出lib
+//////////////////////////////////////////////////////////////////////////
+/*
+ 只有microsoft的编译器需要
+ 用途：
+ 1：编译器可以优化函数调用
+ 2：静态成员变量和成员函数必须使用
+ 3：全局变量的导出
+ */
+#if defined(_MSC_VER)
+#	define CUTE_EXPORT __declspec(dllexport)
+#	define CUTE_IMPORT __declspec(dllimport)
+#else
+#	define CUTE_EXPORT
+#	define CUTE_IMPORT
+#endif
+
 // define CUTE_CORE_API
 // 默认使用DLL，如果使用LIB需要单独定义
 #if defined(CUTE_USE_LIB_CORE)

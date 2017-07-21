@@ -2,7 +2,7 @@
 
 CUTE_NS_BEGIN
 
-// 32 没有norm定义
+//
 #define GL_R32		GL_R32I
 #define GL_RG32		GL_RG32I
 #define GL_RGB32	GL_RGB32I
@@ -15,7 +15,10 @@ struct GLPixelInfo
 	GLint  ginternal;
 };
 
-static GLPixelInfo gl_infos[PIXEL_FORMAT_MAX];
+static GLPixelInfo gl_infos[] = {
+};
+
+//static GLPixelInfo gl_infos[];
 
 //inline void set_info(PixelFormat fmt, GLenum gl_type, GLenum gl_format, GLint gl_internal)
 //{
@@ -153,7 +156,7 @@ static GLPixelInfo gl_infos[PIXEL_FORMAT_MAX];
 //
 //}
 
-void OGL_Mapping::getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glformat, GLenum& gltype)
+void OGL_Mapping::getFormat(RESOURCE_FORMAT fmt, GLint& glinternal, GLenum& glformat, GLenum& gltype)
 {
 	const GLPixelInfo& info = gl_infos[fmt];
 	glinternal = info.ginternal;
@@ -161,142 +164,161 @@ void OGL_Mapping::getPixelFormat(PixelFormat fmt, GLint& glinternal, GLenum& glf
 	gltype = info.gtype;
 }
 
-GLenum OGL_Mapping::getGLInternal(PixelFormat fmt, bool gamma /* = false */)
+GLenum OGL_Mapping::getGLInternal(RESOURCE_FORMAT fmt, bool gamma /* = false */)
 {
 	return gl_infos[fmt].ginternal;
 }
 
-GLenum OGL_Mapping::getGLFormat(PixelFormat fmt)
+GLenum OGL_Mapping::getGLFormat(RESOURCE_FORMAT fmt)
 {
 	return gl_infos[fmt].gformat;
 }
 
-GLenum OGL_Mapping::getGLType(PixelFormat fmt)
+GLenum OGL_Mapping::getGLType(RESOURCE_FORMAT fmt)
 {
 	return gl_infos[fmt].gtype;
 }
 
-GLenum OGL_Mapping::getBufferUsage(BufferUsage type)
+GLenum OGL_Mapping::getUsage(RESOURCE_USAGE usage)
 {
-	switch (type)
-	{
-	case BU_VERTEX:return GL_ARRAY_BUFFER;
-	case BU_INDEX: return GL_ELEMENT_ARRAY_BUFFER;
-	case BU_UNIFORM:return GL_UNIFORM_BUFFER;
-	default:
-		assert(false);
-		break;
+	switch (usage)
+    {
+        case RESOURCE_USAGE_COLOR_TARGET:
+            return 0;
+        case RESOURCE_USAGE_DEPTH_TARGET:
+            return 0;
+        case RESOURCE_USAGE_UNORDERD_ACCESS:
+            return 0;
+        case RESOURCE_USAGE_VERTEX_BUFFER:
+            return GL_ARRAY_BUFFER;
+        case RESOURCE_USAGE_INDEX_BUFFER:
+            return GL_ELEMENT_ARRAY_BUFFER;
+        case RESOURCE_USAGE_CONSTANT_BUFFER:
+            return GL_UNIFORM_BUFFER;
+        case RESOURCE_USAGE_INDIRECT_BUFFER:
+            return 0;
+        case RESOURCE_USAGE_SHADER_RESOURCE:
+            return 0;
+        case RESOURCE_USAGE_COPY_SRC:
+            return 0;
+        case RESOURCE_USAGE_COPY_DST:
+            return 0;
+        case RESOURCE_USAGE_QUERY_BUFFER:
+            return 0;
+        default:
+            assert(false);
+            break;
 	}
 	return 0;
 }
 
-GLbitfield OGL_Mapping::getAccess(MAP_FLAG type)
-{
-	if (type == MAP_READ_ONLY)
-		return GL_MAP_READ_BIT;
-	else if (type == MAP_WRITE_ONLY)
-		return GL_MAP_WRITE_BIT;
-	//
-	GLbitfield access = GL_MAP_WRITE_BIT;
-	if (type == MAP_READ_WRITE)
-		access |= GL_MAP_READ_BIT;
-	else if (type == MAP_WRITE_ONLY_DISCARD)
-		access |= GL_MAP_INVALIDATE_BUFFER_BIT;
-	else if (type == MAP_WRITE_ONLY_ON_OVERWRITE)
-		access |= GL_MAP_UNSYNCHRONIZED_BIT;
-	return access;
-}
-
-GLint OGL_Mapping::getPrimitiveMode(Topology type)
-{
-	static const GLint gl_topology[] = 
-	{
-		0, GL_POINTS, 
-		GL_LINES, GL_LINE_STRIP, GL_TRIANGLES, GL_TRIANGLE_STRIP, 
-		GL_LINES_ADJACENCY, GL_LINE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY, GL_TRIANGLE_STRIP_ADJACENCY
-	};
-
-	if (type < PT_CTRL_PATCH_LIST1)
-		return gl_topology[type];
-
-	return GL_PATCHES;
-}
-
-UniformType OGL_Mapping::getUniformType(GLenum type)
-{
-	switch (type)
-	{
-	case GL_BOOL:
-		return UT_BOOL1;
-	case GL_BOOL_VEC2:
-		return UT_BOOL2;
-	case GL_BOOL_VEC3:
-		return UT_BOOL3;
-	case GL_BOOL_VEC4:
-		return UT_BOOL4;
-	case GL_FLOAT:
-		return UT_FLOAT1;
-	case GL_FLOAT_VEC2:
-		return UT_FLOAT2;
-	case GL_FLOAT_VEC3:
-		return UT_FLOAT3;
-	case GL_FLOAT_VEC4:
-		return UT_FLOAT4;
-	case GL_INT:
-		return UT_INT1;
-	case GL_INT_VEC2:
-		return UT_INT2;
-	case GL_INT_VEC3:
-		return UT_INT3;
-	case GL_INT_VEC4:
-		return UT_INT4;
-	case GL_UNSIGNED_INT:
-		return UT_UINT1;
-	case GL_UNSIGNED_INT_VEC2:
-		return UT_UINT2;
-	case GL_UNSIGNED_INT_VEC3:
-		return UT_UINT3;
-	case GL_UNSIGNED_INT_VEC4:
-		return UT_UINT4;
-	case GL_FLOAT_MAT2:
-		return UT_MATRIX_2X2;
-	case GL_FLOAT_MAT2x3:
-		return UT_MATRIX_2X3;
-	case GL_FLOAT_MAT2x4:
-		return UT_MATRIX_2X4;
-	case GL_FLOAT_MAT3x2:
-		return UT_MATRIX_3X2;
-	case GL_FLOAT_MAT3:
-		return UT_MATRIX_3X3;
-	case GL_FLOAT_MAT3x4:
-		return UT_MATRIX_3X4;
-	case GL_FLOAT_MAT4x2:
-		return UT_MATRIX_4X2;
-	case GL_FLOAT_MAT4x3:
-		return UT_MATRIX_4X3;
-	case GL_FLOAT_MAT4:
-		return UT_MATRIX_4X4;
-	case GL_SAMPLER_1D:
-		return UT_SAMPLER1D;
-	case GL_SAMPLER_2D:
-		return UT_SAMPLER2D;
-	case GL_SAMPLER_3D:
-		return UT_SAMPLER3D;
-	case GL_SAMPLER_CUBE:
-		return UT_SAMPLERCUBE;
-	case GL_SAMPLER_2D_MULTISAMPLE:
-		return UT_SAMPLER2DMS;
-	case GL_IMAGE_1D:
-		return UT_RWTEXTURE1D;
-	case GL_IMAGE_2D:
-		return UT_RWTEXTURE2D;
-	case GL_IMAGE_3D:
-		return UT_RWTEXTURE3D;
-	case GL_IMAGE_2D_MULTISAMPLE:
-		return UT_RWTEXTURE2DMS;
-	default:
-		return UT_UNKNOWN;
-	}
-}
+//GLbitfield OGL_Mapping::getAccess(MAP_FLAG type)
+//{
+//	if (type == MAP_READ_ONLY)
+//		return GL_MAP_READ_BIT;
+//	else if (type == MAP_WRITE_ONLY)
+//		return GL_MAP_WRITE_BIT;
+//	//
+//	GLbitfield access = GL_MAP_WRITE_BIT;
+//	if (type == MAP_READ_WRITE)
+//		access |= GL_MAP_READ_BIT;
+//	else if (type == MAP_WRITE_ONLY_DISCARD)
+//		access |= GL_MAP_INVALIDATE_BUFFER_BIT;
+//	else if (type == MAP_WRITE_ONLY_ON_OVERWRITE)
+//		access |= GL_MAP_UNSYNCHRONIZED_BIT;
+//	return access;
+//}
+//
+//GLint OGL_Mapping::getPrimitiveMode(Topology type)
+//{
+//	static const GLint gl_topology[] = 
+//	{
+//		0, GL_POINTS, 
+//		GL_LINES, GL_LINE_STRIP, GL_TRIANGLES, GL_TRIANGLE_STRIP, 
+//		GL_LINES_ADJACENCY, GL_LINE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY, GL_TRIANGLE_STRIP_ADJACENCY
+//	};
+//
+//	if (type < PT_CTRL_PATCH_LIST1)
+//		return gl_topology[type];
+//
+//	return GL_PATCHES;
+//}
+//
+//UniformType OGL_Mapping::getUniformType(GLenum type)
+//{
+//	switch (type)
+//	{
+//	case GL_BOOL:
+//		return UT_BOOL1;
+//	case GL_BOOL_VEC2:
+//		return UT_BOOL2;
+//	case GL_BOOL_VEC3:
+//		return UT_BOOL3;
+//	case GL_BOOL_VEC4:
+//		return UT_BOOL4;
+//	case GL_FLOAT:
+//		return UT_FLOAT1;
+//	case GL_FLOAT_VEC2:
+//		return UT_FLOAT2;
+//	case GL_FLOAT_VEC3:
+//		return UT_FLOAT3;
+//	case GL_FLOAT_VEC4:
+//		return UT_FLOAT4;
+//	case GL_INT:
+//		return UT_INT1;
+//	case GL_INT_VEC2:
+//		return UT_INT2;
+//	case GL_INT_VEC3:
+//		return UT_INT3;
+//	case GL_INT_VEC4:
+//		return UT_INT4;
+//	case GL_UNSIGNED_INT:
+//		return UT_UINT1;
+//	case GL_UNSIGNED_INT_VEC2:
+//		return UT_UINT2;
+//	case GL_UNSIGNED_INT_VEC3:
+//		return UT_UINT3;
+//	case GL_UNSIGNED_INT_VEC4:
+//		return UT_UINT4;
+//	case GL_FLOAT_MAT2:
+//		return UT_MATRIX_2X2;
+//	case GL_FLOAT_MAT2x3:
+//		return UT_MATRIX_2X3;
+//	case GL_FLOAT_MAT2x4:
+//		return UT_MATRIX_2X4;
+//	case GL_FLOAT_MAT3x2:
+//		return UT_MATRIX_3X2;
+//	case GL_FLOAT_MAT3:
+//		return UT_MATRIX_3X3;
+//	case GL_FLOAT_MAT3x4:
+//		return UT_MATRIX_3X4;
+//	case GL_FLOAT_MAT4x2:
+//		return UT_MATRIX_4X2;
+//	case GL_FLOAT_MAT4x3:
+//		return UT_MATRIX_4X3;
+//	case GL_FLOAT_MAT4:
+//		return UT_MATRIX_4X4;
+//	case GL_SAMPLER_1D:
+//		return UT_SAMPLER1D;
+//	case GL_SAMPLER_2D:
+//		return UT_SAMPLER2D;
+//	case GL_SAMPLER_3D:
+//		return UT_SAMPLER3D;
+//	case GL_SAMPLER_CUBE:
+//		return UT_SAMPLERCUBE;
+//	case GL_SAMPLER_2D_MULTISAMPLE:
+//		return UT_SAMPLER2DMS;
+//	case GL_IMAGE_1D:
+//		return UT_RWTEXTURE1D;
+//	case GL_IMAGE_2D:
+//		return UT_RWTEXTURE2D;
+//	case GL_IMAGE_3D:
+//		return UT_RWTEXTURE3D;
+//	case GL_IMAGE_2D_MULTISAMPLE:
+//		return UT_RWTEXTURE2DMS;
+//	default:
+//		return UT_UNKNOWN;
+//	}
+//}
 
 CUTE_NS_END

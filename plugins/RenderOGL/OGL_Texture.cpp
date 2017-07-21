@@ -8,22 +8,29 @@ static const char TEX_ARRAYS = 1;
 static const char TEX_COMPRESS = 2;
 static const char TEX_COMPRESS_ARRAY = 3;
 
-GLenum OGL_Texture::getGLTarget(TexType type, uint32_t arrays)
+GLenum OGL_Texture::getGLTarget(RESOURCE_DIMENSION type, uint32_t arrays)
 {
 	switch (type)
 	{
-	case TEX_1D:return arrays > 1 ? GL_TEXTURE_1D_ARRAY : GL_TEXTURE_1D;
-	case TEX_2D:return arrays > 1 ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
-	case TEX_3D:return GL_TEXTURE_3D;
-	case TEX_CUBE:return arrays > 1 ? GL_TEXTURE_CUBE_MAP_ARRAY : GL_TEXTURE_CUBE_MAP;
+	case RESOURCE_DIMENSION_TEXTURE1D:
+        return arrays > 1 ? GL_TEXTURE_1D_ARRAY : GL_TEXTURE_1D;
+	case RESOURCE_DIMENSION_TEXTURE2D:
+        return arrays > 1 ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
+	case RESOURCE_DIMENSION_TEXTURE3D:
+        return GL_TEXTURE_3D;
+	case RESOURCE_DIMENSION_CUBEMAP:
+        return arrays > 1 ? GL_TEXTURE_CUBE_MAP_ARRAY : GL_TEXTURE_CUBE_MAP;
+    default:
+        assert(false);
+        break;
 	}
 	return GL_TEXTURE_2D;
 }
 
 OGL_Texture::OGL_Texture(const TextureDesc& desc)
-:Texture(desc)
+//:Texture(desc)
 {
-	m_target = getGLTarget(desc.type, desc.depthOrArraySize);
+	m_target = getGLTarget(desc.dimension, desc.depthOrArraySize);
 	//
 	glGenTextures(1, &m_handle);
 	glBindTexture(m_target, m_handle);
@@ -39,7 +46,7 @@ OGL_Texture::OGL_Texture(const TextureDesc& desc)
 	GLint glinternal;
 	GLenum glformat;
 	GLenum gltype;
-	OGL_Mapping::getPixelFormat(desc.format, glinternal, glformat, gltype);
+	OGL_Mapping::getFormat(desc.format, glinternal, glformat, gltype);
 
 	//
 	bool compressed = PixelUtil::isCompressed(m_format);
@@ -50,10 +57,10 @@ OGL_Texture::OGL_Texture(const TextureDesc& desc)
 	else
 		fill_mode = m_depth > 1 ? TEX_ARRAYS : TEX_NORMAL;
 
-	if ((m_usage & RES_RENDER_TARGET) || (m_usage & RES_DEPTH_STENCIL))
+	if ((desc.usage & RES_RENDER_TARGET) || (m_usage & RES_DEPTH_STENCIL))
 	{
-		if (desc.samples > 0)
-			glTexImage2DMultisample(GL_TEXTURE_2D, desc.samples, glinternal, m_width, m_height, GL_FALSE);
+		if (desc.sampleCount > 0)
+			glTexImage2DMultisample(GL_TEXTURE_2D, desc.sampleCount, glinternal, desc.width, desc.height, GL_FALSE);
 		else
 			glTexImage2D(GL_TEXTURE_2D, 0, glinternal, m_width, m_height, 0, glformat, gltype, NULL);
 	}

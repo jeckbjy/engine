@@ -1,18 +1,19 @@
 #pragma once
 #include "Cute/Foundation.h"
 #include "Cute/Mutex.h"
+#include "Cute/Singleton.h"
 
 CUTE_NS_BEGIN
 
 class Plugin;
 class SharedLibrary;
 
-class CUTE_CORE_API PluginMgr
+class CUTE_CORE_API PluginManager : public Singleton<PluginManager>
 {
 	struct Data;
 public:
-	PluginMgr();
-	~PluginMgr();
+	PluginManager();
+	~PluginManager();
 
 	void load(const String& libpath);
 	void load(const String& path, const String& name);

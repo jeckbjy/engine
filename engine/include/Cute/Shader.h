@@ -1,7 +1,13 @@
 #pragma once
 #include "Cute/Foundation.h"
+#include "Cute/RenderAPI.h"
 
 CUTE_NS_BEGIN
+
+class CUTE_CORE_API Pass: public Object
+{
+public:
+};
 
 class CUTE_CORE_API Technique : public Object
 {

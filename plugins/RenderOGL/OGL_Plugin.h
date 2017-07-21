@@ -1,11 +1,12 @@
 #pragma once
-#include "Plugin.h"
+#include "OGL_API.h"
+#include "Cute/Plugin.h"
 
 CUTE_NS_BEGIN
 
 #define OGL_NAME "OGL"
 class OGL_Device;
-class OGL_Plugin : public Plugin
+class CUTE_OGL_API OGL_Plugin : public Plugin
 {
 public:
 	OGL_Plugin();

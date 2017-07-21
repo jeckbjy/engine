@@ -240,7 +240,7 @@ void TRect2<T>::cut(const std::vector<TRect2>& cutRects, std::vector<TRect2>& pi
 	{
 		const TRect2& cutRect = *itor;
 
-		size_t currentBufferIdx = bufferIdx;
+//		size_t currentBufferIdx = bufferIdx;
 
 		bufferIdx = (bufferIdx + 1) % 2;
 		RectVector& piece_temp = tempPieces[bufferIdx];

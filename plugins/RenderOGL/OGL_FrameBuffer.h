@@ -3,7 +3,7 @@
 
 CUTE_NS_BEGIN
 
-class CU_OGL_API OGL_FrameBuffer : public FrameBuffer
+class CUTE_OGL_API OGL_FrameBuffer : public IFrameBuffer
 {
 public:
 	OGL_FrameBuffer();

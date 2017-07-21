@@ -1,5 +1,5 @@
 //! SharedLibrary
-#include "Cute/PluginMgr.h"
+#include "Cute/PluginManager.h"
 #include "Cute/Plugin.h"
 #include "Cute/Paths.h"
 #include "Cute/String.h"
@@ -7,17 +7,17 @@
 
 CUTE_NS_BEGIN
 
-PluginMgr::PluginMgr()
+PluginManager::PluginManager()
 {
 
 }
 
-PluginMgr::~PluginMgr()
+PluginManager::~PluginManager()
 {
 	unloadAll();
 }
 
-void PluginMgr::load(const String& path)
+void PluginManager::load(const String& path)
 {
     String libname = Paths::getFileName(path);
 
@@ -69,13 +69,13 @@ void PluginMgr::load(const String& path)
 	
 }
 
-void PluginMgr::load(const String& path, const String& name)
+void PluginManager::load(const String& path, const String& name)
 {
 	String filename = path + SharedLibrary::getOSName(name);
 	load(filename);
 }
 
-bool PluginMgr::unloadLibrary(const String& name)
+bool PluginManager::unloadLibrary(const String& name)
 {
 	Mutex::ScopedLock lock(m_mutex);
 	Librarymap::iterator itor = m_libs.find(name);
@@ -90,7 +90,7 @@ bool PluginMgr::unloadLibrary(const String& name)
 	return true;
 }
 
-bool PluginMgr::unloadPlugin(const String& name)
+bool PluginManager::unloadPlugin(const String& name)
 {
 	Mutex::ScopedLock lock(m_mutex);
 	Librarymap::iterator itor = m_plugins.find(name);
@@ -106,7 +106,7 @@ bool PluginMgr::unloadPlugin(const String& name)
 	return true;
 }
 
-void PluginMgr::unloadAll()
+void PluginManager::unloadAll()
 {
 	Mutex::ScopedLock lock(m_mutex);
 
@@ -119,7 +119,7 @@ void PluginMgr::unloadAll()
 	m_libs.clear();
 }
 
-void PluginMgr::unload(Data* data)
+void PluginManager::unload(Data* data)
 {
 	SharedLibrary*	lib = data->lib;
 	Plugin*			plg = data->plugin;

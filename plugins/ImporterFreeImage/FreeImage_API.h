@@ -1,7 +1,6 @@
 #pragma once
 
 // define CUTE_FREEIMAGE_API
-// 默认使用DLL，如果使用LIB需要单独定义
 #if defined(CUTE_USE_LIB_FREEIMAGE)
 // build or use lib
 #	define CUTE_FREEIMAGE_API

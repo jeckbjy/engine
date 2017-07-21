@@ -21,7 +21,7 @@
 
 CUTE_NS_BEGIN
 
-class CU_OGL_API OGL_Shader : public ShaderStage
+class CUTE_OGL_API OGL_Shader : public ShaderStage
 {
 public:
 	OGL_Shader(uint32_t id);

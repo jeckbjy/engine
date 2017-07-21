@@ -5,7 +5,7 @@ CUTE_NS_BEGIN
 
 class CUTE_OGL_API OGL_Texture : public ITexture
 {
-	static GLenum getGLTarget(TexType type, uint32_t arrays);
+	static GLenum getGLTarget(RESOURCE_DIMENSION type, uint32_t arrays);
 public:
 	OGL_Texture(const TextureDesc& desc);
 	virtual ~OGL_Texture();
@@ -27,7 +27,7 @@ private:
 
 protected:
 	GLuint m_handle;
-	GLenum m_target;	// 1D,2D,3DµÈ
+	GLenum m_target;	// 1D,2D,3D
 };
 
 CUTE_NS_END

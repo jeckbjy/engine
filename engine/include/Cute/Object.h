@@ -38,4 +38,10 @@ public:
 	}
 };
 
+//template<typename TYPE, int ID = OID_ANY>
+//class TObject : public Object
+//{
+//    DECLARE_RTTI(TYPE, Object, ID)
+//};
+
 CUTE_NS_END

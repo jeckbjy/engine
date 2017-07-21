@@ -7,7 +7,7 @@ OGL_Buffer::OGL_Buffer(const BufferDesc& desc)
 //:IBuffer(desc)
 {
 	GLenum usage = isDynamic()? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
-	m_target = OGL_Mapping::getBufferUsage(desc.usage);
+	m_target = OGL_Mapping::getUsage(desc.usage);
 	glGenBuffers(1, &m_vbo);
 	glBindBuffer(m_target, m_vbo);
 	glBufferData(m_target, m_bytes, desc.data, usage);
