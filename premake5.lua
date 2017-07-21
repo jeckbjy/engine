@@ -299,12 +299,12 @@ group "plugin_graphics"
 		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
 
 group "plugin_render"
-	project("plugin_beast")
-		src_dir = "plugins/RenderBeast/"
+	project("plugin_rxpath")
+		src_dir = "plugins/RenderXPath/"
 
 		dependson	{ "engine" }
 		kind		( "SharedLib" )
-		defines		{ "CUTE_BUILD_BEAST" }
+		defines		{ "CUTE_BUILD_RXPATH" }
 
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir .. "**.*" } }	
@@ -406,17 +406,6 @@ group "plugin_importer"
 		
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }
-		
-	project ("plugin_font")
-		src_dir 	= "plugins/ImporterFont/"
-		sdk_dir		= ""
-		
-		dependson 	{ "engine" }
-		kind		( "SharedLib" )
-		defines 	{ "CUTE_BUILD_FONT" }
-		
-		files 		{ src_dir .. "**.*" }
-		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 
 	project ("plugin_freeimage")
 		src_dir 	= "plugins/ImporterFreeImage/"
@@ -426,6 +415,29 @@ group "plugin_importer"
 		kind		( "SharedLib" )
 		defines 	{ "CUTE_BUILD_FREEIMAGE" }
 		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+
+-- font
+group "plugin_font"
+	project ("plugin_freetype")
+		src_dir 	= "plugins/ImporterFreeType/"
+		sdk_dir		= "depends/freetype-2.8/"
+		
+		dependson 	{ "engine" }
+		kind		( "SharedLib" )
+		defines 	{ "CUTE_BUILD_FREETYPE" }
+		includedirs { sdk_dir .. "include" }
+		
+		files 		{ src_dir .. "**.*" }
+		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
+
+	project ("plugin_bmfont")
+		src_dir		= "plugins/ImporterBMFont/"
+		dependson	{ "engine" }
+		kind 		("SharedLib")
+		defines		{ "CUTE_BUILD_BMFONT" }
+
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = { src_dir.. "**.*" } }	
 
@@ -458,7 +470,7 @@ group "plugin_audio"
 		vpaths 		{ ["src"] = { src_dir .. "**.*" } }	
 
 --音频格式
-group "plugin_audiodecoder"	
+group "plugin_audio_codec"	
 	project ("plugin_ogg")
 		src_dir 	= "plugins/AudioCodecOgg/"
 		sdk_ogg		= "./depends/libogg/"
