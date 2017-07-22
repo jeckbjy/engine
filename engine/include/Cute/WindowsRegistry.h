@@ -4,6 +4,7 @@
 CUTE_NS_BEGIN
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 
+class Buffer;
 class CUTE_CORE_API WindowsRegistry
 {
 public:

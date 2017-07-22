@@ -17,14 +17,17 @@ public:
     short advanceX;
     uint  page;
     bool  used;
+	bool  kerninged;
 };
 
-//class CUTE_CORE_API FontFace
-//{
-//public:
-//private:
-//};
+class CUTE_CORE_API FontFace
+{
+public:
+private:
+};
 
+// 主要API:getGlyph getKerning
+// 需要重点实现动态生成Glyph，以及如何合并到一张Font上以便减少drawcall
 class CUTE_CORE_API Font : public Resource
 {
 public:

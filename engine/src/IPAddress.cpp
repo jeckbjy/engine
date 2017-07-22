@@ -3,7 +3,12 @@
 #include "Cute/Number.h"
 #include "Cute/SharedLibrary.h"
 #include "Cute/HeapBlock.h"
+
+#if defined(CUTE_OS_FAMILY_WINDOWS)
+#include <iptypes.h>
+#elif defined(CUTE_OS_FAMILY_POSIX)
 #include <net/if.h>
+#endif
 
 CUTE_NS_BEGIN
 
@@ -16,7 +21,7 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
         return;
     
     HeapBlock<IP_ADAPTER_ADDRESSES> addrs(1);
-    ULONG len= sizeof(IP_ADAPTER_ADDRESSES)
+	ULONG len = sizeof(IP_ADAPTER_ADDRESSES);
     if(getAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, addrs, &len) == ERROR_BUFFER_OVERFLOW)
     {
         addrs.malloc(len, 1);
@@ -35,7 +40,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
             {
                 const sockaddr_in* sa_in = (sockaddr_in*)pUnicast->Address.lpSockaddr;
                 IPAddress ip ((uint8*)&sa_in->sin_addr.s_addr, false);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
             else if (pUnicast->Address.lpSockaddr->sa_family == AF_INET6 && includeIPv6)
             {
@@ -53,7 +59,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
                 }
                 
                 IPAddress ip (arr);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
         }
         
@@ -65,7 +72,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
             {
                 const sockaddr_in* sa_in = (sockaddr_in*)pAnycast->Address.lpSockaddr;
                 IPAddress ip ((uint8*)&sa_in->sin_addr.s_addr, false);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
             else if (pAnycast->Address.lpSockaddr->sa_family == AF_INET6 && includeIPv6)
             {
@@ -83,7 +91,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
                 }
                 
                 IPAddress ip (arr);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
         }
         
@@ -95,7 +104,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
             {
                 const sockaddr_in* sa_in = (sockaddr_in*)pMulticast->Address.lpSockaddr;
                 IPAddress ip ((uint8*)&sa_in->sin_addr.s_addr, false);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
             else if (pMulticast->Address.lpSockaddr->sa_family == AF_INET6 && includeIPv6)
             {
@@ -113,7 +123,8 @@ void IPAddress::findAllAddresses(Vector<IPAddress> &results, bool includeIPv6)
                 }
                 
                 IPAddress ip (arr);
-                result.addIfNotAlreadyThere (ip);
+				results.push_back(ip);
+                //result.addIfNotAlreadyThere (ip);
             }
         }
         /// end

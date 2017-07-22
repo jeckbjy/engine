@@ -1,4 +1,4 @@
-#pragma core
+#pragma once
 #include "Cute/Foundation.h"
 #include "Cute/Rect2.h"
 #include "Cute/Vector2.h"

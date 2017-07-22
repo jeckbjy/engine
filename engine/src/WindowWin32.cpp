@@ -7,15 +7,11 @@
 
 CUTE_NS_BEGIN
 
-Window* Window::create(int styles, void* parent)
-{
-    return new WindowWin32(styles, parent);
-}
-
 class WindowWin32 : public Window
 {
 public:
     WindowWin32(int styles, void* parent)
+		: Window(styles)
     {
         
     }
@@ -72,26 +68,30 @@ public:
     void setFullScreen(bool flag) OVERRIDE
     {
         setMinimised(false);
-        // todo:
-        return true;
     }
     
     bool isFullScreen() const OVERRIDE
     {
-        if (! hasTitleBar())
-            return fullScreen;
-        
-        WINDOWPLACEMENT wp;
-        wp.length = sizeof (wp);
-        GetWindowPlacement (hwnd, &wp);
-        
-        return wp.showCmd == SW_SHOWMAXIMIZED;
+		return false;
+        //if (! hasTitleBar())
+        //    return fullScreen;
+        //
+        //WINDOWPLACEMENT wp;
+        //wp.length = sizeof (wp);
+        //GetWindowPlacement (hwnd, &wp);
+        //
+        //return wp.showCmd == SW_SHOWMAXIMIZED;
     }
     
 private:
     HWND m_handle;
 };
 
+Window* Window::create(int styles, void* parent)
+{
+	return NULL;
+	//return new WindowWin32(styles, parent);
+}
 
 CUTE_NS_END
 #endif

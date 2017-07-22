@@ -32,8 +32,8 @@ public:
     Renderer();
     ~Renderer();
     
-    virtual void draw();
-    virtual void drawAll();
+	//virtual void draw();
+	//virtual void drawAll();
 };
 
 CUTE_NS_END

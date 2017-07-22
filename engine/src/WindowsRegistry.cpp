@@ -1,5 +1,6 @@
 //! Misc
 #include "Cute/WindowsRegistry.h"
+#include "Cute/Buffer.h"
 
 CUTE_NS_BEGIN
 
@@ -63,11 +64,11 @@ struct RegistryWrapper
         if(m_key == 0)
             return REG_NONE;
         
-        for(size_t bufferSize = 1024; ; bufferSize *= 2)
+        for(DWORD bufferSize = 1024; ; bufferSize *= 2)
         {
             result.resize(bufferSize, false);
             DWORD type = REG_NONE;
-            DWORD err = RegQueryValueExA(m_key, m_path.c_str(), 0, &type, (LPBYTE)result.data(), &bufferSize)
+			DWORD err = RegQueryValueExA(m_key, m_path.c_str(), 0, &type, (LPBYTE)result.data(), &bufferSize);
             if(err == ERROR_SUCCESS)
             {
                 result.resize(bufferSize, false);
@@ -77,6 +78,8 @@ struct RegistryWrapper
             if(err != ERROR_MORE_DATA)
                 break;
         }
+
+		return REG_NONE;
     }
 
     String getValue(const String& defaultValue)
@@ -86,9 +89,9 @@ struct RegistryWrapper
         switch(type)
         {
         case REG_SZ:
-            return static_cast<const WCHAR*>(buffer.data());
+            return static_cast<const CHAR*>(buffer.data());
         case REG_DWORD:
-            return static_cast<const DWORD*>(buffer.data());
+            return buffer.data();
         default:
             break;
         }

@@ -1,7 +1,10 @@
 //! Network/Core
 #include "Cute/MACAddress.h"
 #include "Cute/Number.h"
+
+#if defined(CUTE_OS_FAMILY_POSIX)
 #include <net/if.h>
+#endif
 
 CUTE_NS_BEGIN
 

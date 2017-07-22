@@ -7,6 +7,7 @@ CUTE_NS_BEGIN
 class CUTE_CORE_API Buffer : public Ref<Buffer>
 {
 public:
+	Buffer();
 	Buffer(size_t len);
 	Buffer(const void* data, size_t len);
 	~Buffer();
@@ -37,6 +38,9 @@ public:
 
 	const char* begin() const;
 	const char* end() const;
+
+	char* data();
+	const char* data() const;
 
 	char& at(size_t index);
 	const char& at(size_t index) const;
@@ -91,6 +95,16 @@ inline const char* Buffer::end() const
 {
 	assert(m_data != NULL);
 	return m_data + m_size;
+}
+
+inline char* Buffer::data()
+{
+	return m_data;
+}
+
+inline const char* Buffer::data() const
+{
+	return m_data;
 }
 
 inline char& Buffer::at(size_t index)

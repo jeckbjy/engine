@@ -87,6 +87,15 @@ public:
     pid_t  m_pid;
 };
 
+ChildProcess::ChildProcess()
+	: m_impl(NULL)
+{
+}
+
+ChildProcess::~ChildProcess()
+{
+}
+
 int ChildProcess::wait() const
 {
     if (m_impl == 0)

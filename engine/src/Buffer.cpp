@@ -5,6 +5,14 @@
 
 CUTE_NS_BEGIN
 
+Buffer::Buffer()
+	: m_data(0)
+	, m_size(0)
+	, m_capacity(0)
+	, m_own(true)
+{
+}
+
 Buffer::Buffer(size_t len)
 	: m_data(0)
 	, m_size(0)
