@@ -1,9 +1,11 @@
 #pragma once
-#include "Cute/Foundation.h"
-#include "Cute/Traits.h"
+//#include "Cute/Foundation.h"
+#include "Cute/Types.h"
+//#include "Cute/Traits.h"
 
 CUTE_NS_BEGIN
 
+class String;
 class CUTE_CORE_API Number
 {
 public:

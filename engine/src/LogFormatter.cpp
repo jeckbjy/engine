@@ -39,47 +39,47 @@ void LogFormatter::format(const LogMessage& msg)
 		timestamp += Timezone::dst()*Timestamp::resolution();
 	}
 	DateTime dateTime = timestamp;
-	for (std::vector<PatternAction>::iterator ip = m_actions.begin(); ip != m_actions.end(); ++ip)
+	for (Vector<PatternAction>::iterator ip = m_actions.begin(); ip != m_actions.end(); ++ip)
 	{
 		text.append(ip->prepend);
 		switch (ip->key)
 		{
 		case 's': text.append(msg.getSource()); break;
 		case 't': text.append(msg.getText()); break;
-		case 'l': Number::append(text, (int)msg.getLevel()); break;
+		case 'l': text.appends((int)msg.getLevel()); break;
 		case 'p': text.append(getPriorityName((int)msg.getLevel())); break;
 		case 'q': text += getPriorityName((int)msg.getLevel()).at(0); break;
-		case 'P': Number::append(text, (int)msg.getPid()); break;
+		case 'P': text.appends((int)msg.getPid()); break;
 		case 'T': text.append(msg.getThread()); break;
-		case 'I': Number::append(text, msg.getTid()); break;
-		case 'O': Number::append(text, msg.getTid()); break;
+		case 'I': text.appends(msg.getTid()); break;
+		case 'O': text.appends(msg.getTid()); break;
 		case 'N': text.append(Environment::nodeName()); break;
 		case 'U': text.append(msg.getFile() ? msg.getFile() : ""); break;
-		case 'u': Number::append(text, msg.getLine()); break;
+		case 'u': text.appends(msg.getLine()); break;
 		case 'w': text.append(DateTime::WEEKDAY_NAMES[dateTime.dayOfWeek()], 0, 3); break;
 		case 'W': text.append(DateTime::WEEKDAY_NAMES[dateTime.dayOfWeek()]); break;
 		case 'b': text.append(DateTime::MONTH_NAMES[dateTime.month() - 1], 0, 3); break;
 		case 'B': text.append(DateTime::MONTH_NAMES[dateTime.month() - 1]); break;
-		case 'd': Number::append0(text, dateTime.day(), 2); break;
-		case 'e': Number::append(text, dateTime.day()); break;
-		case 'f': Number::append(text, dateTime.day(), 2); break;
-		case 'm': Number::append0(text, dateTime.month(), 2); break;
-		case 'n': Number::append(text, dateTime.month()); break;
-		case 'o': Number::append(text, dateTime.month(), 2); break;
-		case 'y': Number::append0(text, dateTime.year() % 100, 2); break;
-		case 'Y': Number::append0(text, dateTime.year(), 4); break;
-		case 'H': Number::append0(text, dateTime.hour(), 2); break;
-		case 'h': Number::append0(text, dateTime.hourAMPM(), 2); break;
+		case 'd': text.append0(dateTime.day(), 2); break;
+		case 'e': text.appends(dateTime.day()); break;
+		case 'f': text.appends(dateTime.day(), 2); break;
+		case 'm': text.append0(dateTime.month(), 2); break;
+		case 'n': text.appends(dateTime.month()); break;
+		case 'o': text.appends(dateTime.month(), 2); break;
+		case 'y': text.append0(dateTime.year() % 100, 2); break;
+		case 'Y': text.append0(dateTime.year(), 4); break;
+		case 'H': text.append0(dateTime.hour(), 2); break;
+		case 'h': text.append0(dateTime.hourAMPM(), 2); break;
 		case 'a': text.append(dateTime.isAM() ? "am" : "pm"); break;
 		case 'A': text.append(dateTime.isAM() ? "AM" : "PM"); break;
-		case 'M': Number::append0(text, dateTime.minute(), 2); break;
-		case 'S': Number::append0(text, dateTime.second(), 2); break;
-		case 'i': Number::append0(text, dateTime.millisecond(), 3); break;
-		case 'c': Number::append(text, dateTime.millisecond() / 100); break;
-		case 'F': Number::append0(text, dateTime.millisecond() * 1000 + dateTime.microsecond(), 6); break;
+		case 'M': text.append0(dateTime.minute(), 2); break;
+		case 'S': text.append0(dateTime.second(), 2); break;
+		case 'i': text.append0(dateTime.millisecond(), 3); break;
+		case 'c': text.appends(dateTime.millisecond() / 100); break;
+		case 'F': text.append0(dateTime.millisecond() * 1000 + dateTime.microsecond(), 6); break;
         case 'z': DateTime::tzdISO(text, localTime ? Timezone::tzd() : DateTime::UTC_ZONE_DIFF); break;
 		case 'Z': DateTime::tzdRFC(text, localTime ? Timezone::tzd() : DateTime::UTC_ZONE_DIFF); break;
-		case 'E': Number::append(text, (int64)msg.getTime().epochTime()); break;
+		case 'E': text.appends((int64)msg.getTime().epochTime()); break;
 		case 'v':
 			if (ip->length > msg.getSource().length())	//append spaces
 				text.append(msg.getSource()).append(ip->length - msg.getSource().length(), ' ');
@@ -89,14 +89,15 @@ void LogFormatter::format(const LogMessage& msg)
 				text.append(msg.getSource());
 			break;
 		case 'x':
-			try
-			{
-				// donot support!!!
-				//text.append(msg[ip->property]);
-			}
-			catch (...)
-			{
-			}
+			//try
+			//{
+			//	// donot support!!!
+			//	//text.append(msg[ip->property]);
+			//}
+			//catch (...)
+			//{
+			//}
+			//break;
 			break;
 		case 'L':
 			if (!localTime)
@@ -116,8 +117,8 @@ void LogFormatter::format(const LogMessage& msg)
 void LogFormatter::parsePattern()
 {
 	m_actions.clear();
-	std::string::const_iterator it = m_pattern.begin();
-	std::string::const_iterator end = m_pattern.end();
+	String::ConstIterator it = m_pattern.begin();
+	String::ConstIterator end = m_pattern.end();
 	PatternAction endAct;
 	while (it != end)
 	{
@@ -133,7 +134,7 @@ void LogFormatter::parsePattern()
 				{
 					act.key = 'x';
 					++it;
-					std::string prop;
+					String prop;
 					while (it != end && *it != ']') prop += *it++;
 					if (it == end) --it;
 					act.property = prop;
@@ -144,16 +145,10 @@ void LogFormatter::parsePattern()
 					if ((it + 1) != end && *(it + 1) == '[')
 					{
 						it += 2;
-						std::string number;
+						String number;
 						while (it != end && *it != ']') number += *it++;
 						if (it == end) --it;
-						try
-						{
-							act.length = Number::parse(number);
-						}
-						catch (...)
-						{
-						}
+						number.parse(act.length);
 					}
 				}
 				m_actions.push_back(act);
@@ -189,7 +184,7 @@ void LogFormatter::setLocal(bool value)
 
 namespace
 {
-	static std::string priorities[] =
+	static String priorities[] =
 	{
 		"",
 		"Fatal",

@@ -33,16 +33,16 @@ void Timespan::append(String& str, const Timespan& timespan, const String& fmt)
 
 			switch (ch)
 			{
-			case 'd': Number::append (str, timespan.days()); break;
-			case 'H': Number::append0(str, timespan.hours(), 2); break;
-			case 'h': Number::append (str, timespan.totalHours()); break;
-			case 'M': Number::append0(str, timespan.minutes(), 2); break;
-			case 'm': Number::append (str, timespan.totalMinutes()); break;
-			case 'S': Number::append0(str, timespan.seconds(), 2); break;
-			case 's': Number::append (str, timespan.totalSeconds()); break;
-			case 'i': Number::append0(str, timespan.milliseconds(), 3); break;
-			case 'c': Number::append (str, timespan.milliseconds() / 100); break;
-			case 'F': Number::append0(str, timespan.milliseconds() * 1000 + timespan.microseconds(), 6); break;
+			case 'd': str.appends(timespan.days()); break;
+			case 'H': str.append0(timespan.hours(), 2); break;
+			case 'h': str.appends(timespan.totalHours()); break;
+			case 'M': str.append0(timespan.minutes(), 2); break;
+			case 'm': str.appends(timespan.totalMinutes()); break;
+			case 'S': str.append0(timespan.seconds(), 2); break;
+			case 's': str.appends(timespan.totalSeconds()); break;
+			case 'i': str.append0(timespan.milliseconds(), 3); break;
+			case 'c': str.appends(timespan.milliseconds() / 100); break;
+			case 'F': str.append0(timespan.milliseconds() * 1000 + timespan.microseconds(), 6); break;
 			default:  str += ch;
 			}
 		}

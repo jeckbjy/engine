@@ -433,20 +433,17 @@ void DateTime::tzdISO(String& str, int timeZoneDifferential)
     {
         if (timeZoneDifferential >= 0)
         {
-//            str.appendF("+%2d:%2d", timeZoneDifferential / 3600, (timeZoneDifferential % 3600) / 60);
             str += '+';
             str.append0(timeZoneDifferential / 3600, 2);
-//            Number::append0(str, timeZoneDifferential / 3600, 2);
             str += ':';
             str.append0((timeZoneDifferential % 3600) / 60, 2);
-//            Number::append0(str, (timeZoneDifferential % 3600) / 60, 2);
         }
         else
         {
             str += '-';
-            Number::append0(str, -timeZoneDifferential / 3600, 2);
+            str.append0(-timeZoneDifferential / 3600, 2);
             str += ':';
-            Number::append0(str, (-timeZoneDifferential % 3600) / 60, 2);
+            str.append0((-timeZoneDifferential % 3600) / 60, 2);
         }
     }
     else str += 'Z';
@@ -459,14 +456,14 @@ void DateTime::tzdRFC(String& str, int timeZoneDifferential)
         if (timeZoneDifferential >= 0)
         {
             str += '+';
-            Number::append0(str, timeZoneDifferential / 3600, 2);
-            Number::append0(str, (timeZoneDifferential % 3600) / 60, 2);
+            str.append0(timeZoneDifferential / 3600, 2);
+            str.append0((timeZoneDifferential % 3600) / 60, 2);
         }
         else
         {
             str += '-';
-            Number::append0(str, -timeZoneDifferential / 3600, 2);
-            Number::append0(str, (-timeZoneDifferential % 3600) / 60, 2);
+            str.append0(-timeZoneDifferential / 3600, 2);
+            str.append0((-timeZoneDifferential % 3600) / 60, 2);
         }
     }
     else str += "GMT";
@@ -497,25 +494,25 @@ void DateTime::format(String& str, const DateTime& dt, const String& fmt)
             case 'W': str.append(WEEKDAY_NAMES[dt.dayOfWeek()]);       break;
             case 'b': str.append(MONTH_NAMES[dt.month() - 1], 0, 3);   break;
             case 'B': str.append(MONTH_NAMES[dt.month() - 1]);         break;
-            case 'd': Number::append0(str, dt.day(), 2); break;
-            case 'e': Number::append (str, dt.day()); break;
-            case 'f': Number::append (str, dt.day(), 2); break;
-            case 'm': Number::append0(str, dt.month(), 2); break;
-            case 'n': Number::append (str, dt.month()); break;
-            case 'o': Number::append (str, dt.month(), 2); break;
-            case 'y': Number::append0(str, dt.year() % 100, 2); break;
-            case 'Y': Number::append0(str, dt.year(), 4); break;
-            case 'H': Number::append0(str, dt.hour(), 2); break;
-            case 'h': Number::append0(str, dt.hourAMPM(), 2); break;
-            case 'M': Number::append0(str, dt.minute(), 2); break;
-            case 'S': Number::append0(str, dt.second(), 2); break;
-            case 's': Number::append0(str, dt.second(), 2);
+            case 'd': str.append0(dt.day(), 2); break;
+            case 'e': str.appends(dt.day()); break;
+            case 'f': str.appends(dt.day(), 2); break;
+            case 'm': str.append0(dt.month(), 2); break;
+            case 'n': str.appends(dt.month()); break;
+            case 'o': str.appends(dt.month(), 2); break;
+            case 'y': str.append0(dt.year() % 100, 2); break;
+            case 'Y': str.append0(dt.year(), 4); break;
+            case 'H': str.append0(dt.hour(), 2); break;
+            case 'h': str.append0(dt.hourAMPM(), 2); break;
+            case 'M': str.append0(dt.minute(), 2); break;
+            case 'S': str.append0(dt.second(), 2); break;
+            case 's': str.append0(dt.second(), 2);
                 str += '.';
-                Number::append0(str, dt.millisecond() * 1000 + dt.microsecond(), 6);
+                str.append0(dt.millisecond() * 1000 + dt.microsecond(), 6);
                 break;
-            case 'i': Number::append0(str, dt.millisecond(), 3); break;
-            case 'c': Number::append (str, dt.millisecond() / 100); break;
-            case 'F': Number::append0(str, dt.millisecond() * 1000 + dt.microsecond(), 6); break;
+            case 'i': str.append0(dt.millisecond(), 3); break;
+            case 'c': str.appends(dt.millisecond() / 100); break;
+            case 'F': str.append0(dt.millisecond() * 1000 + dt.microsecond(), 6); break;
             case 'z': tzdISO(str, timeZoneDifferential); break;
             case 'Z': tzdRFC(str, timeZoneDifferential); break;
             default:  str += ch;

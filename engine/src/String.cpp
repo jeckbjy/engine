@@ -223,16 +223,16 @@ String& String::format(const char* fmt, va_list& va)
     return *this;
 }
 
-String& String::appendN(const char *fmt, ...)
+String& String::appendf(const char *fmt, ...)
 {
     va_list va;
     va_start(va, fmt);
-    appendN(fmt, va);
+    appendf(fmt, va);
     va_end(va);
     return *this;
 }
 
-String& String::appendN(const char *fmt, va_list &va)
+String& String::appendf(const char *fmt, va_list &va)
 {
     String temp;
     format(fmt, va);
@@ -276,84 +276,108 @@ String& String::append(size_t n, char value)
     return *this;
 }
 
-void String::appendN(float  value, int width, int precision)
+String& String::appends(float  value, int width, int precision)
 {
-    
+	Number::append(*this, value, width, precision);
+	return *this;
 }
 
-void String::appendN(double value, int width, int precision)
+String& String::appends(double value, int width, int precision)
 {
-    
+	Number::append(*this, value, width, precision);
+	return *this;
 }
 
-void String::appendN(int32  value, int width, char fill)
+String& String::appends(int32  value, int width, char fill)
 {
-    
-}
-void String::appendN(int64  value, int width, char fill)
-{
-    
-}
-void String::appendN(uint32 value, int width, char fill)
-{
-    
-}
-void String::appendN(uint64 value, int width, char fill)
-{
-    
+	Number::append(*this, value, width);
+	return *this;
 }
 
-void String::append0(int32  value, int width)
+String& String::appends(int64  value, int width, char fill)
 {
-    
-}
-void String::append0(int64  value, int width)
-{
-    
-}
-void String::append0(uint32 value, int width)
-{
-    
-}
-void String::append0(uint64 value, int width)
-{
-    
+	Number::append(*this, value, width);
+	return *this;
 }
 
-void String::appendHex(int32  value, int width, bool prefex)
+String& String::appends(uint32 value, int width, char fill)
 {
-    
-}
-void String::appendHex(int64  value, int width, bool prefex)
-{
-    
-}
-void String::appendHex(uint32 value, int width, bool prefex)
-{
-    
+	Number::append(*this, value, width);
+	return *this;
 }
 
-void String::appendHex(uint64 value, int width, bool prefex)
+String& String::appends(uint64 value, int width, char fill)
 {
-    
+	Number::append(*this, value, width);
+	return *this;
 }
 
-void String::appendOct(int32  value, int width, bool prefex)
+String& String::append0(int32  value, int width)
 {
-    
+	Number::append0(*this, value, width);
+	return *this;
 }
 
-void String::appendOct(int64  value, int width, bool prefex)
+String& String::append0(int64  value, int width)
 {
-    
+	Number::append0(*this, value, width);
+	return *this;
 }
-void String::appendOct(uint32 value, int width, bool prefex)
+
+String& String::append0(uint32 value, int width)
 {
-    
+	Number::append0(*this, value, width);
+	return *this;
 }
-void String::appendOct(uint64 value, int width, bool prefex)
+
+String& String::append0(uint64 value, int width)
 {
-    
+	Number::append0(*this, value, width);
+	return *this;
+}
+
+String& String::appendHex(int32  value, int width, bool prefex)
+{
+	Number::appendHex(*this, value, width, prefex);
+	return *this;
+}
+
+String& String::appendHex(int64  value, int width, bool prefex)
+{
+	Number::appendHex(*this, value, width, prefex);
+	return *this;
+}
+
+String& String::appendHex(uint32 value, int width, bool prefex)
+{
+	Number::appendHex(*this, value, width, prefex);
+	return *this;
+}
+
+String& String::appendHex(uint64 value, int width, bool prefex)
+{
+	Number::appendHex(*this, value, width, prefex);
+	return *this;
+}
+
+String& String::appendOct(int32  value, int width, bool prefex)
+{
+	return *this;
+}
+
+String& String::appendOct(int64  value, int width, bool prefex)
+{
+	return *this;
+}
+
+String& String::appendOct(uint32 value, int width, bool prefex)
+{
+	return *this;
+}
+
+String& String::appendOct(uint64 value, int width, bool prefex)
+{
+	return *this;
 }
 
 bool String::parse(char&   value) const

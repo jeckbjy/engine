@@ -9,10 +9,19 @@ class CUTE_CORE_API String : public std::string
 {
 	typedef std::string BaseString;
 public:
+	enum
+	{
+		TOKEN_IGNORE_EMPTY	= 0x01,
+		TOKEN_TRIM			= 0x02,
+	};
+
+	typedef Vector<String>		StringArray;
 	typedef iterator            Iterator;
 	typedef const_iterator      ConstIterator;
 	typedef reverse_iterator    ReverseIterator;
 	typedef const_reverse_iterator ConstReverseIterator;
+
+public:
 	String();
 	String(char text, size_t count = 1);
 	String(const char* text);
@@ -60,30 +69,30 @@ public:
     
     String& format(const char* fmt, ...);
     String& format(const char* fmt, va_list& va);
-    String& appendN(const char* fmt, ...);
-    String& appendN(const char* fmt, va_list& va);
-    // append number(integer or float)
-    void appendN(float  value, int width = 0, int precision = 0);
-    void appendN(double value, int width = 0, int precision = 0);
-    void appendN(int32  value, int width = 0, char fill=0);
-    void appendN(int64  value, int width = 0, char fill=0);
-    void appendN(uint32 value, int width = 0, char fill=0);
-    void appendN(uint64 value, int width = 0, char fill=0);
+    String& appendf(const char* fmt, ...);
+    String& appendf(const char* fmt, va_list& va);
+
+    String& appends(float  value, int width = 0, int precision = 0);
+	String& appends(double value, int width = 0, int precision = 0);
+	String& appends(int32  value, int width = 0, char fill=0);
+    String& appends(int64  value, int width = 0, char fill=0);
+    String& appends(uint32 value, int width = 0, char fill=0);
+    String& appends(uint64 value, int width = 0, char fill=0);
     
-    void append0(int32  value, int width);
-    void append0(int64  value, int width);
-    void append0(uint32 value, int width);
-    void append0(uint64 value, int width);
+	String& append0(int32  value, int width);
+	String& append0(int64  value, int width);
+	String& append0(uint32 value, int width);
+	String& append0(uint64 value, int width);
     
-    void appendHex(int32  value, int width = 0, bool prefex = false);
-    void appendHex(int64  value, int width = 0, bool prefex = false);
-    void appendHex(uint32 value, int width = 0, bool prefex = false);
-    void appendHex(uint64 value, int width = 0, bool prefex = false);
+	String& appendHex(int32  value, int width = 0, bool prefex = false);
+	String& appendHex(int64  value, int width = 0, bool prefex = false);
+	String& appendHex(uint32 value, int width = 0, bool prefex = false);
+	String& appendHex(uint64 value, int width = 0, bool prefex = false);
     
-    void appendOct(int32  value, int width = 0, bool prefex = false);
-    void appendOct(int64  value, int width = 0, bool prefex = false);
-    void appendOct(uint32 value, int width = 0, bool prefex = false);
-    void appendOct(uint64 value, int width = 0, bool prefex = false);
+	String& appendOct(int32  value, int width = 0, bool prefex = false);
+	String& appendOct(int64  value, int width = 0, bool prefex = false);
+	String& appendOct(uint32 value, int width = 0, bool prefex = false);
+	String& appendOct(uint64 value, int width = 0, bool prefex = false);
     
     bool parse(char&   value) const;
     bool parse(int8&   value) const;
@@ -144,8 +153,9 @@ public:
 	long removeFirst(const String& word, long offset = 0);
 	void replace(const String& from, const String& to);
 	long replaceFirst(const String& from, const String& to, long offset = 0);
-//	void split();
-//	void splitAny();
+
+	bool split(StringArray& tokens, char separator, int options = 0);
+	bool split(StringArray& tokens, const String& separators, int options = 0);
 };
 
 //

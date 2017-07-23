@@ -1,4 +1,4 @@
-#pragma core
+#pragma once
 #include "Cute/Platform.h"
 
 CUTE_NS_BEGIN

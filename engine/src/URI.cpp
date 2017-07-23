@@ -297,7 +297,7 @@ String URI::getAuthority() const
 	if (m_port && !isWellKnownPort())
 	{
 		auth += ':';
-		Number::append(auth, m_port);
+		auth.appends(m_port);
 	}
 	return auth;
 }
