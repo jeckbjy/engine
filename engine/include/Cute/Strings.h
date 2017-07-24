@@ -7,7 +7,6 @@ CUTE_NS_BEGIN
 typedef std::wstring	WString;
 typedef char			UTF8Char;
 typedef String			UTF8String;
-typedef std::vector<String> StringArray;
 
 #if defined(__SIZEOF_WCHAR_T__)//gcc
 #	if (__SIZEOF_WCHAR_T__ == 2)
@@ -78,6 +77,9 @@ public:
     
     static String remove(const String& str, const String& word);
     static String replace(const String& str, const String& from, const String& to);
+    
+    static StringArray split(const String& str, char separator, int options);
+    static StringArray splitAny(const String& str, const String& separator, int options);
 };
 
 //
@@ -88,7 +90,7 @@ inline String Strings::format(const char *fmt, ...)
     String result;
     va_list va;
     va_start(va, fmt);
-    result.format(fmt, va);
+    result.appendf(fmt, va);
     va_end(va);
     return result;
 }
@@ -139,6 +141,20 @@ inline String Strings::replace(const String &str, const String &from, const Stri
 {
     String result(str);
     result.replace(from, to);
+    return result;
+}
+
+inline StringArray Strings::split(const String &str, char separator, int options)
+{
+    StringArray result;
+    str.split(result, separator, options);
+    return result;
+}
+
+inline StringArray Strings::splitAny(const String &str, const String &separator, int options)
+{
+    StringArray result;
+    str.splitAny(result, separator, options);
     return result;
 }
 

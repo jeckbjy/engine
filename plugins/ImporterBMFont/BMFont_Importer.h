@@ -4,11 +4,11 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_FONT_API BMFontImporter : public ImporterSpecific
+class CUTE_BMFONT_API BMFont_Importer : public ImporterSpecific
 {
 public:
-	BMFontImporter();
-	~BMFontImporter();
+	BMFont_Importer();
+	~BMFont_Importer();
 
 	Resource* import(const String& path, const ImportOptions* options /* = NULL */) OVERRIDE;
 };

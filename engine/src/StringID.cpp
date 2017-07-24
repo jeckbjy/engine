@@ -1,3 +1,4 @@
+//! Text
 #include "Cute/StringID.h"
 #include "Cute/Mutex.h"
 

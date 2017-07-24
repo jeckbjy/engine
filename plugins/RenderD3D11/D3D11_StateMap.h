@@ -17,13 +17,12 @@ public:
 	TState* obtain(ID3D11DeviceN* device, const TDesc& desc)
 	{
 		uint32_t hashCode = desc.getHashCode();
-		// 二分查找
+		//
 		int lastIndex;
 		TState* state = find(desc, hashCode, lastIndex);
 		if (state == NULL)
-		{// 创建
+		{//
 			state = new TState(device, desc, hashCode);
-			state->retain();
 			if (lastIndex != -1)
 				m_datas.insert(m_datas.begin() + lastIndex, state);
 			else

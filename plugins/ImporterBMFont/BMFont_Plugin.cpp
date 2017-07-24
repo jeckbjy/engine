@@ -4,17 +4,17 @@ CUTE_NS_BEGIN
 
 DEF_PLUGIN(CUTE_BMFONT_API, BMFontPlugin)
 
-BMFontPlugin::BMFontPlugin()
+BMFont_Plugin::BMFont_Plugin()
     : Plugin("BMFont")
 {
     
 }
 
-void BMFontPlugin::install()
+void BMFont_Plugin::install()
 {
 }
 
-void BMFontPlugin::uninstall()
+void BMFont_Plugin::uninstall()
 {
 }
 

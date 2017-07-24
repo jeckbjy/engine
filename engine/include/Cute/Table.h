@@ -1,7 +1,6 @@
 #pragma once
 #include "Cute/Foundation.h"
-#include "Cute/StringTokenizer.h"
-#include "Cute/String.h"
+#include "Cute/Strings.h"
 #include "Cute/Ref.h"
 #include "Cute/RefPtr.h"
 #include <vector>
@@ -66,7 +65,8 @@ public:
 	{
 		cells.clear();
 
-		StringTokenizer fields(next(), ",");
+        StringArray fields;
+        next().split(fields, ',', String::TOKEN_IGNORE_EMPTY);
 
 		T value;
 		for (auto itor = fields.begin(); itor != fields.end(); ++itor)
@@ -86,11 +86,12 @@ public:
 
 		cells.clear();
 
-		StringTokenizer fields(next(), "|");
+        StringArray fields;
+        next().split(fields, '|', String::TOKEN_IGNORE_EMPTY);
 
 		U key;
 		V value;
-        for (StringTokenizer::Iterator itor = fields.begin(); itor != fields.end(); ++itor)
+        for (StringArray::iterator itor = fields.begin(); itor != fields.end(); ++itor)
 		{
 			const String& field = *itor;
 //			trim(field);

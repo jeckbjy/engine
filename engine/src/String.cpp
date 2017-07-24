@@ -197,32 +197,6 @@ String& String::operator+=(double value)
     return *this;
 }
 
-String& String::format(const char* fmt, ...)
-{
-    va_list va;
-    va_start(va, fmt);
-    format(fmt, va);
-    va_end(va);
-    
-    return *this;
-}
-
-String& String::format(const char* fmt, va_list& va)
-{
-    int size = vsnprintf(0, 0, fmt, va);
-    if (size > 0)
-    {
-        this->resize(size + 1);
-        size = vsnprintf(&(*this)[0], size + 1, fmt, va);
-        if (size == -1)
-            this->clear();
-        else
-            (*this)[size] = '\0';
-    }
-    
-    return *this;
-}
-
 String& String::appendf(const char *fmt, ...)
 {
     va_list va;
@@ -234,9 +208,13 @@ String& String::appendf(const char *fmt, ...)
 
 String& String::appendf(const char *fmt, va_list &va)
 {
-    String temp;
-    format(fmt, va);
-    this->append(temp);
+    int count = vsnprintf(0, 0, fmt, va);
+    if(count > 0)
+    {
+        size_t length = this->length();
+        this->resize(length + count);
+        vsnprintf(&(*this)[length], count, fmt, va);
+    }
     return *this;
 }
 
@@ -270,9 +248,9 @@ String& String::append(const char* value, size_t start, size_t count)
     return *this;
 }
 
-String& String::append(size_t n, char value)
+String& String::append(char value, size_t n)
 {
-    BaseString::append(n, value);
+    BaseString::append(value, n);
     return *this;
 }
 
@@ -813,14 +791,108 @@ long String::replaceFirst(const String& from, const String& to, long offset)
     return long(pos + from.size());
 }
 
-// void String::split()
-// {
+bool String::split(StringArray &tokens, char separator, int options) const
+{
+    if(empty())
+        return false;
+    
+    bool isTrim         = (options & TOKEN_TRIM) != 0;
+    bool isIgnoreEmpty  = (options & TOKEN_IGNORE_EMPTY) != 0;
+    bool isLastToken    = false;
+    
+    ConstIterator itor = begin();
+    ConstIterator itEnd = end();
+    
+    String token;
+    
+    for(; itor != itEnd; ++itor)
+    {
+        if(*itor == separator)
+        {
+            if(isTrim)
+                token.trim();
+            
+            if(!token.empty() || !isIgnoreEmpty)
+                tokens.push_back(token);
+            
+            if(!isIgnoreEmpty)
+                isLastToken = true;
+            
+            token.clear();
+        }
+        else
+        {
+            token += *itor;
+            isLastToken = false;
+        }
+    }
+   
+    if(!token.empty())
+    {
+        if(isTrim)
+            token.trim();
+        
+        if(!token.empty() || !isIgnoreEmpty)
+            tokens.push_back(token);
+    }
+    else if(isLastToken)
+    {
+        tokens.push_back(String());
+    }
+    
+    return !tokens.empty();
+}
 
-// }
-
-// void String::splitAny()
-// {
-
-// }
+bool String::splitAny(StringArray &tokens, const String &separators, int options) const
+{
+    if(empty())
+        return false;
+    
+    bool isTrim         = (options & TOKEN_TRIM) != 0;
+    bool isIgnoreEmpty  = (options & TOKEN_IGNORE_EMPTY) != 0;
+    bool isLastToken    = false;
+    
+    ConstIterator itor = begin();
+    ConstIterator itEnd = end();
+    
+    String token;
+    
+    for(; itor != itEnd; ++itor)
+    {
+        if(separators.contains(*itor))
+        {
+            if(isTrim)
+                token.trim();
+            
+            if(!token.empty() || !isIgnoreEmpty)
+                tokens.push_back(token);
+            
+            if(!isIgnoreEmpty)
+                isLastToken = true;
+            
+            token.clear();
+        }
+        else
+        {
+            token += *itor;
+            isLastToken = false;
+        }
+    }
+    
+    if(!token.empty())
+    {
+        if(isTrim)
+            token.trim();
+        
+        if(!token.empty() || !isIgnoreEmpty)
+            tokens.push_back(token);
+    }
+    else if(isLastToken)
+    {
+        tokens.push_back(String());
+    }
+    
+    return !tokens.empty();
+}
 
 CUTE_NS_END

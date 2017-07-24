@@ -2,15 +2,15 @@
 
 CUTE_NS_BEGIN
 
-FreeTypeImporter::FreeTypeImporter()
+FreeType_Importer::FreeType_Importer()
 {
 }
 
-FreeTypeImporter::~FreeTypeImporter()
+FreeType_Importer::~FreeType_Importer()
 {
 }
 
-Resource* FreeTypeImporter::import(const String& path, const ImportOptions* options)
+Resource* FreeType_Importer::import(const String& path, const ImportOptions* options)
 {
 	return NULL;
 }

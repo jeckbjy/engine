@@ -4,11 +4,11 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_FREETYPE_API FreeTypeImporter : public ImporterSpecific
+class CUTE_FREETYPE_API FreeType_Importer : public ImporterSpecific
 {
 public:
-	FreeTypeImporter();
-	~FreeTypeImporter();
+	FreeType_Importer();
+	~FreeType_Importer();
 
 	Resource* import(const String& path, const ImportOptions* options /* = NULL */) OVERRIDE;
 };

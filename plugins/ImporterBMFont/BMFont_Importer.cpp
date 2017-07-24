@@ -2,15 +2,15 @@
 
 CUTE_NS_BEGIN
 
-BMFontImporter::BMFontImporter()
+BMFont_Importer::BMFont_Importer()
 {
 }
 
-BMFontImporter::~BMFontImporter()
+BMFont_Importer::~BMFont_Importer()
 {
 }
 
-Resource* BMFontImporter::import(const String& path, const ImportOptions* options)
+Resource* BMFont_Importer::import(const String& path, const ImportOptions* options)
 {
 	return NULL;
 }

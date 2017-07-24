@@ -203,7 +203,7 @@ public:
     
     /// Formats the given timezone differential in ISO format.
     /// If timeZoneDifferential is UTC, "Z" is returned,
-    /// otherwise, +HH.MM (or -HH.MM) is returned.
+    /// otherwise, +HH:MM (or -HH:MM) is returned.
     static void   tzdISO(String& str, int tzd);
     /// Formats the given timezone differential in RFC format.
     /// If timeZoneDifferential is UTC, "GMT" is returned,

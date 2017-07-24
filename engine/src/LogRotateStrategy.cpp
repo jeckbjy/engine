@@ -1,6 +1,5 @@
 //! Logging
 #include "Cute/LogRotateStrategy.h"
-#include "Cute/StringTokenizer.h"
 #include "Cute/Exception.h"
 #include "Cute/Number.h"
 #include "Cute/FileStream.h"
@@ -34,10 +33,11 @@ RotateAtTimeStrategy::RotateAtTimeStrategy(const String& rtime, bool isLocal)
 	if ((rtime.find(',') != rtime.npos) && (rtime.find(':') == rtime.npos))
 		throw InvalidArgumentException("Invalid rotation time specified.");
 
-	StringTokenizer timestr(rtime, ",:", StringTokenizer::TOK_TRIM | StringTokenizer::TOK_IGNORE_EMPTY);
+    StringArray timestr;
+    rtime.splitAny(timestr, ",:", String::TOKEN_ALL);
 	int index = 0;
 
-	switch (timestr.count())
+	switch (timestr.size())
 	{
 	case 3: // day,hh:mm
 	{

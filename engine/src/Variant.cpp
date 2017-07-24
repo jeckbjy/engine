@@ -294,21 +294,18 @@ Variant::Variant(const char* value)
 	: m_type(VAR_STR)
 	, m_str(new VString(value))
 {
-	m_str->incRef();
 }
 
 Variant::Variant(const String& value)
 	: m_type(VAR_STR)
 	, m_str(new VString(value))
 {
-	m_str->incRef();
 }
 
 Variant::Variant(const DateTime& date)
 	: m_type(VAR_DATE)
 	, m_date(new VDateTime(date))
 {
-	m_date->incRef();
 }
 
 Variant::Variant(const Variant& other)
@@ -374,7 +371,6 @@ Variant& Variant::operator=(const char*   value)
 	destruct();
 	m_type = VAR_STR;
 	m_str = new VString(value);
-	m_str->incRef();
 	return *this;
 }
 
@@ -383,7 +379,6 @@ Variant& Variant::operator=(const String&   value)
 	destruct();
 	m_type = VAR_STR;
 	m_str = new VString(value);
-	m_str->incRef();
 	return *this;
 }
 Variant& Variant::operator=(const DateTime& value)
@@ -391,7 +386,6 @@ Variant& Variant::operator=(const DateTime& value)
 	destruct();
 	m_type = VAR_DATE;
 	m_date = new VDateTime(value);
-	m_str->incRef();
 	return *this;
 }
 
@@ -572,7 +566,7 @@ void Variant::destruct()
 	{
 		if (m_any)
 		{
-			m_any->decRef();
+			m_any->release();
 			m_any = NULL;
 		}
 		break;
@@ -612,7 +606,7 @@ void Variant::copy(const Variant& other)
 	{
 		m_any = other.m_any;
 		if (m_any)
-			m_any->incRef();
+			m_any->retain();
 		break;
 	}
 	default:

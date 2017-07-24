@@ -2,7 +2,6 @@
 #include "Cute/Path.h"
 #include "Cute/Files.h"
 #include "Cute/Exception.h"
-#include "Cute/StringTokenizer.h"
 #include "Cute/String.h"
 #include "Cute/Environment.h"
 #include <algorithm>
@@ -882,8 +881,8 @@ bool Path::find(StringVec::const_iterator it, StringVec::const_iterator end, con
 
 bool Path::find(const String& pathList, const String& name, Path& path)
 {
-	StringTokenizer st(pathList, String(1, pathSeparator()), StringTokenizer::TOK_IGNORE_EMPTY + StringTokenizer::TOK_TRIM);
-	return find(st.begin(), st.end(), name, path);
+    StringArray st = Strings::split(pathList, pathSeparator(), String::TOKEN_ALL);
+    return find(st.begin(), st.end(), name, path);
 }
 
 void Path::parseUnix(const String& path)

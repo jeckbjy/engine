@@ -1,45 +1,31 @@
 #pragma once
-#include "Cute/Foundation.h"
-#include "Cute/Resource.h"
+#include "Cute/FontFace.h"
 
 CUTE_NS_BEGIN
 
+static const int FONT_DPI = 96;
+
 class ITexture;
-class CUTE_CORE_API FontGlyph
-{
-public:
-    short x;
-    short y;
-    short width;
-    short height;
-    short offsetX;
-    short offsetY;
-    short advanceX;
-    uint  page;
-    bool  used;
-	bool  kerninged;
-};
-
-class CUTE_CORE_API FontFace
-{
-public:
-private:
-};
-
-// ÷˜“™API:getGlyph getKerning
-// –Ë“™÷ÿµ„ µœ÷∂ØÃ¨…˙≥…Glyph£¨“‘º∞»Á∫Œ∫œ≤¢µΩ“ª’≈Font…œ“‘±„ºı…Ÿdrawcall
+// ÂºÇÊ≠•Âä†ËΩΩFontËµÑÊ∫ê?
+// Âä®ÊÄÅÁªòÂà∂FontÔºü
 class CUTE_CORE_API Font : public Resource
 {
 public:
-	Font();
-	virtual ~Font();
+//    typedef RefPtr<Font> Ptr;
+    enum Style
+    {
+        BOLD,
+        ITALIC,
+        UNDERLINE,
+    };
     
-    virtual bool  isMutableGlyphs() const = 0;
-    virtual const FontGlyph* getGlyph(int ch, int flags) = 0;
-    virtual ITexture* getTexture(int page) const = 0;
-//    virtual short getKerning(int c, int d) const;
+    Font();
+    Font(const String& path);
+    ~Font();
     
 private:
+    String      m_path;
+    FontFace*   m_face;
 };
 
 CUTE_NS_END

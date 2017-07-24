@@ -153,8 +153,8 @@ template<typename T, typename H = std::hash<T>, typename A = std::allocator<T> >
 class HashSet : public std::hash_set<T, H, A> { };
 
 /** An associative container containing an ordered set of key-value pairs. Usually faster than Map for larger data sets. */
-template <typename K, typename V, typename H = std::hash<K>, typename A = std::allocator<std::pair<const K, V> > >
-class HashMap : public std::hash_map<K, V, H, A> { };
+template <typename K, typename V>
+class HashMap : public std::hash_map<K, V> { };
 
 #endif
 

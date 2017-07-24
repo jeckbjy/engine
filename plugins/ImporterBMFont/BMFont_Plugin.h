@@ -4,10 +4,10 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_BMFONT_API BMFontPlugin : public Plugin
+class CUTE_BMFONT_API BMFont_Plugin : public Plugin
 {
 public:
-    BMFontPlugin();
+    BMFont_Plugin();
 
 	void install();
 	void uninstall();

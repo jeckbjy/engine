@@ -1,5 +1,5 @@
 #pragma once
-#include "Cute/Foundation.h"
+#include "Cute/String.h"
 #include <stdexcept>
 
 CUTE_NS_BEGIN

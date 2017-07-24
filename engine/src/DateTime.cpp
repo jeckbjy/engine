@@ -427,46 +427,30 @@ bool DateTime::parse(Cute::DateTime &dt, const String &str)
 //////////////////////////////////////////////////////////////////////////
 // format
 //////////////////////////////////////////////////////////////////////////
-void DateTime::tzdISO(String& str, int timeZoneDifferential)
+void DateTime::tzdISO(String& str, int tzd)
 {
-    if (timeZoneDifferential != UTC)
+    if(tzd != UTC)
     {
-        if (timeZoneDifferential >= 0)
-        {
-            str += '+';
-            str.append0(timeZoneDifferential / 3600, 2);
-            str += ':';
-            str.append0((timeZoneDifferential % 3600) / 60, 2);
-        }
-        else
-        {
-            str += '-';
-            str.append0(-timeZoneDifferential / 3600, 2);
-            str += ':';
-            str.append0((-timeZoneDifferential % 3600) / 60, 2);
-        }
+        char sign = tzd > 0 ? '+' : '-';
+        str.appendf("%c%02d:%02d", sign, tzd / 3600, (tzd % 3600) / 60);
     }
-    else str += 'Z';
+    else
+    {
+        str.append("Z");
+    }
 }
 
-void DateTime::tzdRFC(String& str, int timeZoneDifferential)
+void DateTime::tzdRFC(String& str, int tzd)
 {
-    if (timeZoneDifferential != UTC)
+    if(tzd != UTC)
     {
-        if (timeZoneDifferential >= 0)
-        {
-            str += '+';
-            str.append0(timeZoneDifferential / 3600, 2);
-            str.append0((timeZoneDifferential % 3600) / 60, 2);
-        }
-        else
-        {
-            str += '-';
-            str.append0(-timeZoneDifferential / 3600, 2);
-            str.append0((-timeZoneDifferential % 3600) / 60, 2);
-        }
+        char sign = tzd > 0 ? '+' : '-';
+        str.appendf("%c%02d%02d", sign, tzd / 3600, (tzd % 3600) / 60);
     }
-    else str += "GMT";
+    else
+    {
+        str.append("GMT");
+    }
 }
 
 void DateTime::format(String& str, const DateTime& dt, const String& fmt)
@@ -506,10 +490,7 @@ void DateTime::format(String& str, const DateTime& dt, const String& fmt)
             case 'h': str.append0(dt.hourAMPM(), 2); break;
             case 'M': str.append0(dt.minute(), 2); break;
             case 'S': str.append0(dt.second(), 2); break;
-            case 's': str.append0(dt.second(), 2);
-                str += '.';
-                str.append0(dt.millisecond() * 1000 + dt.microsecond(), 6);
-                break;
+            case 's': str.appendf("%02d.%06d", dt.second(), dt.millisecond() * 1000 + dt.microsecond()); break;
             case 'i': str.append0(dt.millisecond(), 3); break;
             case 'c': str.appends(dt.millisecond() / 100); break;
             case 'F': str.append0(dt.millisecond() * 1000 + dt.microsecond(), 6); break;

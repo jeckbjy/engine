@@ -51,7 +51,7 @@ ITable::~ITable()
 	// release
 	for (size_t i = 0; i < m_rows.size(); ++i)
 	{
-		m_rows[i]->decRef();
+		m_rows[i]->release();
 	}
 
 	m_rows.clear();
@@ -132,7 +132,6 @@ bool ITable::doload(const String& path)
 		{
 			row = create(rid);
 			row->setID(rid);
-			row->incRef();
 		}
 
 		row->decode(cells);
@@ -143,7 +142,7 @@ bool ITable::doload(const String& path)
 	for (RowMap::iterator itor = cellMap.begin(); itor != cellMap.end(); ++itor)
 	{
 		IRow* row = itor->second;
-		row->decRef();
+		row->retain();
 	}
 
 	// format??

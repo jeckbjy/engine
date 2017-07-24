@@ -150,8 +150,8 @@ bool intToStr(char* result, std::size_t& size, T value, uint16_t base, bool pref
 	}
 
 	size = ptr - result;
-	cute_assert_dbg(size <= ptr.span());
-	cute_assert_dbg((-1 == width) || (size >= size_t(width)));
+	assert(size <= ptr.span());
+	assert((-1 == width) || (size >= size_t(width)));
 	*ptr-- = '\0';
 
 	// inverted
@@ -319,8 +319,8 @@ bool strToInt(const char* pStr, I& result, short base, char thSep = ',')
 void pad(String& str, int precision, int width, char prefix = ' ', char decSep = '.')
 {
 	// these cases should never happen, if they do, it's a library bug
-	cute_assert_dbg(precision > 0);
-	cute_assert_dbg(str.length());
+	assert(precision > 0);
+	assert(str.length());
 
 	size_t decSepPos = str.find(decSep);
 	if (decSepPos == String::npos)
@@ -393,7 +393,7 @@ void pad(String& str, int precision, int width, char prefix = ' ', char decSep =
 /// Inserts thousand separators. Used only internally.
 void insertThousandSep(std::string& str, char thSep, char decSep = '.')
 {
-	cute_assert(decSep != thSep);
+	assert(decSep != thSep);
 	if (str.size() == 0) return;
 
 	std::string::size_type exPos = str.find('e');

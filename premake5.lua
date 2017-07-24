@@ -298,8 +298,8 @@ group "plugin_graphics"
 		files 		{ src_dir .. "**.*" }
 		vpaths 		{ ["src"] = {src_dir.. "**.*"} }
 
-group "plugin_render"
-	project("plugin_rxpath")
+group "plugin_renderer"
+	project("plugin_renderpath")
 		src_dir = "plugins/RenderXPath/"
 
 		dependson	{ "engine" }

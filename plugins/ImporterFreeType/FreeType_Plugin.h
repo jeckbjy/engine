@@ -4,10 +4,10 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_FREETYPE_API FreeTypePlugin : public Plugin
+class CUTE_FREETYPE_API FreeType_Plugin : public Plugin
 {
 public:
-    FreeTypePlugin();
+    FreeType_Plugin();
 
 	void install();
 	void uninstall();

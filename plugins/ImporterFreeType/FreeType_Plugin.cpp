@@ -2,19 +2,19 @@
 
 CUTE_NS_BEGIN
 
-DEF_PLUGIN(CUTE_FREETYPE_API, FreeTypePlugin)
+DEF_PLUGIN(CUTE_FREETYPE_API, FreeType_Plugin)
 
-FreeTypePlugin::FreeTypePlugin()
+FreeType_Plugin::FreeType_Plugin()
     : Plugin("FreeType")
 {
     
 }
 
-void FreeTypePlugin::install()
+void FreeType_Plugin::install()
 {
 }
 
-void FreeTypePlugin::uninstall()
+void FreeType_Plugin::uninstall()
 {
 }
 

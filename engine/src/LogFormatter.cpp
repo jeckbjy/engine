@@ -5,7 +5,7 @@
 #include "Cute/Timestamp.h"
 #include "Cute/Timezone.h"
 #include "Cute/Environment.h"
-#include "Cute/StringTokenizer.h"
+#include "Cute/Exception.h"
 
 CUTE_NS_BEGIN
 
@@ -207,12 +207,12 @@ void LogFormatter::parsePriorityNames()
 
 	if (!m_priorityNames.empty())
 	{
-		StringTokenizer st(m_priorityNames, ",;", StringTokenizer::TOK_TRIM);
-		if (st.count() == 8)
+        StringArray tokens = Strings::splitAny(m_priorityNames, ",;", String::TOKEN_TRIM);
+		if (tokens.size() == 8)
 		{
 			for (int i = 1; i <= 8; i++)
 			{
-				m_priorities[i] = st[i - 1];
+				m_priorities[i] = tokens[i - 1];
 			}
 		}
 		else throw SyntaxException("priorityNames property must specify a comma-separated list of 8 property names");

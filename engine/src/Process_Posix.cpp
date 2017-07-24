@@ -32,7 +32,7 @@ ChildProcess::ChildProcess()
 ChildProcess::~ChildProcess()
 {
     if(m_impl != NULL)
-        m_impl->decRef();
+        m_impl->release();
 }
 
 int ChildProcess::wait() const
@@ -187,8 +187,7 @@ bool ChildProcess::launch(const String& command, const Args& args, const String&
     }
     
     m_impl = new ChildProcessImpl(pid);
-    m_impl->incRef();
-    //  return pid;
+    //  return pid;Ï
     return true;
 }
 

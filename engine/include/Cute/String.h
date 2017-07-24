@@ -5,6 +5,8 @@
 
 CUTE_NS_BEGIN
 
+// %[flags][width][.precision][length]specifier 
+//format: http://www.cplusplus.com/reference/cstdio/printf/
 class CUTE_CORE_API String : public std::string
 {
 	typedef std::string BaseString;
@@ -13,13 +15,14 @@ public:
 	{
 		TOKEN_IGNORE_EMPTY	= 0x01,
 		TOKEN_TRIM			= 0x02,
+        TOKEN_ALL           = 0x03,
 	};
 
-	typedef Vector<String>		StringArray;
-	typedef iterator            Iterator;
-	typedef const_iterator      ConstIterator;
-	typedef reverse_iterator    ReverseIterator;
-	typedef const_reverse_iterator ConstReverseIterator;
+	typedef Vector<String>          StringArray;
+	typedef iterator                Iterator;
+	typedef const_iterator          ConstIterator;
+	typedef reverse_iterator        ReverseIterator;
+	typedef const_reverse_iterator  ConstReverseIterator;
 
 public:
 	String();
@@ -65,15 +68,14 @@ public:
     String& append(const char* value);
     String& append(const char* value, size_t n);
     String& append(const char* value, size_t start, size_t count);
-    String& append(size_t n, char value);
+    String& append(char value, size_t n);
     
-    String& format(const char* fmt, ...);
-    String& format(const char* fmt, va_list& va);
     String& appendf(const char* fmt, ...);
     String& appendf(const char* fmt, va_list& va);
 
     String& appends(float  value, int width = 0, int precision = 0);
 	String& appends(double value, int width = 0, int precision = 0);
+    
 	String& appends(int32  value, int width = 0, char fill=0);
     String& appends(int64  value, int width = 0, char fill=0);
     String& appends(uint32 value, int width = 0, char fill=0);
@@ -154,9 +156,11 @@ public:
 	void replace(const String& from, const String& to);
 	long replaceFirst(const String& from, const String& to, long offset = 0);
 
-	bool split(StringArray& tokens, char separator, int options = 0);
-	bool split(StringArray& tokens, const String& separators, int options = 0);
+	bool split(StringArray& tokens, char separator, int options = 0) const;
+    bool splitAny(StringArray& tokens, const String& separators, int options = 0) const;
 };
+
+typedef Vector<String> StringArray;
 
 //
 // inlines

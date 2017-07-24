@@ -16,30 +16,30 @@ public:
 	RefPtr(C* ptr)
 		: m_ptr(ptr)
 	{
-		if (m_ptr)
-			m_ptr->incRef();
+//		if (m_ptr)
+//			m_ptr->incRef();
 	}
 
 	RefPtr(const RefPtr& ptr)
 		: m_ptr(ptr.m_ptr)
 	{
 		if (m_ptr)
-			m_ptr->incRef();
+			m_ptr->retain();
 	}
 
 	~RefPtr()
 	{
 		if (m_ptr)
-			m_ptr->decRef();
+			m_ptr->release();
 	}
 
 	RefPtr& assign(C* ptr)
 	{
 		if (m_ptr != ptr)
 		{
-			if (m_ptr) m_ptr->decRef();
+			if (m_ptr) m_ptr->release();
 			m_ptr = ptr;
-			if (m_ptr) m_ptr->incRef();
+			if (m_ptr) m_ptr->retain();
 		}
 		return *this;
 	}
@@ -48,9 +48,9 @@ public:
 	{
 		if (&ptr != this)
 		{
-			if (m_ptr) m_ptr->decRef();
+			if (m_ptr) m_ptr->release();
 			m_ptr = ptr.m_ptr;
-			if (m_ptr) m_ptr->incRef();
+			if (m_ptr) m_ptr->retain();
 		}
 		return *this;
 	}
