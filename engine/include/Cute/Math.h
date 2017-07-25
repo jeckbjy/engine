@@ -60,6 +60,8 @@ public:
 	static float log2(float value) { return (float)std::log2(value); }
 	static float logN(float base, float value) { return (float)(std::log(value) / std::log(base)); }
 
+    static double pow10(int exponent);
+    
 	static int   ceil(float value)  { return (int)std::ceil(value); }
 	static int	 floor(float value) { return (int)std::floor(value); }
 	static int	 round(float value) { return (int)std::floor(value + 0.5f); }

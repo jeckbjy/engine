@@ -1,6 +1,5 @@
 #include "Cute/URI.h"
 #include "Cute/String.h"
-#include "Cute/Number.h"
 #include "Cute/Exception.h"
 
 CUTE_NS_BEGIN
@@ -26,7 +25,7 @@ void URI::encode(const String& str, const String& reserved, String& encodedStr)
 		else if (c <= 0x20 || c >= 0x7F || ILLEGAL.find(c) != String::npos || reserved.find(c) != String::npos)
 		{
 			encodedStr += '%';
-			encodedStr += Number::formatHex(c, 2);
+            encodedStr.appendHex(c, 2);
 		}
 		else encodedStr += c;
 	}
@@ -713,7 +712,7 @@ void URI::parseHostAndPort(String::const_iterator& it, const String::const_itera
 		if (!port.empty())
 		{
 			int nport = 0;
-			if (Number::tryParse(port, nport) && nport > 0 && nport < 65536)
+			if (port.parse(nport) && nport > 0 && nport < 65536)
 				m_port = (unsigned short)nport;
 			else
 				throw URISyntaxException("bad or invalid port number", port);

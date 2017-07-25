@@ -1,6 +1,5 @@
 //! Logging
 #include "Cute/Logger.h"
-#include "Cute/Number.h"
 #include "Cute/String.h"
 #include "Cute/Exception.h"
 #include "Cute/Mutex.h"
@@ -114,7 +113,7 @@ int Logger::parseLevel(const String& level)
     // not find,parse by integer
 	{
 		int numLevel;
-		if (Number::tryParse(level, numLevel))
+        if(level.parse(numLevel))
 		{
 			if (numLevel > 0 && numLevel < 9)
 				return numLevel;

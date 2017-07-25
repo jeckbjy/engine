@@ -1,6 +1,5 @@
 //! Network/Core
 #include "Cute/MACAddress.h"
-#include "Cute/Number.h"
 
 #if defined(CUTE_OS_FAMILY_POSIX)
 #include <net/if.h>
@@ -167,8 +166,7 @@ String MACAddress::toString(const String& separator) const
     
     for (size_t i = 0; i < sizeof (m_address); ++i)
     {
-        Number::appendHex(result, 2, false);
-//        result << String::toHexString ((int) address[i]).paddedLeft ('0', 2);
+        result.appendHex(m_address[i], 2, '0', false);
         
         if (i < sizeof (m_address) - 1)
             result << separator;

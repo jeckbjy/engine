@@ -1,6 +1,5 @@
 //! Logging
 #include "Cute/LogFormatter.h"
-#include "Cute/Number.h"
 #include "Cute/DateTime.h"
 #include "Cute/Timestamp.h"
 #include "Cute/Timezone.h"

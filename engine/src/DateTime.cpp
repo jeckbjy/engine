@@ -1,8 +1,7 @@
 // module DateTime
 #include "Cute/DateTime.h"
-#include "Cute/Number.h"
-#include "Cute/Ascii.h"
 #include "Cute/Exception.h"
+#include "Cute/Ascii.h"
 
 CUTE_NS_BEGIN
 

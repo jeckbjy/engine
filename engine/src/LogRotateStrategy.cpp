@@ -1,7 +1,6 @@
 //! Logging
 #include "Cute/LogRotateStrategy.h"
 #include "Cute/Exception.h"
-#include "Cute/Number.h"
 #include "Cute/FileStream.h"
 #include "Cute/LogFile.h"
 
@@ -45,10 +44,10 @@ RotateAtTimeStrategy::RotateAtTimeStrategy(const String& rtime, bool isLocal)
 		++index;
 	}
 	case 2: // hh:mm
-		m_hour = Number::parse(timestr[index]);
+        timestr[index].parse(m_hour);
 		++index;
 	case 1: // mm
-		m_minute = Number::parse(timestr[index]);
+        timestr[index].parse(m_minute);
 		break;
 	default:
 		throw InvalidArgumentException("Invalid rotation time specified.");

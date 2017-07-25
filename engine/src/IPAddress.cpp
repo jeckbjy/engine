@@ -1,8 +1,7 @@
 //! Network/Core
 #include "Cute/IPAddress.h"
-#include "Cute/Number.h"
-#include "Cute/SharedLibrary.h"
 #include "Cute/HeapBlock.h"
+#include "Cute/SharedLibrary.h"
 
 #if defined(CUTE_OS_FAMILY_WINDOWS)
 #include <iptypes.h>
@@ -315,7 +314,7 @@ String IPAddress::toString() const
     temp.split[0] = m_address[0];
     temp.split[1] = m_address[1];
     
-    Number::appendHex(result, temp.combined);
+    result.appendHex(temp.combined);
     
     for (int i = 1; i < 8; ++i)
     {
@@ -323,7 +322,7 @@ String IPAddress::toString() const
         temp.split[1] = m_address[i * 2 + 1];
         
         result << ':';
-        Number::appendHex(result, temp.combined);
+        result.appendHex(temp.combined);
     }
     
     return result;

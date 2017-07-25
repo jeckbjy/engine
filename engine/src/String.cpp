@@ -1,11 +1,90 @@
 //! Text
 #include "Cute/String.h"
 #include "Cute/Ascii.h"
-#include "Cute/Number.h"
+#include "Cute/Numeric.h"
+#include <sstream>
+#include <iomanip>
 
 CUTE_NS_BEGIN
 // http ://www.cnblogs.com/zyl910/archive/2012/08/08/c99int.html
 
+namespace Helper {
+    template<typename T>
+    inline String& appendDec(String& str, const T& value, int width, char fill = ' ', char thSep = 0)
+    {
+        char   buffer[CUTE_MAX_INT_STRING_LEN];
+        size_t length = CUTE_MAX_INT_STRING_LEN;
+        if(Numeric::formatDec(buffer, length, value, width, fill, thSep))
+            str.append(buffer, length);
+        
+        return str;
+    }
+    
+    template<typename T>
+    inline String& appendHex(String& str, const T& value, int width, char fill, bool prefix)
+    {
+        char   buffer[CUTE_MAX_INT_STRING_LEN];
+        size_t length = CUTE_MAX_INT_STRING_LEN;
+        if(Numeric::formatDec(buffer, length, value, width, fill, prefix))
+            str.append(buffer, length);
+        
+        return str;
+    }
+    
+    template<typename T>
+    inline String& appendOct(String& str, const T& value, int width, char fill, bool prefix)
+    {
+        char   buffer[CUTE_MAX_INT_STRING_LEN];
+        size_t length = CUTE_MAX_INT_STRING_LEN;
+        if(Numeric::formatOct(buffer, length, value, width, fill, prefix))
+            str.append(buffer, length);
+        
+        return str;
+    }
+    
+    template<typename T>
+    inline String& appendFloat(String& str, const T& value, int width, int precision)
+    {
+        std::stringstream ss;
+        if(width > 0)
+            ss.width(width);
+        
+        if(precision > 0)
+            ss << std::setprecision(precision);
+        
+        str.append(ss.str());
+        return str;
+    }
+    
+    template<typename T>
+    inline String& appendNumber(String& str, const T& value)
+    {
+        std::stringstream ss;
+        ss << value;
+        str.append(ss.str());
+        return str;
+    }
+    
+    template<typename T>
+    inline String& setNumber(String& str, const T& value)
+    {
+        str.clear();
+        str.appends(value);
+        return str;
+    }
+    
+    template<typename T>
+    inline bool parse(T& value, const String& str)
+    {
+        std::stringstream ss(str);
+        ss>>value;
+        return !ss.fail();
+    }
+}
+
+//
+//
+//
 String::String()
 {
 }
@@ -42,93 +121,86 @@ String::String(String&& other)
 }
 #endif
 
+String::String(int value)
+{
+    *this = value;
+}
+
 String& String::operator  =(const String& value)
 {
 	BaseString::assign(value);
 	return *this;
 }
 
+String& String::operator  =(bool value)
+{
+    return Helper::setNumber(*this, value);
+}
+
 String& String::operator  =(char value)
 {
-	this->assign(&value, 1);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator  =(int8 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator  =(int16 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator  =(int32 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator  =(int64 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator  =(uint8 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator =(uint16 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator =(uint32 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator =(uint64 value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator =(float value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator =(double value)
 {
-    this->clear();
-    Number::append(*this, value);
-	return *this;
+    return Helper::setNumber(*this, value);
 }
 
 String& String::operator +=(const String& value)
 {
     this->append(value.data(), value.length());
-//    BaseString::append(value.data(), value.length());
     return *this;
+}
+
+String& String::operator+=(bool value)
+{
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(char value)
@@ -139,62 +211,52 @@ String& String::operator+=(char value)
 
 String& String::operator+=(int8 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(int16 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(int32 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(int64 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(uint8 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(uint16 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(uint32 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(uint64 value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(float value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::operator+=(double value)
 {
-    Number::append(*this, value);
-    return *this;
+    return Helper::appendNumber(*this, value);
 }
 
 String& String::appendf(const char *fmt, ...)
@@ -256,154 +318,152 @@ String& String::append(char value, size_t n)
 
 String& String::appends(float  value, int width, int precision)
 {
-	Number::append(*this, value, width, precision);
-	return *this;
+    return Helper::appendFloat(*this, value, width, precision);
 }
 
 String& String::appends(double value, int width, int precision)
 {
-	Number::append(*this, value, width, precision);
-	return *this;
+    return Helper::appendFloat(*this, value, width, precision);
 }
 
-String& String::appends(int32  value, int width, char fill)
+String& String::appends(int32  value, int width, char fill, char thSep)
 {
-	Number::append(*this, value, width);
-	return *this;
+    return Helper::appendDec(*this, value, width, fill, thSep);
 }
 
-String& String::appends(int64  value, int width, char fill)
+String& String::appends(int64  value, int width, char fill, char thSep)
 {
-	Number::append(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width, fill, thSep);
 }
 
-String& String::appends(uint32 value, int width, char fill)
+String& String::appends(uint32 value, int width, char fill, char thSep)
 {
-	Number::append(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width, fill, thSep);
 }
 
-String& String::appends(uint64 value, int width, char fill)
+String& String::appends(uint64 value, int width, char fill, char thSep)
 {
-	Number::append(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width, fill, thSep);
 }
 
 String& String::append0(int32  value, int width)
 {
-	Number::append0(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width);
 }
 
 String& String::append0(int64  value, int width)
 {
-	Number::append0(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width);
 }
 
 String& String::append0(uint32 value, int width)
 {
-	Number::append0(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width);
 }
 
 String& String::append0(uint64 value, int width)
 {
-	Number::append0(*this, value, width);
-	return *this;
+	return Helper::appendDec(*this, value, width);
 }
 
-String& String::appendHex(int32  value, int width, bool prefex)
+String& String::appendHex(int32  value, int width, char fill, bool prefix)
 {
-	Number::appendHex(*this, value, width, prefex);
-	return *this;
+    return Helper::appendHex(*this, value, width, fill, prefix);
 }
 
-String& String::appendHex(int64  value, int width, bool prefex)
+String& String::appendHex(int64  value, int width, char fill, bool prefix)
 {
-	Number::appendHex(*this, value, width, prefex);
-	return *this;
+    return Helper::appendHex(*this, value, width, fill, prefix);
 }
 
-String& String::appendHex(uint32 value, int width, bool prefex)
+String& String::appendHex(uint32 value, int width, char fill, bool prefix)
 {
-	Number::appendHex(*this, value, width, prefex);
-	return *this;
+    return Helper::appendHex(*this, value, width, fill, prefix);
 }
 
-String& String::appendHex(uint64 value, int width, bool prefex)
+String& String::appendHex(uint64 value, int width, char fill, bool prefix)
 {
-	Number::appendHex(*this, value, width, prefex);
-	return *this;
+    return Helper::appendHex(*this, value, width, fill, prefix);
 }
 
-String& String::appendOct(int32  value, int width, bool prefex)
+String& String::appendOct(int32  value, int width, char fill, bool prefix)
 {
-	return *this;
+    return Helper::appendOct(*this, value, width, fill, prefix);
 }
 
-String& String::appendOct(int64  value, int width, bool prefex)
+String& String::appendOct(int64  value, int width, char fill, bool prefix)
 {
-	return *this;
+    return Helper::appendOct(*this, value, width, fill, prefix);
 }
 
-String& String::appendOct(uint32 value, int width, bool prefex)
+String& String::appendOct(uint32 value, int width, char fill, bool prefix)
 {
-	return *this;
+    return Helper::appendOct(*this, value, width, fill, prefix);
 }
 
-String& String::appendOct(uint64 value, int width, bool prefex)
+String& String::appendOct(uint64 value, int width, char fill, bool prefix)
 {
-	return *this;
+    return Helper::appendOct(*this, value, width, fill, prefix);
+}
+
+bool String::parse(bool& value) const
+{
+    return Helper::parse(value, *this);
 }
 
 bool String::parse(char&   value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
 
 bool String::parse(int8&   value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
 
 bool String::parse(int16&  value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
 
 bool String::parse(int32&  value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(int64&  value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(uint8&  value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(uint16& value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(uint32& value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(uint64& value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(float&  value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
+
 bool String::parse(double& value) const
 {
-    return false;
+    return Helper::parse(value, *this);
 }
 
 //

@@ -1,7 +1,6 @@
 //! Dynamic
 #include "Cute/Variant.h"
 #include "Cute/Exception.h"
-#include "Cute/Number.h"
 #include "Cute/DateTime.h"
 #include "Cute/Timestamp.h"
 
@@ -644,7 +643,7 @@ int64 Variant::asInt64() const
 	case VAR_BOOL:
 		return m_bool ? 1 : 0;
 	case VAR_STR:
-		return Number::parse64(m_str->value());
+        return m_str->value().toNumber<int64>();
 	default:
 		return 0;
 	}
@@ -665,7 +664,7 @@ uint64 Variant::asUInt64() const
 	case VAR_BOOL:
 		return m_bool ? 1 : 0;
 	case VAR_STR:
-		return Number::parseUnsigned64(m_str->value());
+        return m_str->value().toNumber<uint64>();
 	default:
 		return 0;
 	}
@@ -686,7 +685,7 @@ double Variant::asDouble() const
 	case VAR_BOOL:
 		return m_bool ? 1 : 0;
 	case VAR_STR:
-		return Number::parseDouble(m_str->value());
+        return m_str->value().toNumber<double>();
 	default:
 		return 0;
 	}
@@ -707,7 +706,7 @@ bool Variant::asBool() const
 	case VAR_BOOL:
 		return m_bool;
 	case VAR_STR:
-		return Number::parseBool(m_str->value());
+        return m_str->value().toBool();
 	default:
 		return false;
 	}
@@ -720,13 +719,13 @@ String Variant::asString() const
 	case VAR_NULL:
 		return "";
 	case VAR_INT:
-		return Number::format(m_int);
+        return String::createFromValue(m_int);
 	case VAR_UINT:
-		return Number::format(m_uint);
+        return String::createFromValue(m_uint);
 	case VAR_REAL:
-		return Number::format(m_real);
+        return String::createFromValue(m_real);
 	case VAR_BOOL:
-		return Number::format(m_bool);
+        return String::createFromValue(m_bool);
 	default:
 	{
 		String val;

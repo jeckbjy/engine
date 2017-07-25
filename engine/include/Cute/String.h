@@ -23,7 +23,10 @@ public:
 	typedef const_iterator          ConstIterator;
 	typedef reverse_iterator        ReverseIterator;
 	typedef const_reverse_iterator  ConstReverseIterator;
-
+    
+    template<typename T>
+    static String createFromValue(const T& value);
+    
 public:
 	String();
 	String(char text, size_t count = 1);
@@ -36,8 +39,10 @@ public:
 #endif
 	template<typename Iter>
 	String(const Iter& begin, const Iter& end): BaseString(begin, end) {}
+    String(int value);
 
 	String& operator  =(const String& value);
+    String& operator  =(bool   value);
 	String& operator  =(char   value);
 	String& operator  =(int8   value);
 	String& operator  =(int16  value);
@@ -51,6 +56,7 @@ public:
 	String& operator  =(double value);
 
 	String& operator +=(const String& value);
+    String& operator +=(bool   value);
 	String& operator +=(char   value);
 	String& operator +=(int8   value);
 	String& operator +=(int16  value);
@@ -73,29 +79,30 @@ public:
     String& appendf(const char* fmt, ...);
     String& appendf(const char* fmt, va_list& va);
 
-    String& appends(float  value, int width = 0, int precision = 0);
-	String& appends(double value, int width = 0, int precision = 0);
+    String& appends(float  value, int width = -1, int precision = 0);
+	String& appends(double value, int width = -1, int precision = 0);
     
-	String& appends(int32  value, int width = 0, char fill=0);
-    String& appends(int64  value, int width = 0, char fill=0);
-    String& appends(uint32 value, int width = 0, char fill=0);
-    String& appends(uint64 value, int width = 0, char fill=0);
+	String& appends(int32  value, int width = -1, char fill=0, char thSep = 0);
+    String& appends(int64  value, int width = -1, char fill=0, char thSep = 0);
+    String& appends(uint32 value, int width = -1, char fill=0, char thSep = 0);
+    String& appends(uint64 value, int width = -1, char fill=0, char thSep = 0);
     
 	String& append0(int32  value, int width);
 	String& append0(int64  value, int width);
 	String& append0(uint32 value, int width);
 	String& append0(uint64 value, int width);
     
-	String& appendHex(int32  value, int width = 0, bool prefex = false);
-	String& appendHex(int64  value, int width = 0, bool prefex = false);
-	String& appendHex(uint32 value, int width = 0, bool prefex = false);
-	String& appendHex(uint64 value, int width = 0, bool prefex = false);
+	String& appendHex(int32  value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendHex(int64  value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendHex(uint32 value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendHex(uint64 value, int width = 0, char fill = ' ', bool prefix = false);
     
-	String& appendOct(int32  value, int width = 0, bool prefex = false);
-	String& appendOct(int64  value, int width = 0, bool prefex = false);
-	String& appendOct(uint32 value, int width = 0, bool prefex = false);
-	String& appendOct(uint64 value, int width = 0, bool prefex = false);
+	String& appendOct(int32  value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendOct(int64  value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendOct(uint32 value, int width = 0, char fill = ' ', bool prefix = false);
+	String& appendOct(uint64 value, int width = 0, char fill = ' ', bool prefix = false);
     
+    bool parse(bool&   value) const;
     bool parse(char&   value) const;
     bool parse(int8&   value) const;
     bool parse(int16&  value) const;
@@ -112,6 +119,7 @@ public:
     uint   toUnsigned() const;
     float  toFloat() const;
     double toDouble() const;
+    bool   toBool() const;
     
     template<typename T>
     T toNumber() const;
@@ -165,6 +173,14 @@ typedef Vector<String> StringArray;
 //
 // inlines
 //
+template<typename T>
+inline String String::createFromValue(const T &value)
+{
+    String result;
+    result = value;
+    return result;
+}
+
 inline char String::charAt(size_t index) const
 {
 	return this->at(index);
@@ -193,6 +209,15 @@ inline float String::toFloat() const
 inline double String::toDouble() const
 {
     return toNumber<double>();
+}
+
+inline bool String::toBool() const
+{
+    bool result;
+    if(parse(result))
+        return result;
+    else
+        return false;
 }
 
 template<typename T>

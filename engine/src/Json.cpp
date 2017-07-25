@@ -1,6 +1,6 @@
 //! Config
 #include "Cute/Json.h"
-#include "Cute/Number.h"
+#include "Cute/Numeric.h"
 #include "Cute/Exception.h"
 #include "Cute/Files.h"
 #include <iomanip>
@@ -154,20 +154,20 @@ bool JsonReader::readArray(Variant& arr)
 bool JsonReader::readNumber(Variant& value)
 {
 	// 解析double或者int
-	Number::Real result;
-	Location pos = Number::parseNumber(result, m_cur);
-	if (result.type == Number::TYPE_NONE)
+	Numeric::Real result;
+	Location pos = Numeric::parseNumber(result, m_cur);
+	if (result.type == Numeric::TYPE_NONE)
 		return false;
 
 	switch (result.type)
 	{
-	case Number::TYPE_SINT:
+	case Numeric::TYPE_SINT:
 		value = result.vi;
 		break;
-	case Number::TYPE_UINT:
+	case Numeric::TYPE_UINT:
 		value = result.vu;
 		break;
-	case Number::TYPE_FLOAT:
+	case Numeric::TYPE_FLOAT:
 		value = result.vd;
 		break;
 	}

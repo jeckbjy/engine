@@ -3,10 +3,9 @@
 #include "Cute/LogArchiveStrategy.h"
 #include "Cute/LogRotateStrategy.h"
 #include "Cute/LogPurgeStrategy.h"
+#include "Cute/Exception.h"
 #include "Cute/DateTime.h"
 #include "Cute/String.h"
-#include "Cute/Number.h"
-#include "Cute/Exception.h"
 #include "Cute/Ascii.h"
 
 CUTE_NS_BEGIN
