@@ -1,4 +1,4 @@
-// module Scene
+//! Scene/Component
 #include "Cute/Camera.h"
 
 CUTE_NS_BEGIN

@@ -28,8 +28,9 @@ enum ObjectID
 	OID_FENCE,
 	OID_DEVICE,
 
-	// 
-	OID_SCENE_OBJECT,
+	//
+    OID_SCENE,
+	OID_ENTITY,
 	OID_COMPONENT,
 	OID_TRANSFORM,
 	OID_CAMERA,
@@ -46,5 +47,20 @@ enum ObjectID
 
 	OID_CUSTOM = 10000,
 };
+
+// core
+class Stream;
+
+// Math
+class Quaternion;
+
+// scene,entity,component
+class Scene;
+class SceneNode;
+class Entity;
+class Component;
+class Transform;
+class Camera;
+class Light;
 
 CUTE_NS_END

@@ -43,10 +43,10 @@ template<typename T>
 class pt_set : public std::set<T>{};
 
 template<typename U, typename V>
-class pt_hmap : public std::hash_map<U, V>{};
+class pt_hmap : public HashMap<U, V>{};
 
 template<typename T>
-class pt_hset : public std::hash_set<T>{};
+class pt_hset : public HashSet<T>{};
 
 template<typename U, typename V>
 class pt_pair : public std::pair<U, V> {};

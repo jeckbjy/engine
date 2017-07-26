@@ -2,7 +2,7 @@
 #include "Cute/Ref.h"
 //#include "Cute/RefPtr.h"
 #include "Cute/RTTI.h"
-#include "Cute/PreDeclare.h"
+#include "Cute/Declare.h"
 #include "Cute/String.h"
 
 CUTE_NS_BEGIN
@@ -39,10 +39,12 @@ public:
 	}
 };
 
-//template<typename TYPE, int ID = OID_ANY>
-//class TObject : public Object
-//{
-//    DECLARE_RTTI(TYPE, Object, ID)
-//};
+template<typename TYPE, int ID = OID_ANY>
+class TObject : public Object
+{
+    DECLARE_RTTI(TYPE, Object, ID)
+//public:
+//    typedef RefPtr<TYPE> Ptr;
+};
 
 CUTE_NS_END

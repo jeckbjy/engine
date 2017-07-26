@@ -1,4 +1,4 @@
-// module Scene
+//! Scene/Component
 #include "Cute/Light.h"
 
 CUTE_NS_BEGIN
