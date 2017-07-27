@@ -58,12 +58,12 @@ public:
 	Quaternion inverse() const;		// 逆
 	Quaternion conjugate() const;	// 共轭
 
-	float normalize();
-	float dot(const Quaternion& other) const;
-	void  multiply(const Quaternion& q);
+	float   normalize();
+	float   dot(const Quaternion& other) const;
+	void    multiply(const Quaternion& q);
 
-	void lookRotation(const Vector3& forward);
-	void lookRotation(const Vector3& forward, const Vector3& up);
+	bool    lookRotation(const Vector3& forward);
+	bool    lookRotation(const Vector3& forward, const Vector3& up);
 	Vector3 rotate(const Vector3& vec) const;
 
 	Vector3 xAxis() const;

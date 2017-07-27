@@ -20,6 +20,154 @@ Component* Transform::clone()
     return result;
 }
 
+void Transform::translate(const Vector3 &delta, TransformSapce space)
+{
+    switch (space) {
+        case TS_LOCAL:
+            m_position += m_rotation.rotate(delta);
+            break;
+        case TS_PARENT:
+            m_position += delta;
+            break;
+        case TS_WORLD:
+        {
+            Transform* parent = getParentTransform();
+            m_position += (parent != NULL) ? parent->getWorldMatrix().inverse().multiply(delta) : delta;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    markDirty();
+}
+
+void Transform::rotate(const Quaternion &delta, TransformSapce space)
+{
+    switch (space) {
+        case TS_LOCAL:
+            m_rotation = (m_rotation * delta);
+            m_rotation.normalize();
+            break;
+        case TS_PARENT:
+            m_rotation = (delta * m_rotation);
+            m_rotation.normalize();
+            break;
+        case TS_WORLD:
+        {
+            Transform* parent = getParentTransform();
+            if(parent)
+            {
+                m_rotation = m_rotation * getWorldRotation().inverse() * delta * getWorldRotation();
+            }
+            else
+            {
+                m_rotation = (delta * m_rotation);
+                m_rotation.normalize();
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    
+    markDirty();
+}
+
+void Transform::rotateAround(const Vector3& point, const Quaternion& delta, TransformSapce space)
+{
+    Vector3 parentSpacePoint;
+    Quaternion oldRotation = m_rotation;
+    switch (space) {
+        case TS_LOCAL:
+        {
+            parentSpacePoint = getMatrix().multiply(point);
+            m_rotation = m_rotation * delta;
+            m_rotation.normalize();
+            break;
+        }
+        case TS_PARENT:
+        {
+            parentSpacePoint = point;
+            m_rotation = delta * m_rotation;
+            m_rotation.normalize();
+            break;
+        }
+        case TS_WORLD:
+        {
+            Transform* parent = getParentTransform();
+            if(parent != NULL)
+            {
+                parentSpacePoint = parent->getWorldMatrix().inverse().multiply(point);
+                const Quaternion& worldRotation = getWorldRotation();
+                m_rotation = m_rotation * worldRotation.inverse() * delta * worldRotation;
+            }
+            else
+            {
+                parentSpacePoint = point;
+                m_rotation = (delta * m_rotation);
+                m_rotation.normalize();
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    
+    Vector3 oldRelativePos = oldRotation.inverse().rotate(m_position - parentSpacePoint);
+    m_position = m_rotation.rotate(oldRelativePos) + parentSpacePoint;
+    markDirty();
+}
+
+bool Transform::lookAt(const Vector3 &target, const Vector3& up, TransformSapce space)
+{
+    Vector3 worldSpaceTarget;
+    
+    switch (space)
+    {
+        case TS_LOCAL:
+            worldSpaceTarget = getWorldMatrix().multiply(target);
+            break;
+            
+        case TS_PARENT:
+        {
+            Transform* parent = getParentTransform();
+            worldSpaceTarget = (parent == NULL) ? target : parent->getWorldMatrix().multiply(target);
+            break;
+        }
+        case TS_WORLD:
+            worldSpaceTarget = target;
+            break;
+    }
+    
+    Vector3 lookDir = worldSpaceTarget - getWorldPosition();
+    // Check if target is very close, in that case can not reliably calculate lookat direction
+    if (lookDir == Vector3::ZERO)
+        return false;
+    Quaternion newRotation;
+    // Do nothing if setting look rotation failed
+    if (!newRotation.lookRotation(lookDir, up))
+        return false;
+    
+    setWorldRotation(newRotation);
+    return true;
+}
+
+void Transform::yaw(float angle, TransformSapce space)
+{
+    rotate(Quaternion(Vector3::UP, angle), space);
+}
+
+void Transform::pitch(float angle, TransformSapce space)
+{
+    rotate(Quaternion(Vector3::RIGHT, angle), space);
+}
+
+void Transform::roll(float angle, TransformSapce space)
+{
+    rotate(Quaternion(Vector3::FORWARD, angle), space);
+}
+
 Transform* Transform::getParentTransform() const
 {
     if(m_owner->getParent())
@@ -37,6 +185,11 @@ void Transform::markDirty()
     // Therefore if we are recursing here to mark this node dirty, and it already was,
     // then all children of this node must also be already dirty, and we don't need to
     // reflag them again.
+
+    // 实际并不需要通知子节点 DIRTY_LOCAL_MATRIX
+    m_dirty |= DIRTY_LOCAL_MATRIX;
+    // 遍历子节点
+    
     if((m_dirty & (~DIRTY_WORLD_MATRIX)) != 0)
         return;
 
@@ -47,27 +200,23 @@ void Transform::markDirty()
         Transform* node = m_owner->getChild(i)->getTransform();
         node->markDirty();
     }
-
 }
 
 void Transform::setRotation(const Quaternion &rotate)
 {
     m_rotation = rotate;
-    m_dirty |= DIRTY_LOCAL_MATRIX;
     markDirty();
 }
 
 void Transform::setPosition(const Vector3 &pos)
 {
     m_position = pos;
-    m_dirty |= DIRTY_LOCAL_MATRIX;
     markDirty();
 }
 
 void Transform::setScale(const Vector3 &scale)
 {
     m_scale = scale;
-    m_dirty |= DIRTY_LOCAL_MATRIX;
     markDirty();
 }
 

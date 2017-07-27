@@ -16,6 +16,14 @@ Color::Color(float red /* = 1.0f */, float green /* = 1.0f */, float blue /* = 1
 {
 }
 
+void Color::set(float red, float green, float blue, float alpha)
+{
+    this->r = red;
+    this->g = green;
+    this->b = blue;
+    this->a = alpha;
+}
+
 ABGR Color::getABGR() const
 {
 	uint8 val8;

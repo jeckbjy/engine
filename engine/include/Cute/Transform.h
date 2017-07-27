@@ -1,10 +1,17 @@
 #pragma once
 #include "Cute/Component.h"
-#include "Cute/Quaternion.h"
-#include "Cute/Vector3.h"
 #include "Cute/Matrix4.h"
+#include "Cute/Vector3.h"
+#include "Cute/Quaternion.h"
 
 CUTE_NS_BEGIN
+
+enum TransformSapce
+{
+    TS_LOCAL = 0,
+    TS_PARENT,
+    TS_WORLD
+};
 
 class CUTE_CORE_API Transform : public Component
 {
@@ -14,6 +21,16 @@ public:
 	~Transform();
 
     virtual Component* clone();
+    
+    void translate(const Vector3& delta, TransformSapce space = TS_LOCAL);
+    void rotate(const Quaternion& delta, TransformSapce space = TS_LOCAL);
+    void rotateAround(const Vector3& point, const Quaternion& delta, TransformSapce space = TS_LOCAL);
+    void pitch(float angle, TransformSapce space = TS_LOCAL);
+    void yaw(float angle, TransformSapce space = TS_LOCAL);
+    void roll(float angle, TransformSapce space = TS_LOCAL);
+    bool lookAt(const Vector3& target, const Vector3& up = Vector3::UNIT_Y, TransformSapce space = TS_WORLD);
+    // in parent space
+    void scale(const Vector3& scale);
     
     // local space
     void setRotation(const Quaternion& rotate);

@@ -1,6 +1,7 @@
 #pragma once
 #include "Cute/Foundation.h"
 #include "Cute/Plane.h"
+#include "Cute/Matrix4.h"
 
 CUTE_NS_BEGIN
 
@@ -30,7 +31,8 @@ public:
 	const Plane& getBottom() const { return m_bottom; }
 	const Plane& getPlane(FrustumPlane index) const { return *(&m_near + index); }
 
-	void update(const Matrix4& projectionMatrix);
+	void update(const Matrix4& proj);
+    void updateOrtho(float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix4& transform = Matrix4::IDENTITY);
 
 private:
 	Plane m_near;

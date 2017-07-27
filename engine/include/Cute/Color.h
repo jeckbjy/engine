@@ -20,6 +20,8 @@ public:
 
 	explicit Color(float red = 1.0f, float green = 1.0f, float blue = 1.0f, float alpha = 1.0f);
 
+    void set(float red, float green, float blue, float alpha = 1.0f);
+    
 	RGBA getRGBA(void) const;
 	ARGB getARGB(void) const;
 	BGRA getBGRA(void) const;
@@ -90,31 +92,31 @@ public:
 //////////////////////////////////////////////////////////////////////////
 //
 //////////////////////////////////////////////////////////////////////////
-float* Color::data()
+inline float* Color::data()
 {
 	return &r;
 }
 
-const float* Color::data() const
+inline const float* Color::data() const
 {
 	return &r;
 }
 
-float Color::operator[] (const size_t i) const
+inline float Color::operator[] (const size_t i) const
 {
 	assert(i < 4);
 
 	return *(&r + i);
 }
 
-float& Color::operator[] (const size_t i)
+inline float& Color::operator[] (const size_t i)
 {
 	assert(i < 4);
 
 	return *(&r + i);
 }
 
-bool Color::operator==(const Color& rhs) const
+inline bool Color::operator==(const Color& rhs) const
 {
 	return
 		r == rhs.r &&
@@ -123,12 +125,12 @@ bool Color::operator==(const Color& rhs) const
 		a == rhs.a;
 }
 
-bool Color::operator!=(const Color& rhs) const
+inline bool Color::operator!=(const Color& rhs) const
 {
 	return !(*this == rhs);
 }
 
-Color& Color::operator+= (const Color& rhs)
+inline Color& Color::operator+= (const Color& rhs)
 {
 	r += rhs.r;
 	g += rhs.g;
@@ -138,7 +140,7 @@ Color& Color::operator+= (const Color& rhs)
 	return *this;
 }
 
-Color& Color::operator-= (const Color& rhs)
+inline Color& Color::operator-= (const Color& rhs)
 {
 	r -= rhs.r;
 	g -= rhs.g;
@@ -148,7 +150,7 @@ Color& Color::operator-= (const Color& rhs)
 	return *this;
 }
 
-Color& Color::operator*= (const Color& rhs)
+inline Color& Color::operator*= (const Color& rhs)
 {
 	r *= rhs.r;
 	g *= rhs.g;
@@ -158,7 +160,7 @@ Color& Color::operator*= (const Color& rhs)
 	return *this;
 }
 
-Color& Color::operator/= (const Color& rhs)
+inline Color& Color::operator/= (const Color& rhs)
 {
 	r /= rhs.r;
 	g /= rhs.g;
@@ -168,7 +170,7 @@ Color& Color::operator/= (const Color& rhs)
 	return *this;
 }
 
-Color& Color::operator+= (const float rhs)
+inline Color& Color::operator+= (const float rhs)
 {
 	r += rhs;
 	g += rhs;
@@ -178,7 +180,7 @@ Color& Color::operator+= (const float rhs)
 	return *this;
 }
 
-Color& Color::operator-= (const float rhs)
+inline Color& Color::operator-= (const float rhs)
 {
 	r -= rhs;
 	g -= rhs;
@@ -188,7 +190,7 @@ Color& Color::operator-= (const float rhs)
 	return *this;
 }
 
-Color& Color::operator*= (const float rhs)
+inline Color& Color::operator*= (const float rhs)
 {
 	r *= rhs;
 	g *= rhs;
@@ -198,7 +200,7 @@ Color& Color::operator*= (const float rhs)
 	return *this;
 }
 
-Color& Color::operator/= (const float rhs)
+inline Color& Color::operator/= (const float rhs)
 {
 	r /= rhs;
 	g /= rhs;
@@ -208,53 +210,53 @@ Color& Color::operator/= (const float rhs)
 	return *this;
 }
 
-Color Color::operator+ (const Color& rhs) const
+inline Color Color::operator+ (const Color& rhs) const
 {
 	return Color(r + rhs.r, g + rhs.g, b + rhs.b, a + rhs.a);
 }
 
-Color Color::operator- (const Color& rhs) const
+inline Color Color::operator- (const Color& rhs) const
 {
 	return Color(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
 }
 
-Color Color::operator* (const Color& rhs) const
+inline Color Color::operator* (const Color& rhs) const
 {
 	return Color(r * rhs.r, g * rhs.g, b * rhs.b, a * rhs.a);
 }
 
-Color Color::operator/ (const Color& rhs) const
+inline Color Color::operator/ (const Color& rhs) const
 {
 	return Color(r / rhs.r, g / rhs.g, b / rhs.b, a / rhs.a);
 }
 
-Color Color::operator+ (float rhs) const
+inline Color Color::operator+ (float rhs) const
 {
 	return Color(r + rhs, g + rhs, b + rhs, a + rhs);
 }
 
-Color Color::operator- (float rhs) const
+inline Color Color::operator- (float rhs) const
 {
 	return Color(r - rhs, g - rhs, b - rhs, a - rhs);
 }
 
-Color Color::operator* (float rhs) const
+inline Color Color::operator* (float rhs) const
 {
 	return Color(r * rhs, g * rhs, b * rhs, a * rhs);
 }
 
-Color Color::operator/ (float rhs) const
+inline Color Color::operator/ (float rhs) const
 {
 	assert(rhs != 0);
 	return Color(r / rhs, g / rhs, b / rhs, a / rhs);
 }
 
-Color operator+ (const float lhs, const Color& rhs)
+inline Color operator+ (const float lhs, const Color& rhs)
 {
 	return Color(lhs + rhs.r, lhs + rhs.g, lhs + rhs.b, lhs + rhs.a);
 }
 
-Color operator* (const float lhs, const Color& rhs)
+inline Color operator* (const float lhs, const Color& rhs)
 {
 	return Color(lhs * rhs.r, lhs * rhs.g, lhs * rhs.b, lhs * rhs.a);
 }

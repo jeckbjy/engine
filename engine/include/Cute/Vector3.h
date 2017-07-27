@@ -12,6 +12,14 @@ public:
 	static const TVector3 ZERO;
 	static const TVector3 ONE;
 	static const TVector3 INF;
+    
+    static const TVector3 LEFT;
+    static const TVector3 RIGHT;
+    static const TVector3 UP;
+    static const TVector3 DOWN;
+    static const TVector3 FORWARD;
+    static const TVector3 BACK;
+    
 	static const TVector3 UNIT_X;
 	static const TVector3 UNIT_Y;
 	static const TVector3 UNIT_Z;
@@ -122,6 +130,15 @@ typedef TVector3<float>	Vector3;
 template<typename T> const TVector3<T> TVector3<T>::ZERO(0);
 template<typename T> const TVector3<T> TVector3<T>::ONE(1);
 template<typename T> const TVector3<T> TVector3<T>::INF(std::numeric_limits<T>::infinity());
+
+template<typename T> const TVector3<T> TVector3<T>::LEFT(-1, 0, 0);
+template<typename T> const TVector3<T> TVector3<T>::RIGHT(1, 0, 0);
+
+template<typename T> const TVector3<T> TVector3<T>::UP(0, 1, 0);
+template<typename T> const TVector3<T> TVector3<T>::DOWN(0, -1, 0);
+template<typename T> const TVector3<T> TVector3<T>::FORWARD(0, 0, 1);
+template<typename T> const TVector3<T> TVector3<T>::BACK(0, 0, -1);
+
 template<typename T> const TVector3<T> TVector3<T>::UNIT_X(1, 0, 0);
 template<typename T> const TVector3<T> TVector3<T>::UNIT_Y(0, 1, 0);
 template<typename T> const TVector3<T> TVector3<T>::UNIT_Z(0, 0, 1);

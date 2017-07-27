@@ -23,6 +23,9 @@ const float Math::RAD2DEG = 180.0f / PI;
 const float Math::LOG2 = std::log(2.0f);
 const float Math::EPSILON = std::numeric_limits<float>::epsilon();
 
+const float Math::MAX_FOV = 160.0f;
+const float Math::MIN_NEARCLIP = 0.01f;
+
 float Math::acos(float value)
 {
 	if (-1.0f < value)

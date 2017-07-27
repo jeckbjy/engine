@@ -551,4 +551,8 @@
 #define CUTE_RAD_TO_DEG(x)          ((x)* 57.29577951f)
 #define CUTE_CLAMP(x, lo, hi)       ((x < lo) ? lo : ((x > hi) ? hi : x))
 
+#define CUTE_HAS_MASK(data, mask)   ((data & mask) == mask)
+#define CUTE_SET_MASK(data, mask)   (data | mask)
+#define CUTE_RESET_MASK(data, mask) (data & (~mask))
+
 #define NPOS						((unsigned int)-1)

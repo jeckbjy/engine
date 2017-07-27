@@ -284,10 +284,10 @@ Vector3 Quaternion::rotate(const Vector3& v) const
 	return rot.transform(v);
 }
 
-void Quaternion::lookRotation(const Vector3& forwardDir)
+bool Quaternion::lookRotation(const Vector3& forwardDir)
 {
 	if (forwardDir == Vector3::ZERO)
-		return;
+		return false;
 
 	Vector3 nrmForwardDir = Vector3::normalize(forwardDir);
 	Vector3 currentForwardDir = -zAxis();
@@ -305,9 +305,11 @@ void Quaternion::lookRotation(const Vector3& forwardDir)
 		Quaternion rotQuat = getRotationFromTo(currentForwardDir, nrmForwardDir);
 		*this = rotQuat * *this;
 	}
+    
+    return true;
 }
 
-void Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
+bool Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
 {
 	Vector3 forward = Vector3::normalize(forwardDir);
 	Vector3 up = Vector3::normalize(upDir);
@@ -315,7 +317,7 @@ void Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
 	if (Math::equals(Vector3::dot(forward, up), 1.0f))
 	{
 		lookRotation(forward);
-		return;
+		return false;
 	}
 
 	Vector3 x = Vector3::cross(forward, up);
@@ -325,6 +327,8 @@ void Quaternion::lookRotation(const Vector3& forwardDir, const Vector3& upDir)
 	y.normalize();
 
 	*this = Quaternion(x, y, -forward);
+    
+    return true;
 }
 
 Vector3 Quaternion::xAxis() const

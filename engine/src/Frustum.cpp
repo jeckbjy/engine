@@ -37,4 +37,9 @@ void Frustum::update(const Matrix4& proj)
 	}
 }
 
+void Frustum::updateOrtho(float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix4& transform)
+{
+    
+}
+
 CUTE_NS_END

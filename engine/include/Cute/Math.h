@@ -15,6 +15,8 @@ public:
 	static const float RAD2DEG;
 	static const float LOG2;
 	static const float EPSILON;
+    static const float MAX_FOV;
+    static const float MIN_NEARCLIP;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Evaluates trigonometric functions using polynomial approximations.

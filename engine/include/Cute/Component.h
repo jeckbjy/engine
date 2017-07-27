@@ -12,6 +12,8 @@ public:
     
     virtual Component* clone() = 0;
     
+    virtual void onTransformChanged(){}
+    
     bool isEnabled() const;
     void setEnabled(bool enable);
 
