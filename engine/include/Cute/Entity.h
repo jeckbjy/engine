@@ -45,7 +45,7 @@ protected:
 //
 inline uint Entity::getNumConponents() const
 {
-    return m_components.size();
+    return (uint)m_components.size();
 }
 
 template<typename T>

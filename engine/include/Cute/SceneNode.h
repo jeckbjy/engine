@@ -54,7 +54,7 @@ inline SceneNode* SceneNode::getParent() const
 
 inline uint SceneNode::getNumChildren() const
 {
-    return m_children.size();
+    return (uint)m_children.size();
 }
 
 inline SceneNode* SceneNode::getChild(uint index) const

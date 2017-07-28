@@ -515,8 +515,8 @@ String Path::current()
 #else
 	String path;
 	char cwd[PATH_MAX];
-	if (getcwd(cwd, sizeof(cwd)))
-		path = cwd;
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		path = String(cwd);
 	else
 		throw SystemException("cannot get current directory");
 	String::size_type n = path.size();
