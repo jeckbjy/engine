@@ -4,6 +4,7 @@
 CUTE_NS_BEGIN
 
 // AnimationModel ??
+// contain AnimationClip, Skeleton, Mesh, Material,
 class CUTE_CORE_API Model
 {
 public:

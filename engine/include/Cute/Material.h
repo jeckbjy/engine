@@ -13,6 +13,8 @@ public:
     Material();
     ~Material();
     
+    void setShader(Shader* shader);
+    
     void setBuffer (const String& name, IBuffer* value);
     void setTexture(const String& name, ITexture* value);
     void setVector2(const String& name, const Vector2& value);

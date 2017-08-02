@@ -1,4 +1,4 @@
-//! Scene/Component
+//! Components
 #include "Cute/Light.h"
 #include "Cute/Math.h"
 

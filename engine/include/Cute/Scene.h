@@ -10,6 +10,9 @@ public:
     Scene();
     ~Scene();
     
+//    void getComponents(Vector<Component*>& results, const Camera* camera, int type);
+//    void getRenderables(Vector<Renderable*>& results, const Camera* camera);
+    
 protected:
     
 };

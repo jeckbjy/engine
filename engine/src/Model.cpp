@@ -1,4 +1,4 @@
-//! Animation
+//! Model
 #include "Cute/Model.h"
 
 CUTE_NS_BEGIN

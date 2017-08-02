@@ -52,7 +52,37 @@ enum ObjectID
 class Stream;
 
 // Math
+class Matrix3;
+class Matrix4;
 class Quaternion;
+class Plane;
+class AABox;
+class Sphere;
+class Ray;
+
+// Graphics
+class IBuffer;
+class ITexture;
+class ISampler;
+class ISwapChain;
+class IFrameBuffer;
+class IVertexLayout;
+class IDescriptorSet;
+class IPipeline;
+class IDevice;
+
+typedef IBuffer VertexBuffer;
+typedef IBuffer IndexBuffer;
+typedef IBuffer UniformBuffer;
+
+// Render
+class Shader;
+class Material;
+class Mesh;
+
+// animation
+class AnimationCurve;
+class AnimationClip;
 
 // scene,entity,component
 class Scene;
@@ -62,5 +92,8 @@ class Component;
 class Transform;
 class Camera;
 class Light;
+class Renderable;
+//class MeshRender;
+//class SkinnedRender;
 
 CUTE_NS_END

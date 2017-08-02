@@ -38,6 +38,10 @@ public:
 //    void setEnabled(bool enabled);
 //    bool isEnabled() const;
     
+protected:
+    virtual void onMeasure(){}
+    virtual void onLayout(){}
+    
 private:
     bool m_visible : 1;
     bool m_opaque  : 1;

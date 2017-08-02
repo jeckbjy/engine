@@ -1,4 +1,4 @@
-//! Scene/Component
+//! Components
 #include "Cute/Camera.h"
 #include "Cute/SceneNode.h"
 #include "Cute/Transform.h"

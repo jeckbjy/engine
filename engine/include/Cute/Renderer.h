@@ -3,22 +3,22 @@
 
 CUTE_NS_BEGIN
 
-class CUTE_CORE_API Geometry
-{
-public:
-    
-};
+//class CUTE_CORE_API Geometry
+//{
+//public:
+//    
+//};
+//
+//struct Batch
+//{
+//    float       distance;
+//    Geometry*   geometry;
+//};
 
-struct Batch
-{
-    float       distance;
-    Geometry*   geometry;
-};
-
-struct BatchGroup
-{
-    
-};
+//struct BatchGroup
+//{
+//    
+//};
 
 class CUTE_CORE_API RenderQueue
 {
