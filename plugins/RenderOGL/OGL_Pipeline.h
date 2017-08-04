@@ -8,12 +8,16 @@ class OGL_Program;
 class CUTE_OGL_API OGL_Pipeline : public IPipeline
 {
 public:
-	OGL_Pipeline(const PipelineDesc& desc);
+	OGL_Pipeline();
 	~OGL_Pipeline();
+    
+    bool init(const GraphicsPipelineDesc& desc);
+    bool init(const ComputePipelineDesc& desc);
+    void term();
 
 	void bind();
 
-	OGL_Program* getProgram() { return m_program; }
+//	OGL_Program* getProgram() { return m_program; }
 
 private:
 //	RenderStateDesc*	m_states;

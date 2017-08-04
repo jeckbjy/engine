@@ -5,8 +5,8 @@
 
 CUTE_NS_BEGIN
 
-OGL_VertexArray::OGL_VertexArray(uint32_t id, VertexLayout* layout)
-	: VertexArray(id, layout)
+OGL_VertexArray::OGL_VertexArray(uint32_t id, IVertexLayout* layout)
+//	: VertexArray(id, layout)
 {
 
 }
@@ -62,40 +62,40 @@ void OGL_VertexArray::bindAttributes(OGL_Program* prog)
 	GLint glByte;
 	GLenum glType;
 	GLboolean glNorm;
-	// ²»Ê¹ÓÃvao
-	const VertexLayout::ElementVec& elements = m_layout->getElements();
-	for (size_t i = 0; i < elements.size(); ++i)
-	{
-		const VertexElement& elem = elements[i];
-		buff = (OGL_Buffer*)m_buffers[elem.slot].get();
-		attr = prog->getLocation(elem.semantic);
-		if (buff == NULL || attr == -1)
-			continue;
-
-		if (last != buff)
-		{
-			last = buff;
-			glBindBuffer(GL_ARRAY_BUFFER, buff->handle());
-		}
-
-		glByte = PixelUtil::getComponents(elem.format);
-		glNorm = PixelUtil::isNormalized(elem.format);
-		glType = OGL_Mapping::getGLType(elem.format);
-		glVertexAttribPointer(attr, glByte, glType, glNorm, elem.stride, (void*)elem.offset);
-		glEnableVertexAttribArray(attr);
-	}
+	// 
+//	const VertexLayout::ElementVec& elements = m_layout->getElements();
+//	for (size_t i = 0; i < elements.size(); ++i)
+//	{
+//		const VertexElement& elem = elements[i];
+//		buff = (OGL_Buffer*)m_buffers[elem.slot].get();
+//		attr = prog->getLocation(elem.semantic);
+//		if (buff == NULL || attr == -1)
+//			continue;
+//
+//		if (last != buff)
+//		{
+//			last = buff;
+//			glBindBuffer(GL_ARRAY_BUFFER, buff->handle());
+//		}
+//
+//		glByte = PixelUtil::getComponents(elem.format);
+//		glNorm = PixelUtil::isNormalized(elem.format);
+//		glType = OGL_Mapping::getGLType(elem.format);
+//		glVertexAttribPointer(attr, glByte, glType, glNorm, elem.stride, (void*)elem.offset);
+//		glEnableVertexAttribArray(attr);
+//	}
 }
 
 void OGL_VertexArray::unbindAttributes(OGL_Program* prog)
 {
-	const VertexLayout::ElementVec& elements = m_layout->getElements();
-	for (size_t i = 0; i < elements.size(); ++i)
-	{
-		const VertexElement& elem = elements[i];
-		GLint attr = prog->getLocation(elem.semantic);
-		if (attr != -1)
-			glDisableVertexAttribArray(attr);
-	}
+//	const VertexLayout::ElementVec& elements = m_layout->getElements();
+//	for (size_t i = 0; i < elements.size(); ++i)
+//	{
+//		const VertexElement& elem = elements[i];
+//		GLint attr = prog->getLocation(elem.semantic);
+//		if (attr != -1)
+//			glDisableVertexAttribArray(attr);
+//	}
 }
 
 void OGL_VertexArray::destroy()

@@ -1,10 +1,9 @@
 #include "OGL_SwapChain.h"
-#include "Window.h"
+#include "Cute/Window.h"
 
 CUTE_NS_BEGIN
 
 OGL_SwapChain::OGL_SwapChain(const SwapChainDesc& desc)
-	: m_wnd(desc.wnd)
 {
 #if defined(CUTE_OS_WIN)
 	HWND hwnd = m_wnd->getHandle();
@@ -46,6 +45,16 @@ OGL_SwapChain::~OGL_SwapChain()
 #elif defined(CU_USE_X11)
 #elif defined(CU_USE_XCB)
 #endif
+}
+
+bool OGL_SwapChain::init(const SwapChainDesc &desc)
+{
+    return true;
+}
+
+void OGL_SwapChain::term()
+{
+    
 }
 
 void OGL_SwapChain::present()

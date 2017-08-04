@@ -8,8 +8,11 @@ class CUTE_OGL_API OGL_Buffer : public IBuffer
 public:
 	OGL_Buffer(const BufferDesc& desc);
 	~OGL_Buffer();
+    
+    void init(const BufferDesc& desc);
+    void term();
 
-    void* map();
+    bool map(void_ptr& result);
     void unmap();
     
 	void bind();

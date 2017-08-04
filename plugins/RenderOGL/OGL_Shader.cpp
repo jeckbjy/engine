@@ -2,25 +2,27 @@
 
 CUTE_NS_BEGIN
 
-GLuint mapping(ShaderType type)
+GLuint mapping(SHADER_MASK type)
 {
-	switch (type)
-	{
-	case SHADER_VERTEX:
-		return GL_VERTEX_SHADER;
-	case SHADER_HULL:
-		return GL_TESS_CONTROL_SHADER;
-	case SHADER_DOMAIN:
-		return GL_TESS_EVALUATION_SHADER;
-	case SHADER_GEOMETRY:
-		return GL_GEOMETRY_SHADER;
-	case SHADER_PIXEL:
-		return GL_FRAGMENT_SHADER;
-	case SHADER_COMPUTE:
-		return GL_COMPUTE_SHADER;
-	default:
-		return 0;
-	}
+//	switch (type)
+//	{
+//	case SHADER_VERTEX:
+//		return GL_VERTEX_SHADER;
+//	case SHADER_HULL:
+//		return GL_TESS_CONTROL_SHADER;
+//	case SHADER_DOMAIN:
+//		return GL_TESS_EVALUATION_SHADER;
+//	case SHADER_GEOMETRY:
+//		return GL_GEOMETRY_SHADER;
+//	case SHADER_PIXEL:
+//		return GL_FRAGMENT_SHADER;
+//	case SHADER_COMPUTE:
+//		return GL_COMPUTE_SHADER;
+//	default:
+//		return 0;
+//	}
+    
+    return 0;
 }
 
 bool is_sampler(GLint type)
@@ -40,8 +42,7 @@ bool is_sampler(GLint type)
 //// Program
 ////////////////////////////////////////////////////////////////////////////
 OGL_Shader::OGL_Shader(uint32_t id)
-	: ShaderStage(id)
-	, m_handle(0)
+	: m_handle(0)
 {
 }
 
@@ -64,8 +65,10 @@ bool OGL_Shader::compile(const ShaderDesc& desc)
 	destroy();
 
 	GLint handle = 0;
-	const char* source = desc.code.c_str();
-	GLenum	gltype = mapping(desc.stage);
+//	const char* source = desc.code.c_str();
+//	GLenum	gltype = mapping(desc.stage);
+    const char* source = NULL;
+    GLenum gltype = GL_VERTEX_SHADER;
 	bool	has_error;
 #ifdef CU_USE_SPO
 	handle = glCreateShaderProgramv(gltype, 1, &source);
@@ -79,7 +82,6 @@ bool OGL_Shader::compile(const ShaderDesc& desc)
 	has_error = (status != GL_TRUE);
 #endif
 
-	// 打印错误信息
 	if (has_error)
 	{
 		GLsizei len;
@@ -91,7 +93,7 @@ bool OGL_Shader::compile(const ShaderDesc& desc)
 			GetShaderInfoLog(handle, len, NULL, &log[0]);
 			log[len - 1] = '\0';
 		}
-		// 释放资源
+		
 		if (handle != 0)
 		{
 			DeleteShader(handle);

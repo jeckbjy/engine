@@ -3,6 +3,26 @@
 
 CUTE_NS_BEGIN
 
+IBuffer::IBuffer(const BufferDesc& desc)
+    : m_usage(desc.usage)
+    , m_size(desc.size)
+    , m_stride(desc.stride)
+{
+}
+
+ITexture::ITexture(const TextureDesc& desc)
+    : m_dimension(desc.dimension)
+    , m_format(desc.format)
+    , m_width(desc.width)
+    , m_height(desc.height)
+    , m_depth(desc.depthOrArraySize)
+    , m_mipmaps(desc.mipLevels)
+{
+}
+
+//
+//
+//
 RenderModule::RenderModule()
     : m_device(NULL)
 {

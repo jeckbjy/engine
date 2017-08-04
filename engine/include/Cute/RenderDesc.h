@@ -1,15 +1,7 @@
-//! Render
 #pragma once
 #include "Cute/RenderDefs.h"
 
 CUTE_NS_BEGIN
-
-class IBuffer;
-class ITexture;
-class ITextureView;
-class IDescriptorSetLayout;
-class IFrameBuffer;
-class IProgram;
 
 struct Offset2D
 {
@@ -100,46 +92,48 @@ struct CUTE_CORE_API BufferDesc
     RESOURCE_USAGE	usage;
     RESOURCE_STATE	state;
     HeapProperty	heapProperty;
+    const char*     data;
 };
 
-struct CUTE_CORE_API BufferViewDesc
-{
-    uint64			offset;
-    uint64			range;
-};
+//struct CUTE_CORE_API BufferViewDesc
+//{
+//    uint64			offset;
+//    uint64			range;
+//};
 
 struct CUTE_CORE_API TextureDesc
 {
     RESOURCE_DIMENSION	dimension;
+    RESOURCE_FORMAT		format;
     uint32				width;
     uint32				height;
     uint32				depthOrArraySize;
-    RESOURCE_FORMAT		format;
     uint32				mipLevels;
     uint32				sampleCount;
     RESOURCE_LAYOUT		layout;
     RESOURCE_USAGE		usage;
     RESOURCE_STATE		initState;
     HeapProperty		heapProperty;
+    const char*         data;
 };
 
-struct CUTE_CORE_API TextureViewDesc
-{
-    VIEW_DIMENSION		dimension;
-    RESOURCE_FORMAT		format;
-    TEXTURE_ASPECT		aspect;
-    uint32				mipSlice;
-    uint32				mipLevels;
-    uint32				firstArraySlice;
-    uint32				arraySize;
-    ComponentMapping	components;
-};
+//struct CUTE_CORE_API TextureViewDesc
+//{
+//    VIEW_DIMENSION		dimension;
+//    RESOURCE_FORMAT		format;
+//    TEXTURE_ASPECT		aspect;
+//    uint32				mipSlice;
+//    uint32				mipLevels;
+//    uint32				firstArraySlice;
+//    uint32				arraySize;
+//    ComponentMapping	components;
+//};
 
 struct CUTE_CORE_API FrameBufferDesc
 {
-    uint32_t			colorCount;
-    ITextureView*		colorTargets[8];
-    ITextureView*		depthTarget;
+    uint32_t            colorCount;
+    ITexture*           colorTargets[8];
+    ITexture*           depthTarget;
 };
 
 struct CUTE_CORE_API SamplerDesc
@@ -275,7 +269,7 @@ struct CUTE_CORE_API ShaderDesc
 
 struct CUTE_CORE_API GraphicsPipelineDesc
 {
-    IDescriptorSetLayout*	layout;
+//    IDescriptorSetLayout*	layout;
     IProgram*				vertex;
     IProgram*				pixel;
     IProgram*				domain;
@@ -293,7 +287,7 @@ struct CUTE_CORE_API GraphicsPipelineDesc
 
 struct CUTE_CORE_API ComputePipelineDesc
 {
-    IDescriptorSetLayout*	layout;
+//    IDescriptorSetLayout*	layout;
     IProgram*				compute;
 };
 
@@ -411,6 +405,25 @@ struct CUTE_CORE_API VertexElement
 struct CUTE_CORE_API VertexDeclaration
 {
     
+};
+
+struct CUTE_CORE_API PixelUtil
+{
+    static uint getBytes(RESOURCE_FORMAT format);
+    static uint getComponents(RESOURCE_FORMAT format);
+    
+    static uint getMemorySize(RESOURCE_FORMAT format, uint width, uint height, uint depth);
+    static uint getImageSize(RESOURCE_FORMAT format, uint width, uint height, uint depth, uint mipmaps, uint faces);
+    
+    static bool hasFlags(RESOURCE_FORMAT fmt, uint32_t flags);
+    
+    static bool isAlpha(RESOURCE_FORMAT format);
+    static bool isFloat(RESOURCE_FORMAT format);
+    static bool isDepth(RESOURCE_FORMAT format);
+    static bool isStencil(RESOURCE_FORMAT format);
+    static bool isLuminance(RESOURCE_FORMAT format);
+    static bool isNormalized(RESOURCE_FORMAT format);
+    static bool isCompressed(RESOURCE_FORMAT format);
 };
 
 CUTE_NS_END

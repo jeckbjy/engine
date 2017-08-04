@@ -86,7 +86,7 @@ extern PFNGLISVERTEXARRAYOESPROC		glIsVertexArray;
 #define CUTE_USE_DRAW_INDEX_BASE
 #define CUTE_USE_UNIFORM_BLOCK
 
-#define OGL_VERSION		OGL_VERSION_4
+#define OGL_VERSION		OGL_VERSION_3
 
 #if defined(CU_HAS_VAO) && !defined(CU_NO_VAO)
 #define CUTE_USE_VAO

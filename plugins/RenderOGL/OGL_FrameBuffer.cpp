@@ -31,7 +31,7 @@ void OGL_FrameBuffer::update()
 	if (m_attachments.empty())
 		return;
 
-	OGL_Texture* ds = (OGL_Texture*)(m_attachments[0].get());
+	OGL_Texture* ds = (OGL_Texture*)(m_attachments[0]);
 	if (ds)
 	{
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, ds->handle());
@@ -44,7 +44,7 @@ void OGL_FrameBuffer::update()
 	for (size_t i = 1; i < m_attachments.size(); ++i)
 	{
 		index = i - 1;
-		tex = (OGL_Texture*)(m_attachments[i].get());
+		tex = (OGL_Texture*)(m_attachments[i]);
 		if (tex)
 		{
 			tex->bindToFrameBuffer(GL_COLOR_ATTACHMENT0 + index);

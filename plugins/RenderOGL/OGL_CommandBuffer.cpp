@@ -8,8 +8,7 @@
 CUTE_NS_BEGIN
 
 OGL_CommandBuffer::OGL_CommandBuffer()
-	: m_target(NULL)
-	, m_pipeline(NULL)
+    : m_pipeline(NULL)
 	, m_index(NULL)
 	, m_descriptors(NULL)
 	, m_primitive(GL_TRIANGLES)
@@ -26,11 +25,11 @@ OGL_CommandBuffer::~OGL_CommandBuffer()
 
 }
 
-void OGL_CommandBuffer::setRenderTarget(RenderTarget* target)
-{
-	m_target = target;
-	m_target->bind(NULL);
-}
+//void OGL_CommandBuffer::setRenderTarget(RenderTarget* target)
+//{
+//	m_target = target;
+//	m_target->bind(NULL);
+//}
 
 void OGL_CommandBuffer::setViewport(int x, int y, size_t w, size_t h)
 {
@@ -47,57 +46,57 @@ void OGL_CommandBuffer::setBlendFactor(const float factors[4])
 	memcpy(m_factors, factors, sizeof(m_factors));
 }
 
-void OGL_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
+//void OGL_CommandBuffer::setStencilRef(StencilFaceFlags mask, size_t reference)
+//{
+//	m_stencilMask = mask;
+//	m_stencilRef = reference;
+//}
+//
+//void OGL_CommandBuffer::setTopology(Topology topology)
+//{
+//	m_primitive = OGL_Mapping::getPrimitiveMode(topology);
+//}
+
+void OGL_CommandBuffer::setDescriptorSet(IDescriptorSet* descriptors)
 {
-	m_stencilMask = mask;
-	m_stencilRef = reference;
+	m_descriptors = (OGL_DescriptorSet*)descriptors;
 }
 
-void OGL_CommandBuffer::setTopology(Topology topology)
-{
-	m_primitive = OGL_Mapping::getPrimitiveMode(topology);
-}
-
-void OGL_CommandBuffer::setDescriptorSet(DescriptorSet* descriptors)
-{
-	m_descriptors = descriptors;
-}
-
-void OGL_CommandBuffer::setPipeline(Pipeline* pipeline)
+void OGL_CommandBuffer::setPipeline(IPipeline* pipeline)
 {
 	m_pipeline = (OGL_Pipeline*)pipeline;
 }
-
-void OGL_CommandBuffer::setVertexArray(VertexArray* vao)
-{
-	m_vertexs = (OGL_VertexArray*)vao;
-}
+//
+//void OGL_CommandBuffer::setVertexArray(VertexArray* vao)
+//{
+//	m_vertexs = (OGL_VertexArray*)vao;
+//}
 
 void OGL_CommandBuffer::setIndexBuffer(IndexBuffer* buffer, size_t offset)
 {
 	m_index = (OGL_Buffer*)buffer;
 }
 
-void OGL_CommandBuffer::clear(ClearMask mask, const Color& color, float depth, uint32_t stencil, uint8_t targetMask)
-{
-	if (mask & CLEAR_COLOR)
-	{
-		glColorMask(true, true, true, true);
-		glClearColor(color.r, color.g, color.b, color.a);
-	}
-
-	if (mask & CLEAR_DEPTH)
-	{
-		glDepthMask(GL_TRUE);
-		glClearDepth(depth);
-	}
-
-	if (mask & CLEAR_STENCIL)
-	{
-		glStencilMask(0xFFFFFFFF);
-		glClearStencil(stencil);
-	}
-}
+//void OGL_CommandBuffer::clear(ClearMask mask, const Color& color, float depth, uint32_t stencil, uint8_t targetMask)
+//{
+//	if (mask & CLEAR_COLOR)
+//	{
+//		glColorMask(true, true, true, true);
+//		glClearColor(color.r, color.g, color.b, color.a);
+//	}
+//
+//	if (mask & CLEAR_DEPTH)
+//	{
+//		glDepthMask(GL_TRUE);
+//		glClearDepth(depth);
+//	}
+//
+//	if (mask & CLEAR_STENCIL)
+//	{
+//		glStencilMask(0xFFFFFFFF);
+//		glClearStencil(stencil);
+//	}
+//}
 
 void OGL_CommandBuffer::draw(uint32_t vertexCount, uint32_t instanceCount, uint32_t vertexOffset, uint32_t instanceOffset)
 {
@@ -118,9 +117,9 @@ void OGL_CommandBuffer::drawIndexed(uint32_t indexCount, uint32_t instanceCount,
 	prepare();
 	// bind
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index->handle());
-	GLenum indexType = m_index->isIndex16() ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+	GLenum indexType = m_index->getStride() == sizeof(int16) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 
-	// 版本校验,低版本
+	//
 #if OGL_VERSION <= OGL_VERSION_2
 	glDrawElements(m_primitive, indexCount, indexType, NULL);
 #else
@@ -153,8 +152,8 @@ void OGL_CommandBuffer::prepare()
 	{
 		m_pipeline->bind();
 
-		if (m_vertexs)
-			m_vertexs->bind(m_pipeline->getProgram());
+//		if (m_vertexs)
+//			m_vertexs->bind(m_pipeline->getProgram());
 	}
 }
 

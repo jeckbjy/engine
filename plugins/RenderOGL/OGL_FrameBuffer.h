@@ -3,6 +3,7 @@
 
 CUTE_NS_BEGIN
 
+class OGL_Texture;
 class CUTE_OGL_API OGL_FrameBuffer : public IFrameBuffer
 {
 public:
@@ -15,7 +16,10 @@ private:
 	void update();
 
 private:
-	GLuint m_fbo;
+    typedef Vector<OGL_Texture*> TextureList;
+	GLuint      m_fbo;
+    bool        m_dirty;
+    TextureList m_attachments;
 };
 
 CUTE_NS_END

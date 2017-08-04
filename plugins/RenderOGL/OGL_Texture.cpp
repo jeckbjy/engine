@@ -24,70 +24,89 @@ GLenum OGL_Texture::getGLTarget(RESOURCE_DIMENSION type, uint32_t arrays)
         assert(false);
         break;
 	}
+    
 	return GL_TEXTURE_2D;
 }
 
 OGL_Texture::OGL_Texture(const TextureDesc& desc)
-//:Texture(desc)
+    : ITexture(desc)
+    , m_handle(0)
+    , m_target(0)
 {
-	m_target = getGLTarget(desc.dimension, desc.depthOrArraySize);
-	//
-	glGenTextures(1, &m_handle);
-	glBindTexture(m_target, m_handle);
-	// This needs to be set otherwise the texture doesn't get rendered
-	glTexParameteri(m_target, GL_TEXTURE_MAX_LEVEL, desc.mipLevels - 1);
-	// Set some misc default parameters so NVidia won't complain, these can of course be changed later
-	glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	GLint glinternal;
-	GLenum glformat;
-	GLenum gltype;
-	OGL_Mapping::getFormat(desc.format, glinternal, glformat, gltype);
-
-	//
-	bool compressed = PixelUtil::isCompressed(m_format);
-
-	char fill_mode;
-	if (compressed)
-		fill_mode = m_depth > 1 ? TEX_COMPRESS_ARRAY : TEX_COMPRESS;
-	else
-		fill_mode = m_depth > 1 ? TEX_ARRAYS : TEX_NORMAL;
-
-	if ((desc.usage & RES_RENDER_TARGET) || (m_usage & RES_DEPTH_STENCIL))
-	{
-		if (desc.sampleCount > 0)
-			glTexImage2DMultisample(GL_TEXTURE_2D, desc.sampleCount, glinternal, desc.width, desc.height, GL_FALSE);
-		else
-			glTexImage2D(GL_TEXTURE_2D, 0, glinternal, m_width, m_height, 0, glformat, gltype, NULL);
-	}
-	const char* data = (const char*)desc.data;
-	// 2d
-	switch (m_type)
-	{
-	case TEX_1D:
-		create1D(glinternal, glformat, gltype, compressed, fill_mode, data);
-		break;
-	case TEX_2D:
-		create2D(glinternal, glformat, gltype, compressed, fill_mode, data);
-		break;
-	case TEX_3D:
-		create3D(glinternal, glformat, gltype, compressed, fill_mode, data);
-		break;
-	case TEX_CUBE:
-		createCube(glinternal, glformat, gltype, compressed, fill_mode, data);
-		break;
-	default:
-		break;
-	}
 }
 
 OGL_Texture::~OGL_Texture()
 {
-	glDeleteTextures(1, &m_handle);
+    term();
+}
+
+bool OGL_Texture::init(const TextureDesc& desc)
+{
+    m_target = getGLTarget(desc.dimension, desc.depthOrArraySize);
+    //
+    glGenTextures(1, &m_handle);
+    glBindTexture(m_target, m_handle);
+    // This needs to be set otherwise the texture doesn't get rendered
+    glTexParameteri(m_target, GL_TEXTURE_MAX_LEVEL, desc.mipLevels - 1);
+    // Set some misc default parameters so NVidia won't complain, these can of course be changed later
+    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    
+    GLint  glinternal;
+    GLenum glformat;
+    GLenum gltype;
+    OGL_Mapping::getFormat(desc.format, glinternal, glformat, gltype);
+    
+    //
+    bool compressed = PixelUtil::isCompressed(desc.format);
+    
+    char fill_mode;
+    if (compressed)
+        fill_mode = desc.depthOrArraySize > 1 ? TEX_COMPRESS_ARRAY : TEX_COMPRESS;
+    else
+        fill_mode = desc.depthOrArraySize > 1 ? TEX_ARRAYS : TEX_NORMAL;
+    
+    if ((desc.usage & RESOURCE_USAGE_COLOR_TARGET) || (desc.usage & RESOURCE_USAGE_DEPTH_TARGET))
+    {
+        if (desc.sampleCount > 0)
+            glTexImage2DMultisample(GL_TEXTURE_2D, desc.sampleCount, glinternal, desc.width, desc.height, GL_FALSE);
+        else
+            glTexImage2D(GL_TEXTURE_2D, 0, glinternal, desc.width, desc.height, 0, glformat, gltype, NULL);
+    }
+    
+    const char* data = (const char*)desc.data;
+    // 2d
+    switch (desc.dimension)
+    {
+        case RESOURCE_DIMENSION_TEXTURE1D:
+            create1D(glinternal, glformat, gltype, compressed, fill_mode, data);
+            break;
+        case RESOURCE_DIMENSION_TEXTURE2D:
+            create2D(glinternal, glformat, gltype, compressed, fill_mode, data);
+            break;
+        case RESOURCE_DIMENSION_TEXTURE3D:
+            create3D(glinternal, glformat, gltype, compressed, fill_mode, data);
+            break;
+        case RESOURCE_DIMENSION_CUBEMAP:
+            createCube(glinternal, glformat, gltype, compressed, fill_mode, data);
+            break;
+        default:
+            break;
+    }
+
+    return true;
+}
+
+void OGL_Texture::term()
+{
+    if(m_handle != 0)
+    {
+        glDeleteTextures(1, &m_handle);
+        m_handle = 0;
+    }
 }
 
 void OGL_Texture::active(GLint index)
@@ -109,17 +128,17 @@ void OGL_Texture::bindToFrameBuffer(GLenum attachment)
 	case GL_TEXTURE_2D_MULTISAMPLE:
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, 0, m_handle, 0);
 		break;
+    case GL_TEXTURE_3D:
 	case GL_TEXTURE_CUBE_MAP:
-	case GL_TEXTURE_3D:
 	default:
 		glFramebufferTexture(GL_FRAMEBUFFER, attachment, m_handle, 0);
 		break;
 	}
 }
 
-void* OGL_Texture::map()
+bool OGL_Texture::map(void_ptr& result)
 {
-	return 0;
+	return false;
 }
 
 void OGL_Texture::unmap()
@@ -129,11 +148,11 @@ void OGL_Texture::unmap()
 
 //void OGL_Texture::read(PixelData& data, uint level, uint face)
 //{
-//	// ´«Èë²ÎÊı²»ÓÃÕâÃ´¸´ÔÓ£¿£¿
+//	// Â¥Â´Â»Ãâ‰¤Å’Â Ëâ‰¤Âªâ€âˆšâ€™â€šâˆšÂ¥âˆÂ¥â€˜â€Â£Ã¸Â£Ã¸
 //	glBindTexture(m_target, m_handle);
 //	GLenum target = (m_type == TEX_CUBE) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X + face : m_target;
 //	if (PixelUtil::isCompressed(m_format))
-//	{// ´´½¨¿Õ¼ä£¿£¿
+//	{// Â¥Â¥Î©Â®Ã¸â€™Âºâ€°Â£Ã¸Â£Ã¸
 //		glGetCompressedTexImage(target, level, data.data);
 //	}
 //	else
@@ -144,7 +163,7 @@ void OGL_Texture::unmap()
 //
 //void OGL_Texture::write(const PixelData& data, uint level, uint face, bool discard)
 //{
-//	// »¹ÄÜÔÙ¼ò»¯Ã´£¿
+//	// ÂªÏ€Æ’â€¹â€˜Å¸ÂºÃšÂªÃ˜âˆšÂ¥Â£Ã¸
 //	glBindTexture(m_target, m_handle);
 //	GLint glinternal;
 //	GLenum glformat;

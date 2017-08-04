@@ -9,8 +9,11 @@ class CUTE_OGL_API OGL_Texture : public ITexture
 public:
 	OGL_Texture(const TextureDesc& desc);
 	virtual ~OGL_Texture();
+    
+    bool init(const TextureDesc& desc);
+    void term();
 
-	void* map();
+	bool map(void_ptr& reslut);
 	void unmap();
 
 	void active(GLint index);

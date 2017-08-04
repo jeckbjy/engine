@@ -8,42 +8,68 @@ CUTE_NS_BEGIN
 //https://github.com/ProjectAsura/asura-SDK/tree/master/a3d
 
 //////////////////////////////////////////////////////////////////////////
-// graphics interface
+// graphics interface:GI_XXX, IGFX_XXXX or GFX_XXX
 //////////////////////////////////////////////////////////////////////////
-class CUTE_CORE_API IResource : public Object
+// GBuffer GTexture wrapper for IBuffer and ITexture
+
+//class CUTE_CORE_API IResource : public Object
+//{
+//	DECLARE_RTTI(IResource, Object, OID_ANY)
+//public:
+//	virtual ~IResource(){}
+//
+//	virtual bool map(void_ptr& reslut) = 0;
+//	virtual void unmap() = 0;
+//
+//	virtual RESOURCE_STATE getState() const = 0;
+//};
+
+class CUTE_CORE_API IBuffer : public Object
 {
-	DECLARE_RTTI(IResource, Object, OID_ANY)
+	DECLARE_RTTI(IBuffer, Object, OID_ANY)
 public:
-	virtual ~IResource(){}
-
-	virtual void* map(size_t offset, size_t length) = 0;
-	virtual void  unmap() = 0;
-
-	virtual RESOURCE_STATE getState() const = 0;
-};
-
-class CUTE_CORE_API IBuffer : public IResource
-{
-	DECLARE_RTTI(IBuffer, IResource, OID_ANY)
-public:
-    IBuffer(const BufferDesc& desc) : m_desc(desc){}
+    IBuffer(const BufferDesc& desc);
 	virtual ~IBuffer(){}
     
-    const BufferDesc& getDescriptor() const { return m_desc; }
+    virtual bool map(void_ptr& result, RESOURCE_MAP mapMode) = 0;
+    virtual void unmap() = 0;
+    
+    RESOURCE_USAGE      getUsage() const { return m_usage; }
+    uint                getSize() const { return m_size; }
+    uint                getStride() const { return m_stride; }
+
 protected:
-    BufferDesc m_desc;
+    RESOURCE_USAGE  m_usage;
+    uint            m_size;
+    uint            m_stride;
 };
 
-class CUTE_CORE_API ITexture : public IResource
+class CUTE_CORE_API ITexture : public Object
 {
-	DECLARE_RTTI(ITexture, IResource, OID_ANY)
+	DECLARE_RTTI(ITexture, Object, OID_ANY)
 public:
+    ITexture(const TextureDesc& desc);
 	virtual ~ITexture(){}
+    
+    virtual bool map(void_ptr& result, RESOURCE_MAP mapMode) = 0;
+    virtual void unmap() = 0;
 
 	virtual bool getSubresourceLayout(SubresourceLayout& layout, uint32 subresource) const = 0;
+    
+    RESOURCE_DIMENSION  getDimension() const { return m_dimension; }
+    RESOURCE_FORMAT     getFormat() const { return m_format; }
+    uint32              getWidth() const { return m_width; }
+    uint32              getHeight() const { return m_height; }
+    uint32              getDepth() const { return m_depth; }
+    uint32              getArraySize() const { return m_depth; }
 
 protected:
-    TextureDesc m_desc;
+    RESOURCE_DIMENSION  m_dimension;
+    RESOURCE_FORMAT     m_format;
+    uint32              m_width;
+    uint32              m_height;
+    uint32              m_depth;
+    uint32              m_mipmaps;
 };
 
 class CUTE_CORE_API ISampler : public Object
@@ -89,7 +115,7 @@ public:
 	virtual ~IDescriptorSet(){}
 
 	virtual void setBuffer(size_t index, IBuffer* buffer) = 0;
-	virtual void setTexture(size_t index, ITextureView* texture) = 0;
+	virtual void setTexture(size_t index, ITexture* texture) = 0;
 	virtual void setSampler(size_t index, ISampler* sampler) = 0;
 
 	virtual void update() {}
@@ -103,21 +129,22 @@ public:
 };
 
 // gpu program
-class CUTE_CORE_API IProgram : public Object
+class CUTE_CORE_API IShader : public Object
 {
-	DECLARE_RTTI(IProgram, Object, OID_ANY)
+	DECLARE_RTTI(IShader, Object, OID_ANY)
 public:
-	virtual ~IProgram(){}
+	virtual ~IShader(){}
+    virtual bool compile(const ShaderDesc& desc) = 0;
 };
 
-class CUTE_CORE_API IShaderModule : public Object
-{
-	DECLARE_RTTI(IShaderModule, Object, OID_ANY)
-public:
-	virtual ~IShaderModule(){}
-
-	virtual bool compile(const ShaderDesc& desc) = 0;
-};
+//class CUTE_CORE_API IShaderModule : public Object
+//{
+//	DECLARE_RTTI(IShaderModule, Object, OID_ANY)
+//public:
+//	virtual ~IShaderModule(){}
+//
+//	virtual bool compile(const ShaderDesc& desc) = 0;
+//};
 
 class CUTE_CORE_API IPipeline : public Object
 {
@@ -169,7 +196,7 @@ public:
 	virtual void setVertexBuffers(uint32 startSlot, uint32 count, IBuffer* buffers, uint64 offsets) = 0;
 	virtual void setIndexBuffer(IBuffer* buffer, uint64 offset) = 0;
 
-	virtual void setBarrier(IResource* resource, RESOURCE_STATE state) = 0;
+//	virtual void setBarrier(IResource* resource, RESOURCE_STATE state) = 0;
 
 	virtual void drawInstanced(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) = 0;
 	virtual void drawIndexedInstanced(uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int vertexOffset, uint32 firstInstance) = 0;

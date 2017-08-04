@@ -8,8 +8,8 @@
 #include "OGL_DescriptorSet.h"
 #include "OGL_FrameBuffer.h"
 #include "OGL_SwapChain.h"
-#include "OGL_VertexArray.h"
-#include "Window.h"
+//#include "OGL_VertexArray.h"
+//#include "Window.h"
 
 CUTE_NS_BEGIN
 

@@ -4,28 +4,48 @@
 CUTE_NS_BEGIN
 
 OGL_Buffer::OGL_Buffer(const BufferDesc& desc)
-//:IBuffer(desc)
+    : IBuffer(desc)
+    , m_vbo(0)
+    , m_target(0)
 {
-	GLenum usage = isDynamic()? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
-	m_target = OGL_Mapping::getUsage(desc.usage);
-	glGenBuffers(1, &m_vbo);
-	glBindBuffer(m_target, m_vbo);
-	glBufferData(m_target, m_bytes, desc.data, usage);
 }
 
 OGL_Buffer::~OGL_Buffer()
 {
-	glDeleteBuffers(1, &m_vbo);
+    term();
 }
 
-void* OGL_Buffer::map()
+void OGL_Buffer::init(const BufferDesc &desc)
 {
-	GLenum access = OGL_Mapping::getAccess(flag);
+    bool isDyanmic = (desc.usage & RESOURCE_USAGE_DYNAMIC) != 0;
+    GLenum usage = isDyanmic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
+    m_target = OGL_Mapping::getUsage(desc.usage);
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(m_target, m_vbo);
+    
+    if(desc.data != NULL)
+        glBufferData(m_target, desc.size, desc.data, usage);
+}
+
+void OGL_Buffer::term()
+{
+    if(m_vbo != 0)
+    {
+        glDeleteBuffers(1, &m_vbo);
+        m_vbo = 0;
+    }
+}
+
+bool OGL_Buffer::map(void_ptr& result)
+{
+//	GLenum access = OGL_Mapping::getAccess(flag);
+    GLenum access = GL_MAP_WRITE_BIT;
+    GLintptr offset = 0;
+    GLsizeiptr length = getSize();
+    
 	glBindBuffer(m_target, m_vbo);
-	void* buff = glMapBufferRange(m_target, offset, len, access);
-	if(buff == 0)
-		throw std::runtime_error("index buffer:Out of memory");
-	return buff;
+	result = glMapBufferRange(m_target, offset, length, access);
+    return result != NULL;
 }
 
 void OGL_Buffer::unmap()

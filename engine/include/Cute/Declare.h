@@ -51,6 +51,10 @@ enum ObjectID
 // core
 class Stream;
 
+// application
+class Window;
+class Application;
+
 // Math
 class Matrix3;
 class Matrix4;
@@ -68,6 +72,7 @@ class ISwapChain;
 class IFrameBuffer;
 class IVertexLayout;
 class IDescriptorSet;
+class IProgram;
 class IPipeline;
 class IDevice;
 
