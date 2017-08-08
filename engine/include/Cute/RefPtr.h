@@ -1,5 +1,6 @@
 #pragma once
-#include "Cute/Foundation.h"
+#include "Cute/Platform.h"
+//#include "Cute/Foundation.h"
 #include "Cute/Exception.h"
 
 CUTE_NS_BEGIN

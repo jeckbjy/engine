@@ -1,4 +1,4 @@
-//! Server
+//! Server/Packet
 #include "Cute/Encoder.h"
 
 CUTE_NS_BEGIN

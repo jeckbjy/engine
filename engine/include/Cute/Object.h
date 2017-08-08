@@ -1,6 +1,6 @@
 #pragma once
 #include "Cute/Ref.h"
-//#include "Cute/RefPtr.h"
+#include "Cute/RefPtr.h"
 #include "Cute/RTTI.h"
 #include "Cute/Declare.h"
 #include "Cute/String.h"
@@ -43,8 +43,8 @@ template<typename TYPE, int ID = OID_ANY>
 class TObject : public Object
 {
     DECLARE_RTTI(TYPE, Object, ID)
-//public:
-//    typedef RefPtr<TYPE> Ptr;
+public:
+    typedef RefPtr<TYPE> Ptr;
 };
 
 CUTE_NS_END

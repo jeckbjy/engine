@@ -1,4 +1,4 @@
-//! Server
+//! Server/Packet
 #pragma once
 #include "Cute/Foundation.h"
 

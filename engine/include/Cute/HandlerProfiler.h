@@ -31,11 +31,11 @@ public:
 private:
 	struct Item
 	{
-		int		cmdid;
-		uint64 elapsedAll;	// 总值
-		uint64 elapsedMax;	// 最大值
-		uint64 elapsedAvg;	// 平均值
-		uint64 hitNum;		// 次数
+		int     cmdid;
+		uint64  elapsedAll;	// 总值
+		uint64  elapsedMax;	// 最大值
+		uint64  elapsedAvg;	// 平均值
+		uint64  hitNum;		// 次数
 		Item() :cmdid(0),elapsedAll(0), elapsedMax(0), hitNum(0){}
 	};
 

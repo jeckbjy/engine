@@ -1,5 +1,6 @@
 //! Server
 #include "Cute/Server.h"
+#include "Cute/Session.h"
 #include "Cute/TCPServerChannel.h"
 #include "Cute/TCPSocketChannel.h"
 
@@ -24,7 +25,6 @@ Server::Server()
 	, m_connectInterval(10)
 	, m_connectTime(0)
 {
-
 }
 
 Server::~Server()
@@ -44,7 +44,6 @@ bool Server::setup()
 
 void Server::quit()
 {
-
 }
 
 void Server::tick()
@@ -71,21 +70,21 @@ void Server::process()
 		if ((events & (PE_REMOVE | PE_ERROR)) != 0)
 			sess->close();
 
-		if ((events & PE_ERROR) != 0)
-		{
-			onError(sess);
-		}
-		else
-		{
-			if ((events & PE_ACCEPT) != 0)
-				onAccept(sess);
-
-			if ((events & PE_CONNECT) != 0)
-				onConnect(sess);
-
-			if ((events & PE_SEND) != 0)
-				onSend(sess);
-		}
+//		if ((events & PE_ERROR) != 0)
+//		{
+//			onError(sess);
+//		}
+//		else
+//		{
+//			if ((events & PE_ACCEPT) != 0)
+//				onAccept(sess);
+//
+//			if ((events & PE_CONNECT) != 0)
+//				onConnect(sess);
+//
+//			if ((events & PE_SEND) != 0)
+//				onSend(sess);
+//		}
 
 		m_sessions.erase(sess->getID());
 	}
@@ -125,21 +124,20 @@ Session* Server::find(uint32 id)
 	return NULL;
 }
 
-void Server::listen(uint16 port, uint32 type)
+void Server::listen(const SocketAddress& addr, uint32 type)
 {
-	SocketAddress addr(port);
-	ServerChannel* channel = new TCPServerChannel(m_loops.main());
-	channel->setListener(this);
-	channel->listen(addr);
-	channel->setID(newID());
-	channel->setType(type);
-	m_acceptors[channel->getID()] = channel;
+    ServerChannel* channel = new TCPServerChannel(m_loops.main());
+    channel->setListener(this);
+    channel->setID(newID());
+    channel->setType(type);
+    m_acceptors[channel->getID()] = channel;
 }
 
 void Server::connect(const SocketAddress& addr, uint32 type)
 {
 	SocketChannel* channel = new TCPSocketChannel(m_loops.main());
-	Session* sess = new Session(&m_protocal, channel, newID(), type);
+	Session* sess = new Session(channel, newID(), type);
+    // default filter
 	m_connectors[sess->getID()] = sess;
 	sess->connect(addr);
 }
@@ -177,63 +175,30 @@ void Server::schedule(Runnable* task)
 	m_pools.start(*task);
 }
 
-void Server::fireAccept(ServerChannel* listener, SocketChannel* channel)
+void Server::addPending(Session *sess, int mask)
 {
-	// 有新的连接
-	Session* sess = new Session(&m_protocal, channel, newID(), listener->getType());
-
-	addPending(sess, PE_ACCEPT);
+    Mutex::ScopedLock lock(m_pendingMutex);
+    Pending& pending = m_pending[sess->getID()];
+    if (pending.sess == 0)
+    {
+        pending.sess = sess;
+        pending.events = mask;
+    }
+    else if (pending.sess == sess)
+    {
+        pending.events |= mask;
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
-void Server::addPending(Session* sess, int mask)
+void Server::fireAccept(ServerChannel *listener, SocketChannel *channel)
 {
-	Mutex::ScopedLock lock(m_pendingMutex);
-	Pending& pending = m_pending[sess->getID()];
-	if (pending.sess == 0)
-	{
-		pending.sess = sess;
-		pending.events = mask;
-	}
-	else if (pending.sess == sess)
-	{
-		pending.events |= mask;
-	}
-	else
-	{
-		assert(false);
-	}
-}
-
-void Server::onAccept(Session* sess)
-{
-	CUTE_UNUSED(sess);
-}
-
-void Server::onConnect(Session* sess)
-{
-	sess->getChannel()->setLoop(m_loops.next());
-}
-
-void Server::onSend(Session* sess)
-{
-	CUTE_UNUSED(sess);
-}
-
-void Server::onError(Session* sess)
-{
-	CUTE_UNUSED(sess);
-}
-
-void Server::onText(Session* sess, String& text)
-{
-	CUTE_UNUSED(sess);
-	CUTE_UNUSED(text);
-}
-
-void Server::onTransfer(Session* sess, TransferPacket* msg)
-{
-	CUTE_UNUSED(sess);
-	CUTE_UNUSED(msg);
+    Session* sess = new Session(channel, newID(), listener->getType());
+    sess->setFilterChain(m_filterChain);
+    addPending(sess, PE_ACCEPT);
 }
 
 CUTE_NS_END

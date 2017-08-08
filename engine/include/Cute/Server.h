@@ -9,7 +9,7 @@
 #include "Cute/ThreadPool.h"
 #include "Cute/Mutex.h"
 #include "Cute/Packet.h"
-#include "Cute/Protocal.h"
+#include "Cute/SessionFilterChain.h"
 
 CUTE_NS_BEGIN
 
@@ -53,22 +53,16 @@ public:
 	Session* find(uint32 id);
 
 	uint32	newID();
-	void	listen(uint16 port, uint32 type = 0);
+	void	listen(const SocketAddress& addr, uint32 type = 0);
 	void	connect(const SocketAddress& addr, uint32 type = 0);
 	void	reconnect();
 
 	void	post(EventBase* ev, uint32 delay = 0);
 	void	schedule(Runnable* task);
 	void	addPending(Session* sess, int mask);
-
-public:
-	virtual void fireAccept(ServerChannel* listener, SocketChannel* channel);
-	virtual void onAccept(Session* sess);
-	virtual void onConnect(Session* sess);
-	virtual void onSend(Session* sess);
-	virtual void onError(Session* sess);
-	virtual void onText(Session* sess, String& text);
-	virtual void onTransfer(Session* sess, TransferPacket* msg);
+    
+protected:
+    virtual void fireAccept(ServerChannel* listener, SocketChannel* channel);
 
 protected:
 	struct Pending
@@ -78,10 +72,10 @@ protected:
 		Pending() :sess(0), events(0){}
 	};
 
-	typedef std::map<uint32, ServerChannel*>	AcceptMap;
-	typedef std::map<uint32, Session*>			SessionMap;
-	typedef std::map<uint32, Pending>			PendingMap;
-	typedef PacketProtocal						Protocal;
+	typedef Map<uint32, ServerChannel*> AcceptorMap;
+	typedef Map<uint32, Session*>		SessionMap;
+	typedef Map<uint32, Pending>        PendingMap;
+    typedef SessionFilterChain::Ptr     FilterChainPtr;
 
 	bool		m_quit;
 	uint32		m_maxid;			// 唯一ID
@@ -89,17 +83,17 @@ protected:
 	uint32		m_maxConnection;	// 最大连接数
 	uint32		m_connectInterval;	// 重连间隔
 	uint32		m_connectTime;		// 重连时间戳
-	Mutex		m_mutex;
 	IOLoopGroup	m_loops;
-	SessionMap	m_sessions;
+	AcceptorMap	m_acceptors;
+    SessionMap	m_sessions;
 	SessionMap	m_connectors;
 	PendingMap	m_pending;			// 将要处理的事件
-	Mutex		m_pendingMutex;
-	AcceptMap	m_acceptors;
+	Mutex		m_mutex;
+    Mutex		m_pendingMutex;
 	EventQueue	m_events;
 	Thread		m_logicThread;
 	ThreadPool	m_pools;
-	Protocal	m_protocal;
+    FilterChainPtr m_filterChain;
 };
 
 CUTE_NS_END

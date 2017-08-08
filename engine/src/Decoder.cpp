@@ -1,4 +1,4 @@
-//! Server
+//! Server/Packet
 #include "Cute/Decoder.h"
 #include "Cute/Stream.h"
 

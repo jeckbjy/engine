@@ -22,25 +22,25 @@ void PacketEvent::process()
 		handler->process(this);
 }
 
-TransferEvent::TransferEvent(Session* sess)
-	: m_sess(sess)
-{
-}
-
-void TransferEvent::process()
-{
-	Server::get().onTransfer(m_sess, &m_msg);
-}
-
-TextEvent::TextEvent(Session* sess, String& text)
-	: m_sess(sess)
-	, m_text(text)
-{
-}
-
-void TextEvent::process()
-{
-	Server::get().onText(m_sess, m_text);
-}
+//TransferEvent::TransferEvent(Session* sess)
+//	: m_sess(sess)
+//{
+//}
+//
+//void TransferEvent::process()
+//{
+//	Server::get().onTransfer(m_sess, &m_msg);
+//}
+//
+//TextEvent::TextEvent(Session* sess, String& text)
+//	: m_sess(sess)
+//	, m_text(text)
+//{
+//}
+//
+//void TextEvent::process()
+//{
+//	Server::get().onText(m_sess, m_text);
+//}
 
 CUTE_NS_END

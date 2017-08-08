@@ -48,8 +48,31 @@ enum ObjectID
 	OID_CUSTOM = 10000,
 };
 
-// core
+// Core
 class Stream;
+
+// IO
+class IOLoop;
+class IOLoopGroup;
+class IOChannel;
+
+// Network
+class IPAddress;
+class MACAddress;
+class SocketAddress;
+
+class ServerChannel;
+class SocketChannel;
+class TCPServerChannel;
+class TCPSocketChannel;
+
+// Server/Client
+class Server;
+class Client;
+class Session;
+class SessionContext;
+class SessionFilter;
+class SessionFilterChain;
 
 // application
 class Window;

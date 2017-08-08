@@ -1,4 +1,4 @@
-//! Server
+//! Server/Packet
 #include "Cute/Packet.h"
 
 CUTE_NS_BEGIN
